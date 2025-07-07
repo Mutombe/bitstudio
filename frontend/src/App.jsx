@@ -418,7 +418,7 @@ export default function App() {
                 <img src="/logo2.png" alt="Logo" className="w-10 h-10" />
               </div>
               <span className="text-xl font-bold text-blue-900">
-                BIT STUDIO
+                Bit Studio
               </span>
             </motion.div>
 
@@ -858,10 +858,7 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-10 h-10 bg-blue-900 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">BS</span>
-                </div>
-                <span className="text-xl font-bold">BIT STUDIO</span>
+                <span className="text-xl font-bold">Bit Studio (Pvt) Ltd</span>
               </div>
               <p className="text-gray-400 mb-4 max-w-md">
                 Crafting exceptional software solutions that drive business
