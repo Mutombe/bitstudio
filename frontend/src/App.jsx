@@ -161,16 +161,17 @@ const HeroSection = () => {
                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
                     <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                   </div>
-                  <span className="text-xs text-gray-500">Crossbow.jsx</span>
+                  <span className="text-xs text-gray-500">Bitstudio.jsx</span>
                 </div>
                 <pre className="text-sm text-gray-800 overflow-x-auto leading-relaxed">
                   <code className="font-mono">
-                    {`function Crossbow() {
+                    {`function Bitstustudio() {
   return (
     <div className="innovation">
       {solutions.map(solution => (
         <DeliverExcellence 
           key={solution.id}
+          title={solution.title}
           client={solution.client}
           impact={solution.impact}
         />
@@ -413,8 +414,8 @@ export default function App() {
               transition={{ duration: 0.5 }}
               className="flex items-center space-x-3"
             >
-              <div className="w-10 h-10 bg-blue-900 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">BS</span>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+                <img src="/logo2.png" alt="Logo" className="w-10 h-10" />
               </div>
               <span className="text-xl font-bold text-blue-900">
                 BIT STUDIO
