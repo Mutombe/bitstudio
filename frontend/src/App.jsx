@@ -170,7 +170,7 @@ const HeroSection = () => {
 
           {/* Right Column - Code Block - Mobile Optimized */}
           <motion.div
-            className="flex justify-center lg:justify-end order-1 lg:order-2"
+            className="flex justify-center lg:justify-end order-1 lg:order-2 mt-8 lg:mt-0"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 50 }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
