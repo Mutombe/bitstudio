@@ -511,6 +511,13 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [scrollY, setScrollY] = useState(0);
+  const [showContactOptions, setShowContactOptions] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    service: "",
+    message: "",
+  });
 
   const stats = [
     {
@@ -564,11 +571,86 @@ export default function App() {
     document.body.style.overflow = "unset";
   };
 
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleContactSubmit = (e) => {
     e.preventDefault();
-    toast.success("Message sent! We'll be in touch within 24 hours.", {
-      duration: 4000,
-    });
+    setShowContactOptions(true);
+  };
+
+  const handleWhatsAppContact = () => {
+    const phone = "263785948128"; // Your phone without + or spaces
+    const serviceNames = {
+      ai: "AI Solutions",
+      mobile: "Mobile App Development",
+      web: "Web Development",
+      analytics: "Data Analytics",
+      automation: "Process Automation",
+      consulting: "AI Consulting",
+    };
+
+    const message = `Hello Bit Studio!
+
+My name is ${formData.name}
+
+Email: ${formData.email}
+Service Interest: ${serviceNames[formData.service] || formData.service}
+
+Message:
+${formData.message}
+
+Looking forward to hearing from you!`;
+
+    const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
+      message
+    )}`;
+    window.open(whatsappUrl, "_blank");
+
+    setFormData({ name: "", email: "", service: "", message: "" });
+    setShowContactOptions(false);
+    toast.success("Redirecting to WhatsApp...", { duration: 2000 });
+  };
+
+  const handleEmailContact = () => {
+    const email = "admin@bitstudio.co.zw";
+    const serviceNames = {
+      ai: "AI Solutions",
+      mobile: "Mobile App Development",
+      web: "Web Development",
+      analytics: "Data Analytics",
+      automation: "Process Automation",
+      consulting: "AI Consulting",
+    };
+
+    const subject = `New Inquiry - ${
+      serviceNames[formData.service] || formData.service
+    }`;
+    const body = `Hello Bit Studio,
+
+My name is ${formData.name}
+
+Email: ${formData.email}
+Service Interest: ${serviceNames[formData.service] || formData.service}
+
+Message:
+${formData.message}
+
+Looking forward to hearing from you!`;
+
+    const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoUrl;
+
+    setFormData({ name: "", email: "", service: "", message: "" });
+    setShowContactOptions(false);
+    toast.success("Opening your email client...", { duration: 2000 });
   };
 
   const services = [
@@ -832,8 +914,7 @@ export default function App() {
               <div
                 className="w-12 h-12 sm:w-12 sm:h-12 rounded-sm flex items-center justify-center"
                 style={{
-                  background:
-                    "",
+                  background: "",
                 }}
               >
                 <img
@@ -945,14 +1026,15 @@ export default function App() {
                 }}
               >
                 {/* Gradient Overlay for Visual Interest */}
-                <div 
+                <div
                   className="absolute inset-0"
                   style={{
-                    background: "linear-gradient(135deg, #0c0a0a 0%, #1a1818 50%, #2a1519 100%)",
-                    opacity: 0.95
+                    background:
+                      "linear-gradient(135deg, #0c0a0a 0%, #1a1818 50%, #2a1519 100%)",
+                    opacity: 0.95,
                   }}
                 />
-                
+
                 {/* Content Container */}
                 <div className="relative z-10 h-full flex flex-col px-6 pt-6 pb-8">
                   {/* Header with Logo and Close Button */}
@@ -970,7 +1052,7 @@ export default function App() {
                         Bit Studio
                       </span>
                     </div>
-                    
+
                     {/* Close button */}
                     <button
                       onClick={closeMenu}
@@ -983,7 +1065,7 @@ export default function App() {
                       <X size={28} />
                     </button>
                   </div>
-                  
+
                   {/* Navigation Links */}
                   <div className="flex-1 space-y-3">
                     {[
@@ -1021,9 +1103,13 @@ export default function App() {
                               ? "Case Studies"
                               : item.charAt(0).toUpperCase() + item.slice(1)}
                           </span>
-                          <ChevronRight 
-                            size={20} 
-                            className={activeSection === item ? "text-white" : "text-[#af2c47]"} 
+                          <ChevronRight
+                            size={20}
+                            className={
+                              activeSection === item
+                                ? "text-white"
+                                : "text-[#af2c47]"
+                            }
                           />
                         </div>
                       </motion.a>
@@ -1052,9 +1138,18 @@ export default function App() {
                     {/* Social Links */}
                     <div className="flex justify-center space-x-4">
                       {[
-                        { icon: <Github size={20} />, href: "https://github.com/Mutombe" },
-                        { icon: <Facebook size={20} />, href: "https://www.facebook.com/profile.php?id=61577381903711" },
-                        { icon: <Linkedin size={20} />, href: "https://www.linkedin.com/company/bbitstudio/" },
+                        {
+                          icon: <Github size={20} />,
+                          href: "https://github.com/Mutombe",
+                        },
+                        {
+                          icon: <Facebook size={20} />,
+                          href: "https://www.facebook.com/profile.php?id=61577381903711",
+                        },
+                        {
+                          icon: <Linkedin size={20} />,
+                          href: "https://www.linkedin.com/company/bbitstudio/",
+                        },
                       ].map((social, idx) => (
                         <motion.a
                           key={idx}
@@ -1795,9 +1890,18 @@ export default function App() {
               {/* Social Links */}
               <div className="flex space-x-4 mt-6 sm:mt-8">
                 {[
-                  { icon: <Github size={20} />, href: "https://github.com/Mutombe" },
-                  { icon: <Facebook size={20} />, href: "https://www.facebook.com/profile.php?id=61577381903711" },
-                  { icon: <Linkedin size={20} />, href: "https://www.linkedin.com/company/bbitstudio/" },
+                  {
+                    icon: <Github size={20} />,
+                    href: "https://github.com/Mutombe",
+                  },
+                  {
+                    icon: <Facebook size={20} />,
+                    href: "https://www.facebook.com/profile.php?id=61577381903711",
+                  },
+                  {
+                    icon: <Linkedin size={20} />,
+                    href: "https://www.linkedin.com/company/bbitstudio/",
+                  },
                 ].map((social, index) => (
                   <motion.a
                     key={index}
@@ -1845,6 +1949,9 @@ export default function App() {
                     </label>
                     <input
                       type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleFormChange}
                       required
                       className="w-full px-4 py-3 rounded-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-300"
                       placeholder="John Doe"
@@ -1862,6 +1969,9 @@ export default function App() {
                     </label>
                     <input
                       type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleFormChange}
                       required
                       className="w-full px-4 py-3 rounded-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-300"
                       placeholder="john@example.com"
@@ -1877,6 +1987,9 @@ export default function App() {
                       Service Interest
                     </label>
                     <select
+                      name="service"
+                      value={formData.service}
+                      onChange={handleFormChange}
                       required
                       className="w-full px-4 py-3 rounded-sm text-white focus:outline-none focus:ring-2 transition-all duration-300"
                       style={{
@@ -1913,6 +2026,9 @@ export default function App() {
                       Message
                     </label>
                     <textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleFormChange}
                       rows={4}
                       required
                       className="w-full px-4 py-3 rounded-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-300 resize-none"
@@ -1937,7 +2053,7 @@ export default function App() {
                     }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    Send Message <ArrowRight size={20} />
+                    Continue <ArrowRight size={20} />
                   </motion.button>
                 </form>
               </div>
@@ -1977,9 +2093,18 @@ export default function App() {
               </p>
               <div className="flex space-x-4">
                 {[
-                  { icon: <Github size={20} />, href: "https://github.com/Mutombe" },
-                  { icon: <Facebook size={20} />, href: "https://www.facebook.com/profile.php?id=61577381903711" },
-                  { icon: <Linkedin size={20} />, href: "https://www.linkedin.com/company/bbitstudio/" },
+                  {
+                    icon: <Github size={20} />,
+                    href: "https://github.com/Mutombe",
+                  },
+                  {
+                    icon: <Facebook size={20} />,
+                    href: "https://www.facebook.com/profile.php?id=61577381903711",
+                  },
+                  {
+                    icon: <Linkedin size={20} />,
+                    href: "https://www.linkedin.com/company/bbitstudio/",
+                  },
                 ].map((social, index) => (
                   <motion.a
                     key={index}
@@ -2072,6 +2197,96 @@ export default function App() {
           </div>
         </div>
       </footer>
+      {/* Contact Method Selection Modal */}
+      <AnimatePresence>
+        {showContactOptions && (
+          <motion.div
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              background: "rgba(0, 0, 0, 0.8)",
+              backdropFilter: "blur(10px)",
+            }}
+          >
+            <motion.div
+              className="max-w-md w-full rounded-sm p-6 sm:p-8"
+              style={{
+                background: "rgba(12, 10, 10, 0.95)",
+                border: "1px solid rgba(175, 44, 71, 0.3)",
+              }}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="text-center mb-6">
+                <h3 className="text-2xl font-bold text-white mb-2">
+                  Choose Contact Method
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  How would you like to reach us?
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {/* WhatsApp Button */}
+                <motion.button
+                  onClick={handleWhatsAppContact}
+                  className="w-full py-4 px-6 rounded-sm font-medium text-white transition-all duration-300 flex items-center justify-center gap-3"
+                  style={{
+                    background: "#25D366",
+                  }}
+                  whileHover={{
+                    scale: 1.02,
+                    boxShadow: "0 10px 30px rgba(37, 211, 102, 0.4)",
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <MessageSquare size={20} />
+                  Continue with WhatsApp
+                </motion.button>
+
+                {/* Email Button */}
+                <motion.button
+                  onClick={handleEmailContact}
+                  className="w-full py-4 px-6 rounded-sm font-medium text-white transition-all duration-300 flex items-center justify-center gap-3"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #af2c47 0%, #681b29 100%)",
+                  }}
+                  whileHover={{
+                    scale: 1.02,
+                    boxShadow: "0 10px 30px rgba(175, 44, 71, 0.4)",
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Mail size={20} />
+                  Continue with Email
+                </motion.button>
+
+                {/* Cancel Button */}
+                <motion.button
+                  onClick={() => setShowContactOptions(false)}
+                  className="w-full py-3 px-6 rounded-sm font-medium text-gray-400 transition-all duration-300 flex items-center justify-center gap-2"
+                  style={{
+                    background: "rgba(255, 255, 255, 0.05)",
+                    border: "1px solid rgba(175, 44, 71, 0.3)",
+                  }}
+                  whileHover={{
+                    background: "rgba(255, 255, 255, 0.1)",
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <X size={18} />
+                  Cancel
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
