@@ -816,9 +816,9 @@ Looking forward to hearing from you!`;
     },
     { name: "Africa RECs", logo: "/ari.png", link: "https://africarecs.com" },
     { name: "COCAZ", logo: "/cocaz.png", link: "https://cocaz.org.zw" },
-    { name: "Greylink", logo: "/greylink.png", link: "https://greylink.co.zw" },
     //{ name: "Autoward", logo: "/autoward.png" },
     { name: "Zim-Rec", logo: "/zimrec2.png", link: "https://zim-rec.co.zw" },
+     { name: "Greylink", logo: "/greylink.png", link: "https://greylink.co.zw" },
   ];
 
   const team = [
