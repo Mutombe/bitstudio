@@ -784,7 +784,7 @@ Looking forward to hearing from you!`;
       description: "Tobacco company website",
       tech: ["Django", "ReactJS", "PostgreSQL", "Tailwind CSS"],
       size: "medium",
-      link: "https://sacmarleaf.co.zw",
+      link: "https://sacmarleaftobacco.co.zw",
     },
     {
       title: "Lunaj Motors",
@@ -798,15 +798,27 @@ Looking forward to hearing from you!`;
 
   const clients = [
     //{ name: "Auto Eden", logo: "/ae.png" },
-    { name: "Stuttafords Zimbabwe", logo: "/favicon.png" },
-    { name: "House of Stone", logo: "/hsp.png" },
-    { name: "Raphaela", logo: "/raphaela.png" },
-    { name: "SACMAR Leaf", logo: "/slt.png" },
-    { name: "Africa RECs", logo: "/ari.png" },
-    { name: "COCAZ", logo: "/cocaz.png" },
-    { name: "Greylink", logo: "/greylink.png" },
+    {
+      name: "Stuttafords Zimbabwe",
+      logo: "/favicon.png",
+      link: "https://stuttafordszimbabwe.com",
+    },
+    { name: "House of Stone", logo: "/hsp.png", link: "https://hsp.co.zw" },
+    {
+      name: "Raphaela",
+      logo: "/raphaela.png",
+      link: "https://raphaelapsychotherapy.ca",
+    },
+    {
+      name: "SACMAR Leaf",
+      logo: "/slt.png",
+      link: "https://sacmarleaftobacco.co.zw",
+    },
+    { name: "Africa RECs", logo: "/ari.png", link: "https://africarecs.com" },
+    { name: "COCAZ", logo: "/cocaz.png", link: "https://cocaz.org.zw" },
+    { name: "Greylink", logo: "/greylink.png", link: "https://greylink.co.zw" },
     //{ name: "Autoward", logo: "/autoward.png" },
-    { name: "Zim-Rec", logo: "/zimrec2.png" },
+    { name: "Zim-Rec", logo: "/zimrec2.png", link: "https://zim-rec.co.zw" },
   ];
 
   const team = [
@@ -1627,26 +1639,30 @@ Looking forward to hearing from you!`;
                   borderColor: "rgba(175, 44, 71, 0.5)",
                 }}
               >
-                <div className="text-center">
-                  <div
-                    className="text-3xl sm:text-4xl font-bold mb-2 transition-colors"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, #af2c47 0%, #681b29 100%)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                    }}
-                  >
-                    <img
-                      src={client.logo}
-                      alt={client.name}
-                      className="max-h-16 mx-auto"
-                    />
+                {" "}
+                <a href={client.link}>
+                  <div className="text-center">
+                    <div
+                      className="text-3xl sm:text-4xl font-bold mb-2 transition-colors"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, #af2c47 0%, #681b29 100%)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }}
+                    >
+                      <img
+                        src={client.logo}
+                        alt={client.name}
+                        className="max-h-16 mx-auto"
+                      />
+                    </div>
+
+                    <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors">
+                      {client.name}
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors">
-                    {client.name}
-                  </div>
-                </div>
+                </a>
               </motion.div>
             ))}
           </div>
