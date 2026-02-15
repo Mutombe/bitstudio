@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowUpRight, Github, Linkedin, Facebook, Mail, Phone, MapPin } from 'lucide-react';
-import { companyInfo, services, navLinks } from '../data/siteData';
+import { ArrowUpRight, Github, Linkedin, Facebook, Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
+import { companyInfo, services, products, navLinks } from '../data/siteData';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -10,7 +10,7 @@ const Footer = () => {
   return (
     <footer className="relative bg-[#0a0a0f] border-t border-white/5">
       {/* CTA Section */}
-      <div className="container-xl py-12 md:py-16 lg:py-20">
+      <div className="container-xl pt-16 md:pt-20 lg:pt-24 pb-16 md:pb-20 lg:pb-24">
         <div className="relative overflow-hidden rounded-lg p-6 md:p-10 lg:p-16 xl:p-20">
           {/* Background */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#af2c47]/20 via-[#681b29]/10 to-transparent" />
@@ -20,7 +20,7 @@ const Footer = () => {
           }} />
 
           {/* Content */}
-          <div className="relative z-10 max-w-3xl">
+          <div className="relative z-10 max-w-3xl pb-10">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -80,11 +80,15 @@ const Footer = () => {
         </div>
       </div>
 
+      <br/>
+      <br/>
+      <br/>
+
       {/* Main Footer */}
-      <div className="container-xl pb-8 md:pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 md:gap-10 lg:gap-8 pb-8 md:pb-12 border-b border-white/5">
+      <div className="container-xl pb-8 md:pb-12 pt-8 md:pt-12">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-12 gap-8 md:gap-10 lg:gap-8 pb-8 md:pb-12 border-b border-white/5">
           {/* Brand Column */}
-          <div className="lg:col-span-4">
+          <div className="col-span-2 md:col-span-2 lg:col-span-4">
             <Link to="/" className="flex items-center gap-3 mb-6">
               <img src="/logo.png" alt="Bit Studio" className="w-10 h-10" />
               <div>
@@ -92,7 +96,7 @@ const Footer = () => {
                 <p className="text-xs text-white/40 tracking-wider uppercase">Digital Innovation</p>
               </div>
             </Link>
-            <p className="text-white/50 mb-6 max-w-sm">
+            <p className="text-white/50 mb-6 max-w-sm text-sm">
               {companyInfo.description}
             </p>
             <div className="flex gap-4">
@@ -116,7 +120,7 @@ const Footer = () => {
 
           {/* Navigation */}
           <div className="lg:col-span-2">
-            <h4 className="font-display font-semibold text-white mb-6">Navigate</h4>
+            <h4 className="font-display font-semibold text-white mb-4 md:mb-6 text-sm">Navigate</h4>
             <ul className="space-y-3">
               {navLinks.map((link) => (
                 <li key={link.path}>
@@ -132,8 +136,8 @@ const Footer = () => {
           </div>
 
           {/* Services */}
-          <div className="lg:col-span-3">
-            <h4 className="font-display font-semibold text-white mb-6">Services</h4>
+          <div className="lg:col-span-2">
+            <h4 className="font-display font-semibold text-white mb-4 md:mb-6 text-sm">Services</h4>
             <ul className="space-y-3">
               {services.slice(0, 5).map((service) => (
                 <li key={service.id}>
@@ -148,9 +152,39 @@ const Footer = () => {
             </ul>
           </div>
 
+          {/* Products */}
+          <div className="lg:col-span-2">
+            <h4 className="font-display font-semibold text-white mb-4 md:mb-6 text-sm">Products</h4>
+            <ul className="space-y-4">
+              {products.map((product) => (
+                <li key={product.id}>
+                  <a
+                    href={product.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 text-white/50 hover:text-[#af2c47] transition-colors duration-300 group"
+                  >
+                    {product.logo && (
+                      <div
+                        className="w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0 overflow-hidden"
+                        style={{ background: `${product.color}15`, border: `1px solid ${product.color}20` }}
+                      >
+                        <img src={product.logo} alt={product.title} className="w-5 h-5 object-contain" />
+                      </div>
+                    )}
+                    <div>
+                      <span className="text-sm block leading-tight">{product.title}</span>
+                      <span className="text-[10px] text-white/30">{product.tagline}</span>
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Contact */}
-          <div className="lg:col-span-3">
-            <h4 className="font-display font-semibold text-white mb-6">Contact</h4>
+          <div className="lg:col-span-2">
+            <h4 className="font-display font-semibold text-white mb-4 md:mb-6 text-sm">Contact</h4>
             <ul className="space-y-4">
               <li>
                 <a
