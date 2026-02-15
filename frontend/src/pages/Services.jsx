@@ -176,36 +176,58 @@ const ServiceDetail = ({ service, index, isReversed }) => {
             className={isReversed ? 'lg:col-start-1 lg:row-start-1' : ''}
           >
             <div className="relative">
-              {/* Main Image */}
-              <div className="aspect-[4/3] rounded-lg overflow-hidden">
+              {/* Main Visual Card */}
+              <div className="aspect-[4/3] rounded-xl overflow-hidden relative">
+                {/* Image */}
                 <img
                   src={service.image}
                   alt={service.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f]/80 via-transparent to-transparent" />
+                {/* Unique color overlay */}
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: `linear-gradient(135deg, ${service.color}50 0%, ${service.color}20 40%, transparent 70%)`,
+                    mixBlendMode: 'multiply'
+                  }}
+                />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: `linear-gradient(to top, ${index % 2 === 0 ? '#0a0a0f' : '#12121a'}ee 0%, transparent 50%)`
+                  }}
+                />
+                {/* Top gradient accent */}
+                <div
+                  className="absolute top-0 left-0 right-0 h-1"
+                  style={{ background: `linear-gradient(90deg, ${service.color}, ${service.color}40, transparent)` }}
+                />
               </div>
 
-              {/* Floating Card */}
+              {/* Floating Stats Card */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3 }}
-                className="absolute -bottom-6 -right-6 p-6 rounded-lg glass-strong max-w-xs"
+                className="absolute -bottom-6 -right-6 p-5 md:p-6 rounded-xl glass-strong max-w-[200px]"
               >
-                <div className="flex items-center gap-3 mb-3">
-                  <Star className="text-[#af2c47]" size={20} />
-                  <span className="text-white font-display font-medium">Excellence Delivered</span>
+                <div
+                  className="w-10 h-10 rounded-lg flex items-center justify-center mb-3"
+                  style={{ background: `${service.color}20` }}
+                >
+                  {IconComponent && <IconComponent size={20} style={{ color: service.color }} />}
                 </div>
-                <p className="text-white/50 text-sm">
-                  Every project meets our rigorous quality standards
+                <p className="text-white font-display font-medium text-sm mb-1">{service.title}</p>
+                <p className="text-white/40 text-xs">
+                  {service.technologies.length} technologies
                 </p>
               </motion.div>
 
               {/* Glow Effect */}
               <div
-                className="absolute -inset-4 rounded-lg -z-10 opacity-30"
+                className="absolute -inset-4 rounded-xl -z-10 opacity-30"
                 style={{
                   background: `radial-gradient(circle at center, ${service.color}30 0%, transparent 70%)`,
                   filter: 'blur(40px)'
@@ -268,17 +290,34 @@ const ServicesOverview = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
-                className="p-6 rounded-lg bg-[#0a0a0f] border border-white/5 hover:border-[#af2c47]/30 transition-all duration-300 text-center group"
+                className="p-6 rounded-xl bg-[#0a0a0f] border transition-all duration-500 text-center group relative overflow-hidden"
+                style={{ borderColor: `${service.color}25` }}
               >
+                {/* Color overlay - always visible */}
                 <div
-                  className="w-12 h-12 rounded-lg mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform"
-                  style={{ background: `${service.color}15`, color: service.color }}
-                >
-                  {IconComponent && <IconComponent size={24} />}
+                  className="absolute inset-0 rounded-xl"
+                  style={{
+                    background: `linear-gradient(135deg, ${service.color}15 0%, ${service.color}05 100%)`,
+                  }}
+                />
+                {/* Top accent */}
+                <div
+                  className="absolute top-0 left-0 right-0 h-0.5 rounded-t-xl"
+                  style={{ background: `linear-gradient(90deg, ${service.color}, ${service.color}40)` }}
+                />
+                <div className="relative z-10">
+                  <div
+                    className="w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-500"
+                    style={{ background: `${service.color}15`, color: service.color }}
+                  >
+                    {IconComponent && <IconComponent size={24} />}
+                  </div>
+                  <h3 className="font-display font-medium text-white text-sm transition-colors duration-300"
+                    style={{ color: undefined }}
+                  >
+                    <span className="group-hover:text-white">{service.title.split(' ')[0]}</span>
+                  </h3>
                 </div>
-                <h3 className="font-display font-medium text-white text-sm group-hover:text-[#af2c47] transition-colors">
-                  {service.title.split(' ')[0]}
-                </h3>
               </motion.a>
             );
           })}

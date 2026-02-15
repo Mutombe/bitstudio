@@ -7,7 +7,7 @@ import {
   ExternalLink, Quote, CheckCircle, Cpu, Database, Cloud,
   Users, Award, Target, Lightbulb
 } from 'lucide-react';
-import { stats, services, projects, clients, testimonials, values, process } from '../data/siteData';
+import { stats, services, projects, products, clients, testimonials, values, process } from '../data/siteData';
 
 // ============================================
 // HERO SECTION
@@ -356,38 +356,84 @@ const ServicesSection = () => {
               >
                 <Link
                   to={`/services#${service.id}`}
-                  className="block h-full p-5 md:p-6 lg:p-8 rounded-lg bg-[#12121a] border border-white/5 hover:border-[#af2c47]/30 transition-all duration-500 group"
+                  className="block h-full rounded-xl overflow-hidden relative group"
                 >
-                  {/* Icon */}
-                  <div
-                    className="w-12 h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center mb-4 md:mb-6 transition-all duration-300 group-hover:scale-110"
-                    style={{ background: `${service.color}20`, color: service.color }}
-                  >
-                    {IconComponent && <IconComponent size={24} className="md:w-7 md:h-7" />}
+                  {/* Color Overlay Background */}
+                  <div className="absolute inset-0">
+                    {/* Base dark */}
+                    <div className="absolute inset-0 bg-[#12121a]" />
+                    {/* Unique color gradient per card - always visible */}
+                    <div
+                      className="absolute inset-0 opacity-100 group-hover:opacity-100 transition-opacity duration-700"
+                      style={{
+                        background: `linear-gradient(135deg, ${service.color}18 0%, transparent 50%, ${service.color}08 100%)`
+                      }}
+                    />
+                    {/* Top accent bar - always visible */}
+                    <div
+                      className="absolute top-0 left-0 right-0 h-1"
+                      style={{ background: `linear-gradient(90deg, ${service.color}, ${service.color}60)` }}
+                    />
+                    {/* Corner glow - always visible, brighter on hover */}
+                    <div
+                      className="absolute -top-20 -right-20 w-40 h-40 rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-700"
+                      style={{
+                        background: `radial-gradient(circle, ${service.color}20 0%, transparent 70%)`,
+                        filter: 'blur(30px)'
+                      }}
+                    />
                   </div>
 
+                  {/* Border - always colored */}
+                  <div
+                    className="absolute inset-0 rounded-xl border transition-all duration-500 group-hover:border-opacity-80"
+                    style={{
+                      borderColor: `${service.color}30`,
+                    }}
+                  />
+
                   {/* Content */}
-                  <h3 className="font-display font-semibold text-lg md:text-xl text-white mb-2 md:mb-3 group-hover:text-[#af2c47] transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-white/50 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
-                    {service.shortDescription}
-                  </p>
+                  <div className="relative z-10 p-5 md:p-6 lg:p-8">
+                    {/* Icon */}
+                    <div
+                      className="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center mb-4 md:mb-6 transition-all duration-500 group-hover:scale-110 group-hover:shadow-lg"
+                      style={{
+                        background: `${service.color}15`,
+                        color: service.color,
+                        boxShadow: 'none',
+                      }}
+                    >
+                      {IconComponent && <IconComponent size={24} className="md:w-7 md:h-7" />}
+                    </div>
 
-                  {/* Features */}
-                  <ul className="space-y-2 mb-4 md:mb-6">
-                    {service.features.slice(0, 3).map((feature, i) => (
-                      <li key={i} className="flex items-center gap-2 text-xs md:text-sm text-white/40">
-                        <CheckCircle size={12} className="text-[#af2c47] md:w-[14px] md:h-[14px]" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
+                    {/* Title */}
+                    <h3 className="font-display font-semibold text-lg md:text-xl text-white mb-2 md:mb-3 transition-colors duration-300"
+                      style={{ '--hover-color': service.color }}
+                    >
+                      <span className="group-hover:text-white">{service.title}</span>
+                    </h3>
+                    <p className="text-white/50 mb-4 md:mb-6 leading-relaxed text-sm md:text-base group-hover:text-white/60 transition-colors duration-300">
+                      {service.shortDescription}
+                    </p>
 
-                  {/* Link */}
-                  <div className="flex items-center gap-2 text-[#af2c47] text-xs md:text-sm font-medium group-hover:gap-3 transition-all">
-                    Learn More
-                    <ArrowRight size={12} className="md:w-[14px] md:h-[14px]" />
+                    {/* Features */}
+                    <ul className="space-y-2 mb-4 md:mb-6">
+                      {service.features.slice(0, 3).map((feature, i) => (
+                        <li key={i} className="flex items-center gap-2 text-xs md:text-sm text-white/40 group-hover:text-white/50 transition-colors duration-300">
+                          <CheckCircle size={12} style={{ color: service.color }} className="md:w-[14px] md:h-[14px] flex-shrink-0" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Link */}
+                    <div
+                      className="flex items-center gap-2 text-xs md:text-sm font-medium group-hover:gap-3 transition-all duration-300"
+                      style={{ color: service.color }}
+                    >
+                      Learn More
+                      <ArrowRight size={12} className="md:w-[14px] md:h-[14px]" />
+                    </div>
                   </div>
                 </Link>
               </motion.div>
@@ -446,62 +492,82 @@ const FeaturedWorkSection = () => {
           </motion.div>
         </div>
 
-        {/* Projects Grid */}
-        <div className="grid lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
+        {/* Projects Grid - Logo Cards */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
           {featuredProjects.map((project, index) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.15 }}
+              transition={{ delay: index * 0.1 }}
               className="group"
             >
               <a
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block relative rounded-lg overflow-hidden"
+                className="block p-5 md:p-6 rounded-lg bg-[#0a0a0f] border border-white/5 hover:border-[#af2c47]/30 transition-all duration-500 h-full"
               >
-                {/* Image */}
-                <div className="aspect-[16/10] relative overflow-hidden">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent" />
-                  <div className="absolute inset-0 bg-[#0a0a0f]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-
-                {/* Content Overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 lg:p-8">
-                  {/* Category */}
-                  <div className="inline-flex items-center gap-2 px-2 md:px-3 py-1 rounded-full glass-primary text-[10px] md:text-xs text-[#af2c47] mb-2 md:mb-4">
-                    {project.category} &middot; {project.year}
-                  </div>
-
-                  <h3 className="font-display font-bold text-lg md:text-xl lg:text-2xl text-white mb-1 md:mb-2 group-hover:text-[#af2c47] transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-white/60 mb-3 md:mb-4 line-clamp-2 text-sm md:text-base">
-                    {project.description}
-                  </p>
-
-                  {/* Tech Stack */}
-                  <div className="flex flex-wrap gap-1.5 md:gap-2">
-                    {project.technologies.slice(0, 4).map((tech, i) => (
-                      <span key={i} className="px-2 md:px-3 py-0.5 md:py-1 text-[10px] md:text-xs text-white/50 bg-white/5 rounded">
-                        {tech}
+                {/* Top Row: Logo + Meta */}
+                <div className="flex items-start gap-4 mb-4">
+                  <div
+                    className="w-12 h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden"
+                    style={{ background: `${project.color}15`, border: `1px solid ${project.color}30` }}
+                  >
+                    {project.logo ? (
+                      <img src={project.logo} alt={project.title} className="w-8 h-8 md:w-9 md:h-9 object-contain" />
+                    ) : (
+                      <span className="text-lg md:text-xl font-display font-bold" style={{ color: project.color }}>
+                        {project.title.charAt(0)}
                       </span>
-                    ))}
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-display font-semibold text-white text-base md:text-lg group-hover:text-[#af2c47] transition-colors truncate">
+                      {project.title}
+                    </h3>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className="text-xs text-[#af2c47]">{project.category}</span>
+                      <span className="w-1 h-1 rounded-full bg-white/20" />
+                      <span className="text-xs text-white/40">{project.year}</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* External Link Icon */}
-                <div className="absolute top-4 right-4 md:top-6 md:right-6 w-8 h-8 md:w-10 md:h-10 rounded-full glass flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                  <ExternalLink size={14} className="text-white md:w-[18px] md:h-[18px]" />
+                {/* Description */}
+                <p className="text-white/50 text-sm leading-relaxed mb-4 line-clamp-2">
+                  {project.description}
+                </p>
+
+                {/* Tech Stack */}
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {project.technologies.slice(0, 3).map((tech, i) => (
+                    <span key={i} className="px-2 py-0.5 text-[10px] md:text-xs text-white/40 bg-white/5 rounded">
+                      {tech}
+                    </span>
+                  ))}
+                  {project.technologies.length > 3 && (
+                    <span className="px-2 py-0.5 text-[10px] md:text-xs text-white/30 bg-white/5 rounded">
+                      +{project.technologies.length - 3}
+                    </span>
+                  )}
                 </div>
+
+                {/* Footer */}
+                <div className="flex items-center justify-between pt-3 border-t border-white/5">
+                  <span className="text-xs text-white/30">{project.subtitle}</span>
+                  <div className="flex items-center gap-1.5 text-[#af2c47] text-xs font-medium group-hover:gap-2.5 transition-all">
+                    Visit
+                    <ExternalLink size={11} />
+                  </div>
+                </div>
+
+                {/* Color Accent */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity rounded-b-lg"
+                  style={{ background: project.color }}
+                />
               </a>
             </motion.div>
           ))}
@@ -752,6 +818,144 @@ const ValuesSection = () => {
 };
 
 // ============================================
+// OUR PRODUCTS SECTION
+// ============================================
+const ProductsSection = () => {
+  const iconMap = {
+    Brain: Brain,
+    BarChart3: BarChart3
+  };
+
+  return (
+    <section className="py-16 md:py-20 lg:py-24 relative overflow-hidden bg-[#0a0a0f]">
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#af2c47]/20 to-transparent" />
+
+      <div className="container-xl relative z-10">
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto mb-10 md:mb-16">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-[#af2c47] font-display text-xs md:text-sm uppercase tracking-widest mb-3 md:mb-4"
+          >
+            Our Products
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="heading-lg text-white mb-4 md:mb-6"
+          >
+            Products we{' '}
+            <span className="text-gradient">built & own</span>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-white/60 text-base md:text-lg"
+          >
+            Beyond client work, we build our own products that solve real problems
+            and push the boundaries of what's possible.
+          </motion.p>
+        </div>
+
+        {/* Products Grid */}
+        <div className="grid md:grid-cols-2 gap-5 md:gap-6 lg:gap-8">
+          {products.map((product, index) => {
+            const IconComponent = iconMap[product.icon];
+            return (
+              <motion.a
+                key={product.id}
+                href={product.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.15 }}
+                className="group block p-6 md:p-8 rounded-lg bg-[#12121a] border border-white/5 hover:border-[#af2c47]/30 transition-all duration-500 relative overflow-hidden"
+              >
+                {/* Background Glow */}
+                <div
+                  className="absolute top-0 right-0 w-40 h-40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{
+                    background: `radial-gradient(circle, ${product.color}15 0%, transparent 70%)`,
+                    filter: 'blur(40px)'
+                  }}
+                />
+
+                <div className="relative z-10">
+                  {/* Top Row */}
+                  <div className="flex items-start justify-between mb-5">
+                    <div className="flex items-center gap-4">
+                      <div
+                        className="w-14 h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center overflow-hidden"
+                        style={{ background: `${product.color}15`, border: `1px solid ${product.color}25` }}
+                      >
+                        {product.logo ? (
+                          <img src={product.logo} alt={product.title} className="w-9 h-9 md:w-10 md:h-10 object-contain" />
+                        ) : (
+                          IconComponent && <IconComponent size={28} style={{ color: product.color }} className="md:w-8 md:h-8" />
+                        )}
+                      </div>
+                      <div>
+                        <h3 className="font-display font-bold text-xl md:text-2xl text-white group-hover:text-[#af2c47] transition-colors">
+                          {product.title}
+                        </h3>
+                        <p style={{ color: product.color }} className="text-sm font-medium">
+                          {product.tagline}
+                        </p>
+                      </div>
+                    </div>
+                    <span className="px-2.5 py-1 text-[10px] md:text-xs font-medium rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      {product.status}
+                    </span>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-white/50 text-sm md:text-base leading-relaxed mb-5">
+                    {product.description}
+                  </p>
+
+                  {/* Features */}
+                  <div className="grid grid-cols-2 gap-2 mb-5">
+                    {product.features.slice(0, 4).map((feature, i) => (
+                      <div key={i} className="flex items-center gap-2">
+                        <CheckCircle size={12} className="text-[#af2c47] flex-shrink-0" />
+                        <span className="text-xs text-white/40">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Footer */}
+                  <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                    <div className="flex flex-wrap gap-1.5">
+                      {product.technologies.slice(0, 3).map((tech, i) => (
+                        <span key={i} className="px-2 py-0.5 text-[10px] text-white/35 bg-white/5 rounded">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-1.5 text-[#af2c47] text-sm font-medium group-hover:gap-2.5 transition-all">
+                      Explore
+                      <ArrowUpRight size={14} />
+                    </div>
+                  </div>
+                </div>
+              </motion.a>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ============================================
 // MAIN HOME PAGE
 // ============================================
 const Home = () => {
@@ -760,6 +964,7 @@ const Home = () => {
       <HeroSection />
       <ServicesSection />
       <FeaturedWorkSection />
+      <ProductsSection />
       <ProcessSection />
       <ClientsSection />
       <ValuesSection />
