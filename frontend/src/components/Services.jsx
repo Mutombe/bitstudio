@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
   GlobeIcon,
   StackIcon,
@@ -9,95 +10,45 @@ import {
   DownloadSimpleIcon,
   SparkleIcon,
   LightningIcon,
+  ArrowRightIcon,
 } from "@phosphor-icons/react";
 import SectionLabel from "./SectionLabel.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 import QuantumHover from "./QuantumHover.jsx";
+import { SERVICES as SERVICE_DATA } from "../data/services.js";
+import { useReducedMotionPreference } from "../hooks/useReducedMotion.js";
 
 /**
- * Services — the full "Capabilities" rewrite.
- * Desktop: 4×2 glassmorphic grid with per-service mesh glow.
- * Mobile: horizontal snap-scroll carousel with dot pagination + mono progress.
+ * Services — self-revealing showcase.
+ * Each card reveals progressively as it enters the viewport:
+ *   000ms  number (tabular-nums mono)
+ *   120ms  icon scale+fade 0.6 → 1
+ *   250ms  chartreuse hairline sweeps top edge L→R (600ms)
+ *   380ms  title motion-blur ghost sharpens (blur(14px) → 0, 500ms)
+ *   500ms  body sentences stagger-fade-up (y:8, 80ms apart)
+ *   900ms  border glow settles
+ *
+ * The hairline persists after the sweep — it becomes the card's identity.
+ * The existing QuantumHover + glassmorphism remain on-hover.
  */
 
-export const SERVICES = [
-  {
-    id: "websites",
-    title: "Websites with consequence",
-    copy:
-      "Marketing pages, storefronts, portfolios. Built to look unreasonable in screenshots and load in under a second on a broken connection.",
-    icon: GlobeIcon,
-    tint: "#B54656",    // maroon-400
-    accent: "#D4FF3A",
-  },
-  {
-    id: "web-apps",
-    title: "Web applications",
-    copy:
-      "Full-stack products with React, Django, Postgres. User flows that respect attention. Dashboards that read like charts before they read like tables.",
-    icon: StackIcon,
-    tint: "#8C1E2C",
-    accent: "#D4FF3A",
-  },
-  {
-    id: "enterprise",
-    title: "Enterprise software",
-    copy:
-      "Internal tools for teams that outgrew the spreadsheet. Custom CRMs, inventory systems, compliance workflows. Designed for the person using it at 4pm on a Friday.",
-    icon: GraphIcon,
-    tint: "#6B1521",
-    accent: "#A8C72E",
-  },
-  {
-    id: "ai-agents",
-    title: "AI agents",
-    copy:
-      "Bespoke assistants, orchestration pipelines, tool-use workflows. Claude, GPT, open models — we choose the one that suits the problem, then make it behave.",
-    icon: RobotIcon,
-    tint: "#3A0A15",
-    accent: "#D4FF3A",
-  },
-  {
-    id: "scraping",
-    title: "Scraping & ingestion",
-    copy:
-      "Bringing the world's data to your database. Anti-bot, pagination, JavaScript rendering, deduplication. Delivered clean.",
-    icon: DownloadSimpleIcon,
-    tint: "#4F0D18",
-    accent: "#D4FF3A",
-  },
-  {
-    id: "automations",
-    title: "Automations",
-    copy:
-      "The tasks you shouldn't have to do anymore. Cron jobs, webhook buses, agent loops, Slack integrations. Quiet machines doing the right thing at 3am.",
-    icon: CpuIcon,
-    tint: "#8C1E2C",
-    accent: "#A8C72E",
-  },
-  {
-    id: "brand-design",
-    title: "Brand + design systems",
-    copy:
-      "Identity, type systems, component libraries. We build the language before we build the page.",
-    icon: SparkleIcon,
-    tint: "#B54656",
-    accent: "#D4FF3A",
-  },
-  {
-    id: "deploy",
-    title: "Deploy + operate",
-    copy:
-      "Render, Vercel, Railway, bare metal. We don't just hand you a zip. We hand you a working thing.",
-    icon: LightningIcon,
-    tint: "#6B1521",
-    accent: "#D4FF3A",
-  },
-];
+const ICON_MAP = {
+  Globe: GlobeIcon,
+  Stack: StackIcon,
+  Graph: GraphIcon,
+  Cpu: CpuIcon,
+  Robot: RobotIcon,
+  DownloadSimple: DownloadSimpleIcon,
+  Sparkle: SparkleIcon,
+  Lightning: LightningIcon,
+};
+
+// Re-export for anywhere else that imported SERVICES from this file historically
+export const SERVICES = SERVICE_DATA;
 
 export default function Services() {
   return (
-    <section className="relative py-24 md:py-40 bg-[color:var(--color-ink)] overflow-hidden">
+    <section id="services" className="relative py-24 md:py-40 bg-[color:var(--color-ink)] overflow-hidden">
       {/* Ambient under-glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-[10%] w-[40vw] h-[40vw] rounded-full bg-maroon-700/25 blur-[150px]" />
@@ -124,7 +75,7 @@ export default function Services() {
         {/* Desktop grid */}
         <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
           {SERVICES.map((s, i) => (
-            <QuantumHover key={s.id} strength={3}>
+            <QuantumHover key={s.slug} strength={3}>
               <ServiceCard s={s} index={i} />
             </QuantumHover>
           ))}
@@ -137,29 +88,41 @@ export default function Services() {
   );
 }
 
+/* ─────────────────────────────────────────────────────────────── */
+/*  Desktop card — self-revealing                                 */
+/* ─────────────────────────────────────────────────────────────── */
+
 function ServiceCard({ s, index }) {
   const hover = useCursorHover("hover", "");
-  const Icon = s.icon;
+  const Icon = ICON_MAP[s.icon] || GlobeIcon;
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, amount: 0.35 });
+  const reduced = useReducedMotionPreference();
+
+  // Split body into sentences for line-by-line reveal
+  const teaser = s.body?.[0] || s.tagline;
+  const sentences = splitSentences(teaser).slice(0, 3);
+
+  // If reduced motion — show everything instantly
+  const show = reduced || inView;
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.65, delay: Math.min(index * 0.04, 0.25), ease: [0.22, 1, 0.36, 1] }}
+      ref={ref}
       {...hover}
       className="group relative"
     >
-      {/* Glass card */}
       <div
-        className="relative h-full min-h-[280px] p-6 lg:p-7 rounded-sm border border-maroon-200/15 bg-maroon-950/30
+        className="relative h-full min-h-[310px] p-6 lg:p-7 rounded-sm border border-maroon-200/15 bg-maroon-950/30
                    backdrop-blur-xl backdrop-saturate-150
-                   transition-[transform,border-color,background] duration-500
+                   transition-[transform,border-color,background,box-shadow] duration-500
                    group-hover:-translate-y-1 group-hover:border-signal/60 group-hover:bg-maroon-900/40
                    overflow-hidden"
         style={{
-          boxShadow:
-            "inset 0 1px 0 rgba(245,239,230,0.04), inset 0 -1px 0 rgba(0,0,0,0.3)",
+          boxShadow: show
+            ? "inset 0 1px 0 rgba(245,239,230,0.05), inset 0 -1px 0 rgba(0,0,0,0.3), 0 0 0 1px rgba(212,255,58,0.05)"
+            : "inset 0 1px 0 rgba(245,239,230,0.04), inset 0 -1px 0 rgba(0,0,0,0.3)",
+          transitionDelay: show ? "900ms" : "0ms",
         }}
       >
         {/* Per-service mesh glow behind icon */}
@@ -168,35 +131,101 @@ function ServiceCard({ s, index }) {
           style={{ background: s.tint }}
           aria-hidden
         />
-        {/* Chartreuse wire edge on hover */}
+
+        {/* Chartreuse hairline — sweeps in at 250ms (600ms), persists after */}
+        <div className="absolute top-0 left-0 right-0 h-px overflow-hidden pointer-events-none" aria-hidden>
+          <motion.div
+            initial={{ scaleX: 0, transformOrigin: "left" }}
+            animate={show ? { scaleX: 1 } : { scaleX: 0 }}
+            transition={{ duration: reduced ? 0 : 0.6, delay: reduced ? 0 : 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(90deg, transparent, ${s.accent} 20%, ${s.accent} 80%, transparent)`,
+              boxShadow: `0 0 10px ${s.accent}88`,
+            }}
+          />
+        </div>
+
+        {/* Hover diagonal wire */}
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
           style={{
-            background:
-              `linear-gradient(135deg, transparent 0%, transparent 40%, ${s.accent}22 50%, transparent 60%, transparent 100%)`,
+            background: `linear-gradient(135deg, transparent 0%, transparent 40%, ${s.accent}22 50%, transparent 60%, transparent 100%)`,
           }}
           aria-hidden
         />
 
-        {/* Index */}
-        <p className="relative label-mono text-maroon-300 mb-8">
-          0{index + 1} / 08
-        </p>
+        {/* 1 — Index number (0ms) */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={show ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: reduced ? 0 : 0.4, delay: 0, ease: "easeOut" }}
+          className="relative label-mono text-maroon-300 mb-8 tabular-nums"
+        >
+          <span className="text-bone-100/80">{s.number}</span>
+          <span className="text-bone-100/30"> / 08</span>
+        </motion.p>
 
-        {/* Icon */}
-        <div className="relative mb-6 transition-transform duration-500 group-hover:rotate-[12deg]">
+        {/* 2 — Icon (120ms), scale + fade 0.6 → 1 */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.6 }}
+          animate={show ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.6 }}
+          transition={{ duration: reduced ? 0 : 0.4, delay: reduced ? 0 : 0.12, ease: [0.22, 1, 0.36, 1] }}
+          className="relative mb-6 transition-transform duration-500 group-hover:rotate-[12deg]"
+        >
           <Icon size={26} weight="regular" className="text-bone-100" />
+        </motion.div>
+
+        {/* 4 — Title (380ms), motion-blur ghost sharpens */}
+        <motion.h3
+          initial={{ opacity: 0, filter: "blur(14px)", y: 6 }}
+          animate={
+            show
+              ? { opacity: 1, filter: "blur(0px)", y: 0 }
+              : { opacity: 0, filter: "blur(14px)", y: 6 }
+          }
+          transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : 0.38, ease: [0.22, 1, 0.36, 1] }}
+          className="relative display-lg text-bone-100 text-[1.45rem] lg:text-[1.65rem] leading-[1] mb-4 tracking-[-0.025em] group-hover:text-signal transition-colors duration-500"
+        >
+          {s.title}
+        </motion.h3>
+
+        {/* 5 — Body (500ms onward), sentence stagger */}
+        <div className="relative text-sm lg:text-[0.95rem] text-bone-100/75 leading-relaxed">
+          {sentences.map((snt, si) => (
+            <motion.span
+              key={si}
+              initial={{ opacity: 0, y: 8 }}
+              animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+              transition={{
+                duration: reduced ? 0 : 0.5,
+                delay: reduced ? 0 : 0.5 + si * 0.08,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="inline"
+            >
+              {snt}
+              {si < sentences.length - 1 ? " " : ""}
+            </motion.span>
+          ))}
         </div>
 
-        {/* Title */}
-        <h3 className="relative display-lg text-bone-100 text-[1.45rem] lg:text-[1.65rem] leading-[1] mb-4 tracking-[-0.025em] group-hover:text-signal transition-colors duration-500">
-          {s.title}
-        </h3>
-
-        {/* Copy */}
-        <p className="relative text-sm lg:text-[0.95rem] text-bone-100/75 leading-relaxed">
-          {s.copy}
-        </p>
+        {/* "More →" link */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={show ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: reduced ? 0 : 0.4, delay: reduced ? 0 : 0.9 }}
+          className="relative mt-6 pt-4 border-t border-white/5"
+        >
+          <Link
+            to={`/services/${s.slug}`}
+            {...hover}
+            className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/70 hover:text-signal transition-colors group/link"
+          >
+            <span>More</span>
+            <ArrowRightIcon size={12} weight="bold" className="transition-transform duration-400 group-hover/link:translate-x-1" />
+          </Link>
+        </motion.div>
 
         {/* Corner mark */}
         <span
@@ -208,6 +237,10 @@ function ServiceCard({ s, index }) {
     </motion.article>
   );
 }
+
+/* ─────────────────────────────────────────────────────────────── */
+/*  Mobile carousel — reveal triggers when centred                */
+/* ─────────────────────────────────────────────────────────────── */
 
 function ServicesCarousel() {
   const scrollerRef = useRef(null);
@@ -237,8 +270,8 @@ function ServicesCarousel() {
     <div className="md:hidden">
       {/* Progress bar */}
       <div className="flex items-center justify-between mb-4 px-1 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50">
-        <span className="text-signal">
-          0{active + 1} <span className="text-bone-100/30">/</span> 08
+        <span className="text-signal tabular-nums">
+          {SERVICES[active]?.number} <span className="text-bone-100/30">/</span> 08
         </span>
         <span className="italic-accent text-bone-300 normal-case tracking-normal text-base text-bone-100">
           {SERVICES[active]?.title.split(" ").slice(0, 3).join(" ")}…
@@ -251,48 +284,9 @@ function ServicesCarousel() {
         className="flex gap-4 overflow-x-auto snap-x snap-mandatory -mx-5 px-5 pb-4 scroll-smooth no-scrollbar"
         style={{ scrollbarWidth: "none" }}
       >
-        {SERVICES.map((s, i) => {
-          const Icon = s.icon;
-          return (
-            <div
-              key={s.id}
-              className="relative shrink-0 snap-center w-[86%] min-h-[420px] p-6 rounded-sm border border-maroon-200/20 bg-maroon-950/40 backdrop-blur-xl overflow-hidden"
-              style={{
-                boxShadow:
-                  "inset 0 1px 0 rgba(245,239,230,0.05), inset 0 -1px 0 rgba(0,0,0,0.3)",
-              }}
-            >
-              {/* Per-service mesh glow */}
-              <div
-                className="absolute -top-10 -left-10 w-52 h-52 rounded-full blur-[80px] opacity-70"
-                style={{ background: s.tint }}
-                aria-hidden
-              />
-
-              <p className="relative label-mono text-maroon-300 mb-6">
-                0{i + 1} / 08
-              </p>
-
-              <div className="relative mb-6">
-                <Icon size={32} weight="regular" className="text-bone-100" />
-              </div>
-
-              <h3 className="relative italic-accent text-4xl leading-[0.95] text-bone-100 mb-5 tracking-[-0.01em]">
-                {s.title}
-              </h3>
-
-              <p className="relative text-[0.98rem] text-bone-100/80 leading-relaxed">
-                {s.copy}
-              </p>
-
-              <span
-                className="absolute bottom-4 right-4 w-2.5 h-2.5 rounded-full"
-                style={{ background: s.accent, boxShadow: `0 0 18px ${s.accent}88` }}
-                aria-hidden
-              />
-            </div>
-          );
-        })}
+        {SERVICES.map((s, i) => (
+          <MobileServiceCard key={s.slug} s={s} index={i} />
+        ))}
       </div>
 
       {/* Dots */}
@@ -318,4 +312,126 @@ function ServicesCarousel() {
       </p>
     </div>
   );
+}
+
+function MobileServiceCard({ s, index }) {
+  const Icon = ICON_MAP[s.icon] || GlobeIcon;
+  const ref = useRef(null);
+  const inView = useInView(ref, { amount: 0.7 }); // triggers when centred
+  const [hasRevealed, setHasRevealed] = useState(false);
+  const reduced = useReducedMotionPreference();
+
+  useEffect(() => {
+    if (inView) setHasRevealed(true);
+  }, [inView]);
+
+  const show = reduced || hasRevealed;
+  const teaser = s.body?.[0] || s.tagline;
+  const sentences = splitSentences(teaser).slice(0, 2);
+
+  return (
+    <div
+      ref={ref}
+      className="relative shrink-0 snap-center w-[86%] min-h-[440px] p-6 rounded-sm border border-maroon-200/20 bg-maroon-950/40 backdrop-blur-xl overflow-hidden"
+      style={{
+        boxShadow: "inset 0 1px 0 rgba(245,239,230,0.05), inset 0 -1px 0 rgba(0,0,0,0.3)",
+      }}
+    >
+      {/* Per-service mesh glow */}
+      <div
+        className="absolute -top-10 -left-10 w-52 h-52 rounded-full blur-[80px] opacity-70"
+        style={{ background: s.tint }}
+        aria-hidden
+      />
+
+      {/* Chartreuse hairline */}
+      <div className="absolute top-0 left-0 right-0 h-px overflow-hidden pointer-events-none" aria-hidden>
+        <motion.div
+          initial={{ scaleX: 0, transformOrigin: "left" }}
+          animate={show ? { scaleX: 1 } : { scaleX: 0 }}
+          transition={{ duration: reduced ? 0 : 0.6, delay: reduced ? 0 : 0.25, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute inset-0"
+          style={{
+            background: `linear-gradient(90deg, transparent, ${s.accent} 20%, ${s.accent} 80%, transparent)`,
+            boxShadow: `0 0 10px ${s.accent}88`,
+          }}
+        />
+      </div>
+
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={show ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: reduced ? 0 : 0.4 }}
+        className="relative label-mono text-maroon-300 mb-6 tabular-nums"
+      >
+        <span className="text-bone-100/80">{s.number}</span>
+        <span className="text-bone-100/30"> / 08</span>
+      </motion.p>
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.6 }}
+        animate={show ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.6 }}
+        transition={{ duration: reduced ? 0 : 0.4, delay: reduced ? 0 : 0.12 }}
+        className="relative mb-6"
+      >
+        <Icon size={32} weight="regular" className="text-bone-100" />
+      </motion.div>
+
+      <motion.h3
+        initial={{ opacity: 0, filter: "blur(14px)", y: 6 }}
+        animate={show ? { opacity: 1, filter: "blur(0px)", y: 0 } : { opacity: 0, filter: "blur(14px)", y: 6 }}
+        transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : 0.38 }}
+        className="relative italic-accent text-4xl leading-[0.95] text-bone-100 mb-5 tracking-[-0.01em]"
+      >
+        {s.title}
+      </motion.h3>
+
+      <div className="relative text-[0.98rem] text-bone-100/80 leading-relaxed">
+        {sentences.map((snt, si) => (
+          <motion.span
+            key={si}
+            initial={{ opacity: 0, y: 8 }}
+            animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+            transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : 0.5 + si * 0.08 }}
+            className="inline"
+          >
+            {snt}{si < sentences.length - 1 ? " " : ""}
+          </motion.span>
+        ))}
+      </div>
+
+      {/* More → */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={show ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: reduced ? 0 : 0.4, delay: reduced ? 0 : 0.9 }}
+        className="relative mt-6 pt-4 border-t border-white/5"
+      >
+        <Link
+          to={`/services/${s.slug}`}
+          className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.22em] uppercase text-signal"
+        >
+          <span>Read the full piece</span>
+          <ArrowRightIcon size={12} weight="bold" />
+        </Link>
+      </motion.div>
+
+      <span
+        className="absolute bottom-4 right-4 w-2.5 h-2.5 rounded-full"
+        style={{ background: s.accent, boxShadow: `0 0 18px ${s.accent}88` }}
+        aria-hidden
+      />
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+
+function splitSentences(text) {
+  if (!text) return [];
+  // Split at sentence boundaries while preserving the terminal punctuation
+  return text
+    .split(/(?<=[.!?])\s+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
 }

@@ -9,14 +9,17 @@ import {
   WhatsappLogoIcon,
   EnvelopeSimpleIcon,
   FrameCornersIcon,
+  SparkleIcon,
 } from "@phosphor-icons/react";
 import { PROJECTS } from "../data/projects.js";
+import { SERVICES } from "../data/services.js";
 
 const STATIC_ITEMS = [
-  { kind: "page", label: "Home",    to: "/",        hint: "Index" },
-  { kind: "page", label: "Work",    to: "/work",    hint: "Ledger of 30+ artifacts" },
-  { kind: "page", label: "Studio",  to: "/studio",  hint: "Philosophy, unapologetically" },
-  { kind: "page", label: "Contact", to: "/contact", hint: "Open a transmission" },
+  { kind: "page", label: "Home",     to: "/",          hint: "Index" },
+  { kind: "page", label: "Work",     to: "/work",      hint: "Ledger of 30+ artifacts" },
+  { kind: "page", label: "Services", to: "/#services", hint: "Eight things we love to solve" },
+  { kind: "page", label: "Studio",   to: "/studio",    hint: "Philosophy, unapologetically" },
+  { kind: "page", label: "Contact",  to: "/contact",   hint: "Open a transmission" },
   { kind: "action", label: "WhatsApp us", href: "https://wa.me/263787335226", hint: "Preferred channel" },
   { kind: "action", label: "Email us",    href: "mailto:hello@bitstudio.co.zw", hint: "hello@bitstudio.co.zw" },
 ];
@@ -36,6 +39,12 @@ export default function CommandPalette({ open, onClose }) {
   }, [open]);
 
   const items = useMemo(() => {
+    const serviceItems = SERVICES.map((s) => ({
+      kind: "service",
+      label: s.title,
+      to: `/services/${s.slug}`,
+      hint: `${s.number} · ${s.tagline}`,
+    }));
     const projectItems = PROJECTS.map((p) => ({
       kind: "project",
       label: p.name,
@@ -43,7 +52,7 @@ export default function CommandPalette({ open, onClose }) {
       hint: `${p.tag} · ${p.kind}`,
       palette: p.palette,
     }));
-    const all = [...STATIC_ITEMS, ...projectItems];
+    const all = [...STATIC_ITEMS, ...serviceItems, ...projectItems];
     if (!q.trim()) return all;
     const t = q.toLowerCase();
     return all.filter(
@@ -148,6 +157,8 @@ export default function CommandPalette({ open, onClose }) {
                 const Icon =
                   it.kind === "page"
                     ? FrameCornersIcon
+                    : it.kind === "service"
+                    ? SparkleIcon
                     : it.kind === "project"
                     ? ArrowRightIcon
                     : it.label.includes("WhatsApp")

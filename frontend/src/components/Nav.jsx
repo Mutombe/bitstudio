@@ -7,8 +7,9 @@ import { useCursorHover } from "../hooks/useCursor.jsx";
 const LINKS = [
   { to: "/", label: "Index", n: "01" },
   { to: "/work", label: "Work", n: "02" },
-  { to: "/studio", label: "Studio", n: "03" },
-  { to: "/contact", label: "Contact", n: "04" },
+  { to: "/#services", label: "Services", n: "03", hash: true },
+  { to: "/studio", label: "Studio", n: "04" },
+  { to: "/contact", label: "Contact", n: "05" },
 ];
 
 export default function Nav({ onSummon }) {
@@ -54,32 +55,59 @@ export default function Nav({ onSummon }) {
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
-            {LINKS.map((l) => (
-              <NavLink
-                key={l.to}
-                to={l.to}
-                {...hover}
-                className={({ isActive }) =>
-                  `relative font-mono text-[11px] tracking-[0.2em] uppercase transition-colors ${
-                    isActive ? "text-signal" : "text-bone-100/70 hover:text-bone-100"
-                  }`
-                }
-                end={l.to === "/"}
-              >
-                {({ isActive }) => (
-                  <span className="flex items-center gap-2">
-                    <span className="text-bone-100/30">{l.n}</span>
-                    <span>{l.label}</span>
-                    {isActive && (
-                      <motion.span
-                        layoutId="nav-dot"
-                        className="w-1.5 h-1.5 rounded-full bg-signal"
-                      />
-                    )}
-                  </span>
-                )}
-              </NavLink>
-            ))}
+            {LINKS.map((l) => {
+              if (l.hash) {
+                // Hash link — uses <Link> so SPA navigation + hash scroll works
+                const active = loc.hash === "#services" && loc.pathname === "/";
+                return (
+                  <Link
+                    key={l.to}
+                    to={l.to}
+                    {...hover}
+                    className={`relative font-mono text-[11px] tracking-[0.2em] uppercase transition-colors ${
+                      active ? "text-signal" : "text-bone-100/70 hover:text-bone-100"
+                    }`}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className="text-bone-100/30">{l.n}</span>
+                      <span>{l.label}</span>
+                      {active && (
+                        <motion.span
+                          layoutId="nav-dot"
+                          className="w-1.5 h-1.5 rounded-full bg-signal"
+                        />
+                      )}
+                    </span>
+                  </Link>
+                );
+              }
+              return (
+                <NavLink
+                  key={l.to}
+                  to={l.to}
+                  {...hover}
+                  className={({ isActive }) =>
+                    `relative font-mono text-[11px] tracking-[0.2em] uppercase transition-colors ${
+                      isActive ? "text-signal" : "text-bone-100/70 hover:text-bone-100"
+                    }`
+                  }
+                  end={l.to === "/"}
+                >
+                  {({ isActive }) => (
+                    <span className="flex items-center gap-2">
+                      <span className="text-bone-100/30">{l.n}</span>
+                      <span>{l.label}</span>
+                      {isActive && (
+                        <motion.span
+                          layoutId="nav-dot"
+                          className="w-1.5 h-1.5 rounded-full bg-signal"
+                        />
+                      )}
+                    </span>
+                  )}
+                </NavLink>
+              );
+            })}
           </nav>
 
           <div className="flex items-center gap-2 md:gap-4">
@@ -144,19 +172,34 @@ export default function Nav({ onSummon }) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.06 * i + 0.1 }}
                 >
-                  <NavLink
-                    to={l.to}
-                    onClick={() => setOpen(false)}
-                    className="flex items-baseline gap-4"
-                    end={l.to === "/"}
-                  >
-                    <span className="font-mono text-[10px] tracking-[0.25em] text-bone-100/40">
-                      {l.n}
-                    </span>
-                    <span className="display-lg text-bone-100">
-                      {l.label}
-                    </span>
-                  </NavLink>
+                  {l.hash ? (
+                    <Link
+                      to={l.to}
+                      onClick={() => setOpen(false)}
+                      className="flex items-baseline gap-4"
+                    >
+                      <span className="font-mono text-[10px] tracking-[0.25em] text-bone-100/40">
+                        {l.n}
+                      </span>
+                      <span className="display-lg text-bone-100">
+                        {l.label}
+                      </span>
+                    </Link>
+                  ) : (
+                    <NavLink
+                      to={l.to}
+                      onClick={() => setOpen(false)}
+                      className="flex items-baseline gap-4"
+                      end={l.to === "/"}
+                    >
+                      <span className="font-mono text-[10px] tracking-[0.25em] text-bone-100/40">
+                        {l.n}
+                      </span>
+                      <span className="display-lg text-bone-100">
+                        {l.label}
+                      </span>
+                    </NavLink>
+                  )}
                 </motion.div>
               ))}
             </nav>

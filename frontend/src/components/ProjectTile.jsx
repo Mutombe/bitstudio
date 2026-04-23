@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 import QuantumHover from "./QuantumHover.jsx";
+import { findService } from "../data/services.js";
 
 export default function ProjectTile({ project, index = 0, size = "md" }) {
   const hover = useCursorHover("view", "View");
@@ -10,6 +11,9 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
 
   // Asymmetric sizing: featured tiles get more weight
   const isLarge = size === "lg";
+
+  // Resolve service label if this project is tagged to one of the 8
+  const service = p.service ? findService(p.service) : null;
 
   return (
     <motion.div
@@ -91,6 +95,17 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
           >
             {p.kind === "recently-live" ? "Recently Live" : "Experimentation"}
           </div>
+
+          {/* Service label (if tagged) — tiny mono at top, just under kind pill */}
+          {service && (
+            <div
+              className="absolute top-[34px] md:top-[42px] left-4 md:left-6 font-mono text-[9px] tracking-[0.22em] uppercase flex items-center gap-1.5"
+              style={{ color: hex("#F5EFE6", 0.65) }}
+            >
+              <span className="w-1 h-1 rounded-full" style={{ background: service.accent }} />
+              <span>{service.number} · {service.title}</span>
+            </div>
+          )}
         </div>
 
         {/* Footer row */}

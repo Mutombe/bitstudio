@@ -1,0 +1,162 @@
+// Bit Studio — service ledger
+// Eight things we are stupid enough to care about at four in the afternoon.
+// Order is deliberate — it mirrors how a good project actually unfolds.
+
+export const SERVICES = [
+  {
+    slug: "websites",
+    number: "01",
+    icon: "Globe",
+    title: "Websites with consequence",
+    tagline: "Marketing pages that load like a slap and read like a letter.",
+    body: [
+      "A website is the smallest contract a business can sign with a stranger. Load it in under a second. Say one true thing on the first screen. Make the second screen earn itself. That is the whole craft.",
+      "We build marketing pages, storefronts, editorial sites, portfolios. They are typeset the way a book is typeset, laid out the way a room is laid out, and compressed the way a good photograph is compressed. Nothing moves that should not move. Nothing waits that should not wait.",
+      "We write the copy or argue with yours. We take the photographs or argue with your stock. We hold onto your brand without becoming a hostage to it. The result is a page somebody's cousin in Bulawayo can open on a broken phone and still feel the room.",
+      "And then we measure. Lighthouse, real-user, conversion, bounce — not as dashboard theatre, but as a conversation with the next version of the site.",
+    ],
+    stack: ["React", "Vite", "Tailwind v4", "Framer Motion", "Render"],
+    relatedProjects: ["brompton-lodge", "lupane-timber", "umati-property-development"],
+    heroType: "typography",
+    accent: "#D4FF3A",
+    tint: "#B54656",
+  },
+  {
+    slug: "web-applications",
+    number: "02",
+    icon: "Stack",
+    title: "Web applications",
+    tagline: "Full-stack products that respect attention.",
+    body: [
+      "A web application is a conversation stretched across time. Somebody logs in at 9am in Msasa, again at 2pm in a taxi, again at 9pm in bed. The product is whatever they remember of the gesture between those moments. We design for that memory.",
+      "We build with React on the outside and Django, FastAPI, or Node on the inside. Postgres, because problems that feel small almost never are, and a relational database is a debt you never regret paying. We keep API surfaces small, schemas narrow, and the number of moving parts countable on the fingers of one hand.",
+      "Dashboards should read like charts before they read like tables. Forms should tell you how to fill them before you have filled them wrong. Empty states should not apologise — they should recommend. Loading states should mean something, or not appear at all.",
+      "We ship in small, boring increments and we keep the tests honest. The goal is a product that, eighteen months later, you can still open without flinching.",
+    ],
+    stack: ["React", "Django", "FastAPI", "PostgreSQL", "Tailwind v4", "Render"],
+    relatedProjects: ["umati-property-development", "bard-santner-golf-v3", "sabarm-business-solutions"],
+    heroType: "wireframe-morph",
+    accent: "#D4FF3A",
+    tint: "#8C1E2C",
+  },
+  {
+    slug: "enterprise-software",
+    number: "03",
+    icon: "Graph",
+    title: "Enterprise software",
+    tagline: "Internal tools for teams that outgrew the spreadsheet.",
+    body: [
+      "The spreadsheet is the most honest UI ever built: a grid with a footnote. The only reason to retire one is to replace it with a system that tells the truth faster. That is what enterprise software is for.",
+      "We build custom CRMs, inventory systems, compliance workflows, case trackers, procurement ledgers. The kind of tool a person uses at four in the afternoon on a Friday, when the coffee has run out and the last thing they need is a disagreeable form field. We design for that four-in-the-afternoon person.",
+      "Role-based access lives in the bones of the system, not bolted on. Audit logs tell a story a lawyer could read. Exports are real exports, not a promise and a spinner. And the admin panel is designed by somebody who has actually had to use an admin panel at three in the morning.",
+      "We know that enterprise is a euphemism for the small number of humans who keep your company alive. We write the software for them, in their language.",
+    ],
+    stack: ["React", "Django", "PostgreSQL", "Redis", "Celery", "S3"],
+    relatedProjects: ["muvingi-and-mugadza-legal", "nyaradzo-life-assurance", "african-century"],
+    heroType: "network-graph",
+    accent: "#A8C72E",
+    tint: "#6B1521",
+  },
+  {
+    slug: "ai-agents",
+    number: "04",
+    icon: "Robot",
+    title: "AI agents",
+    tagline: "Processes that read the world through tools and write their action back.",
+    body: [
+      "An AI agent is not a chatbot. It is a process — patient, stateful, scoped — that reads the world through tools and writes its action back. We build agents the way we build good cathedrals: with small, sturdy decisions and one clear purpose.",
+      "We choose Claude where judgment matters, GPT where coverage matters, and open-weights where the job must stay inside your walls. We write the tool-calls ourselves. We log everything — prompts, completions, retries, refusals. We decide how it fails, because failure is the only part of the contract you cannot outsource to a model.",
+      "Good agents have memory that degrades gracefully, budgets that they cannot overrun, and a voice that belongs to your brand and not to a foundation lab. We keep humans in the loop where humans matter and keep them out of the loop where they become bottlenecks.",
+      "The test of an agent is not a demo. The test is whether, three months in, it is still doing the job — and whether the person whose job it used to be has moved on to something only a human could do.",
+    ],
+    stack: ["Claude", "GPT", "LangChain", "Python", "FastAPI", "Postgres"],
+    relatedProjects: ["sabarm-business-solutions", "muble-axis", "machinery-exchange"],
+    heroType: "orchestration",
+    accent: "#D4FF3A",
+    tint: "#3A0A15",
+  },
+  {
+    slug: "scraping-ingestion",
+    number: "05",
+    icon: "DownloadSimple",
+    title: "Scraping & ingestion",
+    tagline: "Bringing the world's data to your database. Delivered clean.",
+    body: [
+      "The internet is the largest, worst-structured database ever built. Most of what any business needs is already public — in directories, in tenders, in public records, in the footers of competitor sites. The work is not finding it. The work is collecting it without lying to yourself about what you collected.",
+      "We build ingestion pipelines that handle pagination, JavaScript rendering, anti-bot, geo-fencing, and the thousand small indignities of the open web. We deduplicate hard, normalise aggressively, and version every schema change so yesterday's data still means what it meant yesterday.",
+      "Where terms of service allow it, we scrape. Where an API exists, we prefer it. Where a human is the source of truth, we build the form a human would actually want to fill in. The goal is always the same: a clean table at the other end, with provenance, timestamps, and a row count you can defend.",
+      "We also teach you to read your own data — because a pipeline that lands in a dashboard nobody opens is a pipeline that is slowly lying about itself.",
+    ],
+    stack: ["Python", "Playwright", "Scrapy", "SerpAPI", "Postgres", "Redis"],
+    relatedProjects: ["machinery-exchange", "murwisi-airfreight-cargo", "autoworld-zimbabwe"],
+    heroType: "dom-tree",
+    accent: "#D4FF3A",
+    tint: "#4F0D18",
+  },
+  {
+    slug: "automations",
+    number: "06",
+    icon: "Cpu",
+    title: "Automations",
+    tagline: "The tasks you shouldn't have to do anymore.",
+    body: [
+      "Every business has a list of things somebody does on Monday mornings because somebody has always done them on Monday mornings. We read that list with you and we retire as much of it as the law, the provider APIs, and your nerves will allow.",
+      "Cron jobs, webhook buses, event-driven pipelines, Slack and WhatsApp integrations, agent loops, scheduled reports. Quiet machines doing the right thing at three in the morning. We instrument them so that when they fail — and they will — you know first, not your customer.",
+      "We are particular about idempotency, about retries, about the difference between eventual consistency and not-quite-consistent. We write the runbook before we write the automation. We build alerting that tells a human something useful, not alerting that trains a human to ignore it.",
+      "The best automation is one that, a year later, nobody remembers we built. It just works, and somebody's Monday mornings are quieter.",
+    ],
+    stack: ["Python", "Node", "Celery", "Redis", "Render Cron", "WATI"],
+    relatedProjects: ["whelson-transport", "murwisi-airfreight-cargo", "eilite-insurance-agency"],
+    heroType: "cron-orbit",
+    accent: "#A8C72E",
+    tint: "#8C1E2C",
+  },
+  {
+    slug: "brand-design",
+    number: "07",
+    icon: "Sparkle",
+    title: "Brand + design systems",
+    tagline: "We build the language before we build the page.",
+    body: [
+      "A brand is not a logo. A brand is the posture a company holds when nobody is looking. We draw that posture out — through interviews, through arguments, through long afternoons with a pinboard — and we render it as a system: type, colour, rhythm, voice, image.",
+      "We build design systems that are small enough to remember and large enough to actually cover the product. Tokens, components, documentation, voice guidelines, photography direction. The goal is a system your next designer or next engineer can inherit without a six-week tour.",
+      "We believe in restraint. Two good typefaces instead of five, one accent colour instead of seven, a grid that holds instead of a grid that suggests. We believe a brand should be recognisable from across the street, in greyscale, at six point. Most brands fail that test. We build ours to pass it.",
+      "And when the brand is right, the page almost writes itself. That is the tell.",
+    ],
+    stack: ["Figma", "Tailwind v4", "Tokens Studio", "React", "Storybook"],
+    relatedProjects: ["denford-business-attorneys", "bard-santner-golf-v3", "zusly-shopfitters-projects"],
+    heroType: "monogram",
+    accent: "#D4FF3A",
+    tint: "#B54656",
+  },
+  {
+    slug: "deploy-operate",
+    number: "08",
+    icon: "Lightning",
+    title: "Deploy + operate",
+    tagline: "We don't hand you a zip. We hand you a working thing.",
+    body: [
+      "Deployment is the moment a project stops being an artifact and starts being a liability. We take that seriously. Render, Vercel, Railway, AWS, bare metal on a VPS in Harare — we meet the infrastructure where it is, not where a blog post said it should be.",
+      "We wire up domains, TLS, DNS, CI pipelines, preview environments, rollbacks, backups, log sinks, and the kind of status page that tells the truth. We set up monitoring that pages the right person at the right time and stays quiet the rest of the time.",
+      "Operating a system is a skill, not a checklist. We stay on — for a month, a quarter, a year — to watch a new thing through its first outage, its first traffic spike, its first misbehaving dependency. We document the runbook as we go so that, eventually, somebody inside your team can own it without flinching.",
+      "We believe software is a gift only if it keeps working after the launch email. That is the job, and we treat it like the job.",
+    ],
+    stack: ["Render", "Vercel", "GitHub Actions", "Cloudflare", "Grafana", "Sentry"],
+    relatedProjects: ["zusly-shopfitters-projects", "bard-santner-golf-v3", "lupane-timber"],
+    heroType: "pipeline",
+    accent: "#D4FF3A",
+    tint: "#6B1521",
+  },
+];
+
+export function findService(slug) {
+  return SERVICES.find((s) => s.slug === slug);
+}
+
+export function adjacentServices(slug) {
+  const idx = SERVICES.findIndex((s) => s.slug === slug);
+  if (idx < 0) return { prev: null, next: null };
+  const prev = SERVICES[(idx - 1 + SERVICES.length) % SERVICES.length];
+  const next = SERVICES[(idx + 1) % SERVICES.length];
+  return { prev, next };
+}
