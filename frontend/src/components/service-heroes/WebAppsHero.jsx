@@ -26,7 +26,7 @@ export default function WebAppsHero() {
         background: "radial-gradient(circle at 30% 30%, rgba(140,30,44,0.4), transparent 55%), radial-gradient(circle at 75% 75%, rgba(58,10,21,0.55), transparent 55%), #0A0708"
       }} />
 
-      <div className="absolute inset-0 flex items-center justify-center p-8 md:p-16">
+      <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-8 md:p-16">
         <div className="w-full max-w-4xl rounded-sm border border-white/10 overflow-hidden bg-black/40 backdrop-blur-md shadow-[0_40px_80px_rgba(0,0,0,0.5)]">
           {/* Browser chrome */}
           <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/10">
@@ -46,7 +46,7 @@ export default function WebAppsHero() {
           </div>
 
           {/* Layout body */}
-          <div className="p-5 md:p-8 min-h-[280px] md:min-h-[360px]">
+          <div className="p-3 sm:p-5 md:p-8 min-h-[200px] sm:min-h-[280px] md:min-h-[360px]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={layout}

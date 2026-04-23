@@ -315,6 +315,13 @@
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+  /* Slow spin for filter-chip "All" orbit icon */
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .animate-spin-slow { animation: spin-slow 8s linear infinite; }
+
   /* Glassmorphic surface — thin maroon-tinted, saturated */
   .glass-maroon {
     background: rgba(28, 3, 8, 0.35);
@@ -327,14 +334,33 @@
   }
 
   /* ─── Seamless section seams ─── */
-  /* Hero bottom dissolves into next section's ink */
+  /* Hero bottom dissolves into next section via a warm maroon→ink color fusion.
+     No visible solid border on any viewport — the transition is a COLOR blend,
+     not a cut. Two layers: a thin chartreuse kiss at the very edge, and the
+     main maroon→ink fade body. Hero content sits at z-20, above this z-1. */
+  .hero-seam::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 45%;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent 92%, rgba(212, 255, 58, 0.02) 100%);
+    z-index: 1;
+  }
   .hero-seam::after {
     content: "";
     position: absolute;
     left: 0; right: 0; bottom: 0;
-    height: 24%;
+    height: 45%;
     pointer-events: none;
-    background: linear-gradient(180deg, transparent 0%, transparent 40%, var(--color-ink) 100%);
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      transparent 25%,
+      rgba(28, 3, 8, 0.22) 45%,
+      rgba(14, 1, 4, 0.6) 70%,
+      var(--color-ink) 95%
+    );
     z-index: 1;
   }
   /* A wave-break wrapper that dissolves its horizontal edges via radial mask */

@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowUpRightIcon,
   ArrowRightIcon,
   CircleNotchIcon,
   CompassIcon,
 } from "@phosphor-icons/react";
-import { PROJECTS } from "../data/projects.js";
+import { PROJECTS, filterProjects } from "../data/projects.js";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 import { useClock, formatHMS } from "../hooks/useClock.js";
 import Ticker from "../components/Ticker.jsx";
@@ -19,6 +19,7 @@ import Services from "../components/Services.jsx";
 import MeshField from "../components/MeshField.jsx";
 import WaveBreak from "../components/WaveBreak.jsx";
 import FusionField from "../components/FusionField.jsx";
+import FilterChips, { computeCounts } from "../components/FilterChips.jsx";
 
 const TICKER_ITEMS = [
   "Endpoint OK",
@@ -36,10 +37,29 @@ const TICKER_ITEMS = [
 
 const FEATURED = PROJECTS.filter((p) => p.featured);
 
+// Compact chip set for the homepage — "All" + tags present in FEATURED
+const HOME_CHIPS = [
+  { id: "all", label: "All" },
+  ...Array.from(new Set(FEATURED.map((p) => p.tag))).map((tag) => ({
+    id: tag,
+    label: tag,
+  })),
+];
+
 export default function Home({ onSummon }) {
   const hover = useCursorHover("hover", "");
   const viewHover = useCursorHover("view", "Open");
   const now = useClock();
+
+  const [workFilter, setWorkFilter] = useState("all");
+  const workFiltered = useMemo(
+    () => filterProjects(FEATURED, workFilter),
+    [workFilter]
+  );
+  const workCounts = useMemo(
+    () => computeCounts(FEATURED, HOME_CHIPS),
+    []
+  );
 
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -51,12 +71,12 @@ export default function Home({ onSummon }) {
 
   return (
     <PageTransition>
-      {/* ─── 00 · HERO — viewport-fit on desktop ─── */}
+      {/* ─── 00 · HERO — viewport-fit on desktop, natural on mobile ─── */}
       <section
         ref={heroRef}
         className="
           relative overflow-hidden radial-bleed hero-seam
-          min-h-[100svh] pt-24 pb-8
+          min-h-[92vh] pt-16 pb-14
           lg:pt-20 lg:pb-0
           lg:min-h-[calc(100svh-80px)] lg:h-[calc(100svh-80px)] lg:max-h-[860px]
           lg:flex lg:flex-col lg:justify-between
@@ -165,7 +185,7 @@ export default function Home({ onSummon }) {
       {/* ─── 02 · SELECTED WORK ─── */}
       <section className="relative py-20 md:py-32 bg-[color:var(--color-ink)] seam-bleed-top seam-bleed-bottom-maroon">
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
-          <div className="flex flex-wrap items-end justify-between gap-6 mb-12 md:mb-16">
+          <div className="flex flex-wrap items-end justify-between gap-6 mb-10 md:mb-12">
             <div>
               <SectionLabel chapter="§ 04" title="Selected Work" />
               <h2 className="mt-5 display-xl text-bone-100">
@@ -178,16 +198,44 @@ export default function Home({ onSummon }) {
             </Link>
           </div>
 
-          <div className="grid grid-cols-12 gap-6 md:gap-10">
-            {FEATURED.map((p, i) => (
-              <ProjectTile
-                key={p.slug}
-                project={p}
-                index={i}
-                size={i % 3 === 0 ? "lg" : "md"}
-              />
-            ))}
+          {/* Filter chips + count */}
+          <div className="mb-8 md:mb-10">
+            <FilterChips
+              chips={HOME_CHIPS}
+              filter={workFilter}
+              onChange={setWorkFilter}
+              counts={workCounts}
+            />
+            <motion.p
+              key={`${workFilter}-${workFiltered.length}`}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-4 font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/50 tabular-nums"
+            >
+              Showing <span className="text-bone-100">{workFiltered.length}</span> of {FEATURED.length}
+            </motion.p>
           </div>
+
+          <AnimatePresence mode="popLayout">
+            <motion.div
+              key={workFilter}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-12 gap-6 md:gap-10"
+            >
+              {workFiltered.map((p, i) => (
+                <ProjectTile
+                  key={p.slug}
+                  project={p}
+                  index={i}
+                  size={i % 3 === 0 ? "lg" : "md"}
+                />
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </section>
 

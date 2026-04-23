@@ -96,54 +96,62 @@ export default function ServiceDetail() {
 
   return (
     <PageTransition>
-      {/* ─── Hero (60vh, bespoke generative backdrop) ─── */}
+      {/* ─── Hero — contained aspect on mobile so generative SVGs don't overflow ─── */}
       <section className="relative pt-20 md:pt-24">
-        <div className="relative w-full h-[60vh] min-h-[480px] overflow-hidden">
-          <ServiceHero type={service.heroType} />
+        <div className="max-w-[1280px] mx-auto px-5 md:px-10">
+          <div className="relative w-full aspect-[4/3] md:aspect-[16/9] md:min-h-[480px] overflow-hidden rounded-sm">
+            <ServiceHero type={service.heroType} />
 
-          {/* Top strip — breadcrumb */}
-          <div className="absolute top-6 left-0 right-0 px-5 md:px-10 z-10">
-            <div className="max-w-[1600px] mx-auto flex items-center gap-3 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/60">
-              <Link to="/" {...hover} className="hover-line">Index</Link>
-              <span className="text-bone-100/30">/</span>
-              <Link to="/#services" {...hover} className="hover-line">Services</Link>
-              <span className="text-bone-100/30">/</span>
-              <span className="text-signal">{service.title}</span>
+            {/* Top strip — breadcrumb */}
+            <div className="absolute top-4 md:top-6 left-0 right-0 px-4 md:px-6 z-10">
+              <div className="flex items-center gap-2 md:gap-3 font-mono text-[9px] md:text-[10px] tracking-[0.22em] uppercase text-bone-100/60 flex-wrap">
+                <Link to="/" {...hover} className="hover-line">Index</Link>
+                <span className="text-bone-100/30">/</span>
+                <Link to="/#services" {...hover} className="hover-line">Services</Link>
+                <span className="text-bone-100/30">/</span>
+                <span className="text-signal truncate max-w-[60vw]">{service.title}</span>
+              </div>
             </div>
-          </div>
 
-          {/* Hero bottom seam — dissolves into ink */}
-          <div
-            className="absolute left-0 right-0 bottom-0 h-32 pointer-events-none"
-            style={{ background: "linear-gradient(180deg, transparent, var(--color-ink))" }}
-          />
+            {/* Hero bottom seam — dissolves into ink */}
+            <div
+              className="absolute left-0 right-0 bottom-0 h-20 md:h-32 pointer-events-none"
+              style={{ background: "linear-gradient(180deg, transparent, var(--color-ink))" }}
+            />
+          </div>
         </div>
       </section>
 
       {/* ─── Title + tagline ─── */}
-      <section className="relative pt-6 pb-12 md:pt-8 md:pb-16">
-        <div className="max-w-[1600px] mx-auto px-5 md:px-10">
+      <section className="relative pt-8 pb-12 md:pt-10 md:pb-16">
+        <div className="max-w-[1280px] mx-auto px-5 md:px-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col md:flex-row md:items-end md:justify-between gap-6"
           >
-            <div className="flex-1">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 rounded-full border border-signal/40 flex items-center justify-center">
-                  <Icon size={22} weight="regular" className="text-signal" />
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-3 md:gap-4 mb-5 md:mb-6">
+                <div className="w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-full border border-signal/40 flex items-center justify-center">
+                  <Icon size={20} weight="regular" className="text-signal" />
                 </div>
                 <p className="label-mono text-bone-100/50 tabular-nums">
                   <span className="text-signal">{service.number}</span>
                   <span className="text-bone-100/30"> / 08 ·</span> Service
                 </p>
               </div>
-              <h1 className="display-massive text-bone-100 leading-[0.82] max-w-[18ch]">
+              <h1
+                className="text-bone-100 font-display font-bold leading-[0.85] max-w-[18ch]"
+                style={{
+                  fontSize: "clamp(2.25rem, 8vw, 5rem)",
+                  letterSpacing: "-0.04em",
+                }}
+              >
                 {service.title}
                 <span className="italic-accent text-signal font-light">.</span>
               </h1>
-              <p className="mt-8 italic-accent text-2xl md:text-3xl text-bone-300 max-w-3xl leading-snug">
+              <p className="mt-6 md:mt-8 italic-accent text-xl md:text-3xl text-bone-300 max-w-3xl leading-snug">
                 {service.tagline}
               </p>
             </div>
@@ -152,8 +160,8 @@ export default function ServiceDetail() {
       </section>
 
       {/* ─── Manifesto body ─── */}
-      <section className="py-16 md:py-24 border-t border-white/5">
-        <div className="max-w-[1600px] mx-auto px-5 md:px-10 grid grid-cols-12 gap-6 md:gap-10">
+      <section className="py-14 md:py-24 border-t border-white/5">
+        <div className="max-w-[1280px] mx-auto px-5 md:px-10 grid grid-cols-12 gap-6 md:gap-10">
           <div className="col-span-12 md:col-span-4">
             <div className="md:sticky md:top-28">
               <SectionLabel chapter="§ Manifesto" title="What we actually do" />
@@ -171,13 +179,13 @@ export default function ServiceDetail() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.7, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
-                className={`text-bone-100/85 text-lg md:text-[1.22rem] leading-[1.65] max-w-3xl ${
+                className={`text-bone-100/85 text-base md:text-lg leading-[1.7] max-w-prose ${
                   i === 0 ? "first-para" : ""
                 }`}
               >
                 {i === 0 ? (
                   <>
-                    <span className="float-left font-display text-[5rem] md:text-[6rem] leading-[0.82] text-signal mr-3 md:mr-4 mt-1.5 tracking-tight">
+                    <span className="float-left font-display text-[4rem] md:text-[6rem] leading-[0.82] text-signal mr-3 md:mr-4 mt-1.5 tracking-tight">
                       {para.charAt(0)}
                     </span>
                     {highlight(para.slice(1), service.accent)}
@@ -192,8 +200,8 @@ export default function ServiceDetail() {
       </section>
 
       {/* ─── Stack ─── */}
-      <section className="py-16 md:py-20 border-t border-white/5 bg-maroon-950/30">
-        <div className="max-w-[1600px] mx-auto px-5 md:px-10 grid grid-cols-12 gap-6 md:gap-10">
+      <section className="py-14 md:py-20 border-t border-white/5 bg-maroon-950/30">
+        <div className="max-w-[1280px] mx-auto px-5 md:px-10 grid grid-cols-12 gap-6 md:gap-10">
           <div className="col-span-12 md:col-span-4">
             <SectionLabel chapter="§ Stack" title="How we build it" />
             <p className="mt-6 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/40 max-w-xs">
@@ -201,7 +209,7 @@ export default function ServiceDetail() {
             </p>
           </div>
           <div className="col-span-12 md:col-span-8">
-            <div className="flex flex-wrap gap-2.5 md:gap-3">
+            <div className="flex flex-wrap gap-2 md:gap-3">
               {service.stack.map((t, i) => {
                 const TIcon = STACK_ICON[t] || CodeIcon;
                 return (
@@ -211,9 +219,9 @@ export default function ServiceDetail() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.04, duration: 0.4 }}
-                    className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-signal/30 hover:border-signal transition-colors bg-black/30 text-bone-100/90 font-mono text-[11px] tracking-[0.18em] uppercase"
+                    className="inline-flex items-center gap-2 md:gap-2.5 px-3 md:px-4 py-1.5 md:py-2 rounded-full border border-signal/30 hover:border-signal transition-colors bg-black/30 text-bone-100/90 font-mono text-[10px] md:text-[11px] tracking-[0.16em] md:tracking-[0.18em] uppercase whitespace-nowrap"
                   >
-                    <TIcon size={13} weight="regular" className="text-signal" />
+                    <TIcon size={12} weight="regular" className="text-signal" />
                     {t}
                   </motion.span>
                 );
@@ -225,8 +233,8 @@ export default function ServiceDetail() {
 
       {/* ─── Representative projects ─── */}
       {related.length > 0 && (
-        <section className="py-20 md:py-28 border-t border-white/5">
-          <div className="max-w-[1600px] mx-auto px-5 md:px-10">
+        <section className="py-16 md:py-28 border-t border-white/5">
+          <div className="max-w-[1280px] mx-auto px-5 md:px-10">
             <div className="flex flex-wrap items-end justify-between gap-6 mb-10 md:mb-14">
               <div>
                 <SectionLabel chapter="§ Evidence" title="Things we have actually shipped" />
@@ -240,7 +248,7 @@ export default function ServiceDetail() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
               {related.map((p, i) => (
                 <motion.div
                   key={p.slug}
@@ -299,39 +307,41 @@ export default function ServiceDetail() {
 
       {/* ─── Prev/next service navigation ─── */}
       <section className="py-16 md:py-24 border-t border-white/5">
-        <div className="max-w-[1600px] mx-auto px-5 md:px-10">
-          <div className="flex items-center justify-between mb-8">
+        <div className="max-w-[1280px] mx-auto px-5 md:px-10">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
             <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/40 tabular-nums">
               <span className="text-signal">{service.number}</span>
               <span className="text-bone-100/30"> / 08</span>
             </p>
-            <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/40">
-              {SERVICES.map((s) => (
-                <Link
-                  key={s.slug}
-                  to={`/services/${s.slug}`}
-                  {...hover}
-                  className={`w-6 h-1 rounded-full transition-colors ${
-                    s.slug === service.slug ? "bg-signal" : "bg-bone-100/15 hover:bg-bone-100/40"
-                  }`}
-                  aria-label={s.title}
-                />
-              ))}
+            <div className="overflow-x-auto no-scrollbar -mx-5 px-5 md:mx-0 md:px-0">
+              <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/40 w-max">
+                {SERVICES.map((s) => (
+                  <Link
+                    key={s.slug}
+                    to={`/services/${s.slug}`}
+                    {...hover}
+                    className={`w-6 h-1 shrink-0 rounded-full transition-colors ${
+                      s.slug === service.slug ? "bg-signal" : "bg-bone-100/15 hover:bg-bone-100/40"
+                    }`}
+                    aria-label={s.title}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             {prev && (
               <Link
                 to={`/services/${prev.slug}`}
                 {...hover}
-                className="group relative block p-6 md:p-8 rounded-sm border border-white/10 hover:border-signal/50 bg-maroon-950/20 transition-colors"
+                className="group relative block w-full p-5 md:p-8 rounded-sm border border-white/10 hover:border-signal/50 bg-maroon-950/20 transition-colors"
               >
-                <p className="label-mono text-bone-100/40 flex items-center gap-2 mb-4">
+                <p className="label-mono text-bone-100/40 flex items-center gap-2 mb-3 md:mb-4">
                   <ArrowLeftIcon size={12} weight="bold" />
                   Previous · <span className="text-signal tabular-nums">{prev.number}</span>
                 </p>
-                <h3 className="display-lg text-[1.8rem] md:text-[2.2rem] text-bone-100 group-hover:text-signal transition-colors">
+                <h3 className="font-display font-bold text-[1.5rem] md:text-[2.2rem] leading-[0.95] text-bone-100 group-hover:text-signal transition-colors tracking-tight">
                   {prev.title}
                 </h3>
                 <p className="mt-3 text-bone-100/60 text-sm max-w-md">
@@ -343,16 +353,16 @@ export default function ServiceDetail() {
               <Link
                 to={`/services/${next.slug}`}
                 {...hover}
-                className="group relative block p-6 md:p-8 rounded-sm border border-white/10 hover:border-signal/50 bg-maroon-950/20 transition-colors text-right"
+                className="group relative block w-full p-5 md:p-8 rounded-sm border border-white/10 hover:border-signal/50 bg-maroon-950/20 transition-colors md:text-right"
               >
-                <p className="label-mono text-bone-100/40 flex items-center justify-end gap-2 mb-4">
+                <p className="label-mono text-bone-100/40 flex items-center md:justify-end gap-2 mb-3 md:mb-4">
                   Next · <span className="text-signal tabular-nums">{next.number}</span>
                   <ArrowRightIcon size={12} weight="bold" />
                 </p>
-                <h3 className="display-lg text-[1.8rem] md:text-[2.2rem] text-bone-100 group-hover:text-signal transition-colors">
+                <h3 className="font-display font-bold text-[1.5rem] md:text-[2.2rem] leading-[0.95] text-bone-100 group-hover:text-signal transition-colors tracking-tight">
                   {next.title}
                 </h3>
-                <p className="mt-3 text-bone-100/60 text-sm max-w-md ml-auto">
+                <p className="mt-3 text-bone-100/60 text-sm max-w-md md:ml-auto">
                   {next.tagline}
                 </p>
               </Link>
@@ -365,8 +375,8 @@ export default function ServiceDetail() {
       <div className="seam-dissolve">
         <WaveBreak />
       </div>
-      <section className="relative py-24 md:py-40 seam-contact overflow-hidden">
-        <div className="max-w-[1600px] mx-auto px-5 md:px-10 text-center">
+      <section className="relative py-20 md:py-40 seam-contact overflow-hidden">
+        <div className="max-w-[1280px] mx-auto px-5 md:px-10 text-center">
           <SectionLabel chapter="§ Next" title="If any of this resonates" />
           <h2 className="mt-8 display-massive text-bone-100 leading-[0.82] max-w-[14ch] mx-auto">
             Commission<br />
