@@ -347,9 +347,13 @@
     content: "";
     position: absolute;
     left: 0; right: 0; bottom: 0;
-    height: 40%;
+    height: 35%;
     pointer-events: none;
-    background: linear-gradient(180deg, transparent 0%, var(--color-ink) 100%);
+    /* 3-stop gradient with a mid-stop of pure ink early — guarantees the
+       bottom of the hero is fully ink regardless of what the MeshField orbs
+       or radial-bleed happen to paint in that region. Kills the maroon band
+       on wide desktop viewports. */
+    background: linear-gradient(180deg, transparent 0%, transparent 35%, var(--color-ink) 92%, var(--color-ink) 100%);
     z-index: 1;
   }
   /* A wave-break wrapper that dissolves its horizontal edges via radial mask */
