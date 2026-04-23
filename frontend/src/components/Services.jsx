@@ -17,6 +17,9 @@ import { useCursorHover } from "../hooks/useCursor.jsx";
 import QuantumHover from "./QuantumHover.jsx";
 import { SERVICES as SERVICE_DATA } from "../data/services.js";
 import { useReducedMotionPreference } from "../hooks/useReducedMotion.js";
+import { HashChip } from "./HashChip.jsx";
+import { PhosphorIcon } from "./PhosphorIcon.jsx";
+import ServiceArtifact from "./service-artifacts/index.jsx";
 
 /**
  * Services — self-revealing showcase.
@@ -25,11 +28,15 @@ import { useReducedMotionPreference } from "../hooks/useReducedMotion.js";
  *   120ms  icon scale+fade 0.6 → 1
  *   250ms  chartreuse hairline sweeps top edge L→R (600ms)
  *   380ms  title motion-blur ghost sharpens (blur(14px) → 0, 500ms)
- *   500ms  body sentences stagger-fade-up (y:8, 80ms apart)
+ *   440ms  tagline fades in (italic accent, single line)
+ *   540ms  hashtag chips stagger in (y:6, 40ms apart)
+ *   720ms  Phosphor icon cluster fades in
+ *   820ms  SVG design artifact fades in
  *   900ms  border glow settles
  *
  * The hairline persists after the sweep — it becomes the card's identity.
  * The existing QuantumHover + glassmorphism remain on-hover.
+ * Card body is now a design-artifact stack (tags + icons + glyph) — not prose.
  */
 
 const ICON_MAP = {
@@ -99,10 +106,6 @@ function ServiceCard({ s, index }) {
   const inView = useInView(ref, { once: true, amount: 0.35 });
   const reduced = useReducedMotionPreference();
 
-  // Split body into sentences for line-by-line reveal
-  const teaser = s.body?.[0] || s.tagline;
-  const sentences = splitSentences(teaser).slice(0, 3);
-
   // If reduced motion — show everything instantly
   const show = reduced || inView;
 
@@ -113,7 +116,7 @@ function ServiceCard({ s, index }) {
       className="group relative"
     >
       <div
-        className="relative h-full min-h-[310px] p-6 lg:p-7 rounded-sm border border-maroon-200/15 bg-maroon-950/30
+        className="relative h-full min-h-[460px] p-6 lg:p-7 rounded-sm border border-maroon-200/15 bg-maroon-950/30
                    backdrop-blur-xl backdrop-saturate-150
                    transition-[transform,border-color,background,box-shadow] duration-500
                    group-hover:-translate-y-1 group-hover:border-signal/60 group-hover:bg-maroon-900/40
@@ -185,30 +188,60 @@ function ServiceCard({ s, index }) {
               : { opacity: 0, filter: "blur(14px)", y: 6 }
           }
           transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : 0.38, ease: [0.22, 1, 0.36, 1] }}
-          className="relative display-lg text-bone-100 text-[1.45rem] lg:text-[1.65rem] leading-[1] mb-4 tracking-[-0.025em] group-hover:text-signal transition-colors duration-500"
+          className="relative display-lg text-bone-100 text-[1.45rem] lg:text-[1.65rem] leading-[1] mb-2 tracking-[-0.025em] group-hover:text-signal transition-colors duration-500"
         >
           {s.title}
         </motion.h3>
 
-        {/* 5 — Body (500ms onward), sentence stagger */}
-        <div className="relative text-sm lg:text-[0.95rem] text-bone-100/75 leading-relaxed">
-          {sentences.map((snt, si) => (
+        {/* 4b — Tagline (single line, italic accent) */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={show ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: reduced ? 0 : 0.4, delay: reduced ? 0 : 0.44 }}
+          className="relative text-[0.85rem] lg:text-[0.9rem] text-bone-100/55 italic-accent leading-snug mb-4"
+        >
+          {s.tagline}
+        </motion.p>
+
+        {/* 5 — Zone 1: hashtag chips */}
+        <div className="relative mt-4 flex flex-wrap gap-1.5">
+          {(s.hashtags || []).map((tag, hi) => (
             <motion.span
-              key={si}
-              initial={{ opacity: 0, y: 8 }}
-              animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+              key={tag}
+              initial={{ opacity: 0, y: 6 }}
+              animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
               transition={{
-                duration: reduced ? 0 : 0.5,
-                delay: reduced ? 0 : 0.5 + si * 0.08,
+                duration: reduced ? 0 : 0.4,
+                delay: reduced ? 0 : 0.54 + hi * 0.04,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="inline"
             >
-              {snt}
-              {si < sentences.length - 1 ? " " : ""}
+              <HashChip>{tag}</HashChip>
             </motion.span>
           ))}
         </div>
+
+        {/* 6 — Zone 2: Phosphor icon cluster */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={show ? { opacity: 0.6 } : { opacity: 0 }}
+          transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : 0.72 }}
+          className="relative mt-4 flex items-center gap-2.5 text-bone-100 group-hover:opacity-100 transition-opacity duration-500"
+        >
+          {(s.iconCluster || []).map((iconName) => (
+            <PhosphorIcon key={iconName} name={iconName} size={16} weight="regular" />
+          ))}
+        </motion.div>
+
+        {/* 7 — Zone 3: bespoke SVG design artifact */}
+        <motion.div
+          initial={{ opacity: 0, y: 6 }}
+          animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
+          transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : 0.82, ease: [0.22, 1, 0.36, 1] }}
+          className="relative mt-5"
+        >
+          <ServiceArtifact id={s.artifact} />
+        </motion.div>
 
         {/* "More →" link */}
         <motion.div
@@ -326,13 +359,11 @@ function MobileServiceCard({ s, index }) {
   }, [inView]);
 
   const show = reduced || hasRevealed;
-  const teaser = s.body?.[0] || s.tagline;
-  const sentences = splitSentences(teaser).slice(0, 2);
 
   return (
     <div
       ref={ref}
-      className="relative shrink-0 snap-center w-[86%] min-h-[440px] p-6 rounded-sm border border-maroon-200/20 bg-maroon-950/40 backdrop-blur-xl overflow-hidden"
+      className="group relative shrink-0 snap-center w-[86%] min-h-[440px] p-6 rounded-sm border border-maroon-200/20 bg-maroon-950/40 backdrop-blur-xl overflow-hidden"
       style={{
         boxShadow: "inset 0 1px 0 rgba(245,239,230,0.05), inset 0 -1px 0 rgba(0,0,0,0.3)",
       }}
@@ -381,24 +412,55 @@ function MobileServiceCard({ s, index }) {
         initial={{ opacity: 0, filter: "blur(14px)", y: 6 }}
         animate={show ? { opacity: 1, filter: "blur(0px)", y: 0 } : { opacity: 0, filter: "blur(14px)", y: 6 }}
         transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : 0.38 }}
-        className="relative italic-accent text-4xl leading-[0.95] text-bone-100 mb-5 tracking-[-0.01em]"
+        className="relative italic-accent text-4xl leading-[0.95] text-bone-100 mb-3 tracking-[-0.01em]"
       >
         {s.title}
       </motion.h3>
 
-      <div className="relative text-[0.98rem] text-bone-100/80 leading-relaxed">
-        {sentences.map((snt, si) => (
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={show ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: reduced ? 0 : 0.4, delay: reduced ? 0 : 0.44 }}
+        className="relative text-[0.92rem] text-bone-100/55 italic-accent leading-snug mb-5"
+      >
+        {s.tagline}
+      </motion.p>
+
+      {/* Zone 1 — hashtag chips */}
+      <div className="relative flex flex-wrap gap-1.5 mb-4">
+        {(s.hashtags || []).map((tag, hi) => (
           <motion.span
-            key={si}
-            initial={{ opacity: 0, y: 8 }}
-            animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
-            transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : 0.5 + si * 0.08 }}
-            className="inline"
+            key={tag}
+            initial={{ opacity: 0, y: 6 }}
+            animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
+            transition={{ duration: reduced ? 0 : 0.4, delay: reduced ? 0 : 0.54 + hi * 0.04 }}
           >
-            {snt}{si < sentences.length - 1 ? " " : ""}
+            <HashChip>{tag}</HashChip>
           </motion.span>
         ))}
       </div>
+
+      {/* Zone 2 — Phosphor icon cluster */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={show ? { opacity: 0.6 } : { opacity: 0 }}
+        transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : 0.72 }}
+        className="relative flex items-center gap-2.5 text-bone-100 mb-5"
+      >
+        {(s.iconCluster || []).map((iconName) => (
+          <PhosphorIcon key={iconName} name={iconName} size={18} weight="regular" />
+        ))}
+      </motion.div>
+
+      {/* Zone 3 — bespoke SVG design artifact */}
+      <motion.div
+        initial={{ opacity: 0, y: 6 }}
+        animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
+        transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : 0.82 }}
+        className="relative"
+      >
+        <ServiceArtifact id={s.artifact} />
+      </motion.div>
 
       {/* More → */}
       <motion.div
@@ -426,12 +488,3 @@ function MobileServiceCard({ s, index }) {
 }
 
 /* ─────────────────────────────────────────────────────────────── */
-
-function splitSentences(text) {
-  if (!text) return [];
-  // Split at sentence boundaries while preserving the terminal punctuation
-  return text
-    .split(/(?<=[.!?])\s+/)
-    .map((s) => s.trim())
-    .filter(Boolean);
-}
