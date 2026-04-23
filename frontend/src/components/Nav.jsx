@@ -1,7 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
-import { CommandIcon, ListIcon, XIcon } from "@phosphor-icons/react";
+import { CommandIcon, ListIcon, XIcon, PlanetIcon } from "@phosphor-icons/react";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 
 const LINKS = [
@@ -86,12 +86,21 @@ export default function Nav({ onSummon }) {
             <button
               {...hover}
               onClick={onSummon}
-              className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 hover:border-signal hover:text-signal transition-all font-mono text-[10px] tracking-[0.2em] uppercase"
+              className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 hover:border-signal hover:text-signal transition-all font-mono text-[10px] tracking-[0.2em] uppercase group"
               aria-label="Open command palette (Cmd+K)"
             >
-              <CommandIcon size={12} weight="regular" />
+              <PlanetIcon size={13} weight="regular" className="text-signal transition-transform duration-700 group-hover:rotate-180" />
               <span>Summon</span>
               <span className="text-bone-100/40 ml-1">⌘K</span>
+            </button>
+            {/* Mobile: alien Orbit search — opens CommandPalette */}
+            <button
+              {...hover}
+              onClick={onSummon}
+              className="md:hidden p-2 text-bone-100 relative"
+              aria-label="Summon — search projects and pages"
+            >
+              <PlanetIcon size={22} weight="regular" className="text-signal" />
             </button>
             <button
               onClick={() => setOpen(true)}

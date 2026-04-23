@@ -55,7 +55,7 @@ export default function Home({ onSummon }) {
       <section
         ref={heroRef}
         className="
-          relative overflow-hidden radial-bleed
+          relative overflow-hidden radial-bleed hero-seam
           min-h-[100svh] pt-24 pb-8
           lg:pt-20 lg:pb-0
           lg:min-h-[calc(100svh-80px)] lg:h-[calc(100svh-80px)] lg:max-h-[860px]
@@ -149,17 +149,21 @@ export default function Home({ onSummon }) {
         </div>
       </section>
 
-      {/* Wave break */}
-      <WaveBreak />
+      {/* Seam: hero → services (wave is punctuation, edges dissolved) */}
+      <div className="seam-dissolve">
+        <WaveBreak />
+      </div>
 
       {/* ─── 01 · SERVICES (new, altruistic, ultraistic) ─── */}
       <Services />
 
-      {/* Wave break */}
-      <WaveBreak />
+      {/* Seam: services → work (wave is punctuation, radial mask dissolves edges) */}
+      <div className="seam-dissolve">
+        <WaveBreak />
+      </div>
 
       {/* ─── 02 · SELECTED WORK ─── */}
-      <section className="relative py-20 md:py-32 bg-[color:var(--color-ink)]">
+      <section className="relative py-20 md:py-32 bg-[color:var(--color-ink)] seam-bleed-top seam-bleed-bottom-maroon">
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <div className="flex flex-wrap items-end justify-between gap-6 mb-12 md:mb-16">
             <div>
@@ -188,10 +192,13 @@ export default function Home({ onSummon }) {
       </section>
 
       {/* ─── 03 · FUSION BREAK ─── */}
-      <section className="relative overflow-hidden border-y border-white/5 bg-maroon-950">
+      <section className="relative overflow-visible bg-maroon-950 seam-fusion">
         <FusionField size="lg" className="" />
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none px-6">
-          <p className="italic-accent text-2xl md:text-4xl text-bone-100 text-center max-w-3xl leading-snug">
+          <p
+            className="italic-accent text-bone-100 text-center max-w-3xl leading-snug"
+            style={{ fontSize: "clamp(1.35rem, 2.4vw, 2.75rem)" }}
+          >
             "Two stars, one argument.
             <br />
             <span className="text-signal">The interface is where they agree.</span>"
@@ -200,7 +207,7 @@ export default function Home({ onSummon }) {
       </section>
 
       {/* ─── 04 · PHILOSOPHY PULL ─── */}
-      <section className="relative py-28 md:py-44 border-y border-white/5 bg-[color:var(--color-ink)] overflow-hidden">
+      <section className="relative py-28 md:py-44 bg-[color:var(--color-ink)] overflow-hidden seam-philosophy">
         <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 pointer-events-none select-none opacity-[0.04]">
           <span className="display-massive leading-none text-maroon-500">BS</span>
         </div>
@@ -240,11 +247,13 @@ export default function Home({ onSummon }) {
         </div>
       </section>
 
-      {/* Wave break */}
-      <WaveBreak />
+      {/* Seam: philosophy → numbers (wave punctuation, dissolved edges) */}
+      <div className="seam-dissolve">
+        <WaveBreak />
+      </div>
 
       {/* ─── 05 · NUMBERS ─── */}
-      <section className="relative py-20 md:py-32 bg-[color:var(--color-ink)]">
+      <section className="relative py-20 md:py-32 bg-[color:var(--color-ink)] seam-bleed-bottom-maroon proof-section">
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <SectionLabel chapter="§ 06" title="Proof (the absurd kind)" />
           <div className="mt-10 md:mt-14 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
@@ -255,10 +264,16 @@ export default function Home({ onSummon }) {
           </div>
 
           <div className="mt-14 md:mt-20 pt-10 border-t border-white/10 grid md:grid-cols-2 gap-8">
-            <p className="text-bone-100/70 max-w-xl italic-accent text-xl leading-snug">
+            <p
+              className="text-bone-100/70 max-w-xl italic-accent leading-snug"
+              style={{ fontSize: "clamp(1.125rem, 1.8vw, 1.75rem)" }}
+            >
               "The numbers do not know why they were counted. <span className="text-signal">We do.</span>"
             </p>
-            <p className="text-bone-100/60 max-w-md md:justify-self-end">
+            <p
+              className="text-bone-100/60 max-w-md md:justify-self-end leading-snug"
+              style={{ fontSize: "clamp(0.875rem, 1.3vw, 1.125rem)" }}
+            >
               — a small note taped to the studio wall, left by someone who did
               not sign it.
             </p>
@@ -282,7 +297,7 @@ export default function Home({ onSummon }) {
       </section>
 
       {/* ─── 07 · CLOSING CTA ─── */}
-      <section className="relative py-28 md:py-44 bg-[color:var(--color-ink)] overflow-hidden">
+      <section className="relative py-28 md:py-44 bg-[color:var(--color-ink)] overflow-hidden seam-contact">
         <MeshField tint="oxblood" intensity="high" />
         <div className="relative max-w-[1600px] mx-auto px-5 md:px-10">
           <SectionLabel chapter="§ 07" title="Sign-off" />
@@ -345,11 +360,21 @@ function CounterStat({ value, from = 0, suffix = "", label, decimals = 0 }) {
 
   return (
     <div ref={ref}>
-      <p className="display-xl text-bone-100 leading-none">
+      <p
+        className="text-bone-100 leading-none tracking-[-0.04em]"
+        style={{
+          fontFamily: "var(--font-display)",
+          fontWeight: 700,
+          fontSize: "clamp(3rem, 7vw, 9rem)",
+        }}
+      >
         {v.toFixed(decimals)}
         <span className="text-signal">{suffix}</span>
       </p>
-      <p className="mt-3 font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/50">
+      <p
+        className="mt-3 font-mono tracking-[0.2em] uppercase text-bone-100/55"
+        style={{ fontSize: "clamp(0.6rem, 0.85vw, 0.78rem)" }}
+      >
         {label}
       </p>
     </div>

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
 import { useCursorHover } from "../hooks/useCursor.jsx";
+import QuantumHover from "./QuantumHover.jsx";
 
 export default function ProjectTile({ project, index = 0, size = "md" }) {
   const hover = useCursorHover("view", "View");
@@ -17,9 +18,10 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.7, delay: Math.min(index * 0.04, 0.25), ease: [0.22, 1, 0.36, 1] }}
-      className={`group relative overflow-hidden ${isLarge ? "md:col-span-7" : "md:col-span-5"}`}
+      className={`group relative ${isLarge ? "md:col-span-7" : "md:col-span-5"}`}
     >
-      <Link to={`/work/${p.slug}`} {...hover} className="block">
+     <QuantumHover strength={2.5} className="block">
+      <Link to={`/work/${p.slug}`} {...hover} className="block relative overflow-hidden">
         {/* Preview panel — brand-color mesh */}
         <div
           className="relative aspect-[4/3] md:aspect-[16/10] overflow-hidden"
@@ -106,6 +108,7 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
           </p>
         </div>
       </Link>
+     </QuantumHover>
     </motion.div>
   );
 }
