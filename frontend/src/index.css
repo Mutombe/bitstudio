@@ -293,9 +293,11 @@
   .signal-text { color: var(--color-signal); }
 
   .radial-bleed {
+    /* Gradients pulled toward the upper half so the hero's lower edge is
+       uniformly ink — nothing peaks at the bottom and creates a visible band. */
     background:
-      radial-gradient(circle at 20% 20%, rgba(107, 21, 33, 0.45), transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(58, 10, 21, 0.6), transparent 55%),
+      radial-gradient(circle at 20% 25%, rgba(107, 21, 33, 0.38), transparent 55%),
+      radial-gradient(circle at 85% 35%, rgba(58, 10, 21, 0.42), transparent 60%),
       var(--color-ink);
   }
 
