@@ -65,7 +65,7 @@ export default function Home({ onSummon }) {
         {/* Computed ambient mesh (no images) */}
         <MeshField tint="maroon" intensity="med" />
 
-        <div className="relative max-w-[1600px] mx-auto w-full px-5 md:px-10 flex flex-col gap-8 md:gap-10 lg:pt-10 lg:flex-1 lg:justify-center">
+        <div className="relative z-20 max-w-[1600px] mx-auto w-full px-5 md:px-10 flex flex-col gap-8 md:gap-10 lg:pt-10 lg:flex-1 lg:justify-center">
           {/* Diagnostic corner */}
           <div className="flex flex-wrap items-center justify-between gap-4 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50">
             <div className="flex items-center gap-6">
@@ -143,8 +143,8 @@ export default function Home({ onSummon }) {
           </motion.div>
         </div>
 
-        {/* Ticker — sits at the bottom edge on desktop */}
-        <div className="relative mt-10 lg:mt-0">
+        {/* Ticker — sits at the bottom edge on desktop; z-20 keeps it above the hero-seam fade */}
+        <div className="relative z-20 mt-10 lg:mt-0">
           <Ticker items={TICKER_ITEMS} />
         </div>
       </section>
