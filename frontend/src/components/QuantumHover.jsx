@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 /**
@@ -26,17 +26,34 @@ export default function QuantumHover({ children, className = "", strength = 3 })
   const [active, setActive] = useState(false);
   const [tilt, setTilt] = useState({ rx: 0, ry: 0 });
   const pressTimer = useRef(null);
+  // rAF-throttle mousemove so the tilt update never exceeds 1 react-render per frame.
+  // This keeps the custom cursor (driven by its own rAF loop) from feeling laggy
+  // when sliding over a wrapped card.
+  const pendingMove = useRef(null);
+  const moveRaf = useRef(0);
+
+  useEffect(() => () => {
+    if (moveRaf.current) cancelAnimationFrame(moveRaf.current);
+  }, []);
 
   const handleMove = useCallback(
     (e) => {
       const el = ref.current;
       if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const px = (e.clientX - rect.left) / rect.width; // 0..1
-      const py = (e.clientY - rect.top) / rect.height;
-      const ry = (px - 0.5) * strength * 2; // rotateY
-      const rx = -(py - 0.5) * strength * 2; // rotateX
-      setTilt({ rx, ry });
+      // Cache the event coords; flush at most once per frame.
+      pendingMove.current = { x: e.clientX, y: e.clientY };
+      if (moveRaf.current) return; // already queued
+      moveRaf.current = requestAnimationFrame(() => {
+        moveRaf.current = 0;
+        const p = pendingMove.current;
+        if (!p || !ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+        const px = (p.x - rect.left) / rect.width; // 0..1
+        const py = (p.y - rect.top) / rect.height;
+        const ry = (px - 0.5) * strength * 2; // rotateY
+        const rx = -(py - 0.5) * strength * 2; // rotateX
+        setTilt({ rx, ry });
+      });
     },
     [strength]
   );
