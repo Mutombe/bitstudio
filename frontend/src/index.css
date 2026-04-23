@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+/*
+ * ─── Bit Studio — visual principle ─────────────────────────────────────────
+ * This site uses no stock photography. Visual weight is generated in code —
+ * mesh gradients, wave SVG, cross-entropy noise, glassmorphism, motion-blur
+ * type, and screenshots of our own client work. Every pixel should be either
+ * our craft or a computation we authored. Orbs, waves, fusions, grain —
+ * rendered by the browser at request time, not fetched from a photo library.
+ * ──────────────────────────────────────────────────────────────────────────
+ */
+
 @theme {
   /* ─── Palette ─── */
   /* Foundation: deep maroon from the logo + a cooler oxblood underbelly */
@@ -41,7 +51,7 @@
 
 @layer base {
   :root {
-    --grain-opacity: 0.045;
+    --grain-opacity: 0.06;
   }
 
   html {
@@ -118,6 +128,15 @@
     letter-spacing: -0.05em;
     line-height: 0.82;
     font-size: clamp(4rem, 18vw, 18rem);
+  }
+
+  /* Desktop viewport-fit massive — scaled so the hero holds in one screen */
+  .display-hero {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 0.82;
+    font-size: clamp(4rem, 14vw, 16rem);
   }
 
   .display-xl {
@@ -338,5 +357,40 @@
   .swatch-strip > span {
     flex: 1;
     height: 100%;
+  }
+
+  /* Hide scrollbars on the mobile carousel — progress is shown via dots */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Glassmorphic surface — thin maroon-tinted, saturated */
+  .glass-maroon {
+    background: rgba(28, 3, 8, 0.35);
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    border: 1px solid rgba(235, 194, 199, 0.18);
+    box-shadow:
+      inset 0 1px 0 rgba(245, 239, 230, 0.04),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+  }
+
+  /* Motion-blur display type — blurred ghost stacked behind the sharp form */
+  .motion-blur-type {
+    position: relative;
+    display: inline-block;
+  }
+  .motion-blur-type::before {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    color: inherit;
+    filter: blur(18px) brightness(1.3);
+    opacity: 0.6;
+    transform: translate(4px, 6px);
+    z-index: -1;
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .motion-blur-type::before { filter: blur(6px); opacity: 0.3; }
   }
 }

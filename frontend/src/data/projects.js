@@ -1,5 +1,5 @@
 // Bit Studio — project ledger
-// Every entry is a real artifact. Paid or demo. Filterable by tag.
+// Every entry is a real artifact. Recently-live or experimentation. Filterable by tag.
 
 export const INDUSTRIES = [
   "Hospitality",
@@ -20,12 +20,12 @@ export const INDUSTRIES = [
 ];
 
 export const PROJECTS = [
-  // ─── PAID / FEATURED ───
+  // ─── RECENTLY LIVE / FEATURED ───
   {
     slug: "zusly-shopfitters-projects",
     name: "Zusly Shopfitters & Projects",
     tag: "Shopfitting",
-    kind: "paid",
+    kind: "recently-live",
     featured: true,
     year: "2025",
     role: "Brand, interface, engineering",
@@ -42,7 +42,7 @@ export const PROJECTS = [
     slug: "umati-property-development",
     name: "Umati Property Development",
     tag: "Property",
-    kind: "paid",
+    kind: "recently-live",
     featured: true,
     year: "2025",
     role: "Brand system, web platform",
@@ -59,7 +59,7 @@ export const PROJECTS = [
     slug: "lupane-timber",
     name: "Lupane Timber",
     tag: "Timber",
-    kind: "paid",
+    kind: "recently-live",
     featured: true,
     year: "2025",
     role: "Brand, interface, story",
@@ -76,7 +76,7 @@ export const PROJECTS = [
     slug: "denford-business-attorneys",
     name: "Denford Business Attorneys",
     tag: "Legal",
-    kind: "paid",
+    kind: "recently-live",
     featured: true,
     year: "2025",
     role: "Brand system, interface",
@@ -93,7 +93,7 @@ export const PROJECTS = [
     slug: "brompton-lodge",
     name: "Brompton Lodge",
     tag: "Hospitality",
-    kind: "paid",
+    kind: "recently-live",
     featured: true,
     year: "2025",
     role: "Brand, experience design",
@@ -110,7 +110,7 @@ export const PROJECTS = [
     slug: "bard-santner-golf-v3",
     name: "Bard Santner Golf — The Season",
     tag: "Sports",
-    kind: "paid",
+    kind: "recently-live",
     featured: true,
     year: "2026",
     role: "Brand, platform, editorial system",
@@ -124,37 +124,37 @@ export const PROJECTS = [
     tech: ["React 19", "Vite 7", "Tailwind v4", "Framer Motion"],
   },
 
-  // ─── DEMOS (curated & filterable) ───
-  { slug: "palm-river-hotel",           name: "Palm River Hotel",                  tag: "Hospitality", kind: "demo", year: "2025", url: "https://demo-palm-river-hotel.onrender.com",                 palette: ["#0C3B2E", "#D4AF37", "#F5EFE6"], brief: "Luxury hospitality by the water. Gold on deep green.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "the-rainbow-towers-hotel",   name: "The Rainbow Towers Hotel",          tag: "Hospitality", kind: "demo", year: "2025", url: "https://demo-the-rainbow-towers-hotel-and.onrender.com",      palette: ["#1B1F3A", "#B8864B", "#EAE0D0"], brief: "A Harare landmark reframed in editorial type.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "masawara-urban-retreat",     name: "Masawara Urban Retreat",            tag: "Hospitality", kind: "demo", year: "2025", url: "https://demo-masawara-urban-retreat.onrender.com",            palette: ["#2C1810", "#D9B382", "#F5EFE6"], brief: "A retreat in the middle of the city that refuses the city.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "sandalwood-lodge",           name: "Sandalwood Lodge",                  tag: "Hospitality", kind: "demo", year: "2025", url: "https://demo-sandalwood-lodge.onrender.com",                  palette: ["#3E2723", "#C19A6B", "#F5EFE6"], brief: "Cedar-warm. A lodge for returning, not escaping.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "solaire-lightworks",         name: "Solaire Lightworks",                tag: "Retail",      kind: "demo", year: "2025", url: "https://demo-solaire-lightworks.onrender.com",                palette: ["#1C1C1C", "#E5B800", "#F5EFE6"], brief: "Lighting as jewellery. Every fixture a proper noun.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "autoworld-zimbabwe",         name: "Autoworld Zimbabwe",                tag: "Automotive",  kind: "demo", year: "2025", url: "https://demo-autoworld-zimbabwe.onrender.com",                palette: ["#0A0A0A", "#C8102E", "#F5EFE6"], brief: "Automotive black / alarm red. Machines as objects.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "toyota-by-cfao-zimbabwe",    name: "Toyota by CFAO Zimbabwe",           tag: "Automotive",  kind: "demo", year: "2025", url: "https://demo-toyota-by-cfao-zimbabwe.onrender.com",           palette: ["#EB0A1E", "#111111", "#F5EFE6"], brief: "A storied marque, stripped to posture and proof.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "symmetry-dental-surgery",    name: "Symmetry Dental Surgery",           tag: "Healthcare",  kind: "demo", year: "2025", url: "https://demo-symmetry-dental-surgery-dr-t-chombo.onrender.com", palette: ["#E8F4F8", "#2C6E7F", "#0F2A33"], brief: "Clinical calm without the hospital chill.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "the-avenues-clinic",         name: "The Avenues Clinic",                tag: "Healthcare",  kind: "demo", year: "2025", url: "https://demo-the-avenues-clinic.onrender.com",                palette: ["#1C3D5A", "#D9E6F2", "#F5F5F5"], brief: "Institutional blue with a bedside manner.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "melbourne-ivf",              name: "Melbourne IVF",                     tag: "Healthcare",  kind: "demo", year: "2025", url: "https://demo-melbourne.onrender.com",                          palette: ["#3B5998", "#F0C3D3", "#FFF7F2"], brief: "Fertility care, rendered with softness and steel.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "muvingi-and-mugadza-legal",  name: "Muvingi & Mugadza Legal",           tag: "Legal",       kind: "demo", year: "2025", url: "https://demo-muvingi-and-mugadza-legal.onrender.com",          palette: ["#12233A", "#B8864B", "#F5EFE6"], brief: "Senior counsel in deep blue.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "mhishi-nkomo-legal-practice", name: "Mhishi Nkomo Legal Practice",      tag: "Legal",       kind: "demo", year: "2025", url: "https://demo-mhishi-nkomo-legal-practice.onrender.com",        palette: ["#0B1220", "#C6A664", "#F5EFE6"], brief: "A firm as a fortress, built out of lines.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "nyaradzo-life-assurance",    name: "Nyaradzo Life Assurance",           tag: "Insurance",   kind: "demo", year: "2025", url: "https://demo-nyaradzo-life-assurance.onrender.com",            palette: ["#0C4F2E", "#D4AF37", "#F5EFE6"], brief: "Life assurance rendered as a long sentence.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "eilite-insurance-agency",    name: "EILITE Insurance Agency",           tag: "Insurance",   kind: "demo", year: "2025", url: "https://demo-eilite-insurance-agency.onrender.com",            palette: ["#1A1A2E", "#E94560", "#F5EFE6"], brief: "Modern insurance brokerage — agile, explicit.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "murwisi-airfreight-cargo",   name: "Murwisi Airfreight Cargo",          tag: "Logistics",   kind: "demo", year: "2025", url: "https://demo-murwisi-airfreight-cargo.onrender.com",           palette: ["#0A2E5C", "#F5A623", "#F5EFE6"], brief: "Freight in runway-blue and safety-amber.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "whelson-transport",          name: "Whelson Transport",                 tag: "Logistics",   kind: "demo", year: "2025", url: "https://demo-whelson-transport.onrender.com",                  palette: ["#1E3A5F", "#E53E3E", "#F5EFE6"], brief: "Fleet logistics, plainspoken and precise.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "machinery-exchange",         name: "Machinery Exchange",                tag: "Machinery",   kind: "demo", year: "2025", url: "https://demo-machinery-exchange.onrender.com",                 palette: ["#2C2C2C", "#FFC107", "#F5EFE6"], brief: "Heavy equipment in heavier type.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "sabarm-business-solutions",  name: "Sabarm Business Solutions",         tag: "Finance",     kind: "demo", year: "2025", url: "https://demo-sabarm-business-solutions.onrender.com",          palette: ["#0F3460", "#E94F37", "#F5EFE6"], brief: "Audit and assurance — a ledger with a voice.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "african-century",            name: "African Century",                   tag: "Finance",     kind: "demo", year: "2025", url: "https://demo-african-century.onrender.com",                    palette: ["#0D2137", "#D4A74C", "#F5EFE6"], brief: "Financial services for the long horizon.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "zimbabwe-leaf-tobacco",      name: "Zimbabwe Leaf Tobacco",             tag: "Agro",        kind: "demo", year: "2025", url: "https://demo-zimbabwe-leaf-tobacco.onrender.com",              palette: ["#3E2C1C", "#C19A6B", "#F5EFE6"], brief: "A century of leaf, rendered in leaf.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "british-american-tobacco",   name: "British American Tobacco Zimbabwe", tag: "Agro",        kind: "demo", year: "2025", url: "https://demo-british-american-tobacco.onrender.com",           palette: ["#1B365D", "#C8102E", "#F5EFE6"], brief: "Corporate plc, held to the same standard.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "muble-axis",                 name: "Muble Axis",                        tag: "Engineering", kind: "demo", year: "2025", url: "https://demo-muble-axis.onrender.com",                         palette: ["#1A1A1A", "#00B4D8", "#F5EFE6"], brief: "Mechanical engineering. Drawings as interfaces.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "bard-santner-golf-v1",       name: "Bard Santner Golf — The Race (V1)", tag: "Sports",      kind: "demo", year: "2026", url: "https://demo-bard-santner-golf-v1.onrender.com",               palette: ["#0F2A44", "#D4AF37", "#F5EFE6"], brief: "Earlier version of the golf hub — kept as a conversation artifact.", tech: ["React", "Vite", "Tailwind"] },
-  { slug: "bard-santner-golf-v2",       name: "Bard Santner Golf — The Club (V2)", tag: "Sports",      kind: "demo", year: "2026", url: "https://demo-bard-santner-golf-v2.onrender.com",               palette: ["#0F2A44", "#B8864B", "#EAE0D0"], brief: "Club-focused variant. Members-lounge energy.", tech: ["React", "Vite", "Tailwind"] },
+  // ─── EXPERIMENTATION (curated & filterable) ───
+  { slug: "palm-river-hotel",           name: "Palm River Hotel",                  tag: "Hospitality", kind: "experimentation", year: "2025", url: "https://demo-palm-river-hotel.onrender.com",                 palette: ["#0C3B2E", "#D4AF37", "#F5EFE6"], brief: "Luxury hospitality by the water. Gold on deep green.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "the-rainbow-towers-hotel",   name: "The Rainbow Towers Hotel",          tag: "Hospitality", kind: "experimentation", year: "2025", url: "https://demo-the-rainbow-towers-hotel-and.onrender.com",      palette: ["#1B1F3A", "#B8864B", "#EAE0D0"], brief: "A Harare landmark reframed in editorial type.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "masawara-urban-retreat",     name: "Masawara Urban Retreat",            tag: "Hospitality", kind: "experimentation", year: "2025", url: "https://demo-masawara-urban-retreat.onrender.com",            palette: ["#2C1810", "#D9B382", "#F5EFE6"], brief: "A retreat in the middle of the city that refuses the city.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "sandalwood-lodge",           name: "Sandalwood Lodge",                  tag: "Hospitality", kind: "experimentation", year: "2025", url: "https://demo-sandalwood-lodge.onrender.com",                  palette: ["#3E2723", "#C19A6B", "#F5EFE6"], brief: "Cedar-warm. A lodge for returning, not escaping.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "solaire-lightworks",         name: "Solaire Lightworks",                tag: "Retail",      kind: "experimentation", year: "2025", url: "https://demo-solaire-lightworks.onrender.com",                palette: ["#1C1C1C", "#E5B800", "#F5EFE6"], brief: "Lighting as jewellery. Every fixture a proper noun.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "autoworld-zimbabwe",         name: "Autoworld Zimbabwe",                tag: "Automotive",  kind: "experimentation", year: "2025", url: "https://demo-autoworld-zimbabwe.onrender.com",                palette: ["#0A0A0A", "#C8102E", "#F5EFE6"], brief: "Automotive black / alarm red. Machines as objects.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "toyota-by-cfao-zimbabwe",    name: "Toyota by CFAO Zimbabwe",           tag: "Automotive",  kind: "experimentation", year: "2025", url: "https://demo-toyota-by-cfao-zimbabwe.onrender.com",           palette: ["#EB0A1E", "#111111", "#F5EFE6"], brief: "A storied marque, stripped to posture and proof.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "symmetry-dental-surgery",    name: "Symmetry Dental Surgery",           tag: "Healthcare",  kind: "experimentation", year: "2025", url: "https://demo-symmetry-dental-surgery-dr-t-chombo.onrender.com", palette: ["#E8F4F8", "#2C6E7F", "#0F2A33"], brief: "Clinical calm without the hospital chill.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "the-avenues-clinic",         name: "The Avenues Clinic",                tag: "Healthcare",  kind: "experimentation", year: "2025", url: "https://demo-the-avenues-clinic.onrender.com",                palette: ["#1C3D5A", "#D9E6F2", "#F5F5F5"], brief: "Institutional blue with a bedside manner.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "melbourne-ivf",              name: "Melbourne IVF",                     tag: "Healthcare",  kind: "experimentation", year: "2025", url: "https://demo-melbourne.onrender.com",                          palette: ["#3B5998", "#F0C3D3", "#FFF7F2"], brief: "Fertility care, rendered with softness and steel.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "muvingi-and-mugadza-legal",  name: "Muvingi & Mugadza Legal",           tag: "Legal",       kind: "experimentation", year: "2025", url: "https://demo-muvingi-and-mugadza-legal.onrender.com",          palette: ["#12233A", "#B8864B", "#F5EFE6"], brief: "Senior counsel in deep blue.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "mhishi-nkomo-legal-practice", name: "Mhishi Nkomo Legal Practice",      tag: "Legal",       kind: "experimentation", year: "2025", url: "https://demo-mhishi-nkomo-legal-practice.onrender.com",        palette: ["#0B1220", "#C6A664", "#F5EFE6"], brief: "A firm as a fortress, built out of lines.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "nyaradzo-life-assurance",    name: "Nyaradzo Life Assurance",           tag: "Insurance",   kind: "experimentation", year: "2025", url: "https://demo-nyaradzo-life-assurance.onrender.com",            palette: ["#0C4F2E", "#D4AF37", "#F5EFE6"], brief: "Life assurance rendered as a long sentence.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "eilite-insurance-agency",    name: "EILITE Insurance Agency",           tag: "Insurance",   kind: "experimentation", year: "2025", url: "https://demo-eilite-insurance-agency.onrender.com",            palette: ["#1A1A2E", "#E94560", "#F5EFE6"], brief: "Modern insurance brokerage — agile, explicit.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "murwisi-airfreight-cargo",   name: "Murwisi Airfreight Cargo",          tag: "Logistics",   kind: "experimentation", year: "2025", url: "https://demo-murwisi-airfreight-cargo.onrender.com",           palette: ["#0A2E5C", "#F5A623", "#F5EFE6"], brief: "Freight in runway-blue and safety-amber.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "whelson-transport",          name: "Whelson Transport",                 tag: "Logistics",   kind: "experimentation", year: "2025", url: "https://demo-whelson-transport.onrender.com",                  palette: ["#1E3A5F", "#E53E3E", "#F5EFE6"], brief: "Fleet logistics, plainspoken and precise.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "machinery-exchange",         name: "Machinery Exchange",                tag: "Machinery",   kind: "experimentation", year: "2025", url: "https://demo-machinery-exchange.onrender.com",                 palette: ["#2C2C2C", "#FFC107", "#F5EFE6"], brief: "Heavy equipment in heavier type.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "sabarm-business-solutions",  name: "Sabarm Business Solutions",         tag: "Finance",     kind: "experimentation", year: "2025", url: "https://demo-sabarm-business-solutions.onrender.com",          palette: ["#0F3460", "#E94F37", "#F5EFE6"], brief: "Audit and assurance — a ledger with a voice.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "african-century",            name: "African Century",                   tag: "Finance",     kind: "experimentation", year: "2025", url: "https://demo-african-century.onrender.com",                    palette: ["#0D2137", "#D4A74C", "#F5EFE6"], brief: "Financial services for the long horizon.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "zimbabwe-leaf-tobacco",      name: "Zimbabwe Leaf Tobacco",             tag: "Agro",        kind: "experimentation", year: "2025", url: "https://demo-zimbabwe-leaf-tobacco.onrender.com",              palette: ["#3E2C1C", "#C19A6B", "#F5EFE6"], brief: "A century of leaf, rendered in leaf.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "british-american-tobacco",   name: "British American Tobacco Zimbabwe", tag: "Agro",        kind: "experimentation", year: "2025", url: "https://demo-british-american-tobacco.onrender.com",           palette: ["#1B365D", "#C8102E", "#F5EFE6"], brief: "Corporate plc, held to the same standard.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "muble-axis",                 name: "Muble Axis",                        tag: "Engineering", kind: "experimentation", year: "2025", url: "https://demo-muble-axis.onrender.com",                         palette: ["#1A1A1A", "#00B4D8", "#F5EFE6"], brief: "Mechanical engineering. Drawings as interfaces.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "bard-santner-golf-v1",       name: "Bard Santner Golf — The Race (V1)", tag: "Sports",      kind: "experimentation", year: "2026", url: "https://demo-bard-santner-golf-v1.onrender.com",               palette: ["#0F2A44", "#D4AF37", "#F5EFE6"], brief: "Earlier version of the golf hub — kept as a conversation artifact.", tech: ["React", "Vite", "Tailwind"] },
+  { slug: "bard-santner-golf-v2",       name: "Bard Santner Golf — The Club (V2)", tag: "Sports",      kind: "experimentation", year: "2026", url: "https://demo-bard-santner-golf-v2.onrender.com",               palette: ["#0F2A44", "#B8864B", "#EAE0D0"], brief: "Club-focused variant. Members-lounge energy.", tech: ["React", "Vite", "Tailwind"] },
 ];
 
 export const FILTER_CHIPS = [
   { id: "all", label: "All" },
-  { id: "paid", label: "Paid" },
-  { id: "demo", label: "Demo" },
+  { id: "recently-live", label: "Recently Live" },
+  { id: "experimentation", label: "Experimentation" },
   { id: "Hospitality", label: "Hospitality" },
   { id: "Legal", label: "Legal" },
   { id: "Healthcare", label: "Healthcare" },
@@ -173,8 +173,8 @@ export const FILTER_CHIPS = [
 
 export function filterProjects(projects, filter) {
   if (filter === "all") return projects;
-  if (filter === "paid") return projects.filter((p) => p.kind === "paid");
-  if (filter === "demo") return projects.filter((p) => p.kind === "demo");
+  if (filter === "recently-live") return projects.filter((p) => p.kind === "recently-live");
+  if (filter === "experimentation") return projects.filter((p) => p.kind === "experimentation");
   return projects.filter((p) => p.tag === filter);
 }
 

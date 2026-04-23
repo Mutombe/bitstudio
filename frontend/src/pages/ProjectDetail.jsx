@@ -51,8 +51,8 @@ export default function ProjectDetail() {
             >
               <div className="flex items-start justify-between font-mono text-[10px] tracking-[0.22em] uppercase" style={{ color: hex(c || "#F5EFE6", 0.7) }}>
                 <span>{p.year}</span>
-                <span className={p.kind === "paid" ? "text-signal" : ""}>
-                  {p.kind === "paid" ? "Paid · Live" : "Demo · Live"}
+                <span className={p.kind === "recently-live" ? "text-signal" : ""}>
+                  {p.kind === "recently-live" ? "Recently Live" : "Experimentation"}
                 </span>
               </div>
 
