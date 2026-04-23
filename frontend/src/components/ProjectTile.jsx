@@ -83,11 +83,11 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
           {/* Kind pill */}
           <div className="absolute top-4 left-4 md:top-6 md:left-6 px-2.5 py-1 font-mono text-[9px] tracking-[0.22em] uppercase rounded-full"
             style={{
-              background: p.kind === "paid" ? "#D4FF3A" : hex("#F5EFE6", 0.9),
+              background: p.kind === "recently-live" ? "#D4FF3A" : hex("#F5EFE6", 0.9),
               color: "#0A0708",
             }}
           >
-            {p.kind === "paid" ? "Paid" : "Demo"}
+            {p.kind === "recently-live" ? "Recently Live" : "Experimentation"}
           </div>
         </div>
 

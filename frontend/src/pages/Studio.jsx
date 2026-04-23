@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import PageTransition from "../components/PageTransition.jsx";
 import SectionLabel from "../components/SectionLabel.jsx";
 import Ticker from "../components/Ticker.jsx";
+import WireframeOverlay from "../components/WireframeOverlay.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 import { Link } from "react-router-dom";
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
@@ -55,6 +56,7 @@ export default function Studio() {
           <div className="absolute top-[-15%] left-[-15%] w-[60vw] h-[60vw] rounded-full bg-maroon-600/30 blur-[180px]" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-signal/5 blur-[160px]" />
         </div>
+        <WireframeOverlay />
         <div className="relative max-w-[1600px] mx-auto px-5 md:px-10">
           <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50 mb-10">
             <span className="w-1 h-1 rounded-full bg-signal pulse-dot" />
