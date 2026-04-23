@@ -70,22 +70,37 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
         {...hover}
         className="block relative overflow-hidden rounded-sm transition-transform duration-500 group-hover:scale-[1.015] focus:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-ink)]"
       >
-        {/* Tile body — solid CLIENT primary fill + strict zone layout */}
+        {/* Tile body — CLIENT palette fusion (multi-orb mesh of all palette colors) + strict zone */}
         <div
-          className="relative flex flex-col p-5 md:p-6 aspect-[4/5] md:aspect-[3/4] min-h-[280px] md:min-h-[340px] overflow-hidden"
+          className="relative flex flex-col p-4 md:p-5 aspect-[4/3] md:aspect-[5/4] min-h-[200px] md:min-h-[240px] overflow-hidden"
           style={{
-            // Bold, unambiguous: solid client primary color.
+            // Primary as the base, but three overlapping orbs (primary/secondary/paper)
+            // are layered on top in atmospheric mesh so the tile reads as a FUSION
+            // of the client's brand, not a single flat fill.
             backgroundColor: primary,
           }}
         >
-          {/* Subtle atmospheric mesh in client palette (~20%) — adds depth without
-              diluting the primary fill. */}
+          {/* Multi-color palette fusion — 3 big blurred orbs in client colors
+              (primary deepened, secondary, paper). They overlap and blend into
+              a painterly mesh. 70% opacity so it actually reads. */}
           <div
-            className="absolute inset-0 opacity-20 pointer-events-none"
+            className="absolute inset-0 opacity-[0.72] pointer-events-none mix-blend-screen"
             style={{
               background: `
-                radial-gradient(circle at 20% 15%, ${hex(secondary, 0.9)}, transparent 55%),
-                radial-gradient(circle at 82% 85%, ${hex(paper, 0.5)}, transparent 60%)
+                radial-gradient(circle at 15% 10%, ${hex(secondary, 0.95)}, transparent 55%),
+                radial-gradient(circle at 88% 20%, ${hex(paper, 0.55)}, transparent 50%),
+                radial-gradient(circle at 78% 92%, ${hex(primary, 0.9)}, transparent 60%),
+                radial-gradient(circle at 22% 88%, ${hex(secondary, 0.6)}, transparent 55%)
+              `,
+            }}
+            aria-hidden
+          />
+          {/* A secondary fusion veil for depth — darker pass, multiply blend */}
+          <div
+            className="absolute inset-0 opacity-40 pointer-events-none mix-blend-multiply"
+            style={{
+              background: `
+                radial-gradient(ellipse at 50% 50%, transparent 20%, ${hex(primary, 0.7)} 90%)
               `,
             }}
             aria-hidden
