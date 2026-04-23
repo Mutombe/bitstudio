@@ -76,7 +76,7 @@ export default function Home({ onSummon }) {
         ref={heroRef}
         className="
           relative overflow-hidden radial-bleed hero-seam
-          min-h-[92vh] pt-16 pb-14
+          min-h-[100svh] pt-28 md:pt-40 pb-10 md:pb-16
           lg:pt-20 lg:pb-0
           lg:min-h-[calc(100svh-80px)] lg:h-[calc(100svh-80px)] lg:max-h-[860px]
           lg:flex lg:flex-col lg:justify-between
