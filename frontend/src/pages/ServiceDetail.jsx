@@ -96,26 +96,29 @@ export default function ServiceDetail() {
 
   return (
     <PageTransition>
-      {/* ─── Hero — contained aspect on mobile so generative SVGs don't overflow ─── */}
+      {/* ─── Hero ─── */}
       <section className="relative pt-20 md:pt-24">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10">
-          <div className="relative w-full aspect-[4/3] md:aspect-[16/9] md:min-h-[480px] overflow-hidden rounded-sm">
-            <ServiceHero type={service.heroType} />
-
-            {/* Top strip — breadcrumb */}
-            <div className="absolute top-4 md:top-6 left-0 right-0 px-4 md:px-6 z-10">
-              <div className="flex items-center gap-2 md:gap-3 font-mono text-[9px] md:text-[10px] tracking-[0.22em] uppercase text-bone-100/60 flex-wrap">
-                <Link to="/" {...hover} className="hover-line">Index</Link>
-                <span className="text-bone-100/30">/</span>
-                <Link to="/#services" {...hover} className="hover-line">Services</Link>
-                <span className="text-bone-100/30">/</span>
-                <span className="text-signal truncate max-w-[60vw]">{service.title}</span>
-              </div>
+          {/* Breadcrumb — lives OUTSIDE the hero frame so it never collides
+              with the SVG animation's internal labels on mobile */}
+          <div className="mb-4 md:mb-5">
+            <div className="flex items-center gap-2 md:gap-3 font-mono text-[9px] md:text-[10px] tracking-[0.22em] uppercase text-bone-100/60 flex-wrap">
+              <Link to="/" {...hover} className="hover-line">Index</Link>
+              <span className="text-bone-100/30">/</span>
+              <Link to="/#services" {...hover} className="hover-line">Services</Link>
+              <span className="text-bone-100/30">/</span>
+              <span className="text-signal truncate max-w-[60vw]">{service.title}</span>
             </div>
+          </div>
+
+          {/* Hero — contained aspect on mobile so generative SVGs don't overflow.
+              Shorter on mobile (3/4 → 1/1 range) to keep content density reasonable. */}
+          <div className="relative w-full aspect-[16/10] sm:aspect-[4/3] md:aspect-[16/9] md:min-h-[480px] overflow-hidden rounded-sm">
+            <ServiceHero type={service.heroType} />
 
             {/* Hero bottom seam — dissolves into ink */}
             <div
-              className="absolute left-0 right-0 bottom-0 h-20 md:h-32 pointer-events-none"
+              className="absolute left-0 right-0 bottom-0 h-16 md:h-32 pointer-events-none"
               style={{ background: "linear-gradient(180deg, transparent, var(--color-ink))" }}
             />
           </div>
@@ -132,9 +135,12 @@ export default function ServiceDetail() {
             className="flex flex-col md:flex-row md:items-end md:justify-between gap-6"
           >
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-3 md:gap-4 mb-5 md:mb-6">
-                <div className="w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-full border border-signal/40 flex items-center justify-center">
-                  <Icon size={20} weight="regular" className="text-signal" />
+              {/* Icon + number label — tighter stack on mobile so it doesn't
+                  crash against the headline below. */}
+              <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
+                <div className="w-9 h-9 md:w-12 md:h-12 shrink-0 rounded-full border border-signal/40 flex items-center justify-center">
+                  <Icon size={18} weight="regular" className="text-signal md:hidden" />
+                  <Icon size={20} weight="regular" className="text-signal hidden md:block" />
                 </div>
                 <p className="label-mono text-bone-100/50 tabular-nums">
                   <span className="text-signal">{service.number}</span>
@@ -142,16 +148,16 @@ export default function ServiceDetail() {
                 </p>
               </div>
               <h1
-                className="text-bone-100 font-display font-bold leading-[0.85] max-w-[18ch]"
+                className="text-bone-100 font-display font-bold leading-[0.9] md:leading-[0.85] max-w-[18ch]"
                 style={{
-                  fontSize: "clamp(2.25rem, 8vw, 5rem)",
+                  fontSize: "clamp(2rem, 8vw, 5rem)",
                   letterSpacing: "-0.04em",
                 }}
               >
                 {service.title}
                 <span className="italic-accent text-signal font-light">.</span>
               </h1>
-              <p className="mt-6 md:mt-8 italic-accent text-xl md:text-3xl text-bone-300 max-w-3xl leading-snug">
+              <p className="mt-5 md:mt-8 italic-accent text-lg sm:text-xl md:text-3xl text-bone-300 max-w-3xl leading-snug">
                 {service.tagline}
               </p>
             </div>
