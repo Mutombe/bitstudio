@@ -99,9 +99,10 @@ export default function ServiceDetail() {
       {/* ─── Hero ─── */}
       <section className="relative pt-20 md:pt-24">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10">
-          {/* Breadcrumb — lives OUTSIDE the hero frame so it never collides
-              with the SVG animation's internal labels on mobile */}
-          <div className="mb-4 md:mb-5">
+          {/* Breadcrumb — lives OUTSIDE the hero frame. Generous bottom margin
+              + a hairline divider so there's a crisp visual break between the
+              breadcrumb and the artifact below. */}
+          <div className="pb-5 md:pb-6 mb-8 md:mb-10 border-b border-white/5">
             <div className="flex items-center gap-2 md:gap-3 font-mono text-[9px] md:text-[10px] tracking-[0.22em] uppercase text-bone-100/60 flex-wrap">
               <Link to="/" {...hover} className="hover-line">Index</Link>
               <span className="text-bone-100/30">/</span>
@@ -113,19 +114,20 @@ export default function ServiceDetail() {
 
           {/* Hero frame — the generative animation lives INSIDE this frame with
               explicit top/bottom padding so its content never touches the edges
-              (or gets occluded by the bottom seam). */}
-          <div className="relative w-full aspect-[16/10] sm:aspect-[4/3] md:aspect-[16/9] md:min-h-[480px] overflow-hidden rounded-sm">
+              (or gets occluded by the bottom seam). Mb gives room below before
+              the title section begins. */}
+          <div className="relative w-full aspect-[16/10] sm:aspect-[4/3] md:aspect-[16/9] md:min-h-[480px] overflow-hidden rounded-sm mb-10 md:mb-14 border border-white/8">
             {/* Inner padded stage — gives the SVG artifact breathing room on
                 top + bottom. The animation component fills this inner box. */}
-            <div className="absolute inset-0 pt-8 pb-10 md:pt-10 md:pb-14 lg:pt-14 lg:pb-16">
+            <div className="absolute inset-0 pt-10 pb-12 md:pt-12 md:pb-14 lg:pt-14 lg:pb-16">
               <div className="relative w-full h-full">
                 <ServiceHero type={service.heroType} />
               </div>
             </div>
 
-            {/* Hero bottom seam — slimmer on mobile so it doesn't eat the animation */}
+            {/* Hero bottom seam — slim on mobile, cleanly separates the frame */}
             <div
-              className="absolute left-0 right-0 bottom-0 h-8 md:h-20 pointer-events-none"
+              className="absolute left-0 right-0 bottom-0 h-6 md:h-16 pointer-events-none"
               style={{ background: "linear-gradient(180deg, transparent, var(--color-ink))" }}
             />
           </div>
@@ -133,7 +135,7 @@ export default function ServiceDetail() {
       </section>
 
       {/* ─── Title + tagline ─── */}
-      <section className="relative pt-8 pb-12 md:pt-10 md:pb-16">
+      <section className="relative pt-4 pb-12 md:pt-6 md:pb-16">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
