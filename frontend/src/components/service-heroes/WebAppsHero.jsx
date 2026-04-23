@@ -65,7 +65,7 @@ export default function WebAppsHero() {
       </div>
 
       {/* Progress pips */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+      <div className="absolute bottom-2 md:bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
         {LAYOUTS.map((L, i) => (
           <span
             key={L}

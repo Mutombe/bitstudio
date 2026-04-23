@@ -135,7 +135,7 @@ export default function EnterpriseHero() {
       </svg>
 
       {/* Overlay label */}
-      <div className="absolute bottom-8 left-8 right-8 flex items-end justify-between pointer-events-none">
+      <div className="absolute bottom-2 left-3 right-3 md:bottom-8 md:left-8 md:right-8 flex items-end justify-between pointer-events-none">
         <div>
           <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-signal/80 mb-2">
             Internal tools

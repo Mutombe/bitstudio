@@ -117,9 +117,10 @@ export default function ServiceDetail() {
               (or gets occluded by the bottom seam). Mb gives room below before
               the title section begins. */}
           <div className="relative w-full aspect-[16/10] sm:aspect-[4/3] md:aspect-[16/9] md:min-h-[480px] overflow-hidden rounded-sm mb-10 md:mb-14 border border-white/8">
-            {/* Inner padded stage — gives the SVG artifact breathing room on
-                top + bottom. The animation component fills this inner box. */}
-            <div className="absolute inset-0 pt-10 pb-12 md:pt-12 md:pb-14 lg:pt-14 lg:pb-16">
+            {/* Inner stage — on mobile the animation uses the FULL frame so it
+                isn't hidden inside a double-padded box. Desktop retains generous
+                breathing room via pt/pb. */}
+            <div className="absolute inset-0 md:pt-10 md:pb-12 lg:pt-14 lg:pb-16">
               <div className="relative w-full h-full">
                 <ServiceHero type={service.heroType} />
               </div>
