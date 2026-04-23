@@ -338,29 +338,16 @@
      No visible solid border on any viewport — the transition is a COLOR blend,
      not a cut. Two layers: a thin chartreuse kiss at the very edge, and the
      main maroon→ink fade body. Hero content sits at z-20, above this z-1. */
-  .hero-seam::before {
-    content: "";
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    height: 45%;
-    pointer-events: none;
-    background: linear-gradient(180deg, transparent 92%, rgba(212, 255, 58, 0.02) 100%);
-    z-index: 1;
-  }
+  /* Single clean two-stop fade — hero's contents dissolve straight into the
+     next section's background (ink). No intermediate maroon stops that can
+     read as a horizontal band/border. */
   .hero-seam::after {
     content: "";
     position: absolute;
     left: 0; right: 0; bottom: 0;
-    height: 45%;
+    height: 40%;
     pointer-events: none;
-    background: linear-gradient(
-      180deg,
-      transparent 0%,
-      transparent 25%,
-      rgba(28, 3, 8, 0.22) 45%,
-      rgba(14, 1, 4, 0.6) 70%,
-      var(--color-ink) 95%
-    );
+    background: linear-gradient(180deg, transparent 0%, var(--color-ink) 100%);
     z-index: 1;
   }
   /* A wave-break wrapper that dissolves its horizontal edges via radial mask */
