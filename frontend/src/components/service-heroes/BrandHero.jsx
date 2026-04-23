@@ -59,7 +59,7 @@ export default function BrandHero() {
         </AnimatePresence>
       </div>
 
-      <div className="absolute bottom-8 left-8 right-8 flex items-end justify-between pointer-events-none">
+      <div className="absolute bottom-2 left-3 right-3 md:bottom-8 md:left-8 md:right-8 flex items-end justify-between pointer-events-none">
         <div>
           <p className="font-mono text-[10px] tracking-[0.3em] uppercase mb-2" style={{ color: v.accent }}>
             System · 04 variants
