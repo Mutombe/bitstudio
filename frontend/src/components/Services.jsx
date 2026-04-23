@@ -58,7 +58,8 @@ export default function Services() {
     <section id="services" className="relative py-24 md:py-40 bg-[color:var(--color-ink)] overflow-hidden">
       {/* Ambient under-glow */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-[10%] w-[40vw] h-[40vw] rounded-full bg-maroon-700/25 blur-[150px]" />
+        {/* Top orb recessed (top-24 not top-0) + dimmed so the hero/services seam stays clean. */}
+        <div className="absolute top-24 left-[10%] w-[40vw] h-[40vw] rounded-full bg-maroon-700/12 blur-[150px]" />
         <div className="absolute bottom-0 right-[5%] w-[35vw] h-[35vw] rounded-full bg-signal/5 blur-[140px]" />
       </div>
 
@@ -82,9 +83,15 @@ export default function Services() {
         {/* Desktop grid */}
         <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
           {SERVICES.map((s, i) => (
-            <QuantumHover key={s.slug} strength={3}>
-              <ServiceCard s={s} index={i} />
-            </QuantumHover>
+            <Link
+              key={s.slug}
+              to={`/services/${s.slug}`}
+              className="block rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-ink)]"
+            >
+              <QuantumHover strength={3}>
+                <ServiceCard s={s} index={i} />
+              </QuantumHover>
+            </Link>
           ))}
         </div>
 
@@ -243,21 +250,23 @@ function ServiceCard({ s, index }) {
           <ServiceArtifact id={s.artifact} />
         </motion.div>
 
-        {/* "More →" link */}
+        {/* "More →" CTA — visual only; the entire card is the Link */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={show ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: reduced ? 0 : 0.4, delay: reduced ? 0 : 0.9 }}
           className="relative mt-6 pt-4 border-t border-white/5"
         >
-          <Link
-            to={`/services/${s.slug}`}
-            {...hover}
-            className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/70 hover:text-signal transition-colors group/link"
+          <span
+            className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/70 group-hover:text-signal transition-colors"
           >
             <span>More</span>
-            <ArrowRightIcon size={12} weight="bold" className="transition-transform duration-400 group-hover/link:translate-x-1" />
-          </Link>
+            <ArrowRightIcon
+              size={12}
+              weight="bold"
+              className="transition-transform duration-400 group-hover:translate-x-1"
+            />
+          </span>
         </motion.div>
 
         {/* Corner mark */}
@@ -416,6 +425,10 @@ function MobileServiceCard({ s, index, isActive = false, registerRef }) {
 
   return (
    <div ref={setRefs} className="shrink-0 snap-center w-[86%]">
+    <Link
+      to={`/services/${s.slug}`}
+      className="block rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-ink)]"
+    >
     <QuantumHover strength={2.5} forceActive={isActive}>
     <div
       className="group relative w-full min-h-[440px] p-6 rounded-sm border border-maroon-200/20 bg-maroon-950/40 backdrop-blur-xl overflow-hidden"
@@ -517,20 +530,17 @@ function MobileServiceCard({ s, index, isActive = false, registerRef }) {
         <ServiceArtifact id={s.artifact} />
       </motion.div>
 
-      {/* More → */}
+      {/* More → CTA (visual only; whole card is the Link) */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={show ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: reduced ? 0 : 0.4, delay: reduced ? 0 : 0.9 }}
         className="relative mt-6 pt-4 border-t border-white/5"
       >
-        <Link
-          to={`/services/${s.slug}`}
-          className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.22em] uppercase text-signal"
-        >
+        <span className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.22em] uppercase text-signal">
           <span>Read the full piece</span>
           <ArrowRightIcon size={12} weight="bold" />
-        </Link>
+        </span>
       </motion.div>
 
       <span
@@ -540,6 +550,7 @@ function MobileServiceCard({ s, index, isActive = false, registerRef }) {
       />
     </div>
     </QuantumHover>
+    </Link>
    </div>
   );
 }
