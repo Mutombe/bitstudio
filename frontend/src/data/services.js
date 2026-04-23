@@ -20,6 +20,9 @@ export const SERVICES = [
     heroType: "typography",
     accent: "#D4FF3A",
     tint: "#B54656",
+    hashtags: ["#nextjs", "#astro", "#a11y", "#seo", "#cms-headless", "#web-vitals"],
+    iconCluster: ["Globe", "Code", "Gauge", "Megaphone"],
+    artifact: "websites-perf-bars",
   },
   {
     slug: "web-applications",
@@ -38,6 +41,9 @@ export const SERVICES = [
     heroType: "wireframe-morph",
     accent: "#D4FF3A",
     tint: "#8C1E2C",
+    hashtags: ["#react", "#django", "#postgres", "#tailwind", "#auth", "#realtime"],
+    iconCluster: ["Stack", "Database", "Lightning", "UsersThree"],
+    artifact: "web-apps-url-bar",
   },
   {
     slug: "enterprise-software",
@@ -56,6 +62,9 @@ export const SERVICES = [
     heroType: "network-graph",
     accent: "#A8C72E",
     tint: "#6B1521",
+    hashtags: ["#crm", "#workflow", "#permissions", "#audit-trail", "#rbac", "#dashboards"],
+    iconCluster: ["Graph", "Vault", "GitBranch", "ShieldCheck"],
+    artifact: "enterprise-graph",
   },
   {
     slug: "ai-agents",
@@ -74,6 +83,9 @@ export const SERVICES = [
     heroType: "orchestration",
     accent: "#D4FF3A",
     tint: "#3A0A15",
+    hashtags: ["#claude", "#gpt", "#tool-use", "#rag", "#memory", "#orchestration"],
+    iconCluster: ["Robot", "ChatCircleDots", "BookOpen", "Wrench", "Cpu"],
+    artifact: "agents-chain",
   },
   {
     slug: "scraping-ingestion",
@@ -92,6 +104,9 @@ export const SERVICES = [
     heroType: "dom-tree",
     accent: "#D4FF3A",
     tint: "#4F0D18",
+    hashtags: ["#playwright", "#cheerio", "#rotating-proxies", "#js-render", "#dedup", "#etl"],
+    iconCluster: ["DownloadSimple", "Tree", "Funnel", "Database"],
+    artifact: "scraping-json",
   },
   {
     slug: "automations",
@@ -110,6 +125,9 @@ export const SERVICES = [
     heroType: "cron-orbit",
     accent: "#A8C72E",
     tint: "#8C1E2C",
+    hashtags: ["#cron", "#webhooks", "#zapier-replacement", "#slack-ops", "#agent-loops", "#observability"],
+    iconCluster: ["Cpu", "Clock", "ArrowsClockwise", "BellRinging"],
+    artifact: "automations-clock",
   },
   {
     slug: "brand-design",
@@ -128,6 +146,9 @@ export const SERVICES = [
     heroType: "monogram",
     accent: "#D4FF3A",
     tint: "#B54656",
+    hashtags: ["#wordmark", "#type-system", "#color-tokens", "#figma", "#motion-spec", "#component-lib"],
+    iconCluster: ["Sparkle", "PaintBrush", "Swatches", "TextAa"],
+    artifact: "brand-chips",
   },
   {
     slug: "deploy-operate",
@@ -146,6 +167,9 @@ export const SERVICES = [
     heroType: "pipeline",
     accent: "#D4FF3A",
     tint: "#6B1521",
+    hashtags: ["#render", "#vercel", "#cloudflare", "#postgres", "#observability", "#zero-downtime"],
+    iconCluster: ["Lightning", "Rocket", "Broadcast", "Pulse"],
+    artifact: "deploy-pipeline",
   },
 ];
 
