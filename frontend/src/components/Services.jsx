@@ -12,6 +12,7 @@ import {
 } from "@phosphor-icons/react";
 import SectionLabel from "./SectionLabel.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
+import QuantumHover from "./QuantumHover.jsx";
 
 /**
  * Services — the full "Capabilities" rewrite.
@@ -123,7 +124,9 @@ export default function Services() {
         {/* Desktop grid */}
         <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
           {SERVICES.map((s, i) => (
-            <ServiceCard key={s.id} s={s} index={i} />
+            <QuantumHover key={s.id} strength={3}>
+              <ServiceCard s={s} index={i} />
+            </QuantumHover>
           ))}
         </div>
 

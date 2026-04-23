@@ -87,9 +87,22 @@ export default function CommandPalette({ open, onClose }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-[120] bg-black/70 backdrop-blur-sm flex items-start justify-center pt-[12vh] px-4"
+          className="fixed inset-0 z-[120] backdrop-blur-sm flex items-start justify-center pt-[12vh] px-4"
           onClick={onClose}
+          style={{
+            background:
+              "radial-gradient(circle at 30% 20%, rgba(107,21,33,0.72), transparent 55%), radial-gradient(circle at 80% 90%, rgba(212,255,58,0.1), transparent 60%), rgba(0,0,0,0.72)",
+          }}
         >
+          {/* Scanlines overlay */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "repeating-linear-gradient(0deg, transparent 0, transparent 3px, rgba(212,255,58,0.02) 3px, rgba(212,255,58,0.02) 4px)",
+            }}
+            aria-hidden
+          />
           <motion.div
             initial={{ opacity: 0, y: -20, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}

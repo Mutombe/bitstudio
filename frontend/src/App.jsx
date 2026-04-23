@@ -5,6 +5,7 @@ import Nav from "./components/Nav.jsx";
 import Footer from "./components/Footer.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import CommandPalette from "./components/CommandPalette.jsx";
+import AmbientAudio from "./components/AmbientAudio.jsx";
 import { CursorProvider } from "./hooks/useCursor.jsx";
 
 import Home from "./pages/Home.jsx";
@@ -89,6 +90,7 @@ export default function App() {
         <Footer />
 
         <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
+        <AmbientAudio />
       </div>
     </CursorProvider>
   );
