@@ -17,6 +17,7 @@ import SectionLabel from "../components/SectionLabel.jsx";
 import PageTransition from "../components/PageTransition.jsx";
 import Services from "../components/Services.jsx";
 import MeshField from "../components/MeshField.jsx";
+import WireframeOverlay from "../components/WireframeOverlay.jsx";
 import WaveBreak from "../components/WaveBreak.jsx";
 import FusionField from "../components/FusionField.jsx";
 import FilterChips, { computeCounts } from "../components/FilterChips.jsx";
@@ -84,6 +85,9 @@ export default function Home({ onSummon }) {
       >
         {/* Computed ambient mesh (no images) */}
         <MeshField tint="maroon" intensity="med" />
+        {/* Same architectural wireframe artifact as Studio hero — anchored to the
+            right side via the component's viewBox cx=1200 (75% across 1600w). */}
+        <WireframeOverlay />
 
         <div className="relative z-20 max-w-[1600px] mx-auto w-full px-5 md:px-10 flex flex-col gap-8 md:gap-10 lg:pt-10 lg:flex-1 lg:justify-center">
           {/* Diagnostic corner */}
