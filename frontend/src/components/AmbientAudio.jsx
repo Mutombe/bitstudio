@@ -9,8 +9,8 @@ import { useCursorHover } from "../hooks/useCursor.jsx";
  * Persists state to localStorage as "bit:ambient".
  */
 
-const SRC =
-  "https://upload.wikimedia.org/wikipedia/commons/2/24/Mozart_-_Eine_kleine_Nachtmusik_-_1._Allegro.ogg";
+// Served locally from public/ — no network dependency, instant start.
+const SRC = "/mozart.mp3";
 const STORAGE_KEY = "bit:ambient";
 const TARGET_VOLUME = 0.08; // quiet — elegant not noisy
 const FADE_MS = 1200;       // 1.2s fade-in/out
@@ -96,7 +96,7 @@ export default function AmbientAudio() {
               transition={{ duration: 0.3 }}
               className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/70 bg-[color:var(--color-ink)]/60 backdrop-blur-sm border border-white/10 rounded-full px-3 py-1 pointer-events-none"
             >
-              ♪ Eine kleine Nachtmusik
+              ♪ Rondo Alla Turca · Mozart
             </motion.span>
           )}
         </AnimatePresence>

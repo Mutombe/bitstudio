@@ -21,9 +21,9 @@ const PARTICLES = Array.from({ length: 10 }, (_, i) => {
   return { x, y, s, delay: (i % 5) * 0.08 };
 });
 
-export default function QuantumHover({ children, className = "", strength = 3 }) {
+export default function QuantumHover({ children, className = "", strength = 3, forceActive = false }) {
   const ref = useRef(null);
-  const [active, setActive] = useState(false);
+  const [hoverActive, setHoverActive] = useState(false);
   const [tilt, setTilt] = useState({ rx: 0, ry: 0 });
   const pressTimer = useRef(null);
   // rAF-throttle mousemove so the tilt update never exceeds 1 react-render per frame.
@@ -31,6 +31,10 @@ export default function QuantumHover({ children, className = "", strength = 3 })
   // when sliding over a wrapped card.
   const pendingMove = useRef(null);
   const moveRaf = useRef(0);
+
+  // Effects show when mouse-hovered OR when parent pins forceActive
+  // (e.g. mobile carousel says "this card is centered — light it up").
+  const active = hoverActive || forceActive;
 
   useEffect(() => () => {
     if (moveRaf.current) cancelAnimationFrame(moveRaf.current);
@@ -58,19 +62,19 @@ export default function QuantumHover({ children, className = "", strength = 3 })
     [strength]
   );
 
-  const enter = () => setActive(true);
+  const enter = () => setHoverActive(true);
   const leave = () => {
-    setActive(false);
+    setHoverActive(false);
     setTilt({ rx: 0, ry: 0 });
   };
 
   // Touch: long-press fires the effect briefly
   const touchStart = () => {
-    pressTimer.current = setTimeout(() => setActive(true), 220);
+    pressTimer.current = setTimeout(() => setHoverActive(true), 220);
   };
   const touchEnd = () => {
     if (pressTimer.current) clearTimeout(pressTimer.current);
-    setTimeout(() => setActive(false), 600);
+    setTimeout(() => setHoverActive(false), 600);
   };
 
   return (

@@ -5,12 +5,19 @@ import ProjectTile from "../components/ProjectTile.jsx";
 import SectionLabel from "../components/SectionLabel.jsx";
 import PageTransition from "../components/PageTransition.jsx";
 import Ticker from "../components/Ticker.jsx";
+import FilterChips, { computeCounts } from "../components/FilterChips.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 
 export default function Work() {
   const [filter, setFilter] = useState("all");
   const hover = useCursorHover("hover", "");
   const filtered = useMemo(() => filterProjects(PROJECTS, filter), [filter]);
+  const counts = useMemo(() => computeCounts(PROJECTS, FILTER_CHIPS), []);
+  // Only show chips with at least one project under them
+  const visibleChips = useMemo(
+    () => FILTER_CHIPS.filter((c) => (counts[c.id] ?? 0) > 0 || c.id === "all"),
+    [counts]
+  );
 
   return (
     <PageTransition>
@@ -38,34 +45,29 @@ export default function Work() {
 
       {/* Filter chips */}
       <section className="sticky top-16 md:top-20 z-30 bg-[color:var(--color-ink)]/90 backdrop-blur-md border-y border-white/5">
-        <div className="max-w-[1600px] mx-auto px-5 md:px-10 py-4 overflow-x-auto">
-          <div className="flex items-center gap-2 w-max">
-            {FILTER_CHIPS.map((c) => {
-              const active = c.id === filter;
-              return (
-                <button
-                  key={c.id}
-                  {...hover}
-                  onClick={() => setFilter(c.id)}
-                  className={`shrink-0 px-4 py-2 rounded-full border transition-all font-mono text-[10px] tracking-[0.2em] uppercase ${
-                    active
-                      ? "bg-signal text-ink border-signal"
-                      : "border-white/10 text-bone-100/70 hover:border-bone-100/40 hover:text-bone-100"
-                  }`}
-                >
-                  {c.label}
-                </button>
-              );
-            })}
-          </div>
+        <div className="max-w-[1600px] mx-auto px-5 md:px-10 py-4">
+          <FilterChips
+            chips={visibleChips}
+            filter={filter}
+            onChange={setFilter}
+            counts={counts}
+          />
         </div>
       </section>
 
       <section className="relative py-12 md:py-20">
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <div className="flex items-center justify-between mb-10 font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/50">
-            <span>Filter: {filter}</span>
-            <span>{filtered.length} / {PROJECTS.length}</span>
+            <span>Filter: <span className="text-signal">{filter}</span></span>
+            <motion.span
+              key={`${filter}-${filtered.length}`}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="tabular-nums"
+            >
+              Showing <span className="text-bone-100">{filtered.length}</span> of {PROJECTS.length}
+            </motion.span>
           </div>
 
           <AnimatePresence mode="popLayout">

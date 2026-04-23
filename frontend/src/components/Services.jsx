@@ -277,6 +277,7 @@ function ServiceCard({ s, index }) {
 
 function ServicesCarousel() {
   const scrollerRef = useRef(null);
+  const cardRefs = useRef([]);
   const [active, setActive] = useState(0);
   const hover = useCursorHover("hover", "");
 
@@ -290,6 +291,47 @@ function ServicesCarousel() {
     };
     el.addEventListener("scroll", onScroll, { passive: true });
     return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // IntersectionObserver — a card is "centered" when ≥70% of it is within the
+  // scroller's visible rect. That card receives forceActive=true so the
+  // QuantumHover effects (particles, rings, glow, chromatic aberration) render
+  // without needing a mouse, fading as the next card slides in.
+  useEffect(() => {
+    const root = scrollerRef.current;
+    if (!root) return;
+    // Only on touch devices — desktop already uses mouse hover.
+    const isCoarse =
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(pointer: coarse)").matches;
+    if (!isCoarse) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Find the entry with the highest intersectionRatio that's ≥0.7
+        let best = null;
+        entries.forEach((entry) => {
+          if (entry.intersectionRatio >= 0.7) {
+            if (!best || entry.intersectionRatio > best.intersectionRatio) {
+              best = entry;
+            }
+          }
+        });
+        if (best) {
+          const idx = cardRefs.current.findIndex((r) => r === best.target);
+          if (idx >= 0) setActive(idx);
+        }
+      },
+      {
+        root,
+        threshold: [0.5, 0.7, 0.9],
+        rootMargin: "0px -10% 0px -10%",
+      }
+    );
+
+    cardRefs.current.forEach((el) => el && observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
   const go = (i) => {
@@ -318,7 +360,13 @@ function ServicesCarousel() {
         style={{ scrollbarWidth: "none" }}
       >
         {SERVICES.map((s, i) => (
-          <MobileServiceCard key={s.slug} s={s} index={i} />
+          <MobileServiceCard
+            key={s.slug}
+            s={s}
+            index={i}
+            isActive={i === active}
+            registerRef={(el) => (cardRefs.current[i] = el)}
+          />
         ))}
       </div>
 
@@ -347,7 +395,7 @@ function ServicesCarousel() {
   );
 }
 
-function MobileServiceCard({ s, index }) {
+function MobileServiceCard({ s, index, isActive = false, registerRef }) {
   const Icon = ICON_MAP[s.icon] || GlobeIcon;
   const ref = useRef(null);
   const inView = useInView(ref, { amount: 0.7 }); // triggers when centred
@@ -358,12 +406,19 @@ function MobileServiceCard({ s, index }) {
     if (inView) setHasRevealed(true);
   }, [inView]);
 
+  // Expose our DOM node up to the carousel for its IntersectionObserver
+  const setRefs = (el) => {
+    ref.current = el;
+    if (typeof registerRef === "function") registerRef(el);
+  };
+
   const show = reduced || hasRevealed;
 
   return (
+   <div ref={setRefs} className="shrink-0 snap-center w-[86%]">
+    <QuantumHover strength={2.5} forceActive={isActive}>
     <div
-      ref={ref}
-      className="group relative shrink-0 snap-center w-[86%] min-h-[440px] p-6 rounded-sm border border-maroon-200/20 bg-maroon-950/40 backdrop-blur-xl overflow-hidden"
+      className="group relative w-full min-h-[440px] p-6 rounded-sm border border-maroon-200/20 bg-maroon-950/40 backdrop-blur-xl overflow-hidden"
       style={{
         boxShadow: "inset 0 1px 0 rgba(245,239,230,0.05), inset 0 -1px 0 rgba(0,0,0,0.3)",
       }}
@@ -484,6 +539,8 @@ function MobileServiceCard({ s, index }) {
         aria-hidden
       />
     </div>
+    </QuantumHover>
+   </div>
   );
 }
 
