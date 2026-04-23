@@ -10,8 +10,10 @@ import { useCursorHover } from "../hooks/useCursor.jsx";
  */
 
 const SRC =
-  "https://upload.wikimedia.org/wikipedia/commons/7/7c/Eine_kleine_Nachtmusik_-_Mozart_-_1._Allegro.ogg";
+  "https://upload.wikimedia.org/wikipedia/commons/2/24/Mozart_-_Eine_kleine_Nachtmusik_-_1._Allegro.ogg";
 const STORAGE_KEY = "bit:ambient";
+const TARGET_VOLUME = 0.08; // quiet — elegant not noisy
+const FADE_MS = 1200;       // 1.2s fade-in/out
 
 export default function AmbientAudio() {
   const [on, setOn] = useState(false);
@@ -37,21 +39,42 @@ export default function AmbientAudio() {
     } catch (_) {}
   }, []);
 
+  // Smooth gain-curve fader — ramps volume from `from` to `to` over FADE_MS.
+  const fadeVolume = (from, to, onDone) => {
+    const a = audioRef.current;
+    if (!a) return;
+    const start = performance.now();
+    const step = (now) => {
+      const t = Math.min(1, (now - start) / FADE_MS);
+      // Ease-out cubic — gentle approach to target
+      const e = 1 - Math.pow(1 - t, 3);
+      a.volume = from + (to - from) * e;
+      if (t < 1) requestAnimationFrame(step);
+      else if (onDone) onDone();
+    };
+    requestAnimationFrame(step);
+  };
+
   const toggle = () => {
     const a = audioRef.current;
     if (!a) return;
     if (on) {
-      a.pause();
-      setOn(false);
+      // Graceful fade-out, then pause
+      fadeVolume(a.volume, 0, () => {
+        a.pause();
+        setOn(false);
+      });
       try { localStorage.setItem(STORAGE_KEY, "0"); } catch (_) {}
     } else {
-      a.volume = 0.15;
+      a.volume = 0;
       a.loop = true;
       a.play().then(() => {
         setOn(true);
+        fadeVolume(0, TARGET_VOLUME);
         try { localStorage.setItem(STORAGE_KEY, "1"); } catch (_) {}
-      }).catch(() => {
-        // If the browser blocks playback, stay off
+      }).catch((err) => {
+        // Browser blocked OR network/media error — stay silent
+        console.warn("[AmbientAudio] could not play:", err && err.message);
         setOn(false);
       });
     }

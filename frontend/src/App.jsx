@@ -13,6 +13,7 @@ import Work from "./pages/Work.jsx";
 import ProjectDetail from "./pages/ProjectDetail.jsx";
 import Studio from "./pages/Studio.jsx";
 import Contact from "./pages/Contact.jsx";
+import ServiceDetail from "./pages/ServiceDetail.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 class ErrorBoundary extends Component {
@@ -82,6 +83,7 @@ export default function App() {
               <Route path="/work/:slug" element={<ProjectDetail />} />
               <Route path="/studio" element={<Studio />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/services/:slug" element={<ServiceDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AnimatePresence>
