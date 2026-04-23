@@ -111,14 +111,21 @@ export default function ServiceDetail() {
             </div>
           </div>
 
-          {/* Hero — contained aspect on mobile so generative SVGs don't overflow.
-              Shorter on mobile (3/4 → 1/1 range) to keep content density reasonable. */}
+          {/* Hero frame — the generative animation lives INSIDE this frame with
+              explicit top/bottom padding so its content never touches the edges
+              (or gets occluded by the bottom seam). */}
           <div className="relative w-full aspect-[16/10] sm:aspect-[4/3] md:aspect-[16/9] md:min-h-[480px] overflow-hidden rounded-sm">
-            <ServiceHero type={service.heroType} />
+            {/* Inner padded stage — gives the SVG artifact breathing room on
+                top + bottom. The animation component fills this inner box. */}
+            <div className="absolute inset-0 pt-8 pb-10 md:pt-10 md:pb-14 lg:pt-14 lg:pb-16">
+              <div className="relative w-full h-full">
+                <ServiceHero type={service.heroType} />
+              </div>
+            </div>
 
-            {/* Hero bottom seam — dissolves into ink */}
+            {/* Hero bottom seam — slimmer on mobile so it doesn't eat the animation */}
             <div
-              className="absolute left-0 right-0 bottom-0 h-16 md:h-32 pointer-events-none"
+              className="absolute left-0 right-0 bottom-0 h-8 md:h-20 pointer-events-none"
               style={{ background: "linear-gradient(180deg, transparent, var(--color-ink))" }}
             />
           </div>
