@@ -394,7 +394,10 @@ export default function ServiceDetail() {
       <section className="relative py-20 md:py-40 seam-contact overflow-hidden">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10 text-center">
           <SectionLabel chapter="§ Next" title="If any of this resonates" />
-          <h2 className="mt-8 display-massive text-bone-100 leading-[0.82] max-w-[14ch] mx-auto">
+          <h2
+            className="mt-8 font-display font-bold text-bone-100 leading-[0.86] tracking-[-0.04em] mx-auto"
+            style={{ fontSize: "clamp(3rem, 11vw, 8.5rem)" }}
+          >
             Commission<br />
             <span className="italic-accent text-signal font-light">something.</span>
           </h2>
