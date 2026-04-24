@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Bit Studio — redirecting</title>
+    <script>
+      // Strict static hosts (GitHub Pages, plain nginx without fallback rules)
+      // will serve this 404.html for unknown routes. We rewrite the URL back
+      // to the root with the original path as a query so the SPA router can
+      // pick it up and mount the right route on the client.
+      (function () {
+        var path = window.location.pathname + window.location.search + window.location.hash;
+        sessionStorage.setItem('bit:spa-redirect', path);
+        window.location.replace(window.location.origin + '/');
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>
