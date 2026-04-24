@@ -14,6 +14,7 @@ import ProjectDetail from "./pages/ProjectDetail.jsx";
 import Studio from "./pages/Studio.jsx";
 import Contact from "./pages/Contact.jsx";
 import ServiceDetail from "./pages/ServiceDetail.jsx";
+import Terms from "./pages/Terms.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 class ErrorBoundary extends Component {
@@ -84,6 +85,7 @@ export default function App() {
               <Route path="/studio" element={<Studio />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/services/:slug" element={<ServiceDetail />} />
+              <Route path="/terms" element={<Terms />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AnimatePresence>
