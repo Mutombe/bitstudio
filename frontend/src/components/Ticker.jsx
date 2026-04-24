@@ -27,7 +27,7 @@ export default function Ticker({ items, dense = false, onSummon }) {
   };
 
   return (
-    <Marquee className="py-3 border-y border-white/5 bg-maroon-950/50">
+    <Marquee className="py-3">
       {items.map((item, i) => {
         const obj = typeof item === "string" ? { label: item } : item;
         const baseClass = `flex items-center gap-3 shrink-0 font-mono ${size} tracking-[0.2em] uppercase text-bone-100/70 px-2 py-1 rounded-sm transition-colors hover:text-signal hover:bg-signal/5 focus-visible:outline-signal cursor-pointer`;
