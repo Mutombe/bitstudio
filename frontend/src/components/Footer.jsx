@@ -48,6 +48,7 @@ export default function Footer() {
               <li><Link to="/work" {...hover} className="hover-line">Work</Link></li>
               <li><Link to="/studio" {...hover} className="hover-line">Studio</Link></li>
               <li><Link to="/contact" {...hover} className="hover-line">Contact</Link></li>
+              <li><Link to="/terms" {...hover} className="hover-line">Terms</Link></li>
             </ul>
           </div>
           <div className="col-span-6 md:col-span-2">
