@@ -55,7 +55,7 @@ export const SERVICES = SERVICE_DATA;
 
 export default function Services() {
   return (
-    <section id="services" className="relative py-24 md:py-40 bg-[color:var(--color-ink)] overflow-hidden">
+    <section id="services" className="relative pt-32 pb-24 md:py-40 bg-[color:var(--color-ink)] overflow-hidden">
       {/* Ambient under-glow */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Top orb recessed (top-24 not top-0) + dimmed so the hero/services seam stays clean. */}

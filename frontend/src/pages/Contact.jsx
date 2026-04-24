@@ -49,7 +49,7 @@ export default function Contact() {
 
   return (
     <PageTransition>
-      <section className="relative min-h-screen pt-28 md:pt-40 pb-0 overflow-hidden bg-maroon-600 text-bone-100">
+      <section className="relative min-h-screen pt-24 md:pt-40 pb-0 overflow-hidden bg-maroon-600 text-bone-100">
         {/* Ambient bleed */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-maroon-800/60 blur-[180px]" />
@@ -57,7 +57,7 @@ export default function Contact() {
         </div>
 
         <div className="relative max-w-[1600px] mx-auto px-5 md:px-10">
-          <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/60 mb-12">
+          <div className="flex items-center gap-2 sm:gap-3 font-mono text-[9px] sm:text-[10px] tracking-[0.22em] uppercase text-bone-100/60 mb-8 md:mb-12 flex-wrap">
             <span className="w-1 h-1 rounded-full bg-signal pulse-dot" />
             <span>Chapter 04 · Transmission</span>
             <span className="text-bone-100/30">/</span>
@@ -69,13 +69,14 @@ export default function Contact() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             className="display-massive leading-[0.8]"
+            style={{ fontSize: "clamp(3.5rem, 18vw, 18rem)" }}
           >
             TALK.
           </motion.h1>
 
-          <div className="mt-12 md:mt-20 grid grid-cols-12 gap-10 md:gap-16 pb-28 md:pb-40">
+          <div className="mt-10 md:mt-20 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 pb-24 md:pb-40">
             {/* Left — direct channels */}
-            <div className="col-span-12 md:col-span-5 space-y-10">
+            <div className="md:col-span-5 space-y-8 md:space-y-10">
               <SectionLabel chapter="§ Direct" title="Channels" />
 
               <a
@@ -122,7 +123,7 @@ export default function Contact() {
             {/* Right — form */}
             <form
               onSubmit={submit}
-              className="col-span-12 md:col-span-7 bg-[color:var(--color-ink)] text-bone-100 rounded-sm p-6 md:p-10 space-y-8 border border-white/10"
+              className="md:col-span-7 bg-[color:var(--color-ink)] text-bone-100 rounded-sm p-5 sm:p-6 md:p-10 space-y-6 md:space-y-8 border border-white/10"
             >
               <SectionLabel chapter="§ Form" title="Three fields, no ceremony" />
 
@@ -169,7 +170,7 @@ export default function Contact() {
                 ))}
               </div>
 
-              <div className="flex items-center justify-between gap-4 pt-4 border-t border-white/10">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-white/10">
                 <p className="label-mono text-bone-100/40 max-w-xs">
                   We read every transmission. Usually within one day.
                 </p>
@@ -177,7 +178,7 @@ export default function Contact() {
                   type="submit"
                   disabled={sending}
                   {...hover}
-                  className="btn btn-primary disabled:opacity-60"
+                  className="btn btn-primary disabled:opacity-60 self-start sm:self-auto"
                 >
                   {sending ? "Dispatching…" : "Dispatch"}
                   <PaperPlaneTiltIcon size={14} weight="bold" />
