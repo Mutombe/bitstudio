@@ -91,7 +91,10 @@ export default function Contact() {
                   <ArrowUpRightIcon size={18} className="opacity-40 group-hover:opacity-100 group-hover:text-signal -translate-x-1 group-hover:translate-x-0 group-hover:-translate-y-0 transition-all" />
                 </div>
                 <p className="mt-6 label-mono text-bone-100/70">WhatsApp</p>
-                <p className="mt-2 display-lg text-bone-100 group-hover:text-signal transition-colors">
+                <p
+                  className="mt-2 font-display font-bold tracking-[-0.02em] leading-[1.02] text-bone-100 group-hover:text-signal transition-colors"
+                  style={{ fontSize: "clamp(1.35rem, 3.4vw, 2.25rem)" }}
+                >
                   +263 78 594 8128
                 </p>
                 <p className="mt-3 text-bone-100/70">Fastest. Least ceremony. We answer between 08:00 and 22:00 CAT.</p>
