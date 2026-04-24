@@ -419,13 +419,13 @@ function CounterStat({ value, from = 0, suffix = "", label, decimals = 0 }) {
   }, [value, from]);
 
   return (
-    <div ref={ref}>
+    <div ref={ref} className="min-w-0">
       <p
-        className="text-bone-100 leading-none tracking-[-0.04em]"
+        className="text-bone-100 leading-none tracking-[-0.04em] tabular-nums whitespace-nowrap overflow-hidden"
         style={{
           fontFamily: "var(--font-display)",
           fontWeight: 700,
-          fontSize: "clamp(3rem, 7vw, 9rem)",
+          fontSize: "clamp(2rem, 5.5vw, 5.5rem)",
         }}
       >
         {v.toFixed(decimals)}
