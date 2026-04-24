@@ -230,14 +230,22 @@ export default function Home({ onSummon }) {
               transition={{ duration: 0.3 }}
               className="grid grid-cols-12 gap-6 md:gap-10"
             >
-              {workFiltered.map((p, i) => (
-                <ProjectTile
-                  key={p.slug}
-                  project={p}
-                  index={i}
-                  size={i % 3 === 0 ? "lg" : "md"}
-                />
-              ))}
+              {workFiltered.map((p, i) => {
+                // Bento rhythm across a 12-col grid. Each row sums to 12:
+                //   row1: lg(8) + sm(4)
+                //   row2: sm(4) + sm(4) + sm(4)
+                //   row3: sm(4) + lg(8)
+                //   row4: md(6) + md(6)
+                const bento = ["lg", "sm", "sm", "sm", "sm", "sm", "lg", "md", "md"];
+                return (
+                  <ProjectTile
+                    key={p.slug}
+                    project={p}
+                    index={i}
+                    size={bento[i % bento.length]}
+                  />
+                );
+              })}
             </motion.div>
           </AnimatePresence>
         </div>
@@ -368,7 +376,7 @@ export default function Home({ onSummon }) {
               <ArrowUpRightIcon size={14} weight="bold" />
             </Link>
             <a
-              href="https://wa.me/263787335226"
+              href="https://wa.me/263785948128"
               target="_blank"
               rel="noreferrer"
               {...hover}

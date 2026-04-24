@@ -23,11 +23,40 @@ import { findService } from "../data/services.js";
  *   3px chartreuse signature border runs down the left edge.
  */
 
+// Bento size config — varied col-spans + heights for a real irregular grid.
+// Mobile always full-width; tablet always half. Desktop gets the bento rhythm.
+const SIZE_CONFIG = {
+  sm: {
+    col: "md:col-span-4",
+    aspect: "aspect-[4/3] md:aspect-[5/4]",
+    minH: "min-h-[200px] md:min-h-[200px]",
+    title: "text-xl md:text-xl",
+    padding: "p-4",
+    hideBrief: true,
+  },
+  md: {
+    col: "md:col-span-6",
+    aspect: "aspect-[4/3] md:aspect-[5/4]",
+    minH: "min-h-[200px] md:min-h-[220px]",
+    title: "text-2xl md:text-2xl",
+    padding: "p-4 md:p-5",
+    hideBrief: false,
+  },
+  lg: {
+    col: "md:col-span-8",
+    aspect: "aspect-[4/3] md:aspect-[16/10]",
+    minH: "min-h-[220px] md:min-h-[260px]",
+    title: "text-2xl md:text-3xl",
+    padding: "p-4 md:p-5",
+    hideBrief: false,
+  },
+};
+
 export default function ProjectTile({ project, index = 0, size = "md" }) {
   const hover = useCursorHover("view", "View");
   const p = project;
 
-  const isLarge = size === "lg";
+  const cfg = SIZE_CONFIG[size] || SIZE_CONFIG.md;
   const service = p.service ? findService(p.service) : null;
 
   // Client palette — primary / secondary / paper. Fall back gracefully.
@@ -62,7 +91,7 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.7, delay: Math.min(index * 0.04, 0.25), ease: [0.22, 1, 0.36, 1] }}
-      className={`group relative col-span-12 sm:col-span-6 ${isLarge ? "md:col-span-7" : "md:col-span-5"}`}
+      className={`group relative col-span-12 sm:col-span-6 ${cfg.col}`}
     >
      <QuantumHover strength={2.5} className="block">
       <Link
@@ -72,7 +101,7 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
       >
         {/* Tile body — CLIENT palette fusion (multi-orb mesh of all palette colors) + strict zone */}
         <div
-          className="relative flex flex-col p-4 md:p-5 aspect-[4/3] md:aspect-[5/4] min-h-[200px] md:min-h-[240px] overflow-hidden"
+          className={`relative flex flex-col ${cfg.padding} ${cfg.aspect} ${cfg.minH} overflow-hidden`}
           style={{
             // Primary as the base, but three overlapping orbs (primary/secondary/paper)
             // are layered on top in atmospheric mesh so the tile reads as a FUSION
@@ -186,18 +215,19 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
               {p.year}
             </p>
 
-            {/* Title — clamped width so it never bleeds into right edge */}
+            {/* Title — mobile clamps to 1 line to keep the footer inside the card;
+                desktop gets 2 lines for breathing room. */}
             <h3
-              className="font-display text-2xl md:text-3xl leading-tight tracking-[-0.01em] max-w-[85%] line-clamp-2"
+              className={`font-display ${cfg.title} leading-tight tracking-[-0.01em] max-w-[85%] line-clamp-1 md:line-clamp-2`}
               style={{ color: onPrimary }}
             >
               {p.name}
             </h3>
 
-            {/* Brief — one-liner, clamped to 2 lines max */}
-            {p.brief && (
+            {/* Brief — hidden on sm bento tiles to keep them tight. */}
+            {p.brief && !cfg.hideBrief && (
               <p
-                className="text-sm leading-snug line-clamp-2 max-w-[92%]"
+                className="text-sm leading-snug line-clamp-1 md:line-clamp-2 max-w-[92%]"
                 style={{ color: hex(onPrimary, 0.8) }}
               >
                 {p.brief}

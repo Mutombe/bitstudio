@@ -20,8 +20,8 @@ const STATIC_ITEMS = [
   { kind: "page", label: "Services", to: "/#services", hint: "Eight things we love to solve" },
   { kind: "page", label: "Studio",   to: "/studio",    hint: "Philosophy, unapologetically" },
   { kind: "page", label: "Contact",  to: "/contact",   hint: "Open a transmission" },
-  { kind: "action", label: "WhatsApp us", href: "https://wa.me/263787335226", hint: "Preferred channel" },
-  { kind: "action", label: "Email us",    href: "mailto:hello@bitstudio.co.zw", hint: "hello@bitstudio.co.zw" },
+  { kind: "action", label: "WhatsApp us", href: "https://wa.me/263785948128", hint: "Preferred channel" },
+  { kind: "action", label: "Email us",    href: "mailto:admin@bitstudio.co.zw", hint: "admin@bitstudio.co.zw" },
 ];
 
 export default function CommandPalette({ open, onClose }) {
