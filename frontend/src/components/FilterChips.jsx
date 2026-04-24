@@ -73,15 +73,6 @@ export default function FilterChips({ chips, filter, onChange, counts }) {
                 </span>
               )}
 
-              {/* Chartreuse sweep underline — only on active */}
-              {active && (
-                <motion.span
-                  layoutId="filter-chip-sweep"
-                  className="absolute left-3 right-3 bottom-0 h-[2px] bg-signal rounded-full"
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  style={{ boxShadow: "0 0 8px rgba(212,255,58,0.6)" }}
-                />
-              )}
             </motion.button>
           );
         })}

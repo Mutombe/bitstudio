@@ -79,14 +79,19 @@ export default function Work() {
               transition={{ duration: 0.3 }}
               className="grid grid-cols-12 gap-6 md:gap-10"
             >
-              {filtered.map((p, i) => (
-                <ProjectTile
-                  key={p.slug}
-                  project={p}
-                  index={i}
-                  size={i % 5 === 0 || i % 5 === 3 ? "lg" : "md"}
-                />
-              ))}
+              {filtered.map((p, i) => {
+                // Bento rhythm — matches /home Selected Work so the ledger feels
+                // continuous. 9-tile loop, each row sums to 12 cols.
+                const bento = ["lg", "sm", "sm", "sm", "sm", "sm", "lg", "md", "md"];
+                return (
+                  <ProjectTile
+                    key={p.slug}
+                    project={p}
+                    index={i}
+                    size={bento[i % bento.length]}
+                  />
+                );
+              })}
               {filtered.length === 0 && (
                 <div className="col-span-12 py-32 text-center font-mono text-xs tracking-[0.2em] uppercase text-bone-100/40">
                   Nothing here. Try a different filter.

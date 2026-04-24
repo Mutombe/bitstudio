@@ -30,13 +30,13 @@ export default function Contact() {
     setTimeout(() => {
       if (channel === "whatsapp") {
         window.open(
-          `https://wa.me/263787335226?text=${encodeURIComponent(msg)}`,
+          `https://wa.me/263785948128?text=${encodeURIComponent(msg)}`,
           "_blank",
           "noopener,noreferrer"
         );
       } else {
         window.open(
-          `mailto:hello@bitstudio.co.zw?subject=${encodeURIComponent(
+          `mailto:admin@bitstudio.co.zw?subject=${encodeURIComponent(
             "Transmission · " + form.name
           )}&body=${encodeURIComponent(msg)}`,
           "_blank"
@@ -80,7 +80,7 @@ export default function Contact() {
               <SectionLabel chapter="§ Direct" title="Channels" />
 
               <a
-                href="https://wa.me/263787335226"
+                href="https://wa.me/263785948128"
                 target="_blank"
                 rel="noreferrer"
                 {...hover}
@@ -92,13 +92,13 @@ export default function Contact() {
                 </div>
                 <p className="mt-6 label-mono text-bone-100/70">WhatsApp</p>
                 <p className="mt-2 display-lg text-bone-100 group-hover:text-signal transition-colors">
-                  +263 78 733 5226
+                  +263 78 594 8128
                 </p>
                 <p className="mt-3 text-bone-100/70">Fastest. Least ceremony. We answer between 08:00 and 22:00 CAT.</p>
               </a>
 
               <a
-                href="mailto:hello@bitstudio.co.zw"
+                href="mailto:admin@bitstudio.co.zw"
                 {...hover}
                 className="group block p-6 md:p-8 border border-bone-100/20 hover:border-signal hover:bg-maroon-700/40 rounded-sm transition-all"
               >
@@ -107,8 +107,11 @@ export default function Contact() {
                   <ArrowUpRightIcon size={18} className="opacity-40 group-hover:opacity-100 group-hover:text-signal transition-all" />
                 </div>
                 <p className="mt-6 label-mono text-bone-100/70">Email</p>
-                <p className="mt-2 display-lg text-bone-100 group-hover:text-signal transition-colors">
-                  hello@bitstudio.co.zw
+                <p
+                  className="mt-2 font-display font-bold tracking-[-0.02em] leading-[1.02] break-all text-bone-100 group-hover:text-signal transition-colors"
+                  style={{ fontSize: "clamp(1.35rem, 3.4vw, 2.25rem)" }}
+                >
+                  admin@bitstudio.co.zw
                 </p>
                 <p className="mt-3 text-bone-100/70">For briefs, files, long thoughts. We reply within one working day.</p>
               </a>

@@ -1,30 +1,34 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
 /**
  * WaveBreak — a section divider drawn as two sinusoidal strokes
- * (maroon + chartreuse). Phase animates slightly with scroll progress.
- * No images. All SVG.
+ * (maroon + chartreuse) that *actually wave* — the path `d` attribute
+ * loops between two sinusoidal variants so crests rise and troughs dip
+ * continuously. Each path also drifts laterally at a different cadence
+ * for a living, never-synchronized feel.
+ *
+ * Respects prefers-reduced-motion — falls back to a calm static pair.
  *
  * Props:
  *  - variant: "thin" | "full" (default: "thin")
  *  - className: extra classes for the wrapper
  */
-export default function WaveBreak({ variant = "thin", className = "" }) {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  // Pull wave phase from scroll
-  const phase1 = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const phase2 = useTransform(scrollYProgress, [0, 1], [0, -90]);
 
+// Two sinusoidal variants with matching structure so framer-motion can
+// interpolate between them smoothly. Crests and troughs alternate between
+// the two, producing the wavering motion.
+const MAROON_A = "M0 90 Q 200 30, 400 90 T 800 90 T 1200 90 T 1600 90";
+const MAROON_B = "M0 90 Q 200 150, 400 90 T 800 90 T 1200 90 T 1600 90";
+
+const SIGNAL_A = "M0 90 Q 200 150, 400 90 T 800 90 T 1200 90 T 1600 90";
+const SIGNAL_B = "M0 90 Q 200 30, 400 90 T 800 90 T 1200 90 T 1600 90";
+
+export default function WaveBreak({ variant = "thin", className = "" }) {
+  const reduced = useReducedMotion();
   const h = variant === "full" ? 180 : 90;
 
   return (
     <div
-      ref={ref}
       className={`relative w-full overflow-hidden ${className}`}
       style={{ height: h }}
       aria-hidden="true"
@@ -53,24 +57,41 @@ export default function WaveBreak({ variant = "thin", className = "" }) {
           </linearGradient>
         </defs>
 
-        {/* Maroon stroke */}
+        {/* Maroon stroke — wavers (d between A/B) while drifting right */}
         <motion.path
-          d="M0 90 Q 200 30, 400 90 T 800 90 T 1200 90 T 1600 90"
+          initial={{ d: MAROON_A, translateX: 0 }}
+          animate={
+            reduced
+              ? { d: MAROON_A, translateX: 0 }
+              : { d: [MAROON_A, MAROON_B, MAROON_A], translateX: [0, 120, 0] }
+          }
+          transition={{
+            d: { duration: 7, repeat: Infinity, ease: "easeInOut" },
+            translateX: { duration: 22, repeat: Infinity, ease: "easeInOut" },
+          }}
           fill="none"
           stroke="url(#wbMaroon)"
           strokeWidth="1.5"
-          style={{ translateX: phase1 }}
         />
-        {/* Chartreuse whisper */}
+
+        {/* Chartreuse whisper — counter-phase + counter-drift */}
         <motion.path
-          d="M0 90 Q 200 150, 400 90 T 800 90 T 1200 90 T 1600 90"
+          initial={{ d: SIGNAL_A, translateX: 0 }}
+          animate={
+            reduced
+              ? { d: SIGNAL_A, translateX: 0 }
+              : { d: [SIGNAL_A, SIGNAL_B, SIGNAL_A], translateX: [0, -90, 0] }
+          }
+          transition={{
+            d: { duration: 9, repeat: Infinity, ease: "easeInOut" },
+            translateX: { duration: 26, repeat: Infinity, ease: "easeInOut" },
+          }}
           fill="none"
           stroke="url(#wbSignal)"
           strokeWidth="0.75"
-          style={{ translateX: phase2 }}
         />
 
-        {/* Center ghost stroke for depth */}
+        {/* Center ghost stroke for depth — still, provides the resting line */}
         <path
           d="M0 90 Q 100 70, 200 90 T 400 90 T 600 90 T 800 90 T 1000 90 T 1200 90 T 1400 90 T 1600 90"
           fill="none"

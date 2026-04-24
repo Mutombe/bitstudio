@@ -31,11 +31,11 @@ export default function Footer() {
                 <ArrowUpRightIcon size={14} weight="bold" />
               </Link>
               <a
-                href="mailto:hello@bitstudio.co.zw"
+                href="mailto:admin@bitstudio.co.zw"
                 {...hover}
                 className="btn btn-ghost"
               >
-                hello@bitstudio.co.zw
+                admin@bitstudio.co.zw
               </a>
             </div>
           </div>
@@ -54,8 +54,8 @@ export default function Footer() {
           <div className="col-span-6 md:col-span-2">
             <p className="label-mono text-bone-100/40 mb-4">Signal</p>
             <ul className="space-y-2 text-bone-100/80">
-              <li><a href="https://wa.me/263787335226" target="_blank" rel="noreferrer" {...hover} className="hover-line">WhatsApp</a></li>
-              <li><a href="mailto:hello@bitstudio.co.zw" {...hover} className="hover-line">Email</a></li>
+              <li><a href="https://wa.me/263785948128" target="_blank" rel="noreferrer" {...hover} className="hover-line">WhatsApp</a></li>
+              <li><a href="mailto:admin@bitstudio.co.zw" {...hover} className="hover-line">Email</a></li>
               <li><a href="https://github.com/Mutombe" target="_blank" rel="noreferrer" {...hover} className="hover-line">Github</a></li>
               <li><span className="text-bone-100/40">Harare · ZW</span></li>
             </ul>
