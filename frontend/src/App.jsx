@@ -21,6 +21,8 @@ import Privacy from "./pages/Privacy.jsx";
 import HomeDE from "./pages/de/Home.jsx";
 import CraftDE from "./pages/de/Craft.jsx";
 import ContactDE from "./pages/de/Contact.jsx";
+import PaketeDE from "./pages/de/Pakete.jsx";
+import Packages from "./pages/Packages.jsx";
 import ProjectDetail from "./pages/ProjectDetail.jsx";
 import Studio from "./pages/Studio.jsx";
 import Contact from "./pages/Contact.jsx";
@@ -105,6 +107,8 @@ export default function App() {
               <Route path="/de" element={<HomeDE />} />
               <Route path="/de/handwerk" element={<CraftDE />} />
               <Route path="/de/kontakt" element={<ContactDE />} />
+              <Route path="/pakete" element={<PaketeDE />} />
+              <Route path="/packages" element={<Packages />} />
               <Route path="/studio" element={<Studio />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/services/:slug" element={<ServiceDetail />} />

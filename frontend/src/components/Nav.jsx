@@ -11,7 +11,7 @@ const LINKS_EN = [
   { to: "/work", label: "Work", n: "02" },
   { to: "/live", label: "Live", n: "03" },
   { to: "/craft", label: "Craft", n: "04" },
-  { to: "/studio", label: "Studio", n: "05" },
+  { to: "/packages", label: "Packages", n: "05" },
   { to: "/contact", label: "Contact", n: "06" },
 ];
 const LINKS_DE = [
@@ -19,7 +19,8 @@ const LINKS_DE = [
   { to: "/work", label: "Arbeit", n: "02" },
   { to: "/live", label: "Live", n: "03" },
   { to: "/de/handwerk", label: "Handwerk", n: "04" },
-  { to: "/de/kontakt", label: "Kontakt", n: "05" },
+  { to: "/pakete", label: "Pakete", n: "05" },
+  { to: "/de/kontakt", label: "Kontakt", n: "06" },
 ];
 
 export default function Nav({ onSummon }) {
@@ -47,12 +48,14 @@ export default function Nav({ onSummon }) {
     if (isDE) {
       if (loc.pathname.startsWith("/de/handwerk")) return "/craft";
       if (loc.pathname.startsWith("/de/kontakt")) return "/contact";
+      if (loc.pathname === "/pakete") return "/packages";
       if (loc.pathname === "/impressum") return "/legal";
       if (loc.pathname === "/datenschutz") return "/privacy";
       return "/";
     }
     if (loc.pathname.startsWith("/craft")) return "/de/handwerk";
     if (loc.pathname.startsWith("/contact")) return "/de/kontakt";
+    if (loc.pathname === "/packages") return "/pakete";
     if (loc.pathname === "/legal") return "/impressum";
     if (loc.pathname === "/privacy") return "/datenschutz";
     return "/de";
