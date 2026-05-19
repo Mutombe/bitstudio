@@ -10,6 +10,7 @@ import {
 import PageTransition from "../components/PageTransition.jsx";
 import SectionLabel from "../components/SectionLabel.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
+import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
 
 export default function Contact() {
   const hover = useCursorHover("hover", "");
@@ -49,6 +50,18 @@ export default function Contact() {
 
   return (
     <PageTransition>
+      <SEO
+        title="Contact · Open a transmission"
+        description="WhatsApp, email, or the form. Harare hours, but we read from anywhere. Deposit 50% to begin, the rest on completion. FBC Bank account details on this page."
+        path="/contact"
+        keywords={["contact Bit Studio", "Harare design studio", "WhatsApp", "hire a studio"]}
+        jsonLd={[
+          breadcrumbJsonLd([
+            { name: "Index", path: "/" },
+            { name: "Contact", path: "/contact" },
+          ]),
+        ]}
+      />
       <section className="relative min-h-screen pt-24 md:pt-40 pb-0 overflow-hidden bg-maroon-600 text-bone-100">
         {/* Ambient bleed */}
         <div className="absolute inset-0 pointer-events-none">
@@ -199,7 +212,119 @@ export default function Contact() {
           <span className="display-massive text-bone-100 leading-none">BS</span>
         </div>
       </section>
+
+      {/* ─── BANKING ─── How we work + how to pay. */}
+      <BankingSection />
     </PageTransition>
+  );
+}
+
+// ─── Banking Section ──────────────────────────────────────────────────
+// Sits below the Contact section. Discreet but unambiguous. Once a client
+// is ready to engage, this is the contract: 50% deposit, 50% on delivery.
+function BankingSection() {
+  const [copied, setCopied] = useState("");
+  const copy = (label, value) => {
+    try {
+      navigator.clipboard.writeText(value);
+      setCopied(label);
+      setTimeout(() => setCopied(""), 1600);
+    } catch (_) {}
+  };
+  const ROWS = [
+    { label: "Account name", value: "BIT STUDIO" },
+    { label: "Bank", value: "FBC BANK" },
+    { label: "Account number", value: "6870425900199" },
+  ];
+
+  return (
+    <section className="relative py-20 md:py-32 bg-[color:var(--color-ink)] text-bone-100 border-t border-white/10">
+      <div className="max-w-[1600px] mx-auto px-5 md:px-10">
+        <div className="flex items-center gap-4 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50 mb-6">
+          <span className="w-1 h-1 rounded-full bg-signal pulse-dot" />
+          <span>§ Engagement</span>
+          <span className="text-bone-100/30">/</span>
+          <span>How we work</span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
+          {/* Left — the contract in two beats */}
+          <div className="md:col-span-5">
+            <h2 className="display-xl leading-[0.92]">
+              50 to begin.
+              <br />
+              <span className="italic-accent text-maroon-400 font-light">
+                50 when it ships.
+              </span>
+            </h2>
+            <p className="mt-8 max-w-md text-bone-100/70 leading-relaxed">
+              Half on day one — it's how we put the team on the work. The
+              balance settles when the project lands in your hands, live and
+              signed off.
+            </p>
+            <p className="mt-6 max-w-md text-bone-100/50 text-sm">
+              Bank transfer or ZIPIT to the account on the right. WhatsApp
+              proof of payment to{" "}
+              <a
+                href="https://wa.me/263785948128"
+                target="_blank"
+                rel="noreferrer"
+                className="text-signal hover:underline"
+              >
+                +263 78 594 8128
+              </a>{" "}
+              and we open the project file the same day.
+            </p>
+          </div>
+
+          {/* Right — the account card */}
+          <div className="md:col-span-7">
+            <div className="border border-white/15 rounded-sm p-6 md:p-10 bg-maroon-600/10">
+              <div className="flex items-center justify-between mb-6">
+                <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50">
+                  Bank Details · Bit Studio
+                </div>
+                <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal">
+                  Verify before transfer
+                </div>
+              </div>
+
+              <dl className="space-y-5">
+                {ROWS.map((row) => (
+                  <div
+                    key={row.label}
+                    className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 pb-5 border-b border-white/8 last:border-0 last:pb-0"
+                  >
+                    <dt className="font-mono text-[11px] tracking-[0.18em] uppercase text-bone-100/55 min-w-[150px]">
+                      {row.label}
+                    </dt>
+                    <dd className="flex items-center gap-3 sm:gap-4">
+                      <span className="font-display text-lg md:text-xl text-bone-100 break-all tabular-nums">
+                        {row.value}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => copy(row.label, row.value)}
+                        className="font-mono text-[10px] tracking-[0.18em] uppercase px-2.5 py-1.5 border border-white/15 hover:border-signal hover:text-signal text-bone-100/65 rounded-sm transition-colors shrink-0"
+                      >
+                        {copied === row.label ? "Copied" : "Copy"}
+                      </button>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+
+              <p className="mt-7 text-xs text-bone-100/45 leading-relaxed">
+                If the account name doesn't read{" "}
+                <span className="text-bone-100/85">BIT STUDIO</span> at your
+                bank's confirmation step, do not transfer — ping us on
+                WhatsApp and we'll re-issue the details directly.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 

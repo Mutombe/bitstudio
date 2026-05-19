@@ -1,12 +1,18 @@
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRightIcon, ArrowRightIcon, GlobeHemisphereWestIcon } from "@phosphor-icons/react";
 import { PROJECTS, FILTER_CHIPS, filterProjects } from "../data/projects.js";
+import { LIVE_SITES } from "../data/live-sites.js";
 import ProjectTile from "../components/ProjectTile.jsx";
 import SectionLabel from "../components/SectionLabel.jsx";
 import PageTransition from "../components/PageTransition.jsx";
 import Ticker from "../components/Ticker.jsx";
 import FilterChips, { computeCounts } from "../components/FilterChips.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
+import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
+
+const TOTAL_ARTIFACTS = PROJECTS.length + LIVE_SITES.length;
 
 export default function Work() {
   const [filter, setFilter] = useState("all");
@@ -21,16 +27,28 @@ export default function Work() {
 
   return (
     <PageTransition>
+      <SEO
+        title="Work"
+        description={`A ledger of ${TOTAL_ARTIFACTS} artifacts. Real URLs, real clients, sorted by aesthetic carriage — Atelier, Editorial, Cinematic, Brutalist, Heritage, Manifesto, Bento, Pastoral.`}
+        path="/work"
+        keywords={["portfolio", "case studies", "design ledger", "Bit Studio work"]}
+        jsonLd={[
+          breadcrumbJsonLd([
+            { name: "Index", path: "/" },
+            { name: "Work", path: "/work" },
+          ]),
+        ]}
+      />
       <section className="relative pt-32 md:pt-44 pb-12 md:pb-16 overflow-hidden radial-bleed">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-[10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-maroon-600/25 blur-[160px]" />
         </div>
         <div className="relative max-w-[1600px] mx-auto px-5 md:px-10">
-          <div className="flex items-center gap-4 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50 mb-10">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50 mb-10">
             <span className="w-1 h-1 rounded-full bg-signal pulse-dot" />
             <span>Chapter 02 · Ledger</span>
             <span className="text-bone-100/30">/</span>
-            <span>{PROJECTS.length} artifacts</span>
+            <span>{TOTAL_ARTIFACTS} artifacts</span>
           </div>
           <h1 className="display-massive text-bone-100 leading-[0.82]">
             Work.
@@ -40,6 +58,17 @@ export default function Work() {
             Every tile is a live URL. Every tile survived at least one 3 AM.
             Every tile is somebody's home on the internet now.
           </p>
+
+          {/* CTA to the dedicated Live page */}
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Link to="/live" className="btn btn-ghost">
+              On-air broadcasts
+              <ArrowRightIcon size={14} weight="bold" />
+            </Link>
+            <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/40">
+              A selection broadcasting from their own domains
+            </span>
+          </div>
         </div>
       </section>
 
@@ -104,7 +133,7 @@ export default function Work() {
 
       <Ticker
         items={[
-          "30+ live URLs",
+          `${TOTAL_ARTIFACTS} artifacts on-air`,
           "Rendered on Render",
           "Sourced on SerpAPI",
           "Styled by humans",

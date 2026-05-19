@@ -32,6 +32,7 @@ import ServiceHero from "../components/service-heroes/index.jsx";
 import { findService, adjacentServices, SERVICES } from "../data/services.js";
 import { findProject } from "../data/projects.js";
 import { useCursorHover } from "../hooks/useCursor.jsx";
+import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
 
 const ICON_MAP = {
   Globe: GlobeIcon,
@@ -96,6 +97,19 @@ export default function ServiceDetail() {
 
   return (
     <PageTransition>
+      <SEO
+        title={`${service.title} · Service`}
+        description={service.tagline || `Bit Studio's ${service.title} service.`}
+        path={`/services/${service.slug}`}
+        keywords={[service.title, "Bit Studio service", "Harare design"].filter(Boolean)}
+        jsonLd={[
+          breadcrumbJsonLd([
+            { name: "Index", path: "/" },
+            { name: "Services", path: "/#services" },
+            { name: service.title, path: `/services/${service.slug}` },
+          ]),
+        ]}
+      />
       {/* ─── Hero ─── */}
       <section className="relative pt-20 md:pt-24">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10">

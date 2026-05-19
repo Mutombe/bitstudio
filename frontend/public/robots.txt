@@ -1,0 +1,9 @@
+# Bit Studio robots.txt
+User-agent: *
+Allow: /
+
+# Where the map lives
+Sitemap: https://bitstudio.co.zw/sitemap.xml
+
+# Be nice to crawlers — we have ~125 routes and we want all of them
+Crawl-delay: 0

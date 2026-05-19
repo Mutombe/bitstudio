@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
+import { HelmetProvider } from "react-helmet-async";
 import { useEffect, useState, Component } from "react";
 import Nav from "./components/Nav.jsx";
 import Footer from "./components/Footer.jsx";
@@ -10,6 +11,9 @@ import { CursorProvider } from "./hooks/useCursor.jsx";
 
 import Home from "./pages/Home.jsx";
 import Work from "./pages/Work.jsx";
+import Live from "./pages/Live.jsx";
+import LiveDetail from "./pages/LiveDetail.jsx";
+import Craft from "./pages/Craft.jsx";
 import ProjectDetail from "./pages/ProjectDetail.jsx";
 import Studio from "./pages/Studio.jsx";
 import Contact from "./pages/Contact.jsx";
@@ -71,7 +75,8 @@ export default function App() {
   }, []);
 
   return (
-    <CursorProvider>
+    <HelmetProvider>
+      <CursorProvider>
       <div className="grain min-h-screen bg-[color:var(--color-ink)] text-bone-100">
         <ScrollToTop />
         <Nav onSummon={() => setPaletteOpen(true)} />
@@ -82,6 +87,9 @@ export default function App() {
               <Route path="/" element={<Home onSummon={() => setPaletteOpen(true)} />} />
               <Route path="/work" element={<Work />} />
               <Route path="/work/:slug" element={<ProjectDetail />} />
+              <Route path="/live" element={<Live />} />
+              <Route path="/live/:slug" element={<LiveDetail />} />
+              <Route path="/craft" element={<Craft />} />
               <Route path="/studio" element={<Studio />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/services/:slug" element={<ServiceDetail />} />
@@ -96,6 +104,7 @@ export default function App() {
         <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
         <AmbientAudio />
       </div>
-    </CursorProvider>
+      </CursorProvider>
+    </HelmetProvider>
   );
 }

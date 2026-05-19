@@ -6,8 +6,11 @@ import {
   ArrowRightIcon,
   CircleNotchIcon,
   CompassIcon,
+  GlobeHemisphereWestIcon,
 } from "@phosphor-icons/react";
 import { PROJECTS, filterProjects } from "../data/projects.js";
+import { LIVE_SITES, LIVE_FEATURED } from "../data/live-sites.js";
+import { sortByAesthetic } from "../data/aesthetic-score.js";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 import { useClock, formatHMS } from "../hooks/useClock.js";
 import Ticker from "../components/Ticker.jsx";
@@ -16,18 +19,22 @@ import ProjectTile from "../components/ProjectTile.jsx";
 import SectionLabel from "../components/SectionLabel.jsx";
 import PageTransition from "../components/PageTransition.jsx";
 import Services from "../components/Services.jsx";
+import SEO, { organizationJsonLd, websiteJsonLd } from "../components/SEO.jsx";
 import MeshField from "../components/MeshField.jsx";
 import WireframeOverlay from "../components/WireframeOverlay.jsx";
 import WaveBreak from "../components/WaveBreak.jsx";
 import FusionField from "../components/FusionField.jsx";
 import FilterChips, { computeCounts } from "../components/FilterChips.jsx";
 
+// Total artifacts = demos + live-domain sites
+const TOTAL_ARTIFACTS = PROJECTS.length + LIVE_SITES.length;
+
 const TICKER_ITEMS = [
   "Endpoint OK",
   "React 19 · Vite 7 · Tailwind v4",
   "Harare → Signal",
   "Transmission received",
-  "30 artifacts on-air",
+  `${TOTAL_ARTIFACTS} artifacts on-air`,
   "Grain delivered",
   "Deploy green",
   "Heart rate nominal",
@@ -36,12 +43,18 @@ const TICKER_ITEMS = [
   "Latency 41ms",
 ];
 
-const FEATURED = PROJECTS.filter((p) => p.featured);
+// Homepage Selected Work uses the same aesthetic ranking that anchors /work
+// — Alliance Health, AutoWorld, then the rest, top-down. Slice 9 to fit the
+// bento rhythm (lg + sm·sm·sm + sm·sm·sm + lg + md·md = 9 tiles).
+const HOME_TOP = sortByAesthetic(PROJECTS).slice(0, 9);
 
-// Compact chip set for the homepage — "All" + tags present in FEATURED
+// Homepage marquee: pull from the same top-of-the-stack ranking.
+const HOMEPAGE_MARQUEE = sortByAesthetic(PROJECTS).slice(0, 12);
+
+// Compact chip set for the homepage — "All" + tags present in HOME_TOP
 const HOME_CHIPS = [
   { id: "all", label: "All" },
-  ...Array.from(new Set(FEATURED.map((p) => p.tag))).map((tag) => ({
+  ...Array.from(new Set(HOME_TOP.map((p) => p.tag))).map((tag) => ({
     id: tag,
     label: tag,
   })),
@@ -54,11 +67,11 @@ export default function Home({ onSummon }) {
 
   const [workFilter, setWorkFilter] = useState("all");
   const workFiltered = useMemo(
-    () => filterProjects(FEATURED, workFilter),
+    () => filterProjects(HOME_TOP, workFilter),
     [workFilter]
   );
   const workCounts = useMemo(
-    () => computeCounts(FEATURED, HOME_CHIPS),
+    () => computeCounts(HOME_TOP, HOME_CHIPS),
     []
   );
 
@@ -72,6 +85,13 @@ export default function Home({ onSummon }) {
 
   return (
     <PageTransition>
+      <SEO
+        title="Bit Studio"
+        description="A design and engineering studio from Harare. We build interfaces, brand systems, and software that age into heirlooms. After Musashi, 1645."
+        path="/"
+        keywords={["Bit Studio", "design studio", "Harare", "Zimbabwe", "brand systems", "interface design", "Musashi"]}
+        jsonLd={[organizationJsonLd(), websiteJsonLd()]}
+      />
       {/* ─── 00 · HERO — viewport-fit on desktop, natural on mobile ─── */}
       <section
         ref={heroRef}
@@ -152,7 +172,7 @@ export default function Home({ onSummon }) {
                   <div className="border-l border-maroon-500/40 pl-4">
                     <p className="text-bone-100/40 mb-1">Broadcast</p>
                     <p className="text-bone-100/90 text-sm normal-case tracking-normal font-sans">
-                      Six recently-live · 30+ artifacts
+                      {TOTAL_ARTIFACTS} artifacts on-air
                     </p>
                   </div>
                   <div className="border-l border-maroon-500/40 pl-4">
@@ -193,12 +213,12 @@ export default function Home({ onSummon }) {
             <div>
               <SectionLabel chapter="§ 04" title="Selected Work" />
               <h2 className="mt-5 display-xl text-bone-100">
-                Six clients. <br />
-                <span className="italic-accent text-bone-300">Same standard.</span>
+                {TOTAL_ARTIFACTS} artifacts. <br />
+                <span className="italic-accent text-bone-300">One standard.</span>
               </h2>
             </div>
             <Link to="/work" {...hover} className="btn btn-ghost">
-              All 30+ artifacts <ArrowRightIcon size={14} weight="bold" />
+              All {TOTAL_ARTIFACTS} artifacts <ArrowRightIcon size={14} weight="bold" />
             </Link>
           </div>
 
@@ -217,7 +237,7 @@ export default function Home({ onSummon }) {
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               className="mt-4 font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/50 tabular-nums"
             >
-              Showing <span className="text-bone-100">{workFiltered.length}</span> of {FEATURED.length}
+              Showing <span className="text-bone-100">{workFiltered.length}</span> of {HOME_TOP.length}
             </motion.p>
           </div>
 
@@ -250,6 +270,9 @@ export default function Home({ onSummon }) {
           </AnimatePresence>
         </div>
       </section>
+
+      {/* ─── 02.5 · LIVE PRODUCTION STRIP ─── */}
+      <HomeLiveStrip />
 
       {/* ─── 03 · FUSION BREAK ─── */}
       <section className="relative overflow-visible bg-maroon-950 seam-fusion">
@@ -303,6 +326,21 @@ export default function Home({ onSummon }) {
                 Then we ship. On time. Because taste without discipline is a hobby.
               </p>
             </div>
+
+            {/* Lead the reader into the longer-form inheritance — /craft */}
+            <div className="mt-16 md:mt-24 max-w-3xl border-t border-white/10 pt-10 md:pt-14">
+              <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/45 mb-4">
+                The full inheritance · 道
+              </p>
+              <p className="font-display text-2xl md:text-3xl text-bone-100 leading-[1.15] max-w-2xl mb-6">
+                We learnt to make from a swordsman who lived four centuries ago.
+                <span className="italic-accent text-bone-300"> The five rings are taped to the wall.</span>
+              </p>
+              <Link to="/craft" {...hover} className="btn btn-ghost">
+                Read The Way
+                <ArrowUpRightIcon size={14} weight="bold" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -317,7 +355,7 @@ export default function Home({ onSummon }) {
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <SectionLabel chapter="§ 06" title="Proof (the absurd kind)" />
           <div className="mt-10 md:mt-14 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
-            <CounterStat value={142} from={23} suffix="" label="Artifacts deployed" />
+            <CounterStat value={TOTAL_ARTIFACTS} from={23} suffix="" label="Artifacts deployed" />
             <CounterStat value={87} from={0} suffix="/88" label="Mothers satisfied" />
             <CounterStat value={2030} from={2024} suffix="" label="Years forward" />
             <CounterStat value={99.94} from={90} suffix="%" label="Uptime nominal" decimals={2} />
@@ -344,7 +382,7 @@ export default function Home({ onSummon }) {
       {/* ─── 06 · CLIENT MARQUEE ─── */}
       <section className="relative py-10 bg-maroon-600 text-bone-100 overflow-hidden">
         <Marquee speed="fast" className="py-3">
-          {PROJECTS.slice(0, 12).map((p) => (
+          {HOMEPAGE_MARQUEE.map((p) => (
             <span
               key={p.slug}
               className="display-lg text-bone-100/95 whitespace-nowrap flex items-center gap-8"
@@ -389,6 +427,109 @@ export default function Home({ onSummon }) {
         </div>
       </section>
     </PageTransition>
+  );
+}
+
+// ─── HOMEPAGE LIVE STRIP — 6 featured live sites + "see all" CTA ──────
+function HomeLiveStrip() {
+  // Pull the 6 featured live sites, fall back to first 6 if fewer marked.
+  const featured =
+    LIVE_FEATURED.length >= 6 ? LIVE_FEATURED.slice(0, 6) : LIVE_SITES.slice(0, 6);
+  const hover = useCursorHover("view", "Open");
+
+  return (
+    <section className="relative py-20 md:py-28 bg-[color:var(--color-ink)] border-y border-white/5">
+      <div className="max-w-[1600px] mx-auto px-5 md:px-10">
+        <div className="flex flex-wrap items-end justify-between gap-6 mb-10 md:mb-12">
+          <div>
+            <SectionLabel chapter="§ 05" title="On the open internet" />
+            <h2 className="mt-5 display-xl text-bone-100 leading-[0.92]">
+              Broadcasting <br />
+              <span className="italic-accent text-signal font-light">from their own domains.</span>
+            </h2>
+            <p className="mt-6 max-w-xl text-bone-100/70">
+              A small selection of the studio's catalogue, broadcasting right
+              now from public addresses.
+            </p>
+          </div>
+          <Link to="/live" className="btn btn-ghost">
+            View broadcasts <ArrowRightIcon size={14} weight="bold" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-7">
+          {featured.map((site, i) => (
+            <motion.div
+              key={site.slug}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{
+                duration: 0.55,
+                delay: Math.min(i * 0.05, 0.3),
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="group relative overflow-hidden rounded-sm border border-white/10 hover:border-signal/60 transition-colors"
+              style={{ backgroundColor: site.palette[0] }}
+            >
+              {/* Card-wide link to detail page on our site */}
+              <Link
+                to={`/live/${site.slug}`}
+                {...hover}
+                className="absolute inset-0 z-20"
+                aria-label={`Open ${site.name} on Bit Studio`}
+              />
+              <span className="absolute left-0 top-0 bottom-0 w-[3px] bg-signal/80 z-10" />
+              <div className="absolute top-0 left-0 right-0 h-1 flex z-10">
+                {site.palette.map((c, idx) => (
+                  <span key={idx} className="flex-1" style={{ backgroundColor: c }} />
+                ))}
+              </div>
+              <div className="p-6 md:p-7 pt-9 md:pt-10 min-h-[240px] flex flex-col justify-between">
+                <div>
+                  <div
+                    className="font-mono text-[10px] tracking-[0.22em] uppercase mb-3"
+                    style={{ color: site.palette[1] }}
+                  >
+                    {site.tag} · On-air
+                  </div>
+                  <h3 className="font-display text-xl md:text-2xl text-bone-100 leading-[1.05] mb-3">
+                    {site.name}
+                  </h3>
+                  <p className="text-sm text-bone-100/75 leading-[1.55] line-clamp-3">
+                    {site.brief}
+                  </p>
+                </div>
+                <div className="mt-5 flex items-end justify-between gap-3">
+                  <div className="flex items-center gap-2 text-bone-100/60 min-w-0">
+                    <GlobeHemisphereWestIcon size={13} className="shrink-0" />
+                    <span className="font-mono text-[11px] truncate">
+                      {site.domain}
+                    </span>
+                  </div>
+                  {/* Outbound link — z-30 above the card-wide Link */}
+                  <a
+                    href={site.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="relative z-30 inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/85 hover:text-signal transition-colors shrink-0"
+                    aria-label={`Open ${site.domain} in a new tab`}
+                  >
+                    Visit
+                    <ArrowUpRightIcon
+                      size={14}
+                      weight="bold"
+                      className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                    />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 

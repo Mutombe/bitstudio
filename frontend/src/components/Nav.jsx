@@ -7,9 +7,10 @@ import { useCursorHover } from "../hooks/useCursor.jsx";
 const LINKS = [
   { to: "/", label: "Index", n: "01" },
   { to: "/work", label: "Work", n: "02" },
-  { to: "/#services", label: "Services", n: "03", hash: true },
-  { to: "/studio", label: "Studio", n: "04" },
-  { to: "/contact", label: "Contact", n: "05" },
+  { to: "/live", label: "Live", n: "03" },
+  { to: "/craft", label: "Craft", n: "04" },
+  { to: "/studio", label: "Studio", n: "05" },
+  { to: "/contact", label: "Contact", n: "06" },
 ];
 
 export default function Nav({ onSummon }) {
