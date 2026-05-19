@@ -14,13 +14,9 @@
          pages flush full route-specific head; the title below is only a
          fallback for the SPA shell before React hydrates. -->
     <title>Bit Studio</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Fonts are self-hosted via @fontsource imports in main.jsx.
+         No third-party CDN, no user-IP leak to fonts.googleapis.com.
+         DSGVO-clean per LG München I 3 O 17493/20. -->
   </head>
   <body>
     <div id="root"></div>

@@ -25,12 +25,17 @@ const PRINCIPLES = [
     title: "Verantwortlicher",
     body: `Verantwortlicher im Sinne der Datenschutz-Grundverordnung (DSGVO) ist:
 
-Bit Studio (Pvt) Ltd
-Harare, Simbabwe
+Proplogic Tech (Private) Limited
+Handelsmarke: Bit Studio
+14 Ceres Road, Avondale, Harare
+Simbabwe
+Registernummer: 91103A0232026 (CIPZ)
 E-Mail: admin@bitstudio.co.zw
 Telefon: +263 78 594 8128
 
-Bit Studio ist außerhalb der Europäischen Union ansässig, behandelt personen­bezogene Daten von Nutzerinnen und Nutzern aus der EU jedoch nach den Maßstäben der DSGVO (Art. 3 Abs. 2 DSGVO).`,
+Vertreten durch den Geschäftsführer Simbarashe Mutombe (Principal Officer & Company Secretary).
+
+Die Proplogic Tech (Private) Limited ist außerhalb der Europäischen Union ansässig, behandelt personen­bezogene Daten von Nutzerinnen und Nutzern aus der EU jedoch nach den Maßstäben der DSGVO (Art. 3 Abs. 2 DSGVO).`,
   },
   {
     title: "Erhebung beim Aufruf der Website",
@@ -51,12 +56,10 @@ Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der Berei
 Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragsanbahnung) bzw. Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse). Die Daten werden bis zur abschließenden Bearbeitung Ihrer Anfrage aufbewahrt, längstens jedoch sechs Monate nach dem letzten Kontakt.`,
   },
   {
-    title: "Google Fonts",
-    body: `Wir binden Schriften (Syne, Space Grotesk, Fraunces, JetBrains Mono) über fonts.googleapis.com und fonts.gstatic.com ein. Beim Aufruf der Website wird Ihre IP-Adresse an Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA, übermittelt.
+    title: "Schriften (selbst gehostet)",
+    body: `Wir verwenden die Schriften Syne, Space Grotesk, Fraunces und JetBrains Mono. Diese Schriften werden ausschließlich von unseren eigenen Servern ausgeliefert (selbst gehostet) und nicht dynamisch von Google Fonts oder einem anderen Drittanbieter-CDN nachgeladen.
 
-Wir sind uns der Rechtslage zu dynamisch eingebundenen Google Fonts bewusst (LG München I, Urteil vom 20.01.2022, Az. 3 O 17493/20) und arbeiten an einer Umstellung auf lokal gehostete Schriften. Bis dahin können Sie das Laden der Schriften über Browser-Erweiterungen oder den Privatmodus unterbinden.
-
-Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer konsistenten typografischen Darstellung).`,
+Es findet daher keine Übermittlung Ihrer IP-Adresse an Google LLC oder andere Schriftenanbieter statt. Diese Umsetzung entspricht den Anforderungen aus dem Urteil des LG München I vom 20.01.2022 (Az. 3 O 17493/20).`,
   },
   {
     title: "Cookies & lokale Speicherung",
@@ -66,7 +69,7 @@ Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer kon
     title: "Hosting & Drittanbieter",
     body: `Die Website wird auf Render Inc., 525 Brannan St., San Francisco, CA 94107, USA, gehostet. Render bietet einen aktuellen Auftragsverarbeitungsvertrag (AVV) und unterzeichnet die EU-Standardvertragsklauseln; das Datenschutzniveau entspricht den Anforderungen der DSGVO.
 
-Außer den oben genannten Diensten (Render-Hosting, Google Fonts) übermitteln wir keine Daten an externe Anbieter.`,
+Schriften, Icons, Bilder und Anwendungs-JavaScript werden von der gleichen Domain (bitstudio.co.zw) ausgeliefert. Es gibt keine externen CDN-Aufrufe von dieser Website. Wir verwenden keine Tracking-, Analyse- oder Werbedienste.`,
   },
   {
     title: "Ihre Rechte",
