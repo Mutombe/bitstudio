@@ -24,7 +24,7 @@ export const PACKAGES = [
     // Numbers
     price: "€25.000",
     price_en: "€25,000",
-    timeline_weeks: 10,
+    timeline_days: 10,
     slots_per_quarter: 3,
     slots_remaining: 2,
 
@@ -87,7 +87,7 @@ export const PACKAGES = [
 
     price: "€28.000",
     price_en: "€28,000",
-    timeline_weeks: 10,
+    timeline_days: 10,
     slots_per_quarter: 3,
     slots_remaining: 3,
 
@@ -150,7 +150,7 @@ export const PACKAGES = [
 
     price: "€19.000",
     price_en: "€19,000",
-    timeline_weeks: 8,
+    timeline_days: 8,
     slots_per_quarter: 3,
     slots_remaining: 1,
 
@@ -201,13 +201,15 @@ export const PACKAGES = [
 ];
 
 // Universal four-phase process shared across all three packages.
+// Day ranges given for the 10-day cadence (Manufaktur, Hotel). The 8-day
+// Kanzlei runs the same four phases, just compressed.
 export const PROCESS_PHASES = [
   {
     n: "I",
     name_de: "Briefing & Konzept",
     name_en: "Brief & Concept",
-    weeks_short: "Wo. 1-2",
-    weeks_long: "Wo. 1-2",
+    days_de: "Tag 1-2",
+    days_en: "Day 1-2",
     body_de:
       "Wir hören zu. Wir lesen, was Sie bereits geschrieben haben. Wir nehmen die Stoffe, die Materialien, die Mandate in die Hand. Am Ende dieser Phase liegt ein Konzept vor: visuelle Richtung, Tonfall, Strukturentwurf.",
     body_en:
@@ -217,19 +219,19 @@ export const PROCESS_PHASES = [
     n: "II",
     name_de: "Gestaltung",
     name_en: "Design",
-    weeks_short: "Wo. 3-4",
-    weeks_long: "Wo. 3-5",
+    days_de: "Tag 3-5",
+    days_en: "Day 3-5",
     body_de:
-      "Die endgültige visuelle Sprache wird gebaut: Typografie, Farbpalette, Raster, Komponenten-System. Erste Seiten werden vollständig gestaltet. Zwei Iterationsrunden sind eingeplant.",
+      "Die endgültige visuelle Sprache wird gebaut: Typografie, Farbpalette, Raster, Komponenten-System. Erste Seiten werden vollständig gestaltet. Eine Iterationsrunde ist eingeplant.",
     body_en:
-      "The final visual language is built: typography, palette, grid, component system. First pages are fully designed. Two iteration rounds are budgeted.",
+      "The final visual language is built: typography, palette, grid, component system. First pages are fully designed. One iteration round is budgeted.",
   },
   {
     n: "III",
     name_de: "Bau",
     name_en: "Build",
-    weeks_short: "Wo. 5-6",
-    weeks_long: "Wo. 6-8",
+    days_de: "Tag 6-8",
+    days_en: "Day 6-8",
     body_de:
       "Engineering. React, Vite, Tailwind, lokale Schriftauslieferung. Inhalte werden eingepflegt. Tests auf realer Hardware, in echten Browsern, mit echten Verbindungen.",
     body_en:
@@ -239,8 +241,8 @@ export const PROCESS_PHASES = [
     n: "IV",
     name_de: "Launch & Nachbetreuung",
     name_en: "Launch & Aftercare",
-    weeks_short: "Wo. 7-8",
-    weeks_long: "Wo. 9-10",
+    days_de: "Tag 9-10",
+    days_en: "Day 9-10",
     body_de:
       "Umstellung, Schulung, Übergabe. Erste Tage live werden engmaschig beobachtet. Sechs Monate Hosting und Monitoring sind anschließend inbegriffen — wir verschwinden nicht am Tag des Launches.",
     body_en:
