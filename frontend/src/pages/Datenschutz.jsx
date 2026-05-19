@@ -25,17 +25,16 @@ const PRINCIPLES = [
     title: "Verantwortlicher",
     body: `Verantwortlicher im Sinne der Datenschutz-Grundverordnung (DSGVO) ist:
 
-Proplogic Tech (Private) Limited
-Handelsmarke: Bit Studio
+Bit Studio (Private) Limited
 14 Ceres Road, Avondale, Harare
 Simbabwe
-Registernummer: 91103A0232026 (CIPZ)
+Registernummer: 42656A0252025 (CIPZ)
 E-Mail: admin@bitstudio.co.zw
 Telefon: +263 78 594 8128
 
-Vertreten durch den Geschäftsführer Simbarashe Mutombe (Principal Officer & Company Secretary).
+Vertreten durch den Geschäftsführer Simbarashe Mutombe (Principal Officer & Company Secretary), gemeinsam mit der Direktorin Newlife Marangwanda.
 
-Die Proplogic Tech (Private) Limited ist außerhalb der Europäischen Union ansässig, behandelt personen­bezogene Daten von Nutzerinnen und Nutzern aus der EU jedoch nach den Maßstäben der DSGVO (Art. 3 Abs. 2 DSGVO).`,
+Die Bit Studio (Private) Limited ist außerhalb der Europäischen Union ansässig, behandelt personen­bezogene Daten von Nutzerinnen und Nutzern aus der EU jedoch nach den Maßstäben der DSGVO (Art. 3 Abs. 2 DSGVO).`,
   },
   {
     title: "Erhebung beim Aufruf der Website",
