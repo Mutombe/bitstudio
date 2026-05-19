@@ -29,6 +29,8 @@ const HREFLANG_PAIRS = {
   "/impressum": { en: "/legal", de: "/impressum" },
   "/privacy": { en: "/privacy", de: "/datenschutz" },
   "/datenschutz": { en: "/privacy", de: "/datenschutz" },
+  "/packages": { en: "/packages", de: "/pakete" },
+  "/pakete": { en: "/packages", de: "/pakete" },
 };
 
 export default function SEO({

@@ -31,7 +31,10 @@ const STATIC_ROUTES = [
   // German edition (DACH market)
   { path: "/de",          priority: "0.9", changefreq: "weekly"  },
   { path: "/de/handwerk", priority: "0.8", changefreq: "monthly" },
+  { path: "/pakete",      priority: "0.9", changefreq: "weekly"  },
   { path: "/de/kontakt",  priority: "0.6", changefreq: "monthly" },
+  // English packages page (mirror of /pakete)
+  { path: "/packages",    priority: "0.9", changefreq: "weekly"  },
   // Legal pages — DE for German-market presence, EN for US/global
   { path: "/impressum",   priority: "0.4", changefreq: "yearly"  },
   { path: "/datenschutz", priority: "0.4", changefreq: "yearly"  },
