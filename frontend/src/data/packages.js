@@ -53,7 +53,7 @@ export const PACKAGES = [
     includes_en: [
       "Editorial website with photo-led typography",
       "Product story system (an editorial page per piece, with material notes, maker's notes, photo essays)",
-      "Bilingual German + English — fully translated",
+      "Bilingual — any two languages of your choice (default German + English)",
       "Dealer directory with map",
       "Press kit (PDF + landing page) for trade press and magazines",
       "Trade show kit: booth signage, business cards, leave-behind cards (print templates)",
@@ -99,7 +99,7 @@ export const PACKAGES = [
     for_de:
       "Boutique-Hotels und Lodges der 4- bis 5-Sterne-Kategorie. Inhabergeführt oder mit kleinem Führungsteam. Standorte: Berlin, München, Hamburg, Schwarzwald, Sylt, Bodensee, Wachau, Engadin, Salzkammergut. Sie haben eine außergewöhnliche Geschichte — Architektur, Küche, Lage — und einen Auftritt, der sie nicht trägt.",
     for_en:
-      "Boutique hotels and lodges in the 4-5 star range. Owner-led or with a small leadership team. Locations: Berlin, Munich, Hamburg, Black Forest, Sylt, Lake Constance, Wachau, Engadin, Salzkammergut. You have an exceptional story — architecture, kitchen, location — and a web presence that doesn't carry it.",
+      "Boutique hotels and lodges in the 4-5 star range. Owner-led or with a small leadership team. Locations vary — alpine lodge, coastal retreat, city house, vineyard estate, historic Schloss. You have an exceptional story — architecture, kitchen, location — and a web presence that doesn't carry it.",
 
     includes_de: [
       "Cineastische Landingpage mit Voll-Viewport-Bewegtbild oder Großfoto",
@@ -157,12 +157,12 @@ export const PACKAGES = [
     promise_de:
       "Ein Auftritt, der die Würde und das Vertrauen Ihrer Kanzlei trägt — ohne den verstaubten Eindruck, den die meisten Kanzlei-Websites hinterlassen.",
     promise_en:
-      "A presence that carries the dignity and trust of your chamber — without the dusty impression most law-firm websites leave.",
+      "A presence that carries the dignity and trust of your firm — without the dusty impression most law-firm websites leave.",
 
     for_de:
       "Boutique-Sozietäten mit fünf bis dreißig Anwältinnen und Anwälten. Schwerpunkte: Wirtschaftsrecht, M&A, IP, Arbeitsrecht, Steuerrecht, Strafrecht. Sie haben Mandate, die für sich sprechen, und einen Webauftritt, der das nicht tut. Ein neuer Sozius oder eine neue Sozia ist der Auslöser; das Internet wird endlich ernst genommen.",
     for_en:
-      "Boutique chambers with five to thirty attorneys. Focus areas: commercial, M&A, IP, employment, tax, criminal. Your mandates speak for themselves; your website doesn't. A new partner is usually the trigger — the internet finally gets taken seriously.",
+      "Boutique law firms with five to thirty attorneys. Focus areas: commercial, M&A, IP, employment, tax, criminal. Your mandates speak for themselves; your website doesn't. A new partner is usually the trigger — the internet finally gets taken seriously.",
 
     includes_de: [
       "Editorial-Website in Heritage-Ästhetik (Serife, ruhige Raster, geprüfte Typografie)",
