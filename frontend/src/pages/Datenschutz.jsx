@@ -134,7 +134,13 @@ export default function Datenschutz() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 display-massive text-bone-100 leading-[0.85]"
+            className="mt-6 font-display text-bone-100 leading-[0.85] tracking-[-0.04em] block w-full max-w-full break-words"
+            style={{
+              fontWeight: 700,
+              // "Datenschutz." is 12 chars — even tighter clamp than Impressum
+              // so it never reaches the right gutter.
+              fontSize: "clamp(2.25rem, 11vw, 12rem)",
+            }}
           >
             Datenschutz.
           </motion.h1>

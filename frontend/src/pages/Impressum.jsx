@@ -117,7 +117,14 @@ export default function Impressum() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 display-massive text-bone-100 leading-[0.85]"
+            className="mt-6 font-display text-bone-100 leading-[0.85] tracking-[-0.04em] block w-full max-w-full break-words"
+            style={{
+              fontWeight: 700,
+              // "Impressum." is 10 chars — base display-massive (clamp 4-18rem at 18vw)
+              // overflows the 1280-wide content frame. Tuned clamp keeps the word
+              // inside the gutter from 360px mobile to 1600px desktop.
+              fontSize: "clamp(2.75rem, 13vw, 13rem)",
+            }}
           >
             Impressum.
           </motion.h1>
