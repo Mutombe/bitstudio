@@ -25,7 +25,7 @@ import { PACKAGES, PROCESS_PHASES } from "../data/packages.js";
  * international buyer hits the same offer architecture as DACH.
  */
 
-const WEEKS = (n) => `${n} weeks`;
+const DAYS = (n) => `${n} days`;
 
 export default function Packages() {
   const hover = useCursorHover("hover", "");
@@ -182,7 +182,7 @@ export default function Packages() {
               >
                 <span className="absolute -left-[6px] top-0 w-2.5 h-2.5 rounded-full bg-signal" />
                 <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal mb-2">
-                  Phase {phase.n} · {phase.weeks_short.replace("Wo.", "W.")}
+                  Phase {phase.n} · {phase.days_en}
                 </p>
                 <p className="font-display text-xl md:text-2xl text-bone-100 leading-[1.1] mb-3">
                   {phase.name_en}
@@ -333,7 +333,7 @@ function PackageSection({ pkg, index, hover }) {
                     <ClockIcon size={11} weight="bold" />
                     Timeline
                   </dt>
-                  <dd className="text-bone-100/90 font-mono">{WEEKS(pkg.timeline_weeks)}</dd>
+                  <dd className="text-bone-100/90 font-mono">{DAYS(pkg.timeline_days)}</dd>
                 </div>
                 <div className="flex items-baseline justify-between gap-3 pb-3 border-b border-white/10">
                   <dt className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/55 flex items-center gap-1.5">

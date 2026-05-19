@@ -28,7 +28,7 @@ import { PACKAGES, PROCESS_PHASES } from "../../data/packages.js";
  * src/data/packages.js — change copy once, both update.
  */
 
-const NF_WEEKS = (n) => `${n} Wochen`;
+const NF_DAYS = (n) => `${n} Tage`;
 
 export default function Pakete() {
   const hover = useCursorHover("hover", "");
@@ -185,7 +185,7 @@ export default function Pakete() {
               >
                 <span className="absolute -left-[6px] top-0 w-2.5 h-2.5 rounded-full bg-signal" />
                 <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal mb-2">
-                  Phase {phase.n} · {phase.weeks_short}
+                  Phase {phase.n} · {phase.days_de}
                 </p>
                 <p className="font-display text-xl md:text-2xl text-bone-100 leading-[1.1] mb-3">
                   {phase.name_de}
@@ -337,7 +337,7 @@ function PackageSection({ pkg, index, hover }) {
                     Dauer
                   </dt>
                   <dd className="text-bone-100/90 font-mono">
-                    {NF_WEEKS(pkg.timeline_weeks)}
+                    {NF_DAYS(pkg.timeline_days)}
                   </dd>
                 </div>
                 <div className="flex items-baseline justify-between gap-3 pb-3 border-b border-white/10">
