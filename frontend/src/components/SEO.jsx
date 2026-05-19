@@ -16,6 +16,17 @@ const TWITTER_HANDLE = "@bitstudio";
  *   <SEO title="Alliance Health" description="..." path="/work/alliance-health"
  *        image="/screens/alliance.png" jsonLd={[creativeWorkJsonLd]} />
  */
+// Map of EN ↔ DE route equivalents. Used to emit hreflang annotations so
+// Google serves the right locale to the right user.
+const HREFLANG_PAIRS = {
+  "/": { en: "/", de: "/de" },
+  "/de": { en: "/", de: "/de" },
+  "/craft": { en: "/craft", de: "/de/handwerk" },
+  "/de/handwerk": { en: "/craft", de: "/de/handwerk" },
+  "/contact": { en: "/contact", de: "/de/kontakt" },
+  "/de/kontakt": { en: "/contact", de: "/de/kontakt" },
+};
+
 export default function SEO({
   title,
   description,
@@ -30,9 +41,12 @@ export default function SEO({
   const fullTitle =
     title && title !== SITE_NAME ? `${title} — ${SITE_NAME}` : SITE_NAME;
   const imageAbs = image.startsWith("http") ? image : `${SITE_ORIGIN}${image}`;
+  const isDE = path === "/de" || path.startsWith("/de/");
+  const langTag = isDE ? "de" : "en";
+  const hreflang = HREFLANG_PAIRS[path];
 
   return (
-    <Helmet prioritizeSeoTags>
+    <Helmet prioritizeSeoTags htmlAttributes={{ lang: langTag }}>
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       {keywords.length > 0 && (
@@ -43,6 +57,22 @@ export default function SEO({
         name="robots"
         content={noindex ? "noindex, nofollow" : "index, follow"}
       />
+
+      {/* Hreflang annotations — only emitted on pages with a known EN/DE pair */}
+      {hreflang && (
+        <link rel="alternate" hrefLang="en" href={`${SITE_ORIGIN}${hreflang.en}`} />
+      )}
+      {hreflang && (
+        <link rel="alternate" hrefLang="de" href={`${SITE_ORIGIN}${hreflang.de}`} />
+      )}
+      {hreflang && (
+        <link rel="alternate" hrefLang="x-default" href={`${SITE_ORIGIN}${hreflang.en}`} />
+      )}
+
+      <meta property="og:locale" content={isDE ? "de_DE" : "en_US"} />
+      {hreflang && (
+        <meta property="og:locale:alternate" content={isDE ? "en_US" : "de_DE"} />
+      )}
 
       {/* Open Graph */}
       <meta property="og:type" content={type} />

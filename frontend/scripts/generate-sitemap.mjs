@@ -20,13 +20,21 @@ const TODAY = new Date().toISOString().slice(0, 10);
 
 // ─── Static routes — change priority/freshness here ─────────────────
 const STATIC_ROUTES = [
-  { path: "/",         priority: "1.0", changefreq: "weekly"  },
-  { path: "/work",     priority: "0.9", changefreq: "weekly"  },
-  { path: "/live",     priority: "0.9", changefreq: "weekly"  },
-  { path: "/craft",    priority: "0.8", changefreq: "monthly" },
-  { path: "/studio",   priority: "0.7", changefreq: "monthly" },
-  { path: "/contact",  priority: "0.6", changefreq: "monthly" },
-  { path: "/terms",    priority: "0.3", changefreq: "yearly"  },
+  // English
+  { path: "/",            priority: "1.0", changefreq: "weekly"  },
+  { path: "/work",        priority: "0.9", changefreq: "weekly"  },
+  { path: "/live",        priority: "0.9", changefreq: "weekly"  },
+  { path: "/craft",       priority: "0.8", changefreq: "monthly" },
+  { path: "/studio",      priority: "0.7", changefreq: "monthly" },
+  { path: "/contact",     priority: "0.6", changefreq: "monthly" },
+  { path: "/terms",       priority: "0.3", changefreq: "yearly"  },
+  // German edition (DACH market)
+  { path: "/de",          priority: "0.9", changefreq: "weekly"  },
+  { path: "/de/handwerk", priority: "0.8", changefreq: "monthly" },
+  { path: "/de/kontakt",  priority: "0.6", changefreq: "monthly" },
+  // Legal — required for German-market presence
+  { path: "/impressum",   priority: "0.4", changefreq: "yearly"  },
+  { path: "/datenschutz", priority: "0.4", changefreq: "yearly"  },
 ];
 
 // Dynamic-route loaders. We use raw source parsing instead of importing the

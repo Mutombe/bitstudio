@@ -14,6 +14,11 @@ import Work from "./pages/Work.jsx";
 import Live from "./pages/Live.jsx";
 import LiveDetail from "./pages/LiveDetail.jsx";
 import Craft from "./pages/Craft.jsx";
+import Impressum from "./pages/Impressum.jsx";
+import Datenschutz from "./pages/Datenschutz.jsx";
+import HomeDE from "./pages/de/Home.jsx";
+import CraftDE from "./pages/de/Craft.jsx";
+import ContactDE from "./pages/de/Contact.jsx";
 import ProjectDetail from "./pages/ProjectDetail.jsx";
 import Studio from "./pages/Studio.jsx";
 import Contact from "./pages/Contact.jsx";
@@ -90,6 +95,12 @@ export default function App() {
               <Route path="/live" element={<Live />} />
               <Route path="/live/:slug" element={<LiveDetail />} />
               <Route path="/craft" element={<Craft />} />
+              <Route path="/impressum" element={<Impressum />} />
+              <Route path="/datenschutz" element={<Datenschutz />} />
+              {/* German entry — for European/DACH market outreach */}
+              <Route path="/de" element={<HomeDE />} />
+              <Route path="/de/handwerk" element={<CraftDE />} />
+              <Route path="/de/kontakt" element={<ContactDE />} />
               <Route path="/studio" element={<Studio />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/services/:slug" element={<ServiceDetail />} />

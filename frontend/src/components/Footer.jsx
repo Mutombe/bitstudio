@@ -66,8 +66,14 @@ export default function Footer() {
   const year = new Date().getFullYear();
   const { pathname } = useLocation();
 
-  // Hide the engagement strip on /contact (already covered there) and /terms.
-  const showEngagement = pathname !== "/contact" && pathname !== "/terms";
+  // Hide the engagement strip on contact + terms + legal pages (already
+  // covered there). Also hide on /de/kontakt which has its own bank block.
+  const showEngagement =
+    pathname !== "/contact" &&
+    pathname !== "/de/kontakt" &&
+    pathname !== "/terms" &&
+    pathname !== "/impressum" &&
+    pathname !== "/datenschutz";
 
   return (
     <footer className="relative bg-[color:var(--color-ink)] border-t border-white/5 overflow-hidden">
@@ -201,7 +207,6 @@ export default function Footer() {
               <li><Link to="/craft" {...hover} className="hover-line">Craft</Link></li>
               <li><Link to="/studio" {...hover} className="hover-line">Studio</Link></li>
               <li><Link to="/contact" {...hover} className="hover-line">Contact</Link></li>
-              <li><Link to="/terms" {...hover} className="hover-line">Terms</Link></li>
             </ul>
           </div>
           <div className="col-span-6 md:col-span-2">
@@ -211,6 +216,18 @@ export default function Footer() {
               <li><a href="mailto:admin@bitstudio.co.zw" {...hover} className="hover-line">Email</a></li>
               <li><a href="https://github.com/Mutombe" target="_blank" rel="noreferrer" {...hover} className="hover-line">Github</a></li>
               <li><span className="text-bone-100/40">Harare · ZW</span></li>
+            </ul>
+          </div>
+
+          {/* Legal column — required by EU/DE law for any German-market activity */}
+          <div className="col-span-12 md:col-span-2 md:col-start-11">
+            <p className="label-mono text-bone-100/40 mb-4">Rechtliches</p>
+            <ul className="space-y-2 text-bone-100/80">
+              <li><Link to="/de" {...hover} className="hover-line">Deutsche Version</Link></li>
+              <li><Link to="/impressum" {...hover} className="hover-line">Impressum</Link></li>
+              <li><Link to="/datenschutz" {...hover} className="hover-line">Datenschutz</Link></li>
+              <li><Link to="/terms" {...hover} className="hover-line">Terms</Link></li>
+              <li><a href="/sitemap.xml" {...hover} className="hover-line" target="_blank" rel="noreferrer">Sitemap</a></li>
             </ul>
           </div>
         </div>
