@@ -9,27 +9,24 @@ import { useCursorHover } from "../hooks/useCursor.jsx";
  * Impressum — legal disclosure required by German law (§ 5 TMG, § 18 MStV).
  *
  * Legal facts confirmed against the Companies and Intellectual Property
- * Office of Zimbabwe (CIPZ) entity summary, dated 19/3/2026:
+ * Office of Zimbabwe (CIPZ) Certificate of Incorporation:
  *
- *   Trade name (public-facing):  Bit Studio
- *   Legal entity:                Proplogic Tech (Private) Limited
- *   Entity No.:                  91103A0232026
- *   Date of incorporation:       19 March 2026
+ *   Legal entity:                Bit Studio (Private) Limited
+ *   Entity No.:                  42656A0252025
+ *   Date of incorporation:       9 May 2025
  *   Registered address:          14 Ceres Road, Avondale, Harare, Zimbabwe
  *   Registrar:                   Companies and Intellectual Property Office
  *                                of Zimbabwe (CIPZ), under the Companies and
  *                                Other Business Entities Act [Chapter 24:31]
  *   Directors:                   Simbarashe Mutombe (Principal Officer)
  *                                Newlife Marangwanda
- *                                Gift Maenzanise Chipunza
  */
 
 const SECTIONS = [
   {
     title: "Angaben gemäß § 5 TMG",
     rows: [
-      ["Diensteanbieter", "Proplogic Tech (Private) Limited"],
-      ["Handelsmarke", "Bit Studio — eingetragene Geschäftsbezeichnung der Proplogic Tech (Private) Limited"],
+      ["Diensteanbieter", "Bit Studio (Private) Limited"],
       ["Anschrift", "14 Ceres Road\nAvondale, Harare\nSimbabwe"],
       ["Telefon", "+263 78 594 8128 (WhatsApp)"],
       ["E-Mail", "admin@bitstudio.co.zw"],
@@ -41,7 +38,6 @@ const SECTIONS = [
     rows: [
       ["Geschäftsführender Direktor", "Simbarashe Mutombe\nPrincipal Officer & Company Secretary"],
       ["Direktor", "Newlife Marangwanda"],
-      ["Direktor", "Gift Maenzanise Chipunza"],
     ],
   },
   {
@@ -49,8 +45,8 @@ const SECTIONS = [
     rows: [
       ["Registergericht", "Companies and Intellectual Property Office of Zimbabwe (CIPZ)"],
       ["Rechtsgrundlage", "Companies and Other Business Entities Act [Chapter 24:31]"],
-      ["Registernummer", "91103A0232026"],
-      ["Gründungsdatum", "19. März 2026"],
+      ["Registernummer", "42656A0252025"],
+      ["Gründungsdatum", "9. Mai 2025"],
       ["Status", "REGISTERED"],
     ],
   },
@@ -73,13 +69,13 @@ const SECTIONS = [
   },
 ];
 
-const DISPUTE = `Online-Streitbeilegung: Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit, die unter ec.europa.eu/consumers/odr erreichbar ist. Bit Studio (Proplogic Tech (Private) Limited) ist nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.`;
+const DISPUTE = `Online-Streitbeilegung: Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit, die unter ec.europa.eu/consumers/odr erreichbar ist. Bit Studio (Private) Limited ist nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.`;
 
 const DISCLAIMER = `Haftung für Inhalte: Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
 
 Haftung für Links: Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.
 
-Urheberrecht: Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem simbabwischen und internationalen Urheberrecht (Bern-Übereinkunft). Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung der Proplogic Tech (Private) Limited.`;
+Urheberrecht: Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem simbabwischen und internationalen Urheberrecht (Bern-Übereinkunft). Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung der Bit Studio (Private) Limited.`;
 
 export default function Impressum() {
   const hover = useCursorHover("hover", "");
@@ -88,10 +84,10 @@ export default function Impressum() {
     <PageTransition>
       <SEO
         title="Impressum"
-        description="Rechtliche Angaben gemäß § 5 TMG und § 18 MStV. Proplogic Tech (Private) Limited, Handelsmarke Bit Studio. Registernummer 91103A0232026."
+        description="Rechtliche Angaben gemäß § 5 TMG und § 18 MStV. Bit Studio (Private) Limited, Harare. Registernummer 42656A0252025."
         path="/impressum"
         noindex={false}
-        keywords={["Impressum", "Bit Studio", "Proplogic Tech", "TMG", "MStV", "rechtliche Hinweise"]}
+        keywords={["Impressum", "Bit Studio", "TMG", "MStV", "rechtliche Hinweise"]}
         jsonLd={[
           breadcrumbJsonLd([
             { name: "Index", path: "/" },
