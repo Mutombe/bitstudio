@@ -10,6 +10,7 @@ import { findProject, adjacentProjects } from "../data/projects.js";
 import PageTransition from "../components/PageTransition.jsx";
 import SectionLabel from "../components/SectionLabel.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
+import SEO, { breadcrumbJsonLd, creativeWorkJsonLd } from "../components/SEO.jsx";
 
 export default function ProjectDetail() {
   const { slug } = useParams();
@@ -26,13 +27,38 @@ export default function ProjectDetail() {
 
   return (
     <PageTransition>
+      <SEO
+        title={`${p.name} · ${p.tag}`}
+        description={p.brief || `${p.name} — a Bit Studio artifact. ${p.tag} aesthetic. ${p.industry || "Real-world client."}`}
+        path={`/work/${p.slug}`}
+        type="article"
+        keywords={[p.name, p.tag, p.industry, "Bit Studio", "case study"].filter(Boolean)}
+        jsonLd={[
+          breadcrumbJsonLd([
+            { name: "Index", path: "/" },
+            { name: "Work", path: "/work" },
+            { name: p.name, path: `/work/${p.slug}` },
+          ]),
+          creativeWorkJsonLd({
+            name: p.name,
+            description: p.brief,
+            url: p.url,
+            image: p.image,
+            palette: p.palette,
+            aesthetic: p.tag,
+            industry: p.industry,
+          }),
+        ]}
+      />
       <section className="relative pt-24 md:pt-32 pb-0 overflow-hidden">
         {/* Split hero — brand color left panel, preview right */}
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50 mb-8">
             <Link to="/work" {...hover} className="hover-line">Work</Link>
             <span className="text-bone-100/30">/</span>
-            <span>{p.tag}</span>
+            <span>{p.industry || p.tag}</span>
+            <span className="text-bone-100/30">·</span>
+            <span className="text-signal">{p.tag}</span>
             <span className="text-bone-100/30">/</span>
             <span className="text-bone-100">{p.name}</span>
           </div>

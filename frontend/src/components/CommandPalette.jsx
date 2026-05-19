@@ -12,11 +12,14 @@ import {
   SparkleIcon,
 } from "@phosphor-icons/react";
 import { PROJECTS } from "../data/projects.js";
+import { LIVE_SITES } from "../data/live-sites.js";
 import { SERVICES } from "../data/services.js";
 
 const STATIC_ITEMS = [
   { kind: "page", label: "Home",     to: "/",          hint: "Index" },
-  { kind: "page", label: "Work",     to: "/work",      hint: "Ledger of 30+ artifacts" },
+  { kind: "page", label: "Work",     to: "/work",      hint: `Ledger of ${PROJECTS.length + LIVE_SITES.length} artifacts` },
+  { kind: "page", label: "Live",     to: "/live",      hint: `${LIVE_SITES.length} broadcasting on their own domain` },
+  { kind: "page", label: "Craft",    to: "/craft",     hint: "The Way · after Musashi, 1645" },
   { kind: "page", label: "Services", to: "/#services", hint: "Eight things we love to solve" },
   { kind: "page", label: "Studio",   to: "/studio",    hint: "Philosophy, unapologetically" },
   { kind: "page", label: "Contact",  to: "/contact",   hint: "Open a transmission" },

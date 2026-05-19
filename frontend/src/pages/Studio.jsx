@@ -6,6 +6,7 @@ import WireframeOverlay from "../components/WireframeOverlay.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 import { Link } from "react-router-dom";
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
+import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
 
 const DROP_PHRASES = [
   {
@@ -50,6 +51,18 @@ export default function Studio() {
 
   return (
     <PageTransition>
+      <SEO
+        title="Studio · A manifesto"
+        description="The studio's manifesto. Five short essays on beauty, code, restraint, speed, and the platform. Read it twice."
+        path="/studio"
+        keywords={["studio manifesto", "design philosophy", "Bit Studio", "Harare"]}
+        jsonLd={[
+          breadcrumbJsonLd([
+            { name: "Index", path: "/" },
+            { name: "Studio", path: "/studio" },
+          ]),
+        ]}
+      />
       {/* Hero */}
       <section className="relative pt-32 md:pt-44 pb-10 md:pb-16 overflow-hidden radial-bleed">
         <div className="absolute inset-0 pointer-events-none">
@@ -76,6 +89,16 @@ export default function Studio() {
             with documentation. The following is what we believe, written out
             loud so we can be held to it.
           </p>
+
+          <div className="mt-10 flex flex-wrap items-center gap-3">
+            <Link to="/craft" {...hover} className="btn btn-ghost">
+              The Way · after Musashi
+              <ArrowUpRightIcon size={14} weight="bold" />
+            </Link>
+            <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/40">
+              The longer-form inheritance lives there
+            </span>
+          </div>
         </div>
       </section>
 

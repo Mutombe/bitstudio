@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import PageTransition from "../components/PageTransition.jsx";
 import SectionLabel from "../components/SectionLabel.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
+import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
 
 /**
  * Terms — a philosophical terms-and-conditions.
@@ -88,6 +89,18 @@ export default function Terms() {
 
   return (
     <PageTransition>
+      <SEO
+        title="Terms of engagement"
+        description="The agreement between Bit Studio and our clients — payment, IP, revisions, and what counts as 'done.' Written in plain language, no legalese."
+        path="/terms"
+        keywords={["terms of engagement", "studio terms", "Bit Studio agreement"]}
+        jsonLd={[
+          breadcrumbJsonLd([
+            { name: "Index", path: "/" },
+            { name: "Terms", path: "/terms" },
+          ]),
+        ]}
+      />
       {/* Hero */}
       <section className="relative pt-24 md:pt-40 pb-10 md:pb-16 overflow-hidden radial-bleed">
         <div className="absolute inset-0 pointer-events-none">

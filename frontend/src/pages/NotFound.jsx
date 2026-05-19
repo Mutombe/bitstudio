@@ -2,11 +2,18 @@ import { Link } from "react-router-dom";
 import { ArrowLeftIcon } from "@phosphor-icons/react";
 import PageTransition from "../components/PageTransition.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
+import SEO from "../components/SEO.jsx";
 
 export default function NotFound() {
   const hover = useCursorHover("hover", "");
   return (
     <PageTransition>
+      <SEO
+        title="Not found"
+        description="The requested page is not at this address."
+        path="/404"
+        noindex
+      />
       <section className="min-h-[100svh] flex items-center radial-bleed">
         <div className="max-w-[1600px] mx-auto px-5 md:px-10 py-32 md:py-44">
           <p className="label-mono text-bone-100/50">404 · Transmission lost</p>
