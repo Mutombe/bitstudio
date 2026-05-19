@@ -4,13 +4,22 @@ import { useEffect, useState } from "react";
 import { CommandIcon, ListIcon, XIcon, PlanetIcon } from "@phosphor-icons/react";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 
-const LINKS = [
+// Two navigation sets — English (default) and German (/de/*).
+// We pick which one to render based on the current pathname.
+const LINKS_EN = [
   { to: "/", label: "Index", n: "01" },
   { to: "/work", label: "Work", n: "02" },
   { to: "/live", label: "Live", n: "03" },
   { to: "/craft", label: "Craft", n: "04" },
   { to: "/studio", label: "Studio", n: "05" },
   { to: "/contact", label: "Contact", n: "06" },
+];
+const LINKS_DE = [
+  { to: "/de", label: "Index", n: "01" },
+  { to: "/work", label: "Arbeit", n: "02" },
+  { to: "/live", label: "Live", n: "03" },
+  { to: "/de/handwerk", label: "Handwerk", n: "04" },
+  { to: "/de/kontakt", label: "Kontakt", n: "05" },
 ];
 
 export default function Nav({ onSummon }) {
@@ -27,6 +36,23 @@ export default function Nav({ onSummon }) {
   }, []);
 
   useEffect(() => setOpen(false), [loc.pathname]);
+
+  // Locale routing — anything under /de/* is the German edition.
+  const isDE = loc.pathname === "/de" || loc.pathname.startsWith("/de/");
+  const LINKS = isDE ? LINKS_DE : LINKS_EN;
+
+  // Where the language toggle points. When on /de, link back to /; when
+  // on a recognised English page, jump to the closest German equivalent.
+  const toggleHref = (() => {
+    if (isDE) {
+      if (loc.pathname.startsWith("/de/handwerk")) return "/craft";
+      if (loc.pathname.startsWith("/de/kontakt")) return "/contact";
+      return "/";
+    }
+    if (loc.pathname.startsWith("/craft")) return "/de/handwerk";
+    if (loc.pathname.startsWith("/contact")) return "/de/kontakt";
+    return "/de";
+  })();
 
   return (
     <>
@@ -112,6 +138,17 @@ export default function Nav({ onSummon }) {
           </nav>
 
           <div className="flex items-center gap-2 md:gap-4">
+            {/* Language toggle — DE ↔ EN. Always visible. */}
+            <Link
+              to={toggleHref}
+              {...hover}
+              aria-label={isDE ? "Switch to English" : "Auf Deutsch wechseln"}
+              className="hidden sm:flex items-center px-2.5 py-1 rounded-full border border-white/10 hover:border-signal font-mono text-[10px] tracking-[0.2em] uppercase transition-all"
+            >
+              <span className={isDE ? "text-bone-100/40" : "text-signal"}>EN</span>
+              <span className="mx-1.5 text-bone-100/20">·</span>
+              <span className={isDE ? "text-signal" : "text-bone-100/40"}>DE</span>
+            </Link>
             <button
               {...hover}
               onClick={onSummon}
@@ -119,7 +156,7 @@ export default function Nav({ onSummon }) {
               aria-label="Open command palette (Cmd+K)"
             >
               <PlanetIcon size={13} weight="regular" className="text-signal transition-transform duration-700 group-hover:rotate-180" />
-              <span>Summon</span>
+              <span>{isDE ? "Suchen" : "Summon"}</span>
               <span className="text-bone-100/40 ml-1">⌘K</span>
             </button>
             {/* Mobile: alien Orbit search — opens CommandPalette */}
