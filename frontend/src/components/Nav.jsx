@@ -47,10 +47,14 @@ export default function Nav({ onSummon }) {
     if (isDE) {
       if (loc.pathname.startsWith("/de/handwerk")) return "/craft";
       if (loc.pathname.startsWith("/de/kontakt")) return "/contact";
+      if (loc.pathname === "/impressum") return "/legal";
+      if (loc.pathname === "/datenschutz") return "/privacy";
       return "/";
     }
     if (loc.pathname.startsWith("/craft")) return "/de/handwerk";
     if (loc.pathname.startsWith("/contact")) return "/de/kontakt";
+    if (loc.pathname === "/legal") return "/impressum";
+    if (loc.pathname === "/privacy") return "/datenschutz";
     return "/de";
   })();
 

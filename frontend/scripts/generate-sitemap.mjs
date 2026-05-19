@@ -32,9 +32,11 @@ const STATIC_ROUTES = [
   { path: "/de",          priority: "0.9", changefreq: "weekly"  },
   { path: "/de/handwerk", priority: "0.8", changefreq: "monthly" },
   { path: "/de/kontakt",  priority: "0.6", changefreq: "monthly" },
-  // Legal — required for German-market presence
+  // Legal pages — DE for German-market presence, EN for US/global
   { path: "/impressum",   priority: "0.4", changefreq: "yearly"  },
   { path: "/datenschutz", priority: "0.4", changefreq: "yearly"  },
+  { path: "/legal",       priority: "0.4", changefreq: "yearly"  },
+  { path: "/privacy",     priority: "0.4", changefreq: "yearly"  },
 ];
 
 // Dynamic-route loaders. We use raw source parsing instead of importing the

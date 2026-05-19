@@ -25,6 +25,10 @@ const HREFLANG_PAIRS = {
   "/de/handwerk": { en: "/craft", de: "/de/handwerk" },
   "/contact": { en: "/contact", de: "/de/kontakt" },
   "/de/kontakt": { en: "/contact", de: "/de/kontakt" },
+  "/legal": { en: "/legal", de: "/impressum" },
+  "/impressum": { en: "/legal", de: "/impressum" },
+  "/privacy": { en: "/privacy", de: "/datenschutz" },
+  "/datenschutz": { en: "/privacy", de: "/datenschutz" },
 };
 
 export default function SEO({

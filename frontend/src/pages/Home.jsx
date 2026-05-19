@@ -193,7 +193,84 @@ export default function Home({ onSummon }) {
         </div>
       </section>
 
-      {/* Seam: hero → services (wave is punctuation, edges dissolved) */}
+      {/* Seam: hero → why us */}
+      <div className="seam-dissolve">
+        <WaveBreak />
+      </div>
+
+      {/* ─── 0.5 · WHY US — the rationale a US/EU buyer is silently asking ─── */}
+      <section className="relative py-20 md:py-32 bg-[color:var(--color-ink)] seam-bleed-top">
+        <div className="max-w-[1600px] mx-auto px-5 md:px-10">
+          <div className="grid grid-cols-12 gap-6 md:gap-10 items-start">
+            <div className="col-span-12 md:col-span-3 md:pt-3">
+              <SectionLabel chapter="§ 01" title="Why us" />
+            </div>
+            <div className="col-span-12 md:col-span-9 space-y-12 max-w-4xl">
+              <motion.h2
+                initial={{ opacity: 0, y: 32 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                className="display-xl text-bone-100 leading-[1.02]"
+              >
+                Three answers to a fair question:
+                <br />
+                <span className="italic-accent text-bone-300 font-light">
+                  why hire a studio in Zimbabwe?
+                </span>
+              </motion.h2>
+
+              <div className="grid md:grid-cols-3 gap-8 md:gap-10">
+                <div>
+                  <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal mb-3">
+                    01 · Time zone
+                  </p>
+                  <p className="font-display text-xl text-bone-100 leading-[1.1] mb-3">
+                    One hour off Berlin.<br />
+                    <span className="text-bone-100/55">Seven hours ahead of New York.</span>
+                  </p>
+                  <p className="text-bone-100/75 leading-relaxed text-sm md:text-base">
+                    Stand-up at 09:00 CAT lines up with 08:00 Berlin and lands a
+                    full afternoon before New York wakes. Replies come the same
+                    day, not the next.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal mb-3">
+                    02 · Craft tradition
+                  </p>
+                  <p className="font-display text-xl text-bone-100 leading-[1.1] mb-3">
+                    Bauhaus, but warmer.
+                  </p>
+                  <p className="text-bone-100/75 leading-relaxed text-sm md:text-base">
+                    Schooled in a lineage that runs Werkbund → Vignelli →
+                    Musashi — no fashion, no trend, no lorem. Form follows
+                    function, with a soul. Read the long version on{" "}
+                    <Link to="/craft" className="text-signal hover-line">/craft</Link>.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal mb-3">
+                    03 · Pricing
+                  </p>
+                  <p className="font-display text-xl text-bone-100 leading-[1.1] mb-3">
+                    Berlin standard,<br />
+                    <span className="text-bone-100/55">without the Berlin bill.</span>
+                  </p>
+                  <p className="text-bone-100/75 leading-relaxed text-sm md:text-base">
+                    A Mittelstand-tier site from us is materially cheaper than
+                    a comparable Berlin or Brooklyn agency — with the same
+                    appetite for depth and patience. We invest in the work,
+                    not the showroom.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Seam: why us → services */}
       <div className="seam-dissolve">
         <WaveBreak />
       </div>

@@ -16,6 +16,8 @@ import LiveDetail from "./pages/LiveDetail.jsx";
 import Craft from "./pages/Craft.jsx";
 import Impressum from "./pages/Impressum.jsx";
 import Datenschutz from "./pages/Datenschutz.jsx";
+import Legal from "./pages/Legal.jsx";
+import Privacy from "./pages/Privacy.jsx";
 import HomeDE from "./pages/de/Home.jsx";
 import CraftDE from "./pages/de/Craft.jsx";
 import ContactDE from "./pages/de/Contact.jsx";
@@ -97,6 +99,8 @@ export default function App() {
               <Route path="/craft" element={<Craft />} />
               <Route path="/impressum" element={<Impressum />} />
               <Route path="/datenschutz" element={<Datenschutz />} />
+              <Route path="/legal" element={<Legal />} />
+              <Route path="/privacy" element={<Privacy />} />
               {/* German entry — for European/DACH market outreach */}
               <Route path="/de" element={<HomeDE />} />
               <Route path="/de/handwerk" element={<CraftDE />} />
