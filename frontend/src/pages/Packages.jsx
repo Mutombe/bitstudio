@@ -104,7 +104,7 @@ export default function Packages() {
                 </p>
                 <div className="flex items-center justify-between font-mono text-[10px] tracking-[0.18em] uppercase">
                   <span className="text-bone-100/65">{p.price_en}</span>
-                  <span className="text-bone-100/45">{WEEKS(p.timeline_weeks)}</span>
+                  <span className="text-bone-100/45">{DAYS(p.timeline_days)}</span>
                 </div>
               </a>
             ))}

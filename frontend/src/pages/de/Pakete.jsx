@@ -107,7 +107,7 @@ export default function Pakete() {
                 </p>
                 <div className="flex items-center justify-between font-mono text-[10px] tracking-[0.18em] uppercase">
                   <span className="text-bone-100/65">{p.price}</span>
-                  <span className="text-bone-100/45">{NF_WEEKS(p.timeline_weeks)}</span>
+                  <span className="text-bone-100/45">{NF_DAYS(p.timeline_days)}</span>
                 </div>
               </a>
             ))}
