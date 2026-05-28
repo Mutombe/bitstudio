@@ -123,9 +123,9 @@ const BRIEFS = [
   },
 ];
 
-// Field notes — the studio's public reading log on these surfaces.
-// Listed so visitors can see what preparation has been done, in
-// place of fabricating shipped work.
+// Field notes — the studio's public reading log across every surface
+// we build for. This is preparation in place of fabricated portfolios.
+// The breadth is the point: an infrastructure builder reads widely.
 const FIELD_NOTES = [
   {
     surface: "Meta Ray-Ban Display",
@@ -154,13 +154,101 @@ const FIELD_NOTES = [
     ],
   },
   {
+    surface: "Web applications · 2026 frontier",
+    items: [
+      "React 19 + Vite 7 + Tailwind v4 · production patterns from 130+ shipped sites in our ledger",
+      "TanStack Router + Query · async-state architecture and the boundary between routing and data",
+      "React Server Components · when to use, when to refuse, what they replace",
+      "Web Vitals 2025 · INP, CLS, LCP — the new triad and what each actually measures",
+      "Edge runtimes · Vercel Edge, Cloudflare Workers, Deno Deploy — placement decisions for latency",
+      "Better Auth / Clerk / Lucia · modern session design after the JWT decade",
+    ],
+  },
+  {
+    surface: "AI agents · MCP · multi-agent",
+    items: [
+      "Anthropic Model Context Protocol (MCP, Nov 2024) · official spec — tools, resources, prompts, sampling",
+      "MCP server design · typed schemas, idempotency, paginated resources, capability negotiation",
+      "Claude Code SDK + agent dispatch · patterns from running 30+ design-expert agents in parallel",
+      "Tool use design · parallel execution, error envelopes, retry semantics, partial-failure replay",
+      "Multi-agent orchestration · Anthropic patterns, LangGraph, AutoGen, CrewAI — when each is right",
+      "Agent memory · file-backed persistent recall, semantic dedup, hash-based collision",
+      "Eval discipline · golden-path regression, hallucination probes, prompt-cache hit-rate budgets",
+      "Open weights · LLaMA 3.3, Qwen 2.5, Phi-3 — quantisation cost and battery profile",
+    ],
+  },
+  {
+    surface: "WhatsApp infrastructure",
+    items: [
+      "Meta WhatsApp Cloud API · webhooks, template message governance, the 24-hour session window",
+      "WATI / Vonage / Twilio · integrator trade-offs and ceiling effects (trial-end discovered the hard way)",
+      "whatsmeow (Go library) · direct-device pairing via 8-character phone code — patched in our toolkit",
+      "WhatsApp Flows · native multi-step forms, server-side data fetching, ack semantics",
+      "Multi-tenancy + number rotation · soft-ban detection, marketing-conversation rate-limit, opt-in flows",
+      "Conversational commerce · catalogues, carts, payments, business profile verification",
+    ],
+  },
+  {
+    surface: "Cloud, data, infrastructure",
+    items: [
+      "Render · Vercel · Fly.io · Railway · Cloudflare — placement decisions and the audit trail",
+      "Postgres 16 + pgvector + RLS · the modern stack's single source of truth",
+      "Neon · Turso · PlanetScale · edge-data and the read-replica latency question",
+      "Observability · Grafana, Sentry, OpenTelemetry — the three rooms a system must live in",
+      "Migration patterns · dual-write, shadow traffic, expand-contract, blue-green",
+      "Backups + DR · point-in-time recovery, cross-region replication, restoration drills",
+    ],
+  },
+  {
     surface: "Cross-platform research",
     items: [
       "CHI 2024 · Gaze-and-Voice Multimodal Input papers (3)",
       "NeurIPS 2024 · On-device LLM optimisation track",
       "Public patents · Meta US20240XXXXX (display companion), Apple US2024XXXX (gaze-anchored UI)",
-      "Smart-glasses ethics literature · attention economics, ambient capture",
+      "Smart-glasses ethics literature · attention economics, ambient capture, peripheral suggestion",
     ],
+  },
+];
+
+// Workshop output — internal tools the studio actually built and
+// runs every week. These are not specifications; these are receipts.
+// They are how an institution proves it is what it says it is.
+const WORKSHOP = [
+  {
+    name: "Multi-agent design dispatch",
+    note:
+      "The pattern we built to ship 33 bespoke React/Vite websites in parallel during a single fortnight. Each agent receives a per-business brief, scaffolds a fresh project, hand-builds 8–13 pages, audits its own Phosphor imports, verifies imagery context, and reports back. Powers the entire Agri Show campaign on /work.",
+    tags: ["Claude Code SDK", "Vite", "React 19"],
+  },
+  {
+    name: "Agentic outreach orchestrator",
+    note:
+      "Personalised email + WhatsApp send pipeline with dry-run gate, IMAP-append for sent-folder fidelity, random stagger, per-recipient hook personalisation, and idempotency on top of an append-only JSON log. The Agri Show 30-email + 18-WhatsApp burst moved through it without an Excel sheet in sight.",
+    tags: ["Gmail SMTP", "Hostinger IMAP", "Python"],
+  },
+  {
+    name: "whatsapp-cli (patched fork)",
+    note:
+      "A fork of whatsmeow's CLI extended with 8-character phone-number device pairing and a structured JSON-everywhere output mode. The studio uses it for direct-device WhatsApp from the office number when a third-party integrator is the wrong tool. Open to client commission.",
+    tags: ["Go", "whatsmeow", "WhatsApp"],
+  },
+  {
+    name: "Prerender + sitemap pipeline",
+    note:
+      "Custom Puppeteer postbuild crawler that visits every SPA route and writes static HTML — powers SEO for this site's 174 routes. Pairs with a sitemap generator that reads slugs straight from source files (no build-time config drift). Both ship as a single 'npm run build:full' step.",
+    tags: ["Puppeteer", "Vite", "Node"],
+  },
+  {
+    name: "Aesthetic-preset engine",
+    note:
+      "Hash-based design-token generator that maps one brand brief to a unique aesthetic — palette, typography pairing, hero variant, signature gesture — across the 130-site portfolio without two ever looking the same. Eight aesthetic archetypes, hand-mapped by industry then varied per business.",
+    tags: ["React 19", "Tailwind v4", "Aesthetic taxonomy"],
+  },
+  {
+    name: "Persistent memory file-system",
+    note:
+      "How we run multi-week campaigns without losing context between sessions. Append-only file-backed memory keyed by topic, with semantic recall, hash-dedup, and explicit overwrite-on-correction. Operates the studio's own agent loop and is being abstracted into an MCP server.",
+    tags: ["MCP", "Claude", "JSON-LD"],
   },
 ];
 
@@ -481,7 +569,7 @@ export default function Lab() {
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <div className="grid grid-cols-12 gap-6 md:gap-10 items-start mb-12 md:mb-16">
             <div className="col-span-12 md:col-span-3 md:pt-3">
-              <SectionLabel chapter="§ 04" title="Open problems" />
+              <SectionLabel chapter="§ 05" title="Open problems" />
             </div>
             <div className="col-span-12 md:col-span-9 max-w-3xl">
               <h2 className="display-xl text-bone-100 leading-[1.02]">
@@ -518,6 +606,74 @@ export default function Lab() {
               </motion.li>
             ))}
           </ol>
+        </div>
+      </section>
+
+      <div className="seam-dissolve">
+        <WaveBreak />
+      </div>
+
+      {/* ─── WORKSHOP OUTPUT — real internal tools we run ─── */}
+      <section className="relative py-20 md:py-28 bg-[color:var(--color-ink)]">
+        <div className="max-w-[1600px] mx-auto px-5 md:px-10">
+          <div className="grid grid-cols-12 gap-6 md:gap-10 items-start mb-12 md:mb-16">
+            <div className="col-span-12 md:col-span-3 md:pt-3">
+              <SectionLabel chapter="§ 04" title="Workshop output" />
+            </div>
+            <div className="col-span-12 md:col-span-9 max-w-3xl">
+              <h2 className="display-xl text-bone-100 leading-[1.02]">
+                What we have actually built
+                <br />
+                <span className="italic-accent text-bone-300 font-light">
+                  and run, every week.
+                </span>
+              </h2>
+              <p className="mt-6 text-bone-100/70 max-w-2xl leading-relaxed">
+                Internal tools the studio depends on. Each is real, each
+                operates in production for our own work, and each is
+                available to be productised for a client commission. This
+                is the infrastructure builder's receipt.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+            {WORKSHOP.map((w, i) => (
+              <motion.article
+                key={w.name}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.6, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] }}
+                className="relative p-6 md:p-7 rounded-sm border border-white/8 bg-white/[0.018] hover:border-signal/25 transition-colors"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal">
+                    Tool {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/40">
+                    In production
+                  </span>
+                </div>
+                <h3 className="font-display text-xl md:text-2xl text-bone-100 leading-tight mb-4">
+                  {w.name}
+                </h3>
+                <p className="text-bone-100/75 leading-relaxed text-sm md:text-base mb-5">
+                  {w.note}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {w.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="inline-flex items-center px-2 py-0.5 rounded-full border border-white/10 font-mono text-[9px] tracking-[0.18em] uppercase text-bone-100/55"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </motion.article>
+            ))}
+          </div>
         </div>
       </section>
 

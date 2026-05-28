@@ -991,7 +991,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://bitstudio.co.zw/services/websites</loc>
+    <loc>https://bitstudio.co.zw/services/spatial-wearable</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1003,7 +1003,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://bitstudio.co.zw/services/enterprise-software</loc>
+    <loc>https://bitstudio.co.zw/services/whatsapp-applications</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1015,13 +1015,25 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://bitstudio.co.zw/services/automations</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://bitstudio.co.zw/services/scraping-ingestion</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://bitstudio.co.zw/services/automations</loc>
+    <loc>https://bitstudio.co.zw/services/websites</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bitstudio.co.zw/services/enterprise-software</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1034,12 +1046,6 @@
   </url>
   <url>
     <loc>https://bitstudio.co.zw/services/deploy-operate</loc>
-    <lastmod>2026-05-28</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://bitstudio.co.zw/services/spatial-wearable</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
