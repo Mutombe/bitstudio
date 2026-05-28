@@ -44,6 +44,13 @@ import {
   ScribbleLoop,
   Flask,
   Notebook,
+  WhatsappLogo,
+  ChatTeardropText,
+  ChatsCircle,
+  Network,
+  Plugs,
+  GitMerge,
+  PhoneCall,
 } from "@phosphor-icons/react";
 
 const ICONS = {
@@ -91,6 +98,14 @@ const ICONS = {
   ScribbleLoop,
   Flask,
   Notebook,
+  // WhatsApp / messaging / infra icons
+  WhatsappLogo,
+  ChatTeardropText,
+  ChatsCircle,
+  Network,
+  Plugs,
+  GitMerge,
+  PhoneCall,
 };
 
 export function PhosphorIcon({ name, ...rest }) {
