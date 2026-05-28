@@ -177,12 +177,15 @@ export default function HomeDE() {
 
       <div className="seam-dissolve"><WaveBreak /></div>
 
-      {/* ─── 01 · WHY BIT STUDIO ─── */}
+      {/* ─── § 01 · ÜBER MAßSTÄBE — Maßstäbe, denen wir uns selbst stellen;
+              die Herkunft, zu der wir gehören; und die Auswahl, die
+              entscheidet, mit wem wir arbeiten. Der Raum, in dem ein
+              Auftraggeber steht — nicht die Tür, an der er klopft. ─── */}
       <section className="relative py-20 md:py-32 bg-[color:var(--color-ink)] seam-bleed-top">
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <div className="grid grid-cols-12 gap-6 md:gap-10 items-start">
             <div className="col-span-12 md:col-span-3 md:pt-3">
-              <SectionLabel chapter="§ 01" title="Warum wir" />
+              <SectionLabel chapter="§ 01" title="Über Maßstäbe" />
             </div>
             <div className="col-span-12 md:col-span-9 space-y-12 max-w-4xl">
               <motion.h2
@@ -192,52 +195,80 @@ export default function HomeDE() {
                 transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
                 className="display-xl text-bone-100 leading-[1.02]"
               >
-                Drei Antworten auf eine berechtigte Frage:
+                Wir arbeiten zu einem Standard,
                 <br />
                 <span className="italic-accent text-bone-300 font-light">
-                  Warum aus Simbabwe?
+                  den die Welt erkennt.
                 </span>
               </motion.h2>
+
+              <p className="max-w-2xl text-base md:text-lg text-bone-100/70 leading-relaxed">
+                Jeder — auf jedem Kontinent — dessen Geschäft auf
+                wirklicher Schönheit, dauerhafter Infrastruktur, echter
+                Skalierung oder Langlebigkeit jenseits des nächsten
+                Quartals beruht, ist eingeladen, uns zu schreiben. Wir
+                wählen die Arbeit, so wie die Arbeit uns wählt. Was folgt,
+                sind die Maßstäbe, denen wir uns stellen.
+              </p>
+
+              {/* Die vier Leistungen, als ruhiges Band sichtbar gemacht —
+                  was uns ein Unternehmen tatsächlich beauftragt, bevor es
+                  überhaupt danach fragt. */}
+              <ul className="grid grid-cols-2 md:grid-cols-4 gap-y-3 gap-x-6 max-w-2xl text-bone-100/55 font-mono text-[10px] tracking-[0.22em] uppercase border-y border-white/10 py-4">
+                <li className="flex items-center gap-2"><span className="w-1 h-1 rounded-full bg-signal" />Schönheit</li>
+                <li className="flex items-center gap-2"><span className="w-1 h-1 rounded-full bg-signal" />Infrastruktur</li>
+                <li className="flex items-center gap-2"><span className="w-1 h-1 rounded-full bg-signal" />Skalierung</li>
+                <li className="flex items-center gap-2"><span className="w-1 h-1 rounded-full bg-signal" />Langlebigkeit</li>
+              </ul>
 
               <div className="grid md:grid-cols-3 gap-8 md:gap-10">
                 <div>
                   <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal mb-3">
-                    01 · Zeitzone
+                    01 · Maßstäbe
                   </p>
                   <p className="font-display text-xl text-bone-100 leading-[1.1] mb-3">
-                    Eine Stunde zu Berlin.
+                    Lighthouse 100 ist die Untergrenze.<br />
+                    <span className="text-bone-100/55">Zehn Tage ist die Obergrenze.</span>
                   </p>
                   <p className="text-bone-100/75 leading-relaxed text-sm md:text-base">
-                    Wir sind innerhalb deutscher Bürozeiten erreichbar. Stand-up
-                    um 09:00 MEZ. Ein Anruf um 15:00 erreicht uns. Antworten
-                    kommen am selben Tag, nicht am nächsten.
+                    Zahlen, die andere Studios als Ambition
+                    veröffentlichen — bei uns sind sie die Untergrenze.
+                    Performance, Barrierefreiheit, SEO, Best Practices —
+                    vor dem Launch gemessen und am Tag danach erneut. Was
+                    die Linie nicht erreicht, geht nicht live, auch wenn
+                    der Kalender es lieber anders hätte.
                   </p>
                 </div>
                 <div>
                   <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal mb-3">
-                    02 · Werkkunst
+                    02 · Herkunft
                   </p>
                   <p className="font-display text-xl text-bone-100 leading-[1.1] mb-3">
-                    Bauhaus, aber wärmer.
+                    Werkbund. Vignelli. Musashi.
                   </p>
                   <p className="text-bone-100/75 leading-relaxed text-sm md:text-base">
-                    Wir sind in einer Tradition geschult, die zwischen Werkbund,
-                    Vignelli und Musashi steht — keine Mode, kein Trend, kein
-                    Lorem. Form folgt der Funktion, hat aber eine Seele.
+                    Die Menschen, denen Sie hier begegnen, sind in einem
+                    Kanon geschult, der die Mode ablehnt. Kein Trend, kein
+                    Lorem, keine Dekoration, die sich nicht verdient hat.
+                    Form folgt der Funktion, mit einer Seele — und die
+                    Seele ist nicht optional. Die lange Fassung steht auf{" "}
+                    <Link to="/de/handwerk" className="text-signal hover-line">/handwerk</Link>.
                   </p>
                 </div>
                 <div>
                   <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal mb-3">
-                    03 · Preisklasse
+                    03 · Auswahl
                   </p>
                   <p className="font-display text-xl text-bone-100 leading-[1.1] mb-3">
-                    Berliner Niveau, ohne Berliner Tarif.
+                    Drei Plätze pro Quartal.<br />
+                    <span className="text-bone-100/55">Jeder Kontinent.</span>
                   </p>
                   <p className="text-bone-100/75 leading-relaxed text-sm md:text-base">
-                    Ein Mittelstand-Auftritt von uns ist substanziell günstiger
-                    als bei einer vergleichbaren Berliner Agentur — mit dem
-                    gleichen Anspruch an Tiefe und Sorgfalt. Wir investieren in
-                    die Arbeit, nicht in das Showroom.
+                    Wir lehnen zwei Arten von Briefing ab: jene, die schon
+                    wissen, wie sie aussehen wollen — und jene, die mit
+                    ihren eigenen Nutzern streiten. Alle übrigen
+                    bekommen ein echtes Gespräch und gelegentlich
+                    einen&nbsp;Vertrag.
                   </p>
                 </div>
               </div>

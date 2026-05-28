@@ -198,12 +198,15 @@ export default function Home({ onSummon }) {
         <WaveBreak />
       </div>
 
-      {/* ─── 0.5 · WHY US — the rationale a US/EU buyer is silently asking ─── */}
+      {/* ─── § 01 · ON STANDARDS — standards we hold ourselves to,
+              the lineage we belong to, and the scarcity that decides who
+              we work with. The room a buyer is in, not the door they are
+              trying to open. ─── */}
       <section className="relative py-20 md:py-32 bg-[color:var(--color-ink)] seam-bleed-top">
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <div className="grid grid-cols-12 gap-6 md:gap-10 items-start">
             <div className="col-span-12 md:col-span-3 md:pt-3">
-              <SectionLabel chapter="§ 01" title="Why us" />
+              <SectionLabel chapter="§ 01" title="On standards" />
             </div>
             <div className="col-span-12 md:col-span-9 space-y-12 max-w-4xl">
               <motion.h2
@@ -213,55 +216,77 @@ export default function Home({ onSummon }) {
                 transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
                 className="display-xl text-bone-100 leading-[1.02]"
               >
-                Three answers to a fair question:
+                We work to a standard
                 <br />
                 <span className="italic-accent text-bone-300 font-light">
-                  why hire a studio in Zimbabwe?
+                  the world recognises.
                 </span>
               </motion.h2>
+
+              <p className="max-w-2xl text-base md:text-lg text-bone-100/70 leading-relaxed">
+                Anyone — on any continent — whose business depends on
+                real beauty, durable infrastructure, true scale, or
+                longevity past the next quarter is welcome to write to us.
+                We choose the work as much as the work chooses us. What
+                follows is what we hold ourselves to.
+              </p>
+
+              {/* The four deliverables, surfaced as a quiet ribbon —
+                  the things a business actually engages us for, named
+                  in the room before they ask. */}
+              <ul className="grid grid-cols-2 md:grid-cols-4 gap-y-3 gap-x-6 max-w-2xl text-bone-100/55 font-mono text-[10px] tracking-[0.22em] uppercase border-y border-white/10 py-4">
+                <li className="flex items-center gap-2"><span className="w-1 h-1 rounded-full bg-signal" />Real beauty</li>
+                <li className="flex items-center gap-2"><span className="w-1 h-1 rounded-full bg-signal" />Infrastructure</li>
+                <li className="flex items-center gap-2"><span className="w-1 h-1 rounded-full bg-signal" />Scale</li>
+                <li className="flex items-center gap-2"><span className="w-1 h-1 rounded-full bg-signal" />Longevity</li>
+              </ul>
 
               <div className="grid md:grid-cols-3 gap-8 md:gap-10">
                 <div>
                   <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal mb-3">
-                    01 · Time zone
+                    01 · Standards
                   </p>
                   <p className="font-display text-xl text-bone-100 leading-[1.1] mb-3">
-                    One hour off Berlin.<br />
-                    <span className="text-bone-100/55">Seven hours ahead of New York.</span>
+                    Lighthouse 100 is the floor.<br />
+                    <span className="text-bone-100/55">Ten days is the ceiling.</span>
                   </p>
                   <p className="text-bone-100/75 leading-relaxed text-sm md:text-base">
-                    Stand-up at 09:00 CAT lines up with 08:00 Berlin and lands a
-                    full afternoon before New York wakes. Replies come the same
-                    day, not the next.
+                    Numbers other studios publish as ambition, we publish
+                    as the floor. Performance, accessibility, SEO,
+                    best‑practices — measured before launch and again on
+                    the day after. What does not clear the line does not
+                    ship, even when the calendar would prefer that it did.
                   </p>
                 </div>
                 <div>
                   <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal mb-3">
-                    02 · Craft tradition
+                    02 · Lineage
                   </p>
                   <p className="font-display text-xl text-bone-100 leading-[1.1] mb-3">
-                    Bauhaus, but warmer.
+                    Werkbund. Vignelli. Musashi.
                   </p>
                   <p className="text-bone-100/75 leading-relaxed text-sm md:text-base">
-                    Schooled in a lineage that runs Werkbund → Vignelli →
-                    Musashi — no fashion, no trend, no lorem. Form follows
-                    function, with a soul. Read the long version on{" "}
+                    The people you'll meet here trained in a canon that
+                    refuses fashion. No trend, no lorem, no decoration
+                    that has not earned itself. Form follows function,
+                    with a soul — and the soul is not optional. The long
+                    version is on{" "}
                     <Link to="/craft" className="text-signal hover-line">/craft</Link>.
                   </p>
                 </div>
                 <div>
                   <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal mb-3">
-                    03 · Pricing
+                    03 · Selectivity
                   </p>
                   <p className="font-display text-xl text-bone-100 leading-[1.1] mb-3">
-                    Berlin standard,<br />
-                    <span className="text-bone-100/55">without the Berlin bill.</span>
+                    Three slots a quarter.<br />
+                    <span className="text-bone-100/55">Any continent.</span>
                   </p>
                   <p className="text-bone-100/75 leading-relaxed text-sm md:text-base">
-                    A Mittelstand-tier site from us is materially cheaper than
-                    a comparable Berlin or Brooklyn agency — with the same
-                    appetite for depth and patience. We invest in the work,
-                    not the showroom.
+                    We refuse two kinds of brief: those that already know
+                    what they want to look like, and those that argue
+                    with their own users. The rest receive a real
+                    conversation — and, occasionally, a&nbsp;contract.
                   </p>
                 </div>
               </div>
