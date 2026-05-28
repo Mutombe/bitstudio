@@ -5,7 +5,7 @@ import { ArrowRightIcon, ArrowUpRightIcon } from "@phosphor-icons/react";
 import PageTransition from "../components/PageTransition.jsx";
 import SectionLabel from "../components/SectionLabel.jsx";
 import Ticker from "../components/Ticker.jsx";
-import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
+import SEO, { breadcrumbJsonLd, articleJsonLd } from "../components/SEO.jsx";
 import WaveBreak from "../components/WaveBreak.jsx";
 
 /*
@@ -99,21 +99,52 @@ export default function FieldManual() {
   return (
     <PageTransition>
       <SEO
-        title="Field Manual"
-        description="The studio's published operating doctrines. Twelve numbered opinions on shipping, refusing, measuring, and naming. Defendable in public."
+        title="Field Manual · Twelve doctrines"
+        description="Twelve published operating doctrines. We ship in ten days because the eleventh is theatre. We refuse two kinds of brief. We publish the numbers we hold ourselves to. We name the people, not the team. The platform is rented. Read it twice. If you disagree with three or more, we are unlikely to be the right studio for you."
         path="/field-manual"
         keywords={[
-          "operating principles",
-          "studio doctrines",
-          "Bit Studio field manual",
-          "design principles",
-          "engineering principles",
+          "operating doctrines", "studio principles", "design principles",
+          "engineering principles", "shipping discipline",
+          "ten day ship cycle", "fixed price web design", "no discovery workshop",
+          "Lighthouse 100", "Linear style principles", "IDEO style principles",
+          "studio manifesto", "premium design studio",
         ]}
         jsonLd={[
           breadcrumbJsonLd([
             { name: "Index", path: "/" },
             { name: "Field Manual", path: "/field-manual" },
           ]),
+          articleJsonLd({
+            headline: "Field Manual. Twelve published operating doctrines.",
+            description:
+              "Twelve numbered opinions on shipping, refusing, measuring, and naming. Defendable in public. Distinct from /craft (the canon) and /studio (the manifesto).",
+            url: "https://bitstudio.co.zw/field-manual",
+            image: "https://bitstudio.co.zw/logo.png",
+            datePublished: "2026-05-28",
+          }),
+          // ItemList of the doctrines themselves. Each is a DefinedTerm so
+          // Google can surface a specific doctrine on a specific search
+          // query (e.g. "studio that ships in ten days").
+          {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: "Field Manual",
+            url: "https://bitstudio.co.zw/field-manual",
+            mainEntity: {
+              "@type": "ItemList",
+              name: "Twelve operating doctrines",
+              itemListElement: DOCTRINES.map((d, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                item: {
+                  "@type": "DefinedTerm",
+                  name: d.title,
+                  description: d.body,
+                  inDefinedTermSet: "https://bitstudio.co.zw/field-manual",
+                },
+              })),
+            },
+          },
         ]}
       />
 

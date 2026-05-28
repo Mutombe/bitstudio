@@ -30,7 +30,32 @@ const SRC = path.join(ROOT, "src");
 const PORT = 4173;
 const ORIGIN = `http://localhost:${PORT}`;
 
-const STATIC_ROUTES = ["/", "/work", "/live", "/craft", "/studio", "/contact", "/terms"];
+// All non-dynamic routes the SPA serves. Every entry here is rendered
+// to dist/<route>/index.html so a dumb crawler (Bing, LinkedIn, Slack,
+// AI scrapers, Twitter, Mastodon, social previewers) gets the real
+// page on first response, not an empty SPA shell.
+const STATIC_ROUTES = [
+  // English
+  "/",
+  "/work",
+  "/live",
+  "/craft",
+  "/studio",
+  "/lab",
+  "/field-manual",
+  "/packages",
+  "/contact",
+  "/terms",
+  "/legal",
+  "/privacy",
+  // German
+  "/de",
+  "/de/handwerk",
+  "/de/kontakt",
+  "/pakete",
+  "/impressum",
+  "/datenschutz",
+];
 
 async function extractSlugs(file) {
   const src = await fs.readFile(file, "utf8");
@@ -108,13 +133,15 @@ function diskPathFor(route) {
 
 async function main() {
   // Discover all routes
-  const [proj, live, svc] = await Promise.all([
+  const [proj, agri, live, svc] = await Promise.all([
     extractSlugs(path.join(SRC, "data/projects.js")),
+    extractSlugs(path.join(SRC, "data/agri-show-demos.js")),
     extractSlugs(path.join(SRC, "data/live-sites.js")),
     extractSlugs(path.join(SRC, "data/services.js")),
   ]);
   const dynamic = [
     ...proj.map((s) => `/work/${s}`),
+    ...agri.map((s) => `/work/${s}`),
     ...live.map((s) => `/live/${s}`),
     ...svc.map((s) => `/services/${s}`),
   ];

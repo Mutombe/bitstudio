@@ -5,7 +5,7 @@ import { ArrowRightIcon, ArrowUpRightIcon } from "@phosphor-icons/react";
 import PageTransition from "../components/PageTransition.jsx";
 import SectionLabel from "../components/SectionLabel.jsx";
 import Ticker from "../components/Ticker.jsx";
-import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
+import SEO, { breadcrumbJsonLd, articleJsonLd } from "../components/SEO.jsx";
 import PhosphorIcon from "../components/PhosphorIcon.jsx";
 import WaveBreak from "../components/WaveBreak.jsx";
 
@@ -265,23 +265,52 @@ export default function Lab() {
   return (
     <PageTransition>
       <SEO
-        title="Lab"
-        description="The studio's R&D arm. Surfaces we build for ahead of demand. Meta Ray-Ban Display, Apple Vision Pro, Quest, Wear OS, and the experiments we are willing to defend in public."
+        title="Lab · Spatial, agents, infrastructure"
+        description="Where the studio builds for the surfaces customers will be on next. Meta Ray-Ban Display, Apple Vision Pro, Meta Quest, Wear OS, voice and ambient AI. Open briefs for first commission. A public reading log across spatial, web, AI agents and MCP, WhatsApp infrastructure, and cloud. Six internal tools in production. Six open problems we are publicly noodling on."
         path="/lab"
         keywords={[
-          "spatial computing",
-          "Meta Ray-Ban Display",
-          "Apple Vision Pro",
-          "Meta Quest",
-          "Wear OS",
-          "WebXR",
-          "Bit Studio Lab",
+          "Meta Ray-Ban Display app", "Apple Vision Pro developer",
+          "Meta Quest WebXR", "Wear OS companion app",
+          "spatial computing studio", "Vision OS development",
+          "WebXR React Three Fiber", "Meta Spatial SDK",
+          "on-device LLM", "smart glasses development",
+          "Anthropic MCP", "Model Context Protocol", "Claude agent",
+          "multi-agent orchestration", "agentic web", "MCP server",
+          "WhatsApp Cloud API", "whatsmeow", "WATI integration",
+          "WhatsApp Flows", "conversational AI",
+          "R&D studio", "frontier platform studio", "boutique software lab",
         ]}
         jsonLd={[
           breadcrumbJsonLd([
             { name: "Index", path: "/" },
             { name: "Lab", path: "/lab" },
           ]),
+          articleJsonLd({
+            headline: "Lab. What we are building before clients ask for it.",
+            description:
+              "Five surfaces, four open briefs, a public reading log across eight domains, six internal tools in production, six open problems. The institutional R&D arm.",
+            url: "https://bitstudio.co.zw/lab",
+            image: "https://bitstudio.co.zw/logo.png",
+            datePublished: "2026-05-28",
+          }),
+          // CollectionPage with the five surfaces as ItemList. Lets Google
+          // surface the page on queries for any of the named surfaces.
+          {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: "Lab. Surfaces, briefs, field notes",
+            url: "https://bitstudio.co.zw/lab",
+            mainEntity: {
+              "@type": "ItemList",
+              name: "Surfaces we build for",
+              itemListElement: SURFACES.map((s, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                name: s.name,
+                description: s.note,
+              })),
+            },
+          },
         ]}
       />
 
