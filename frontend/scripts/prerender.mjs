@@ -43,6 +43,7 @@ const STATIC_ROUTES = [
   "/studio",
   "/lab",
   "/field-manual",
+  "/writing",
   "/packages",
   "/contact",
   "/terms",

@@ -11,7 +11,7 @@ const LINKS_EN = [
   { to: "/work", label: "Work", n: "02" },
   { to: "/live", label: "Live", n: "03" },
   { to: "/lab", label: "Lab", n: "04" },
-  { to: "/craft", label: "Craft", n: "05" },
+  { to: "/writing", label: "Writing", n: "05" },
   { to: "/packages", label: "Packages", n: "06" },
   { to: "/contact", label: "Contact", n: "07" },
 ];
@@ -20,7 +20,7 @@ const LINKS_DE = [
   { to: "/work", label: "Arbeit", n: "02" },
   { to: "/live", label: "Live", n: "03" },
   { to: "/lab", label: "Labor", n: "04" },
-  { to: "/de/handwerk", label: "Handwerk", n: "05" },
+  { to: "/writing", label: "Schriften", n: "05" },
   { to: "/pakete", label: "Pakete", n: "06" },
   { to: "/de/kontakt", label: "Kontakt", n: "07" },
 ];
