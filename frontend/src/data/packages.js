@@ -1,10 +1,11 @@
-// Bit Studio. Three Erneuerungs-Pakete (renewal packages) for the
-// German Mittelstand. Fixed scope, fixed price, three slots per quarter.
+// Bit Studio. Three productised engagements offered globally. Fixed
+// scope, fixed price, three slots per quarter. Whoever can afford the
+// offer takes the offer, on whichever continent they read it from.
 //
-// Each package is consumed by /pakete (DE) and /packages (EN). The DE
-// page is the spearhead of the German cold outreach campaign; the EN
-// page is the mirror for international visitors and future US-market
-// outreach.
+// Each package is consumed by /pakete (DE labels and copy) and
+// /packages (EN labels and copy). Slugs stay German so internal hash
+// anchors and inbound links keep working; the visible English labels
+// are international and language-neutral.
 //
 // To add a fourth package later, append an object with the same shape.
 // Order matters. The order here is the order on the page.
@@ -15,9 +16,9 @@ export const PACKAGES = [
     archetype: "manufaktur",
     // Identity
     name_de: "Die Manufaktur-Bühne",
-    name_en: "The Manufaktur Stage",
+    name_en: "The Workshop",
     eyebrow_de: "Für Manufakturen und Werkstätten",
-    eyebrow_en: "For makers and workshops",
+    eyebrow_en: "For makers and ateliers",
     aesthetic: "Editorial × Atelier",
     accent: "#C8A968",
 
@@ -32,13 +33,13 @@ export const PACKAGES = [
     promise_de:
       "Die Bühne, auf der Ihre Werkstücke die Geschichte erzählen, die sie verdienen. In Editorial-Typografie, mit der Sorgfalt einer Monografie.",
     promise_en:
-      "The stage on which your pieces tell the story they deserve. In editorial typography, with the discipline of a monograph.",
+      "The stage on which the work tells the story it deserves. In editorial typography, with the discipline of a monograph.",
 
     // Who it's for
     for_de:
       "Familiengeführte Manufakturen mit handwerklicher Tradition: Möbel, Leder, Schmuck, Präzisionsinstrumente, Textil, Keramik. Sie verkaufen über den Fachhandel oder direkt. Ihre Produkte verdienen mehr als ein Online-Katalog. Ihr aktueller Auftritt stammt aus der Zeit, bevor das Internet ernst genommen wurde.",
     for_en:
-      "Family-owned makers with a craft tradition: furniture, leather, jewellery, precision instruments, textile, ceramics. You sell through dealers or direct. Your products deserve more than an online catalogue. Your current site predates the internet being taken seriously.",
+      "Owner-led makers and ateliers with a craft tradition. Furniture, leather, jewellery, precision instruments, textile, ceramics. You sell through dealers or direct. The work deserves more than an online catalogue. The current site predates the internet being taken seriously.",
 
     // Included
     includes_de: [
@@ -52,11 +53,11 @@ export const PACKAGES = [
     ],
     includes_en: [
       "Editorial website with photo-led typography",
-      "Product story system (an editorial page per piece, with material notes, maker's notes, photo essays)",
-      "Bilingual. Any two languages of your choice (default German + English)",
-      "Dealer directory with map",
+      "Product story system. An editorial page per piece, with material notes, maker's notes, photo essays",
+      "Bilingual. Any two languages of your choice",
+      "Dealer or stockist directory with map",
       "Press kit (PDF + landing page) for trade press and magazines",
-      "Trade show kit: booth signage, business cards, leave-behind cards (print templates)",
+      "Trade-show kit. Booth signage, business cards, leave-behind cards (print templates)",
       "Six months of hosting + monitoring included",
     ],
 
@@ -69,8 +70,8 @@ export const PACKAGES = [
     ],
     out_en: [
       "E-commerce (Shopify add-on: €8,000)",
-      "Translation into languages beyond German + English",
-      "Product photography (we provide a shot list; the photographer remains yours)",
+      "Translation beyond the two languages chosen",
+      "Product photography. We provide a shot list; the photographer stays yours",
       "Logo redesign (add-on: €4,500 on request)",
     ],
   },
@@ -79,7 +80,7 @@ export const PACKAGES = [
     slug: "hotel-sammlung",
     archetype: "hotel",
     name_de: "Die Hotel-Sammlung",
-    name_en: "The Hotel Collection",
+    name_en: "The House",
     eyebrow_de: "Für Boutique-Hotels und Lodges",
     eyebrow_en: "For boutique hotels and lodges",
     aesthetic: "Cinematic × Atelier",
@@ -99,7 +100,7 @@ export const PACKAGES = [
     for_de:
       "Boutique-Hotels und Lodges der 4- bis 5-Sterne-Kategorie. Inhabergeführt oder mit kleinem Führungsteam. Standorte: Berlin, München, Hamburg, Schwarzwald, Sylt, Bodensee, Wachau, Engadin, Salzkammergut. Sie haben eine außergewöhnliche Geschichte. Architektur, Küche, Lage. Und einen Auftritt, der sie nicht trägt.",
     for_en:
-      "Boutique hotels and lodges in the 4-5 star range. Owner-led or with a small leadership team. Locations vary. Alpine lodge, coastal retreat, city house, vineyard estate, historic Schloss. You have an exceptional story. Architecture, kitchen, location, and a web presence that doesn't carry it.",
+      "Boutique hotels and lodges in the 4-5 star range. Owner-led or with a small leadership team. An alpine lodge, a coastal retreat, a desert camp, a vineyard estate, a city house, an island address. The architecture, the kitchen, the location speak for themselves. The web presence does not yet.",
 
     includes_de: [
       "Cineastische Landingpage mit Voll-Viewport-Bewegtbild oder Großfoto",
@@ -116,10 +117,10 @@ export const PACKAGES = [
       "Cinematic landing with full-viewport motion or hero photography",
       "Rooms, suites, atmosphere sections with narrative depth",
       "Sections for restaurant, spa, experiences",
-      "Multilingual: German, English + one more language of your choice (FR / IT / ES)",
-      "Booking system integration (Mews, SiteMinder, Cloudbeds. We connect one)",
-      "Photo-direction brief for your photographer (shot list, mood references, sequences)",
-      "Digital welcome system: in-stay landing pages, QR-based concierge pages",
+      "Multilingual. Up to three languages of your choice",
+      "Booking-system integration. Mews, SiteMinder, Cloudbeds, Little Hotelier, Cloudbeds. We connect one",
+      "Photo-direction brief for your photographer. Shot list, mood references, sequences",
+      "Digital welcome system. In-stay landing pages, QR-based concierge pages",
       "House journal / story section for storytelling and SEO",
       "Six months of hosting + monitoring included",
     ],
@@ -132,9 +133,9 @@ export const PACKAGES = [
     ],
     out_en: [
       "PMS (Property Management System) migration. Separate quote",
-      "Custom booking-engine development (we connect existing engines, but don't build new ones)",
-      "Photography production (we deliver the brief and direction; the photographer stays yours)",
-      "Translation into languages beyond the four named above",
+      "Custom booking-engine development. We connect existing engines, we don't build new ones",
+      "Photography production. We deliver the brief and direction; the photographer stays yours",
+      "Translation beyond the three languages chosen",
     ],
   },
 
@@ -142,7 +143,7 @@ export const PACKAGES = [
     slug: "kanzlei-erneuerung",
     archetype: "kanzlei",
     name_de: "Die Kanzlei-Erneuerung",
-    name_en: "The Kanzlei Renewal",
+    name_en: "The Chambers",
     eyebrow_de: "Für Anwaltskanzleien und Sozietäten",
     eyebrow_en: "For law firms and chambers",
     aesthetic: "Heritage × Editorial",
@@ -157,12 +158,12 @@ export const PACKAGES = [
     promise_de:
       "Ein Auftritt, der die Würde und das Vertrauen Ihrer Kanzlei trägt. Ohne den verstaubten Eindruck, den die meisten Kanzlei-Websites hinterlassen.",
     promise_en:
-      "A presence that carries the dignity and trust of your firm. Without the dusty impression most law-firm websites leave.",
+      "A presence that carries the dignity and trust of the firm. Without the dusty impression most law-firm sites leave.",
 
     for_de:
       "Boutique-Sozietäten mit fünf bis dreißig Anwältinnen und Anwälten. Schwerpunkte: Wirtschaftsrecht, M&A, IP, Arbeitsrecht, Steuerrecht, Strafrecht. Sie haben Mandate, die für sich sprechen, und einen Webauftritt, der das nicht tut. Ein neuer Sozius oder eine neue Sozia ist der Auslöser; das Internet wird endlich ernst genommen.",
     for_en:
-      "Boutique law firms with five to thirty attorneys. Focus areas: commercial, M&A, IP, employment, tax, criminal. Your mandates speak for themselves; your website doesn't. A new partner is usually the trigger. The internet finally gets taken seriously.",
+      "Partner-led law firms with five to thirty attorneys, on any continent. Commercial, M&A, IP, employment, tax, criminal. The mandates speak for themselves; the site does not. Usually a new partner is the trigger. The internet finally gets taken seriously.",
 
     includes_de: [
       "Editorial-Website in Heritage-Ästhetik (Serife, ruhige Raster, geprüfte Typografie)",
@@ -175,11 +176,11 @@ export const PACKAGES = [
       "Sechs Monate Hosting + Monitoring inbegriffen",
     ],
     includes_en: [
-      "Editorial website in heritage aesthetic (serif, calm grid, considered typography)",
-      "Partner bio system (CV, fields, publications, contact)",
-      "Mandate templates (NDA-aware, with placeholders and example mandates)",
-      "Intake form with calendar booking (Calendly or HubSpot integration)",
-      "News / Aktuelles section with editorial rhythm template",
+      "Editorial website in heritage aesthetic. Serif, calm grid, considered typography",
+      "Partner bio system. CV, fields, publications, contact",
+      "Mandate templates. NDA-aware, with placeholders and example mandates",
+      "Intake form with calendar booking. Calendly or HubSpot integration",
+      "News / Insights section with editorial rhythm template",
       "Content rhythm brief. One template per partner per quarter",
       "Careers page with job-posting template",
       "Six months of hosting + monitoring included",
@@ -194,7 +195,7 @@ export const PACKAGES = [
     out_en: [
       "Full editorial CMS for non-technical staff (WordPress migration add-on: €5,000)",
       "CRM integration beyond the intake form",
-      "Translation. The Kanzlei Renewal is single-language by default (German or English); bilingual on request + €4,000",
+      "Translation. The Chambers is single-language by default; bilingual on request + €4,000",
       "Client portal (separate project, separate quote)",
     ],
   },

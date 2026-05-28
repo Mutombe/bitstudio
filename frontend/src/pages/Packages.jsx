@@ -18,11 +18,9 @@ import { useCursorHover } from "../hooks/useCursor.jsx";
 import { PACKAGES, PROCESS_PHASES } from "../data/packages.js";
 
 /**
- * /packages. English-language mirror of /pakete.
- *
- * Same three renewal packages, same fixed-scope / fixed-price / three-slots
- * model. Lives at /packages so the US market and any English-speaking
- * international buyer hits the same offer architecture as DACH.
+ * /packages. The international English face of three productised
+ * engagements. Same fixed-scope / fixed-price / three-slots model as
+ * /pakete; same offer architecture for any buyer on any continent.
  */
 
 const DAYS = (n) => `${n} days`;
@@ -35,14 +33,14 @@ export default function Packages() {
     <PageTransition>
       <SEO
         title="Packages · Three slots per quarter"
-        description="Three renewal packages for the Mittelstand and boutique-tier buyer: the Manufaktur Stage, the Hotel Collection, the Kanzlei Renewal. Fixed scope, fixed price, three slots per quarter."
+        description="Three productised engagements offered globally. The Workshop, the House, the Chambers. Fixed scope, fixed price, three slots per quarter. Whoever fits, fits."
         path="/packages"
         keywords={[
           "design studio packages",
           "boutique website rebuild",
           "law firm website",
           "hotel website design",
-          "manufacturer website",
+          "atelier website",
           "fixed-price web design",
           "Bit Studio",
         ]}
@@ -82,10 +80,10 @@ export default function Packages() {
           </motion.h1>
 
           <p className="mt-10 max-w-2xl text-base md:text-lg text-bone-100/85 leading-relaxed">
-            Most studios sell time. We sell three sharply defined pieces a
-            quarter. Fixed scope, fixed price, fixed delivery date. Who fits
-            knows before the first call. Who doesn't fit is spared the
-            choreography.
+            Most studios sell time. We sell three sharply defined pieces
+            a quarter, on any continent. Fixed scope, fixed price, fixed
+            delivery date. Whoever fits knows before the first call.
+            Whoever does not fit is spared the choreography.
           </p>
 
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 max-w-3xl">
@@ -132,15 +130,10 @@ export default function Packages() {
           <div className="col-span-12 md:col-span-9 max-w-3xl space-y-6 text-bone-100/80 leading-relaxed">
             <p className="text-base md:text-lg">
               Slots are not assigned in order of arrival. We choose the
-              projects in which our care will have the largest effect. Houses
-              that take their own story seriously, and for which an honest
-              renewal makes the biggest difference.
-            </p>
-            <p className="text-base md:text-lg">
-              We reserve at least one slot per quarter for a house that
-              cannot pay the full fixed price but stands out culturally or in
-              craft. If you think that could be you, say so in the first
-              email.
+              projects in which our care will have the largest effect.
+              Houses that take their own story seriously, on any
+              continent, and for which an honest renewal makes the
+              biggest difference.
             </p>
             <p className="text-base md:text-lg italic-accent text-bone-100">
               A 50% deposit opens the slot. The remaining 50% is due on
@@ -213,19 +206,23 @@ export default function Packages() {
             />
             <Objection
               q="Do you build in WordPress, Webflow, or Wix?"
-              a="No. We build on React, Vite, and Tailwind. That's the platform on which our work ages the way it should. Fast, legible, durable. If you intend to keep an existing WordPress site, we're not the right studio."
+              a="No. We build on React, Vite, and Tailwind. That is the platform on which the work ages the way it should. Fast, legible, durable. If you intend to keep an existing WordPress site, we are not the right studio."
             />
             <Objection
               q="Who hosts the finished site?"
-              a="Render (USA, GDPR-compliant). Six months are included in the price. After that, approximately €50/month, or you take over the Render account and we hand off the keys."
+              a="Render. Six months are included in the price. After that, approximately €50 / month, or you take over the Render account and we hand off the keys. EU, US, or Asia-Pacific regions on request."
             />
             <Objection
               q="Can we pay in stages?"
               a="Standard is 50 / 50. Deposit at start, balance on acceptance. On request, we split the balance into two tranches (25 / 25) at mid-point and at acceptance. Just say so in the first email."
             />
             <Objection
-              q="We're in the US / UK / Australia. Do packages apply?"
-              a="Yes. Packages are identical across the Anglosphere. We quote and invoice in EUR or USD; reverse-charge applies for business customers in compatible VAT regimes."
+              q="Currency and invoicing across borders?"
+              a="EUR is the default. USD, GBP, AUD, or CHF on request. Reverse-charge for business customers in compatible VAT regimes. Wire transfer or SEPA. Bank rails are uninteresting; the work is the work."
+            />
+            <Objection
+              q="What about the time zone?"
+              a="We keep a working window wide enough to overlap with anywhere from Tokyo to Toronto. Async by default; synchronous on demand. The date in the contract is the date the work appears, regardless of where you read this from."
             />
           </div>
         </div>
