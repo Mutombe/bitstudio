@@ -98,9 +98,16 @@ export default function Craft() {
     <PageTransition>
       <SEO
         title="Craft · The Way"
-        description="We learnt to make from Miyamoto Musashi, a swordsman who lived four centuries ago. Earth, Water, Fire, Wind, Void. The five rings of our practice. The Dokkōdō, ten precepts taped to the studio wall."
+        description="A design and engineering practice in the lineage of Werkbund, Vignelli, Bauhaus, and Miyamoto Musashi. Earth, Water, Fire, Wind, Void. The five rings of our practice. The Dokkōdō, ten precepts taped to the studio wall. An aesthetic taxonomy of Atelier, Editorial, Cinematic, Brutalist, Heritage, Manifesto, Bento, Pastoral."
         path="/craft"
-        keywords={["Musashi", "Book of Five Rings", "Dokkodo", "craft", "mastery", "design philosophy", "aesthetic taxonomy"]}
+        keywords={[
+          "Musashi", "Book of Five Rings", "Go Rin no Sho", "Dokkodo",
+          "Werkbund", "Vignelli", "Bauhaus", "Massimo Vignelli",
+          "design lineage", "design philosophy", "craft tradition",
+          "aesthetic taxonomy", "Atelier", "Editorial", "Cinematic",
+          "Brutalist", "Heritage", "Manifesto", "Bento", "Pastoral",
+          "Mittelstand design", "boutique design studio",
+        ]}
         jsonLd={[
           breadcrumbJsonLd([
             { name: "Index", path: "/" },

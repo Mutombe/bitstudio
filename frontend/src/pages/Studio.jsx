@@ -6,7 +6,7 @@ import WireframeOverlay from "../components/WireframeOverlay.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 import { Link } from "react-router-dom";
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
-import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
+import SEO, { breadcrumbJsonLd, articleJsonLd } from "../components/SEO.jsx";
 
 const DROP_PHRASES = [
   {
@@ -53,14 +53,27 @@ export default function Studio() {
     <PageTransition>
       <SEO
         title="Studio · A manifesto"
-        description="The studio's manifesto. Five short essays on beauty, code, restraint, speed, and the platform. Read it twice."
+        description="A manifesto in five essays. On beauty, on code, on restraint, on speed, and on the platform. The operating beliefs behind a design and engineering practice for businesses that need real beauty, durable infrastructure, true scale, and longevity past the next quarter."
         path="/studio"
-        keywords={["studio manifesto", "design philosophy", "Bit Studio", "Harare"]}
+        keywords={[
+          "studio manifesto", "design manifesto", "design philosophy",
+          "engineering philosophy", "on beauty", "on code", "on restraint",
+          "on speed", "design principles", "engineering principles",
+          "boutique studio", "premium design studio",
+          "Werkbund", "Bauhaus", "Vignelli", "craft tradition",
+        ]}
         jsonLd={[
           breadcrumbJsonLd([
             { name: "Index", path: "/" },
             { name: "Studio", path: "/studio" },
           ]),
+          articleJsonLd({
+            headline: "The Practice. A manifesto in five essays.",
+            description: "On beauty, code, restraint, speed, and the platform. Five short essays that describe how this studio actually thinks before it ships.",
+            url: "https://bitstudio.co.zw/studio",
+            image: "https://bitstudio.co.zw/logo.png",
+            datePublished: "2026-05-19",
+          }),
         ]}
       />
       {/* Hero */}
