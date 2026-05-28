@@ -83,7 +83,7 @@ export default function HomeDE() {
           relative overflow-hidden radial-bleed hero-seam
           min-h-[100svh] pt-28 md:pt-40 pb-10 md:pb-16
           lg:pt-20 lg:pb-0
-          lg:min-h-[calc(100svh-80px)] lg:h-[calc(100svh-80px)] lg:max-h-[860px]
+          lg:min-h-[calc(100svh-80px)]
           lg:flex lg:flex-col lg:justify-between
         "
       >
@@ -116,10 +116,10 @@ export default function HomeDE() {
               <p className="label-mono text-bone-100/60 mb-4 md:mb-6">
                 Sendung 0001 — offen
               </p>
-              <h1 className="display-hero text-bone-100 -ml-1 md:-ml-3 leading-[0.86]">
+              <h1 className="display-massive text-bone-100 -ml-1 md:-ml-2 leading-[0.86] text-balance text-[clamp(3.25rem,10vw,10rem)]">
                 Wir dekorieren nicht.
               </h1>
-              <h1 className="display-hero text-bone-100 -mt-[0.05em] md:-mt-[0.06em] leading-[0.86]">
+              <h1 className="display-massive text-bone-100 -mt-[0.04em] md:-mt-[0.05em] leading-[0.86] text-[clamp(3.25rem,10vw,10rem)]">
                 <span className="italic-accent text-maroon-400 font-light">Wir erinnern.</span>
               </h1>
             </div>
