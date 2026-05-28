@@ -10,17 +10,19 @@ const LINKS_EN = [
   { to: "/", label: "Index", n: "01" },
   { to: "/work", label: "Work", n: "02" },
   { to: "/live", label: "Live", n: "03" },
-  { to: "/craft", label: "Craft", n: "04" },
-  { to: "/packages", label: "Packages", n: "05" },
-  { to: "/contact", label: "Contact", n: "06" },
+  { to: "/lab", label: "Lab", n: "04" },
+  { to: "/craft", label: "Craft", n: "05" },
+  { to: "/packages", label: "Packages", n: "06" },
+  { to: "/contact", label: "Contact", n: "07" },
 ];
 const LINKS_DE = [
   { to: "/de", label: "Index", n: "01" },
   { to: "/work", label: "Arbeit", n: "02" },
   { to: "/live", label: "Live", n: "03" },
-  { to: "/de/handwerk", label: "Handwerk", n: "04" },
-  { to: "/pakete", label: "Pakete", n: "05" },
-  { to: "/de/kontakt", label: "Kontakt", n: "06" },
+  { to: "/lab", label: "Labor", n: "04" },
+  { to: "/de/handwerk", label: "Handwerk", n: "05" },
+  { to: "/pakete", label: "Pakete", n: "06" },
+  { to: "/de/kontakt", label: "Kontakt", n: "07" },
 ];
 
 export default function Nav({ onSummon }) {

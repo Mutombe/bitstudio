@@ -22,11 +22,13 @@ const TODAY = new Date().toISOString().slice(0, 10);
 const STATIC_ROUTES = [
   // English
   { path: "/",            priority: "1.0", changefreq: "weekly"  },
-  { path: "/work",        priority: "0.9", changefreq: "weekly"  },
-  { path: "/live",        priority: "0.9", changefreq: "weekly"  },
-  { path: "/craft",       priority: "0.8", changefreq: "monthly" },
-  { path: "/studio",      priority: "0.7", changefreq: "monthly" },
-  { path: "/contact",     priority: "0.6", changefreq: "monthly" },
+  { path: "/work",          priority: "0.9", changefreq: "weekly"  },
+  { path: "/live",          priority: "0.9", changefreq: "weekly"  },
+  { path: "/lab",           priority: "0.9", changefreq: "monthly" },
+  { path: "/field-manual",  priority: "0.8", changefreq: "monthly" },
+  { path: "/craft",         priority: "0.8", changefreq: "monthly" },
+  { path: "/studio",        priority: "0.7", changefreq: "monthly" },
+  { path: "/contact",       priority: "0.6", changefreq: "monthly" },
   { path: "/terms",       priority: "0.3", changefreq: "yearly"  },
   // German edition (DACH market)
   { path: "/de",          priority: "0.9", changefreq: "weekly"  },

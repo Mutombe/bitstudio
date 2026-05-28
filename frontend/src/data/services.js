@@ -171,6 +171,27 @@ export const SERVICES = [
     iconCluster: ["Lightning", "Rocket", "Broadcast", "Pulse"],
     artifact: "deploy-pipeline",
   },
+  {
+    slug: "spatial-wearable",
+    number: "09",
+    icon: "Eyeglasses",
+    title: "Spatial & wearable applications",
+    tagline: "Apps for the surfaces your customers will be on next.",
+    body: [
+      "A new surface arrives every few years and most software waits for an invitation. Meta Ray-Ban Display is on people's faces in Berlin and Brooklyn already. Apple Vision Pro is in the cabinets of the firms who will fund the next decade. Wear OS sits on every Pixel Watch. The question is no longer whether you build for these surfaces — it is whether you build for them in time to matter.",
+      "We build native apps for Meta Ray-Ban Display, Apple Vision Pro, Meta Quest, and Wear OS. We build the spatial layer in React Three Fiber and WebXR. We build the on-device LLM ranking that makes a glasses-app feel intelligent without burning the battery. We design the interface as if every pixel had to justify the gram of weight it sits on, because for these devices it does.",
+      "Spatial is not VR with a different name. It is a new grammar of interface — gaze, voice, micro-gesture, peripheral attention. We have spent the last year reading the patents, prototyping the patterns, and shipping experiments through our /lab. The body of work we are willing to defend in front of any audience: a Ray-Ban Display reading companion, a Vision Pro spatial archive, a Wear OS glasses-control app — each a real artifact, each a real lesson.",
+      "If your business is going to be on a customer's face, wrist, or workshop bench within the next two years, you should engage. We will not tell you the surface is ready when it isn't. We will tell you what we have built, what we have learned, and which of the surfaces is worth the early investment for the particular business you are running.",
+    ],
+    stack: ["React Three Fiber", "Meta Spatial SDK", "WebXR", "Wear OS", "Apple Vision OS", "SwiftUI", "Three.js", "MediaPipe"],
+    relatedProjects: ["zusly-shopfitters-projects", "bard-santner-golf-v3", "umati-property-development"],
+    heroType: "typography",
+    accent: "#D4FF3A",
+    tint: "#3B2F8C",
+    hashtags: ["#ray-ban-display", "#vision-pro", "#quest", "#wear-os", "#webxr", "#react-three-fiber", "#spatial-ui", "#on-device-llm"],
+    iconCluster: ["Eyeglasses", "Cube", "Sparkle", "DeviceMobile"],
+    artifact: "spatial-surfaces",
+  },
 ];
 
 export function findService(slug) {

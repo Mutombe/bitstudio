@@ -32,6 +32,18 @@ import {
   Rocket,
   Broadcast,
   Pulse,
+  Eyeglasses,
+  Cube,
+  DeviceMobile,
+  Eye,
+  HandPointing,
+  Microphone,
+  Compass,
+  Atom,
+  Lightbulb,
+  ScribbleLoop,
+  Flask,
+  Notebook,
 } from "@phosphor-icons/react";
 
 const ICONS = {
@@ -65,6 +77,20 @@ const ICONS = {
   Rocket,
   Broadcast,
   Pulse,
+  // Spatial / wearable additions
+  Eyeglasses,
+  Cube,
+  DeviceMobile,
+  Eye,
+  HandPointing,
+  Microphone,
+  // Lab / field-manual additions
+  Compass,
+  Atom,
+  Lightbulb,
+  ScribbleLoop,
+  Flask,
+  Notebook,
 };
 
 export function PhosphorIcon({ name, ...rest }) {
