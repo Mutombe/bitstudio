@@ -37,7 +37,7 @@ const TICKER_ITEMS = [
   `${TOTAL_ARTIFACTS} artifacts on-air`,
   "Grain delivered",
   "Deploy green",
-  "Heart rate nominal",
+  "Lighthouse 100 · floor",
   "Cursor: maroon · 10px · difference",
   "Uptime 99.94%",
   "Latency 41ms",
@@ -115,9 +115,9 @@ export default function Home({ onSummon }) {
             <div className="flex items-center gap-6">
               <span className="flex items-center gap-2">
                 <CircleNotchIcon size={12} className="animate-spin text-signal" />
-                Bit Studio · MMXXX
+                Chapter 00 · Index
               </span>
-              <span className="hidden md:inline">Chapter 00 / Index</span>
+              <span className="hidden md:inline">MMXXX</span>
             </div>
             <div className="flex items-center gap-6">
               <span className="hidden sm:inline">UTC {formatHMS(now)}</span>
@@ -135,25 +135,23 @@ export default function Home({ onSummon }) {
           >
             <div className="flex flex-col">
               <p className="label-mono text-bone-100/60 mb-4 md:mb-6">
-                Transmission 0001 — opened from Harare to the signal
+                Transmission 0001 — open
               </p>
-              <h1 className="display-hero text-bone-100 -ml-1 md:-ml-3">
-                <span className="motion-blur-type" data-text="BIT">BIT</span>
-                <span className="signal-text">·</span>
+              <h1 className="display-hero text-bone-100 -ml-1 md:-ml-3 leading-[0.86]">
+                We do not decorate.
               </h1>
-              <h1 className="display-hero text-bone-100 -mt-[0.15em] md:-mt-[0.2em] pl-[0.3em]">
-                <span className="italic-accent text-maroon-400 font-light">studio</span>
+              <h1 className="display-hero text-bone-100 -mt-[0.05em] md:-mt-[0.06em] leading-[0.86]">
+                <span className="italic-accent text-maroon-400 font-light">We remember.</span>
               </h1>
             </div>
 
             <div className="grid grid-cols-12 gap-6 md:gap-10 items-end">
               <div className="col-span-12 md:col-span-6 lg:col-span-5">
                 <p className="text-base md:text-lg lg:text-[1.05rem] text-bone-100/85 leading-relaxed max-w-[48ch]">
-                  We are the ultimate philosophers of beauty and code. We do not
-                  decorate software —
-                  <span className="italic-accent text-signal"> we remember what beauty was</span> before
-                  it was contested. Interfaces, brand systems, engineering. From
-                  Harare, broadcasting to any platform that will hold us.
+                  Interfaces. Systems. Brands. A practice for businesses
+                  that need
+                  <span className="italic-accent text-signal"> real beauty, durable infrastructure, true scale, and longevity</span>{" "}
+                  past the next quarter. After Musashi, 1645.
                 </p>
                 <div className="mt-6 md:mt-8 flex flex-wrap items-center gap-3">
                   <Link to="/work" {...hover} className="btn btn-primary">

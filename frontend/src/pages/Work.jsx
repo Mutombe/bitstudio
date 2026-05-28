@@ -217,7 +217,7 @@ export default function Work() {
           "Sourced on SerpAPI",
           "Styled by humans",
           "Shipped with discipline",
-          "Bit Studio · MMXXX",
+          "MMXXX · One standard",
         ]}
       />
     </PageTransition>

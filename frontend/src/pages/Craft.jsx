@@ -439,7 +439,7 @@ export default function Craft() {
           "The Way · 道",
           "Earth · Water · Fire · Wind · Void",
           "After Musashi, 1645",
-          "Bit Studio · MMXXX",
+          "MMXXX · Earth, Water, Fire, Wind, Void",
         ]}
       />
     </PageTransition>
