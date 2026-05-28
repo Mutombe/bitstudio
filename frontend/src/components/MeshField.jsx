@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 
 /**
- * MeshField — a full-bleed animated mesh gradient of drifting orbs.
+ * MeshField. A full-bleed animated mesh gradient of drifting orbs.
  * No images. Pure computed color. Drifts slowly to hint at life.
  *
  * Props:
@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
  *  - tint: one of "maroon" | "oxblood" | "signal" | "mixed" (default: "mixed")
  *  - className: extra classes for the wrapper
  *
- * NOTE on hero seam: the two lower orbs sit in the upper half (y 30–40%) and
+ * NOTE on hero seam: the two lower orbs sit in the upper half (y 30-40%) and
  * the whole wrapper is masked to fade to transparent in the bottom ~25%.
  * This prevents orbs from painting a warm maroon "band" at the hero's lower
  * edge on wide desktop viewports (where vw-sized orbs otherwise become huge).
@@ -35,7 +35,7 @@ export default function MeshField({
 
   // Four orbs, drifting at different phases.
   // All sizes clamp()-capped so a 2560px ultrawide doesn't turn these into
-  // 1000px+ warm masses. Lower orbs moved UP to 30–40% so they never paint
+  // 1000px+ warm masses. Lower orbs moved UP to 30-40% so they never paint
   // the hero's bottom seam.
   const orbs = [
     { c: colors[0], x: "-10%", y: "10%",  w: "clamp(280px, 55vw, 620px)", h: "clamp(280px, 55vw, 620px)", dx: 20,  dy: -15, dur: 24 },

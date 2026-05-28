@@ -1,13 +1,13 @@
 import { motion, useReducedMotion } from "framer-motion";
 
 /**
- * WaveBreak — a section divider drawn as two sinusoidal strokes
- * (maroon + chartreuse) that *actually wave* — the path `d` attribute
+ * WaveBreak. A section divider drawn as two sinusoidal strokes
+ * (maroon + chartreuse) that *actually wave*. The path `d` attribute
  * loops between two sinusoidal variants so crests rise and troughs dip
  * continuously. Each path also drifts laterally at a different cadence
  * for a living, never-synchronized feel.
  *
- * Respects prefers-reduced-motion — falls back to a calm static pair.
+ * Respects prefers-reduced-motion. Falls back to a calm static pair.
  *
  * Props:
  *  - variant: "thin" | "full" (default: "thin")
@@ -57,7 +57,7 @@ export default function WaveBreak({ variant = "thin", className = "" }) {
           </linearGradient>
         </defs>
 
-        {/* Maroon stroke — wavers (d between A/B) while drifting right */}
+        {/* Maroon stroke. Wavers (d between A/B) while drifting right */}
         <motion.path
           initial={{ d: MAROON_A, translateX: 0 }}
           animate={
@@ -74,7 +74,7 @@ export default function WaveBreak({ variant = "thin", className = "" }) {
           strokeWidth="1.5"
         />
 
-        {/* Chartreuse whisper — counter-phase + counter-drift */}
+        {/* Chartreuse whisper. Counter-phase + counter-drift */}
         <motion.path
           initial={{ d: SIGNAL_A, translateX: 0 }}
           animate={
@@ -91,7 +91,7 @@ export default function WaveBreak({ variant = "thin", className = "" }) {
           strokeWidth="0.75"
         />
 
-        {/* Center ghost stroke for depth — still, provides the resting line */}
+        {/* Center ghost stroke for depth. Still, provides the resting line */}
         <path
           d="M0 90 Q 100 70, 200 90 T 400 90 T 600 90 T 800 90 T 1000 90 T 1200 90 T 1400 90 T 1600 90"
           fill="none"

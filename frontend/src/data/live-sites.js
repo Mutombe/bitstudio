@@ -1,7 +1,7 @@
-// Bit Studio — live production sites
+// Bit Studio. Live production sites
 //
 // Sites that have left the demo subdomain and earned a real domain.
-// Curated list — the ones we'd happily show anyone, in front-row order.
+// Curated list. The ones we'd happily show anyone, in front-row order.
 //
 // Each entry is decorated with an aesthetic (Atelier, Editorial, …) so the
 // chips on /live and /work share the same vocabulary. The original sector
@@ -19,7 +19,7 @@ const _LIVE = [
     palette: ["#0B1E3A", "#D4A24A", "#F4F1E8"],
     featured: true,
     brief:
-      "Bard Global Finance Institute — daily editorial coverage of African capital markets, plus long-form research from Finance Africa Quarterly.",
+      "Bard Global Finance Institute. Daily editorial coverage of African capital markets, plus long-form research from Finance Africa Quarterly.",
   },
   {
     slug: "taqon",
@@ -30,7 +30,7 @@ const _LIVE = [
     palette: ["#0F2A4B", "#F26522", "#FAFAF6"],
     featured: true,
     brief:
-      "Solar shop, package builder, and advisor platform — the sun's interface.",
+      "Solar shop, package builder, and advisor platform. The sun's interface.",
   },
   {
     slug: "ecolusgroup",
@@ -41,7 +41,7 @@ const _LIVE = [
     palette: ["#0E4D2B", "#228B22", "#F4F7EE"],
     featured: true,
     brief:
-      "Solar, renewables, and the wider group story — green commerce under one roof.",
+      "Solar, renewables, and the wider group story. Green commerce under one roof.",
   },
   {
     slug: "mamavee",
@@ -63,7 +63,7 @@ const _LIVE = [
     palette: ["#0F2A44", "#F5A623", "#F4F1E8"],
     featured: true,
     brief:
-      "Short-term lending under the Bard banner — capital that moves on the speed of trust.",
+      "Short-term lending under the Bard banner. Capital that moves on the speed of trust.",
   },
   {
     slug: "rudiariuscapital",
@@ -74,7 +74,7 @@ const _LIVE = [
     palette: ["#0E2238", "#C8A968", "#F4F1E8"],
     featured: true,
     brief:
-      "Asset management — tailored capital solutions for businesses that intend to compound for a long time.",
+      "Asset management. Tailored capital solutions for businesses that intend to compound for a long time.",
   },
   {
     slug: "brymatongroup",
@@ -84,7 +84,7 @@ const _LIVE = [
     tag: "Group",
     palette: ["#102544", "#E87126", "#F4F1E8"],
     brief:
-      "A Zimbabwean group portfolio — multiple ventures, one identity.",
+      "A Zimbabwean group portfolio. Multiple ventures, one identity.",
   },
   {
     slug: "gemaksecurity",
@@ -104,7 +104,7 @@ const _LIVE = [
     tag: "Interiors",
     palette: ["#1F1B1A", "#C8A968", "#F4EFE2"],
     brief:
-      "Luxury stretch ceilings and custom lighting — interior architecture as an editorial.",
+      "Luxury stretch ceilings and custom lighting. Interior architecture as an editorial.",
   },
   {
     slug: "ncubeburrow",
@@ -114,7 +114,7 @@ const _LIVE = [
     tag: "Engineering",
     palette: ["#12233A", "#B89858", "#F5EFE6"],
     brief:
-      "Zimbabwe's premier civil engineering firm — bridges, roads, civil works at quiet, unrushed scale.",
+      "Zimbabwe's premier civil engineering firm. Bridges, roads, civil works at quiet, unrushed scale.",
   },
   {
     slug: "silvercarbon",
@@ -124,7 +124,7 @@ const _LIVE = [
     tag: "Carbon",
     palette: ["#1B2735", "#9DA6B0", "#F4F1E8"],
     brief:
-      "Carbon asset development and carbon finance — value across the carbon credits chain, from creation to retirement.",
+      "Carbon asset development and carbon finance. Value across the carbon credits chain, from creation to retirement.",
   },
   {
     slug: "zim-rec",
@@ -134,7 +134,7 @@ const _LIVE = [
     tag: "Energy",
     palette: ["#103D2A", "#F5C518", "#F4F7EE"],
     brief:
-      "Zimbabwean renewable energy certificates — the registry for green attribute trading.",
+      "Zimbabwean renewable energy certificates. The registry for green attribute trading.",
   },
 ];
 

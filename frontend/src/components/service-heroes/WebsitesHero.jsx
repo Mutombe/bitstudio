@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useReducedMotionPreference } from "../../hooks/useReducedMotion.js";
 
 /**
- * WebsitesHero — typography-only hero.
+ * WebsitesHero. Typography-only hero.
  * A pull-quote grows from blurry to sharp while a horizontal marquee of
  * browser-chrome wireframes scrolls underneath.
  */
@@ -19,7 +19,7 @@ export default function WebsitesHero() {
         background: "radial-gradient(circle at 20% 30%, rgba(107,21,33,0.4), transparent 55%), radial-gradient(circle at 80% 70%, rgba(58,10,21,0.5), transparent 55%), #0A0708"
       }} />
 
-      {/* Pull quote — blurred → sharp */}
+      {/* Pull quote. Blurred → sharp */}
       <div className="absolute inset-0 flex items-center justify-center px-8">
         <motion.div
           initial={reduced ? {} : { opacity: 0, filter: "blur(28px)", letterSpacing: "0.08em" }}

@@ -88,7 +88,7 @@ export default function Contact() {
           </motion.h1>
 
           <div className="mt-10 md:mt-20 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 pb-24 md:pb-40">
-            {/* Left — direct channels */}
+            {/* Left. Direct channels */}
             <div className="md:col-span-5 space-y-8 md:space-y-10">
               <SectionLabel chapter="§ Direct" title="Channels" />
 
@@ -139,7 +139,7 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Right — form */}
+            {/* Right. Form */}
             <form
               onSubmit={submit}
               className="md:col-span-7 bg-[color:var(--color-ink)] text-bone-100 rounded-sm p-5 sm:p-6 md:p-10 space-y-6 md:space-y-8 border border-white/10"
@@ -248,7 +248,7 @@ function BankingSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
-          {/* Left — the contract in two beats */}
+          {/* Left. The contract in two beats */}
           <div className="md:col-span-5">
             <h2 className="display-xl leading-[0.92]">
               50 to begin.
@@ -258,7 +258,7 @@ function BankingSection() {
               </span>
             </h2>
             <p className="mt-8 max-w-md text-bone-100/70 leading-relaxed">
-              Half on day one — it's how we put the team on the work. The
+              Half on day one. It's how we put the team on the work. The
               balance settles when the project lands in your hands, live and
               signed off.
             </p>
@@ -277,7 +277,7 @@ function BankingSection() {
             </p>
           </div>
 
-          {/* Right — the account card */}
+          {/* Right. The account card */}
           <div className="md:col-span-7">
             <div className="border border-white/15 rounded-sm p-6 md:p-10 bg-maroon-600/10">
               <div className="flex items-center justify-between mb-6">
@@ -317,7 +317,7 @@ function BankingSection() {
               <p className="mt-7 text-xs text-bone-100/45 leading-relaxed">
                 If the account name doesn't read{" "}
                 <span className="text-bone-100/85">BIT STUDIO</span> at your
-                bank's confirmation step, do not transfer — ping us on
+                bank's confirmation step, do not transfer. Ping us on
                 WhatsApp and we'll re-issue the details directly.
               </p>
             </div>

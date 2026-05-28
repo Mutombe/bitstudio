@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 /**
- * HashChip — small mono-type hashtag pill with a thin chartreuse border.
+ * HashChip. Small mono-type hashtag pill with a thin chartreuse border.
  *
  * When `to` is provided, becomes a <Link>. Otherwise a span.
  * Hover/focus: chartreuse fill, light orange glow.

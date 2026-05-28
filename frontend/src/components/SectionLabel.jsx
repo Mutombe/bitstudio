@@ -1,5 +1,5 @@
 /**
- * SectionLabel — "§ 01 — Preamble" style eyebrow label.
+ * SectionLabel. "§ 01. Preamble" style eyebrow label.
  *
  * When `targetId` is provided (or `onClick`), the chapter number + title are
  * rendered as a button that smooth-scrolls to the target section (or runs the
@@ -27,7 +27,7 @@ export default function SectionLabel({
   const inner = (
     <p className="label-mono text-bone-100/50">
       <span className="text-maroon-400">{chapter}</span>
-      {" "}— {title}
+      {" "}{title}
     </p>
   );
 
@@ -43,7 +43,7 @@ export default function SectionLabel({
         >
           <span className="label-mono text-bone-100/50 group-hover:text-signal transition-colors">
             <span className="text-maroon-400 group-hover:text-signal">{chapter}</span>
-            {" "}— {title}
+            {" "}{title}
           </span>
         </button>
       ) : (

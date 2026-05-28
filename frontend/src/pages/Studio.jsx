@@ -146,7 +146,7 @@ export default function Studio() {
             <div className="col-span-12 md:col-span-7">
               <h2 className="display-xl text-bone-100">
                 Simba Mutombe
-                <span className="italic-accent text-bone-300"> — </span>
+                <span className="italic-accent text-bone-300">. </span>
                 <span className="italic-accent text-signal font-light">
                   thinks in systems; <br/>ships in colour.
                 </span>
@@ -164,7 +164,7 @@ export default function Studio() {
         </div>
       </section>
 
-      {/* Process — four steps */}
+      {/* Process. Four steps */}
       <section className="py-20 md:py-32 bg-[color:var(--color-ink)]">
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <SectionLabel chapter="§ vii" title="How a project moves" />
@@ -173,7 +173,7 @@ export default function Studio() {
               { n: "01", t: "Listen", d: "One call. A brief. Maybe a drink." },
               { n: "02", t: "Draft", d: "A thinking document. Wrong on purpose. Useful immediately." },
               { n: "03", t: "Build", d: "Live URL on day three. No slide decks. No mockups to approve." },
-              { n: "04", t: "Hand off", d: "Documentation, ownership transfer, and a note that reads: 'you have it now — treat it well'." },
+              { n: "04", t: "Hand off", d: "Documentation, ownership transfer, and a note that reads: 'you have it now. Treat it well'." },
             ].map((s, i) => (
               <motion.div
                 key={s.n}

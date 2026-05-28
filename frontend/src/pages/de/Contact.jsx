@@ -15,12 +15,12 @@ import { useCursorHover } from "../../hooks/useCursor.jsx";
 import SEO, { breadcrumbJsonLd } from "../../components/SEO.jsx";
 
 /**
- * /de/kontakt — German Contact page.
+ * /de/kontakt. German Contact page.
  *
  * Same form mechanic as /contact: dispatches to WhatsApp or mailto.
  * Includes the deposit/banking block in German for B2B clients who
  * want to see payment terms before reaching out. The bank details
- * remain the same (FBC Zimbabwe) — Mittelstand buyers often pay via
+ * remain the same (FBC Zimbabwe). Mittelstand buyers often pay via
  * SEPA/SWIFT to non-EU vendors and are comfortable with this.
  */
 
@@ -131,7 +131,7 @@ export default function ContactDE() {
           </motion.h1>
 
           <div className="mt-10 md:mt-20 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 pb-24 md:pb-40">
-            {/* Left — direct channels */}
+            {/* Left. Direct channels */}
             <div className="md:col-span-5 space-y-8 md:space-y-10">
               <SectionLabel chapter="§ Direkt" title="Kanäle" />
 
@@ -178,14 +178,14 @@ export default function ContactDE() {
                   Erreichbarkeit
                 </p>
                 <p className="text-bone-100/85 leading-relaxed">
-                  Montag bis Freitag, 09:00 — 18:00 MEZ. Wir antworten in der
+                  Montag bis Freitag, 09:00. 18:00 MEZ. Wir antworten in der
                   Regel innerhalb von vier Stunden, auf WhatsApp meistens
                   schneller.
                 </p>
               </div>
             </div>
 
-            {/* Right — form */}
+            {/* Right. Form */}
             <form onSubmit={submit} className="md:col-span-7 space-y-6">
               <SectionLabel chapter="§ Formular" title="Drei Felder" />
 
@@ -212,7 +212,7 @@ export default function ContactDE() {
                     onChange={update("project")}
                     rows={3}
                     className="w-full bg-transparent border-b border-bone-100/30 focus:border-signal py-2 text-base md:text-lg text-bone-100 placeholder-bone-100/30 outline-none transition-colors resize-none"
-                    placeholder="In drei Sätzen — was bauen wir?"
+                    placeholder="In drei Sätzen. Was bauen wir?"
                   />
                 </label>
 
@@ -270,7 +270,7 @@ export default function ContactDE() {
         </div>
       </section>
 
-      {/* Banking — visible at /de/kontakt only, hidden in the global footer */}
+      {/* Banking. Visible at /de/kontakt only, hidden in the global footer */}
       <section className="relative py-16 md:py-24 bg-[color:var(--color-ink)] border-y border-white/5">
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <div className="grid grid-cols-12 gap-8 md:gap-10">

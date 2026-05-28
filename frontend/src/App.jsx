@@ -105,7 +105,7 @@ export default function App() {
               <Route path="/datenschutz" element={<Datenschutz />} />
               <Route path="/legal" element={<Legal />} />
               <Route path="/privacy" element={<Privacy />} />
-              {/* German entry — for European/DACH market outreach */}
+              {/* German entry. For European/DACH market outreach */}
               <Route path="/de" element={<HomeDE />} />
               <Route path="/de/handwerk" element={<CraftDE />} />
               <Route path="/de/kontakt" element={<ContactDE />} />

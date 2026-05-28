@@ -18,7 +18,7 @@ import { useCursorHover } from "../hooks/useCursor.jsx";
 import { PACKAGES, PROCESS_PHASES } from "../data/packages.js";
 
 /**
- * /packages — English-language mirror of /pakete.
+ * /packages. English-language mirror of /pakete.
  *
  * Same three renewal packages, same fixed-scope / fixed-price / three-slots
  * model. Lives at /packages so the US market and any English-speaking
@@ -83,7 +83,7 @@ export default function Packages() {
 
           <p className="mt-10 max-w-2xl text-base md:text-lg text-bone-100/85 leading-relaxed">
             Most studios sell time. We sell three sharply defined pieces a
-            quarter — fixed scope, fixed price, fixed delivery date. Who fits
+            quarter. Fixed scope, fixed price, fixed delivery date. Who fits
             knows before the first call. Who doesn't fit is spared the
             choreography.
           </p>
@@ -132,7 +132,7 @@ export default function Packages() {
           <div className="col-span-12 md:col-span-9 max-w-3xl space-y-6 text-bone-100/80 leading-relaxed">
             <p className="text-base md:text-lg">
               Slots are not assigned in order of arrival. We choose the
-              projects in which our care will have the largest effect — houses
+              projects in which our care will have the largest effect. Houses
               that take their own story seriously, and for which an honest
               renewal makes the biggest difference.
             </p>
@@ -161,7 +161,7 @@ export default function Packages() {
           <div className="mb-14 md:mb-20 max-w-3xl">
             <SectionLabel chapter="§ Process" title="Four phases" />
             <h2 className="mt-6 font-display text-bone-100 leading-[1.0]" style={{ fontSize: "clamp(2.25rem, 6vw, 5rem)", fontWeight: 700, letterSpacing: "-0.04em" }}>
-              From brief to launch —<br />
+              From brief to launch.<br />
               <span className="italic-accent text-bone-300 font-light">four phases, transparently kept.</span>
             </h2>
           </div>
@@ -213,18 +213,18 @@ export default function Packages() {
             />
             <Objection
               q="Do you build in WordPress, Webflow, or Wix?"
-              a="No. We build on React, Vite, and Tailwind. That's the platform on which our work ages the way it should — fast, legible, durable. If you intend to keep an existing WordPress site, we're not the right studio."
+              a="No. We build on React, Vite, and Tailwind. That's the platform on which our work ages the way it should. Fast, legible, durable. If you intend to keep an existing WordPress site, we're not the right studio."
             />
             <Objection
               q="Who hosts the finished site?"
-              a="Render (USA, GDPR-compliant). Six months are included in the price. After that, approximately €50/month — or you take over the Render account and we hand off the keys."
+              a="Render (USA, GDPR-compliant). Six months are included in the price. After that, approximately €50/month, or you take over the Render account and we hand off the keys."
             />
             <Objection
               q="Can we pay in stages?"
-              a="Standard is 50 / 50 — deposit at start, balance on acceptance. On request, we split the balance into two tranches (25 / 25) at mid-point and at acceptance. Just say so in the first email."
+              a="Standard is 50 / 50. Deposit at start, balance on acceptance. On request, we split the balance into two tranches (25 / 25) at mid-point and at acceptance. Just say so in the first email."
             />
             <Objection
-              q="We're in the US / UK / Australia — do packages apply?"
+              q="We're in the US / UK / Australia. Do packages apply?"
               a="Yes. Packages are identical across the Anglosphere. We quote and invoice in EUR or USD; reverse-charge applies for business customers in compatible VAT regimes."
             />
           </div>
@@ -244,7 +244,7 @@ export default function Packages() {
           <p className="mt-10 max-w-2xl text-bone-100/75 text-lg leading-relaxed">
             Write us one sentence about your house and the package you're
             interested in. We reply the same working day with two or three
-            precise questions — and propose a 20-minute call if the mutual
+            precise questions, and propose a 20-minute call if the mutual
             interest is real.
           </p>
 

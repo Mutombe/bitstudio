@@ -29,7 +29,7 @@ export default function ProjectDetail() {
     <PageTransition>
       <SEO
         title={`${p.name} · ${p.tag}`}
-        description={p.brief || `${p.name} — a Bit Studio artifact. ${p.tag} aesthetic. ${p.industry || "Real-world client."}`}
+        description={p.brief || `${p.name}. A Bit Studio artifact. ${p.tag} aesthetic. ${p.industry || "Real-world client."}`}
         path={`/work/${p.slug}`}
         type="article"
         keywords={[p.name, p.tag, p.industry, "Bit Studio", "case study"].filter(Boolean)}
@@ -51,7 +51,7 @@ export default function ProjectDetail() {
         ]}
       />
       <section className="relative pt-24 md:pt-32 pb-0 overflow-hidden">
-        {/* Split hero — brand color left panel, preview right */}
+        {/* Split hero. Brand color left panel, preview right */}
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50 mb-8">
             <Link to="/work" {...hover} className="hover-line">Work</Link>
@@ -109,7 +109,7 @@ export default function ProjectDetail() {
               </div>
             </div>
 
-            {/* Right — preview / mockup */}
+            {/* Right. Preview / mockup */}
             <div className="col-span-12 md:col-span-6 relative">
               <div className="relative rounded-sm border border-white/10 overflow-hidden bg-maroon-950 min-h-[60vh] h-full flex flex-col">
                 <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/10 font-mono text-[10px] tracking-[0.18em] uppercase text-bone-100/40">

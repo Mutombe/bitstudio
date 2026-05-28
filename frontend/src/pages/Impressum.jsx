@@ -6,7 +6,7 @@ import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 
 /**
- * Impressum — legal disclosure required by German law (§ 5 TMG, § 18 MStV).
+ * Impressum. Legal disclosure required by German law (§ 5 TMG, § 18 MStV).
  *
  * Legal facts confirmed against the Companies and Intellectual Property
  * Office of Zimbabwe (CIPZ) Certificate of Incorporation:
@@ -63,7 +63,7 @@ const SECTIONS = [
     rows: [
       [
         "USt-IdNr.",
-        "Nicht vorhanden — Anbieter ist außerhalb der Europäischen Union ansässig (Simbabwe). B2B-Leistungen unterliegen der Reverse-Charge-Regelung gemäß § 13b UStG.",
+        "Nicht vorhanden. Anbieter ist außerhalb der Europäischen Union ansässig (Simbabwe). B2B-Leistungen unterliegen der Reverse-Charge-Regelung gemäß § 13b UStG.",
       ],
     ],
   },
@@ -120,7 +120,7 @@ export default function Impressum() {
             className="mt-6 font-display text-bone-100 leading-[0.85] tracking-[-0.04em] block w-full max-w-full break-words"
             style={{
               fontWeight: 700,
-              // "Impressum." is 10 chars — base display-massive (clamp 4-18rem at 18vw)
+              // "Impressum." is 10 chars. Base display-massive (clamp 4-18rem at 18vw)
               // overflows the 1280-wide content frame. Tuned clamp keeps the word
               // inside the gutter from 360px mobile to 1600px desktop.
               fontSize: "clamp(2.75rem, 13vw, 13rem)",

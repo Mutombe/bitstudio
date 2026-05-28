@@ -22,7 +22,7 @@ export default function NotFound() {
           </h1>
           <p className="mt-8 max-w-xl text-lg text-bone-100/75">
             We routed you to a wrong frequency. It happens. Try the index, or summon
-            the palette — you'll find what you were looking for.
+            the palette. You'll find what you were looking for.
           </p>
           <Link to="/" {...hover} className="btn btn-primary mt-10">
             <ArrowLeftIcon size={14} weight="bold" />

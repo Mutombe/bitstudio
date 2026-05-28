@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useReducedMotionPreference } from "../../hooks/useReducedMotion.js";
 
 /**
- * Web apps artifact — a stylised URL bar with a blinking cursor.
+ * Web apps artifact. A stylised URL bar with a blinking cursor.
  * Idle: cursor blinks at ~1.1s cadence.
  * Hover: the blink accelerates slightly.
  */

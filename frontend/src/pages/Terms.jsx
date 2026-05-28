@@ -6,7 +6,7 @@ import { useCursorHover } from "../hooks/useCursor.jsx";
 import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
 
 /**
- * Terms — a philosophical terms-and-conditions.
+ * Terms. A philosophical terms-and-conditions.
  * Real clauses, written in the voice of the studio. No legalese copy-paste,
  * no "WHEREAS the party of the first part." An actual agreement a thinking
  * person could read in one sitting.
@@ -18,16 +18,16 @@ const SECTIONS = [
     title: "What you are actually agreeing to",
     body: [
       "A contract is a small shared memory. You write down what both parties already believe, so that later, when the memory falters or the weather changes, the paper can speak.",
-      "By engaging Bit Studio — through a written brief, a scope document, a WhatsApp message that ends with 'let's do it', or a transferred deposit — you accept the terms below. They apply to every piece of work we make together until we agree otherwise, in writing, also together.",
+      "By engaging Bit Studio. Through a written brief, a scope document, a WhatsApp message that ends with 'let's do it', or a transferred deposit. You accept the terms below. They apply to every piece of work we make together until we agree otherwise, in writing, also together.",
     ],
   },
   {
     roman: "II",
     title: "Who owns what we make",
     body: [
-      "You own the work. When the final invoice clears, the code, the design files, the copy, the brand assets, the deployment keys — they are yours. Unambiguously. We do not believe in surprise-you-later licensing.",
+      "You own the work. When the final invoice clears, the code, the design files, the copy, the brand assets, the deployment keys. They are yours. Unambiguously. We do not believe in surprise-you-later licensing.",
       "We retain the right to name you as a client, to show the work in our portfolio, and to speak about the work in public talks, case studies and social posts. If a project is under embargo or genuinely confidential, tell us before we start and we will honour it.",
-      "We keep the right to reuse internal patterns — hooks, utilities, component primitives we built before and during your project. You do not license our library to us; we simply do not re-license ours to you.",
+      "We keep the right to reuse internal patterns. Hooks, utilities, component primitives we built before and during your project. You do not license our library to us; we simply do not re-license ours to you.",
     ],
   },
   {
@@ -35,7 +35,7 @@ const SECTIONS = [
     title: "Payment",
     body: [
       "We quote fixed fees for shaped work, and time-and-materials for open-ended work. Both are legitimate. You will always know which you are paying for before you pay for it.",
-      "Typical cadence: 50% to begin, 50% on delivery. Longer engagements stage into phases. Invoices are due within 14 days. Late payments accrue a 1.5% monthly charge — not as punishment, but as a signal that the project's context has shifted and we should talk.",
+      "Typical cadence: 50% to begin, 50% on delivery. Longer engagements stage into phases. Invoices are due within 14 days. Late payments accrue a 1.5% monthly charge. Not as punishment, but as a signal that the project's context has shifted and we should talk.",
       "We accept ZWL, USD, EUR, GBP, ZAR, and crypto where it makes sense. We do not chase. We ask once, clearly, then we pause work until the pause is resolved.",
     ],
   },
@@ -43,7 +43,7 @@ const SECTIONS = [
     roman: "IV",
     title: "Confidentiality",
     body: [
-      "What you share with us — internal documents, roadmaps, customer data, half-formed ambitions, post-funding-round anxieties — stays with us.",
+      "What you share with us. Internal documents, roadmaps, customer data, half-formed ambitions, post-funding-round anxieties. Stays with us.",
       "Our team is small. Access to your material is need-to-know within that team. We sign NDAs when you want one, even though our instinct is already to behave like we've signed one.",
     ],
   },
@@ -51,15 +51,15 @@ const SECTIONS = [
     roman: "V",
     title: "How we use artificial intelligence",
     body: [
-      "We use AI tools in our daily work — to write boilerplate, to surface references, to draft copy, to test edge cases. We do so transparently. No tool replaces judgment; no output ships without a human having read, understood and edited it.",
-      "We never feed your proprietary material into a consumer-grade model without asking first. Where models are used in production — agents, assistants, pipelines — we specify which, why, at what volume, and what happens if they fail.",
+      "We use AI tools in our daily work. To write boilerplate, to surface references, to draft copy, to test edge cases. We do so transparently. No tool replaces judgment; no output ships without a human having read, understood and edited it.",
+      "We never feed your proprietary material into a consumer-grade model without asking first. Where models are used in production. Agents, assistants, pipelines. We specify which, why, at what volume, and what happens if they fail.",
     ],
   },
   {
     roman: "VI",
     title: "Warranty, and the shape of what could go wrong",
     body: [
-      "We warrant that the work will do what we said it would do, on the platforms we said it would run on, for thirty days after delivery. Bugs found inside that window are ours to fix. After that window, continued work is billable — and generally small.",
+      "We warrant that the work will do what we said it would do, on the platforms we said it would run on, for thirty days after delivery. Bugs found inside that window are ours to fix. After that window, continued work is billable, and generally small.",
       "We are not responsible for third-party service outages, for changes to APIs we don't maintain, for acts of regulation or nature, or for business outcomes we cannot control. We are responsible for our own craft and for speaking up the moment something looks wrong.",
       "Our total liability, in the rare case something goes catastrophically sideways, is capped at the fees paid for the specific engagement. This is how studios stay solvent enough to keep making things.",
     ],
@@ -69,8 +69,8 @@ const SECTIONS = [
     title: "How we end",
     body: [
       "Either party may terminate an engagement with fourteen days' written notice. On termination we stop work, invoice for everything delivered up to that point, and transfer all finished assets.",
-      "We will not hold your deliverables hostage. If we have been paid for them, they are already yours — notice or no notice.",
-      "If the ending is sudden because something broke between us — a missed deadline, a miscommunication, a disagreement — we would prefer a fifteen-minute phone call before a lawyer. That is not always possible. We reserve the right to try anyway.",
+      "We will not hold your deliverables hostage. If we have been paid for them, they are already yours. Notice or no notice.",
+      "If the ending is sudden because something broke between us. A missed deadline, a miscommunication, a disagreement. We would prefer a fifteen-minute phone call before a lawyer. That is not always possible. We reserve the right to try anyway.",
     ],
   },
   {
@@ -91,7 +91,7 @@ export default function Terms() {
     <PageTransition>
       <SEO
         title="Terms of engagement"
-        description="The agreement between Bit Studio and our clients — payment, IP, revisions, and what counts as 'done.' Written in plain language, no legalese."
+        description="The agreement between Bit Studio and our clients. Payment, IP, revisions, and what counts as 'done.' Written in plain language, no legalese."
         path="/terms"
         keywords={["terms of engagement", "studio terms", "Bit Studio agreement"]}
         jsonLd={[
@@ -129,17 +129,17 @@ export default function Terms() {
           </h1>
           <p className="mt-6 md:mt-10 italic-accent text-lg md:text-2xl text-bone-300 max-w-3xl leading-snug">
             A contract is a small shared memory. This one is written in our voice
-            so it can be read in our voice — and remembered in the shape that we
+            so it can be read in our voice, and remembered in the shape that we
             meant it.
           </p>
         </div>
       </section>
 
-      {/* Manifesto body — 8 Roman-numeral sections */}
+      {/* Manifesto body. 8 Roman-numeral sections */}
       <section className="relative py-10 md:py-20">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16">
-            {/* Sticky sidebar — section index */}
+            {/* Sticky sidebar. Section index */}
             <aside className="md:col-span-3">
               <div className="md:sticky md:top-28">
                 <p className="label-mono text-bone-100/40 mb-5">Articles</p>

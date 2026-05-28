@@ -1,4 +1,4 @@
-// PhosphorIcon — small named-import resolver.
+// PhosphorIcon. Small named-import resolver.
 // Keeps tree-shaking intact (no wildcard imports). Extend the map as new
 // icons are added to service iconClusters.
 import {

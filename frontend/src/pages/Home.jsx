@@ -44,14 +44,14 @@ const TICKER_ITEMS = [
 ];
 
 // Homepage Selected Work uses the same aesthetic ranking that anchors /work
-// — Alliance Health, AutoWorld, then the rest, top-down. Slice 9 to fit the
+//. Alliance Health, AutoWorld, then the rest, top-down. Slice 9 to fit the
 // bento rhythm (lg + sm·sm·sm + sm·sm·sm + lg + md·md = 9 tiles).
 const HOME_TOP = sortByAesthetic(PROJECTS).slice(0, 9);
 
 // Homepage marquee: pull from the same top-of-the-stack ranking.
 const HOMEPAGE_MARQUEE = sortByAesthetic(PROJECTS).slice(0, 12);
 
-// Compact chip set for the homepage — "All" + tags present in HOME_TOP
+// Compact chip set for the homepage. "All" + tags present in HOME_TOP
 const HOME_CHIPS = [
   { id: "all", label: "All" },
   ...Array.from(new Set(HOME_TOP.map((p) => p.tag))).map((tag) => ({
@@ -92,7 +92,7 @@ export default function Home({ onSummon }) {
         keywords={["Bit Studio", "design studio", "Harare", "Zimbabwe", "brand systems", "interface design", "Musashi"]}
         jsonLd={[organizationJsonLd(), websiteJsonLd()]}
       />
-      {/* ─── 00 · HERO — viewport-fit on desktop, natural on mobile ─── */}
+      {/* ─── 00 · HERO. Viewport-fit on desktop, natural on mobile ─── */}
       <section
         ref={heroRef}
         className="
@@ -105,7 +105,7 @@ export default function Home({ onSummon }) {
       >
         {/* Computed ambient mesh (no images) */}
         <MeshField tint="maroon" intensity="med" />
-        {/* Same architectural wireframe artifact as Studio hero — anchored to the
+        {/* Same architectural wireframe artifact as Studio hero. Anchored to the
             right side via the component's viewBox cx=1200 (75% across 1600w). */}
         <WireframeOverlay />
 
@@ -135,7 +135,7 @@ export default function Home({ onSummon }) {
           >
             <div className="flex flex-col">
               <p className="label-mono text-bone-100/60 mb-4 md:mb-6">
-                Transmission 0001 — open
+                Transmission 0001. Open
               </p>
               <h1 className="display-massive text-bone-100 -ml-1 md:-ml-2 leading-[0.86] text-balance text-[clamp(3.25rem,10vw,10rem)]">
                 We do not decorate.
@@ -185,7 +185,7 @@ export default function Home({ onSummon }) {
           </motion.div>
         </div>
 
-        {/* Ticker — sits at the bottom edge on desktop; z-20 keeps it above the hero-seam fade */}
+        {/* Ticker. Sits at the bottom edge on desktop; z-20 keeps it above the hero-seam fade */}
         <div className="relative z-20 mt-10 lg:mt-0">
           <Ticker items={TICKER_ITEMS} />
         </div>
@@ -196,7 +196,7 @@ export default function Home({ onSummon }) {
         <WaveBreak />
       </div>
 
-      {/* ─── § 01 · ON STANDARDS — standards we hold ourselves to,
+      {/* ─── § 01 · ON STANDARDS. Standards we hold ourselves to,
               the lineage we belong to, and the scarcity that decides who
               we work with. The room a buyer is in, not the door they are
               trying to open. ─── */}
@@ -222,14 +222,14 @@ export default function Home({ onSummon }) {
               </motion.h2>
 
               <p className="max-w-2xl text-base md:text-lg text-bone-100/70 leading-relaxed">
-                Anyone — on any continent — whose business depends on
+                Anyone. On any continent. Whose business depends on
                 real beauty, durable infrastructure, true scale, or
                 longevity past the next quarter is welcome to write to us.
                 We choose the work as much as the work chooses us. What
                 follows is what we hold ourselves to.
               </p>
 
-              {/* The four deliverables, surfaced as a quiet ribbon —
+              {/* The four deliverables, surfaced as a quiet ribbon.
                   the things a business actually engages us for, named
                   in the room before they ask. */}
               <ul className="grid grid-cols-2 md:grid-cols-4 gap-y-3 gap-x-6 max-w-2xl text-bone-100/55 font-mono text-[10px] tracking-[0.22em] uppercase border-y border-white/10 py-4">
@@ -251,7 +251,7 @@ export default function Home({ onSummon }) {
                   <p className="text-bone-100/75 leading-relaxed text-sm md:text-base">
                     Numbers other studios publish as ambition, we publish
                     as the floor. Performance, accessibility, SEO,
-                    best‑practices — measured before launch and again on
+                    best‑practices. Measured before launch and again on
                     the day after. What does not clear the line does not
                     ship, even when the calendar would prefer that it did.
                   </p>
@@ -267,7 +267,7 @@ export default function Home({ onSummon }) {
                     The people you'll meet here trained in a canon that
                     refuses fashion. No trend, no lorem, no decoration
                     that has not earned itself. Form follows function,
-                    with a soul — and the soul is not optional. The long
+                    with a soul, and the soul is not optional. The long
                     version is on{" "}
                     <Link to="/craft" className="text-signal hover-line">/craft</Link>.
                   </p>
@@ -284,7 +284,7 @@ export default function Home({ onSummon }) {
                     We refuse two kinds of brief: those that already know
                     what they want to look like, and those that argue
                     with their own users. The rest receive a real
-                    conversation — and, occasionally, a&nbsp;contract.
+                    conversation. And, occasionally, a&nbsp;contract.
                   </p>
                 </div>
               </div>
@@ -427,7 +427,7 @@ export default function Home({ onSummon }) {
               </p>
             </div>
 
-            {/* Lead the reader into the longer-form inheritance — /craft */}
+            {/* Lead the reader into the longer-form inheritance. /craft */}
             <div className="mt-16 md:mt-24 max-w-3xl border-t border-white/10 pt-10 md:pt-14">
               <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/45 mb-4">
                 The full inheritance · 道
@@ -472,7 +472,7 @@ export default function Home({ onSummon }) {
               className="text-bone-100/60 max-w-md md:justify-self-end leading-snug"
               style={{ fontSize: "clamp(0.875rem, 1.3vw, 1.125rem)" }}
             >
-              — a small note taped to the studio wall, left by someone who did
+             . A small note taped to the studio wall, left by someone who did
               not sign it.
             </p>
           </div>
@@ -530,7 +530,7 @@ export default function Home({ onSummon }) {
   );
 }
 
-// ─── HOMEPAGE LIVE STRIP — 6 featured live sites + "see all" CTA ──────
+// ─── HOMEPAGE LIVE STRIP. 6 featured live sites + "see all" CTA ──────
 function HomeLiveStrip() {
   // Pull the 6 featured live sites, fall back to first 6 if fewer marked.
   const featured =
@@ -607,7 +607,7 @@ function HomeLiveStrip() {
                       {site.domain}
                     </span>
                   </div>
-                  {/* Outbound link — z-30 above the card-wide Link */}
+                  {/* Outbound link. Z-30 above the card-wide Link */}
                   <a
                     href={site.url}
                     target="_blank"

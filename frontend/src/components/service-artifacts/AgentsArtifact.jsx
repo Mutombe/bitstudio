@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useReducedMotionPreference } from "../../hooks/useReducedMotion.js";
 
 /**
- * Agents artifact — a linear chain: PROMPT → TOOL → RESPONSE.
+ * Agents artifact. A linear chain: PROMPT → TOOL → RESPONSE.
  * Idle: a signal dot migrates along the dashed spine once every ~3.4s.
  * Hover: the cycle accelerates; nodes border brightens to signal.
  */

@@ -20,7 +20,7 @@ const STEPS = [
     n: "02",
     label: "Build",
     body:
-      "We work the way a jeweller works — slowly, with light, measuring three times before the cut.",
+      "We work the way a jeweller works. Slowly, with light, measuring three times before the cut.",
   },
   {
     n: "03",
@@ -221,7 +221,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Legal column — both locales linked side by side */}
+          {/* Legal column. Both locales linked side by side */}
           <div className="col-span-12 md:col-span-2 md:col-start-11">
             <p className="label-mono text-bone-100/40 mb-4">Legal</p>
             <ul className="space-y-2 text-bone-100/80">

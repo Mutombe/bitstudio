@@ -22,7 +22,7 @@ import FusionField from "../../components/FusionField.jsx";
 import SEO, { organizationJsonLd, websiteJsonLd } from "../../components/SEO.jsx";
 
 /**
- * /de — German-language entry point for the European market.
+ * /de. German-language entry point for the European market.
  *
  * Loud signals German-side B2B buyers respond to: craft-led language
  * (Werkkunst, Handwerk, Sorgfalt), structured layout, clear pricing
@@ -114,7 +114,7 @@ export default function HomeDE() {
           >
             <div className="flex flex-col">
               <p className="label-mono text-bone-100/60 mb-4 md:mb-6">
-                Sendung 0001 — offen
+                Sendung 0001. Offen
               </p>
               <h1 className="display-massive text-bone-100 -ml-1 md:-ml-2 leading-[0.86] text-balance text-[clamp(3.25rem,10vw,10rem)]">
                 Wir dekorieren nicht.
@@ -173,10 +173,10 @@ export default function HomeDE() {
 
       <div className="seam-dissolve"><WaveBreak /></div>
 
-      {/* ─── § 01 · ÜBER MAßSTÄBE — Maßstäbe, denen wir uns selbst stellen;
+      {/* ─── § 01 · ÜBER MAßSTÄBE. Maßstäbe, denen wir uns selbst stellen;
               die Herkunft, zu der wir gehören; und die Auswahl, die
               entscheidet, mit wem wir arbeiten. Der Raum, in dem ein
-              Auftraggeber steht — nicht die Tür, an der er klopft. ─── */}
+              Auftraggeber steht. Nicht die Tür, an der er klopft. ─── */}
       <section className="relative py-20 md:py-32 bg-[color:var(--color-ink)] seam-bleed-top">
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <div className="grid grid-cols-12 gap-6 md:gap-10 items-start">
@@ -199,7 +199,7 @@ export default function HomeDE() {
               </motion.h2>
 
               <p className="max-w-2xl text-base md:text-lg text-bone-100/70 leading-relaxed">
-                Jeder — auf jedem Kontinent — dessen Geschäft auf
+                Jeder. Auf jedem Kontinent. Dessen Geschäft auf
                 wirklicher Schönheit, dauerhafter Infrastruktur, echter
                 Skalierung oder Langlebigkeit jenseits des nächsten
                 Quartals beruht, ist eingeladen, uns zu schreiben. Wir
@@ -207,7 +207,7 @@ export default function HomeDE() {
                 sind die Maßstäbe, denen wir uns stellen.
               </p>
 
-              {/* Die vier Leistungen, als ruhiges Band sichtbar gemacht —
+              {/* Die vier Leistungen, als ruhiges Band sichtbar gemacht.
                   was uns ein Unternehmen tatsächlich beauftragt, bevor es
                   überhaupt danach fragt. */}
               <ul className="grid grid-cols-2 md:grid-cols-4 gap-y-3 gap-x-6 max-w-2xl text-bone-100/55 font-mono text-[10px] tracking-[0.22em] uppercase border-y border-white/10 py-4">
@@ -228,8 +228,8 @@ export default function HomeDE() {
                   </p>
                   <p className="text-bone-100/75 leading-relaxed text-sm md:text-base">
                     Zahlen, die andere Studios als Ambition
-                    veröffentlichen — bei uns sind sie die Untergrenze.
-                    Performance, Barrierefreiheit, SEO, Best Practices —
+                    veröffentlichen. Bei uns sind sie die Untergrenze.
+                    Performance, Barrierefreiheit, SEO, Best Practices.
                     vor dem Launch gemessen und am Tag danach erneut. Was
                     die Linie nicht erreicht, geht nicht live, auch wenn
                     der Kalender es lieber anders hätte.
@@ -246,7 +246,7 @@ export default function HomeDE() {
                     Die Menschen, denen Sie hier begegnen, sind in einem
                     Kanon geschult, der die Mode ablehnt. Kein Trend, kein
                     Lorem, keine Dekoration, die sich nicht verdient hat.
-                    Form folgt der Funktion, mit einer Seele — und die
+                    Form folgt der Funktion, mit einer Seele. Und die
                     Seele ist nicht optional. Die lange Fassung steht auf{" "}
                     <Link to="/de/handwerk" className="text-signal hover-line">/handwerk</Link>.
                   </p>
@@ -261,7 +261,7 @@ export default function HomeDE() {
                   </p>
                   <p className="text-bone-100/75 leading-relaxed text-sm md:text-base">
                     Wir lehnen zwei Arten von Briefing ab: jene, die schon
-                    wissen, wie sie aussehen wollen — und jene, die mit
+                    wissen, wie sie aussehen wollen. Und jene, die mit
                     ihren eigenen Nutzern streiten. Alle übrigen
                     bekommen ein echtes Gespräch und gelegentlich
                     einen&nbsp;Vertrag.

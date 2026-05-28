@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useReducedMotionPreference } from "../../hooks/useReducedMotion.js";
 
 /**
- * AgentsHero — 3 glowing orbs spawning and passing tokens between them.
+ * AgentsHero. 3 glowing orbs spawning and passing tokens between them.
  * Orchestration diagram in light.
  */
 export default function AgentsHero() {

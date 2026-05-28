@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useReducedMotionPreference } from "../../hooks/useReducedMotion.js";
 
 /**
- * Deploy artifact — 4 pipeline stations: build → test → ship → live.
+ * Deploy artifact. 4 pipeline stations: build → test → ship → live.
  * Idle: a signal packet migrates along the rail once every ~3.6s.
  * Hover: each station label brightens, rail picks up signal tint.
  */

@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 /*
- * ─── Bit Studio — visual principle ─────────────────────────────────────────
- * This site uses no stock photography. Visual weight is generated in code —
+ * ─── Bit Studio. Visual principle ─────────────────────────────────────────
+ * This site uses no stock photography. Visual weight is generated in code.
  * mesh gradients, wave SVG, cross-entropy noise, glassmorphism, motion-blur
  * type, and screenshots of our own client work. Every pixel should be either
- * our craft or a computation we authored. Orbs, waves, fusions, grain —
+ * our craft or a computation we authored. Orbs, waves, fusions, grain.
  * rendered by the browser at request time, not fetched from a photo library.
  * ──────────────────────────────────────────────────────────────────────────
  */
@@ -19,7 +19,7 @@
   --color-maroon-300: #D98A94;
   --color-maroon-400: #B54656;
   --color-maroon-500: #8C1E2C;
-  --color-maroon-600: #6B1521;   /* logo maroon — anchor */
+  --color-maroon-600: #6B1521;   /* logo maroon. Anchor */
   --color-maroon-700: #4F0D18;
   --color-maroon-800: #33060F;
   --color-maroon-900: #1C0308;
@@ -31,10 +31,10 @@
   --color-bone-200: #EBE3D3;
   --color-bone-300: #D9CEB6;
 
-  /* Oxblood — maroon's cousin */
+  /* Oxblood. Maroon's cousin */
   --color-oxblood: #3A0A15;
 
-  /* Avant-garde accent: phosphorescent warm lime — a single radioactive note */
+  /* Avant-garde accent: phosphorescent warm lime. A single radioactive note */
   --color-signal: #D4FF3A;       /* chartreuse / radioactive */
   --color-signal-muted: #A8C72E;
 
@@ -93,7 +93,7 @@
     border-radius: 2px;
   }
 
-  /* Scrollbar — narrow, maroon */
+  /* Scrollbar. Narrow, maroon */
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-track { background: var(--color-ink); }
   ::-webkit-scrollbar-thumb {
@@ -130,7 +130,7 @@
     font-size: clamp(4rem, 18vw, 18rem);
   }
 
-  /* Desktop viewport-fit massive — scaled so the hero holds in one screen */
+  /* Desktop viewport-fit massive. Scaled so the hero holds in one screen */
   .display-hero {
     font-family: var(--font-display);
     font-weight: 700;
@@ -170,7 +170,7 @@
     letter-spacing: -0.015em;
   }
 
-  /* Custom cursor removed — OS default cursor restored. */
+  /* Custom cursor removed. OS default cursor restored. */
 
   /* ─── Marquee ─── */
   .marquee {
@@ -270,7 +270,7 @@
     100% { opacity: 1; transform: translateY(0); }
   }
 
-  /* Custom cursor removed per client request — OS default cursor restored. */
+  /* Custom cursor removed per client request. OS default cursor restored. */
 
   /* ─── Respect reduced motion ─── */
   @media (prefers-reduced-motion: reduce) {
@@ -294,7 +294,7 @@
 
   .radial-bleed {
     /* Gradients pulled toward the upper half so the hero's lower edge is
-       uniformly ink — nothing peaks at the bottom and creates a visible band. */
+       uniformly ink. Nothing peaks at the bottom and creates a visible band. */
     background:
       radial-gradient(circle at 20% 25%, rgba(107, 21, 33, 0.38), transparent 55%),
       radial-gradient(circle at 85% 35%, rgba(58, 10, 21, 0.42), transparent 60%),
@@ -313,7 +313,7 @@
     height: 100%;
   }
 
-  /* Hide scrollbars on the mobile carousel — progress is shown via dots */
+  /* Hide scrollbars on the mobile carousel. Progress is shown via dots */
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -324,7 +324,7 @@
   }
   .animate-spin-slow { animation: spin-slow 8s linear infinite; }
 
-  /* Glassmorphic surface — thin maroon-tinted, saturated */
+  /* Glassmorphic surface. Thin maroon-tinted, saturated */
   .glass-maroon {
     background: rgba(28, 3, 8, 0.35);
     backdrop-filter: blur(20px) saturate(1.4);
@@ -337,10 +337,10 @@
 
   /* ─── Seamless section seams ─── */
   /* Hero bottom dissolves into next section via a warm maroon→ink color fusion.
-     No visible solid border on any viewport — the transition is a COLOR blend,
+     No visible solid border on any viewport. The transition is a COLOR blend,
      not a cut. Two layers: a thin chartreuse kiss at the very edge, and the
      main maroon→ink fade body. Hero content sits at z-20, above this z-1. */
-  /* Single clean two-stop fade — hero's contents dissolve straight into the
+  /* Single clean two-stop fade. Hero's contents dissolve straight into the
      next section's background (ink). No intermediate maroon stops that can
      read as a horizontal band/border. */
   .hero-seam::after {
@@ -349,7 +349,7 @@
     left: 0; right: 0; bottom: 0;
     height: 35%;
     pointer-events: none;
-    /* 3-stop gradient with a mid-stop of pure ink early — guarantees the
+    /* 3-stop gradient with a mid-stop of pure ink early. Guarantees the
        bottom of the hero is fully ink regardless of what the MeshField orbs
        or radial-bleed happen to paint in that region. Kills the maroon band
        on wide desktop viewports. */
@@ -431,12 +431,12 @@
     z-index: 0;
   }
 
-  /* Proof section — responsive label scaling */
+  /* Proof section. Responsive label scaling */
   .proof-section .label-mono {
     font-size: clamp(0.6rem, 0.9vw, 0.78rem);
   }
 
-  /* QuantumHover — a11y + pointer coarse tweaks */
+  /* QuantumHover. A11y + pointer coarse tweaks */
   .quantum-hover {
     transform-style: preserve-3d;
   }
@@ -444,7 +444,7 @@
     .quantum-hover > * { transform: none !important; }
   }
 
-  /* Motion-blur display type — blurred ghost stacked behind the sharp form */
+  /* Motion-blur display type. Blurred ghost stacked behind the sharp form */
   .motion-blur-type {
     position: relative;
     display: inline-block;

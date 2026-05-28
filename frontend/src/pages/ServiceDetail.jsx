@@ -113,7 +113,7 @@ export default function ServiceDetail() {
       {/* ─── Hero ─── */}
       <section className="relative pt-20 md:pt-24">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10">
-          {/* Breadcrumb — lives OUTSIDE the hero frame. Generous bottom margin
+          {/* Breadcrumb. Lives OUTSIDE the hero frame. Generous bottom margin
               + a hairline divider so there's a crisp visual break between the
               breadcrumb and the artifact below. */}
           <div className="pb-5 md:pb-6 mb-8 md:mb-10 border-b border-white/5">
@@ -126,12 +126,12 @@ export default function ServiceDetail() {
             </div>
           </div>
 
-          {/* Hero frame — the generative animation lives INSIDE this frame with
+          {/* Hero frame. The generative animation lives INSIDE this frame with
               explicit top/bottom padding so its content never touches the edges
               (or gets occluded by the bottom seam). Mb gives room below before
               the title section begins. */}
           <div className="relative w-full aspect-[16/10] sm:aspect-[4/3] md:aspect-[16/9] md:min-h-[480px] overflow-hidden rounded-sm mb-10 md:mb-14 border border-white/8">
-            {/* Inner stage — on mobile the animation uses the FULL frame so it
+            {/* Inner stage. On mobile the animation uses the FULL frame so it
                 isn't hidden inside a double-padded box. Desktop retains generous
                 breathing room via pt/pb. */}
             <div className="absolute inset-0 md:pt-10 md:pb-12 lg:pt-14 lg:pb-16">
@@ -140,7 +140,7 @@ export default function ServiceDetail() {
               </div>
             </div>
 
-            {/* Hero bottom seam — slim on mobile, cleanly separates the frame */}
+            {/* Hero bottom seam. Slim on mobile, cleanly separates the frame */}
             <div
               className="absolute left-0 right-0 bottom-0 h-6 md:h-16 pointer-events-none"
               style={{ background: "linear-gradient(180deg, transparent, var(--color-ink))" }}
@@ -159,7 +159,7 @@ export default function ServiceDetail() {
             className="flex flex-col md:flex-row md:items-end md:justify-between gap-6"
           >
             <div className="flex-1 min-w-0">
-              {/* Icon + number label — tighter stack on mobile so it doesn't
+              {/* Icon + number label. Tighter stack on mobile so it doesn't
                   crash against the headline below. */}
               <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
                 <div className="w-9 h-9 md:w-12 md:h-12 shrink-0 rounded-full border border-signal/40 flex items-center justify-center">
@@ -437,7 +437,7 @@ export default function ServiceDetail() {
 /* ─── helpers ─── */
 
 function highlight(text, accent = "#D4FF3A") {
-  // Wrap a few key terms (not links — just chartreuse emphasis) — we pick
+  // Wrap a few key terms (not links. Just chartreuse emphasis). We pick
   // short, evocative ones. Keep it sparse to preserve reading rhythm.
   const TERMS = [
     "one true thing", "one clear purpose", "working thing", "the job",

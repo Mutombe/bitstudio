@@ -1,6 +1,6 @@
-// Bit Studio — service ledger
+// Bit Studio. Service ledger
 // Ten things we are stupid enough to care about at four in the afternoon.
-// Order is deliberate — frontier work first, foundations behind it.
+// Order is deliberate. Frontier work first, foundations behind it.
 
 export const SERVICES = [
 {
@@ -10,9 +10,9 @@ export const SERVICES = [
     title: "Spatial & wearable applications",
     tagline: "Apps for the surfaces your customers will be on next.",
     body: [
-      "A new surface arrives every few years and most software waits for an invitation. Meta Ray-Ban Display is on people's faces in Berlin and Brooklyn already. Apple Vision Pro is in the cabinets of the firms who will fund the next decade. Wear OS sits on every Pixel Watch. The question is no longer whether you build for these surfaces — it is whether you build for them in time to matter.",
+      "A new surface arrives every few years and most software waits for an invitation. Meta Ray-Ban Display is on people's faces in Berlin and Brooklyn already. Apple Vision Pro is in the cabinets of the firms who will fund the next decade. Wear OS sits on every Pixel Watch. The question is no longer whether you build for these surfaces. It is whether you build for them in time to matter.",
       "We build native apps for Meta Ray-Ban Display, Apple Vision Pro, Meta Quest, and Wear OS. We build the spatial layer in React Three Fiber and WebXR. We build the on-device LLM ranking that makes a glasses-app feel intelligent without burning the battery. We design the interface as if every pixel had to justify the gram of weight it sits on, because for these devices it does.",
-      "Spatial is not VR with a different name. It is a new grammar of interface — gaze, voice, micro-gesture, peripheral attention. We have spent the last year reading the patents, prototyping the patterns, and shipping experiments through our /lab. The body of work we are willing to defend in front of any audience: a Ray-Ban Display reading companion, a Vision Pro spatial archive, a Wear OS glasses-control app — each a real artifact, each a real lesson.",
+      "Spatial is not VR with a different name. It is a new grammar of interface. Gaze, voice, micro-gesture, peripheral attention. We have spent the last year reading the patents, prototyping the patterns, and shipping experiments through our /lab. The body of work we are willing to defend in front of any audience: a Ray-Ban Display reading companion, a Vision Pro spatial archive, a Wear OS glasses-control app. Each a real artifact, each a real lesson.",
       "If your business is going to be on a customer's face, wrist, or workshop bench within the next two years, you should engage. We will not tell you the surface is ready when it isn't. We will tell you what we have built, what we have learned, and which of the surfaces is worth the early investment for the particular business you are running.",
     ],
     stack: ["React Three Fiber", "Meta Spatial SDK", "WebXR", "Wear OS", "Apple Vision OS", "SwiftUI", "Three.js", "MediaPipe"],
@@ -33,7 +33,7 @@ export const SERVICES = [
     body: [
       "A web application is a conversation stretched across time. Somebody logs in at 9am in Msasa, again at 2pm in a taxi, again at 9pm in bed. The product is whatever they remember of the gesture between those moments. We design for that memory.",
       "We build with React on the outside and Django, FastAPI, or Node on the inside. Postgres, because problems that feel small almost never are, and a relational database is a debt you never regret paying. We keep API surfaces small, schemas narrow, and the number of moving parts countable on the fingers of one hand.",
-      "Dashboards should read like charts before they read like tables. Forms should tell you how to fill them before you have filled them wrong. Empty states should not apologise — they should recommend. Loading states should mean something, or not appear at all.",
+      "Dashboards should read like charts before they read like tables. Forms should tell you how to fill them before you have filled them wrong. Empty states should not apologise. They should recommend. Loading states should mean something, or not appear at all.",
       "We ship in small, boring increments and we keep the tests honest. The goal is a product that, eighteen months later, you can still open without flinching.",
     ],
     stack: ["React", "Django", "FastAPI", "PostgreSQL", "Tailwind v4", "Render"],
@@ -52,10 +52,10 @@ export const SERVICES = [
     title: "WhatsApp-based applications",
     tagline: "The interface for a market that lives in a single app.",
     body: [
-      "Across most of the world's emerging markets WhatsApp is not 'an app' — it is the operating system of small business. A salon books through it. A grocer takes orders on it. A farmer settles a payment on it. The customers who matter for the majority of our clients are already there, every hour, every day. We build for that.",
-      "We design and ship full conversational systems on the WhatsApp Business platform. Template flows for the first 24-hour outreach window, session messages for the response that follows, WhatsApp Flows for the moment a brochure becomes a form. We wire the Meta Cloud API and WATI to your stack, your CRM, your warehouse, your Postgres — and we add the agentic layer that triages inbound messages, drafts replies in your brand's voice, and escalates cleanly to a human.",
+      "Across most of the world's emerging markets WhatsApp is not 'an app'. It is the operating system of small business. A salon books through it. A grocer takes orders on it. A farmer settles a payment on it. The customers who matter for the majority of our clients are already there, every hour, every day. We build for that.",
+      "We design and ship full conversational systems on the WhatsApp Business platform. Template flows for the first 24-hour outreach window, session messages for the response that follows, WhatsApp Flows for the moment a brochure becomes a form. We wire the Meta Cloud API and WATI to your stack, your CRM, your warehouse, your Postgres, and we add the agentic layer that triages inbound messages, drafts replies in your brand's voice, and escalates cleanly to a human.",
       "We have patched the whatsmeow Go library to add phone-number device pairing. We have built an outreach orchestrator that runs from a single number with stagger, idempotency, and a soft-ban watchdog. We have published a private reading log on the Meta Cloud API's 24-hour window, marketing-conversation cap, and the difference between session-pricing and template-pricing. This is infrastructure we use ourselves, every week.",
-      "If your business sells, supports, recruits, or markets on WhatsApp, you should engage. We will tell you what is possible inside Meta's rate limits and what is possible only if you operate two numbers. We will tell you when a Flow is the right answer and when a plain template is. The platform rewards discipline — and discipline is what we are for.",
+      "If your business sells, supports, recruits, or markets on WhatsApp, you should engage. We will tell you what is possible inside Meta's rate limits and what is possible only if you operate two numbers. We will tell you when a Flow is the right answer and when a plain template is. The platform rewards discipline, and discipline is what we are for.",
     ],
     stack: ["Meta Cloud API", "WATI", "whatsmeow", "Twilio", "Claude API", "Postgres", "Cron"],
     relatedProjects: ["sabarm-business-solutions", "muble-axis", "machinery-exchange"],
@@ -73,10 +73,10 @@ export const SERVICES = [
     title: "AI agents",
     tagline: "Processes that read the world through tools and write their action back.",
     body: [
-      "An AI agent is not a chatbot. It is a process — patient, stateful, scoped — that reads the world through tools and writes its action back. We build agents the way we build good cathedrals: with small, sturdy decisions and one clear purpose.",
-      "We choose Claude where judgment matters, GPT where coverage matters, and open-weights where the job must stay inside your walls. We write the tool-calls ourselves. We log everything — prompts, completions, retries, refusals. We decide how it fails, because failure is the only part of the contract you cannot outsource to a model.",
+      "An AI agent is not a chatbot. It is a process. Patient, stateful, scoped. That reads the world through tools and writes its action back. We build agents the way we build good cathedrals: with small, sturdy decisions and one clear purpose.",
+      "We choose Claude where judgment matters, GPT where coverage matters, and open-weights where the job must stay inside your walls. We write the tool-calls ourselves. We log everything. Prompts, completions, retries, refusals. We decide how it fails, because failure is the only part of the contract you cannot outsource to a model.",
       "Good agents have memory that degrades gracefully, budgets that they cannot overrun, and a voice that belongs to your brand and not to a foundation lab. We keep humans in the loop where humans matter and keep them out of the loop where they become bottlenecks.",
-      "The test of an agent is not a demo. The test is whether, three months in, it is still doing the job — and whether the person whose job it used to be has moved on to something only a human could do.",
+      "The test of an agent is not a demo. The test is whether, three months in, it is still doing the job, and whether the person whose job it used to be has moved on to something only a human could do.",
     ],
     stack: ["Claude", "GPT", "LangChain", "Python", "FastAPI", "Postgres"],
     relatedProjects: ["sabarm-business-solutions", "muble-axis", "machinery-exchange"],
@@ -95,7 +95,7 @@ export const SERVICES = [
     tagline: "The tasks you shouldn't have to do anymore.",
     body: [
       "Every business has a list of things somebody does on Monday mornings because somebody has always done them on Monday mornings. We read that list with you and we retire as much of it as the law, the provider APIs, and your nerves will allow.",
-      "Cron jobs, webhook buses, event-driven pipelines, Slack and WhatsApp integrations, agent loops, scheduled reports. Quiet machines doing the right thing at three in the morning. We instrument them so that when they fail — and they will — you know first, not your customer.",
+      "Cron jobs, webhook buses, event-driven pipelines, Slack and WhatsApp integrations, agent loops, scheduled reports. Quiet machines doing the right thing at three in the morning. We instrument them so that when they fail, and they will. You know first, not your customer.",
       "We are particular about idempotency, about retries, about the difference between eventual consistency and not-quite-consistent. We write the runbook before we write the automation. We build alerting that tells a human something useful, not alerting that trains a human to ignore it.",
       "The best automation is one that, a year later, nobody remembers we built. It just works, and somebody's Monday mornings are quieter.",
     ],
@@ -115,10 +115,10 @@ export const SERVICES = [
     title: "Scraping & ingestion",
     tagline: "Bringing the world's data to your database. Delivered clean.",
     body: [
-      "The internet is the largest, worst-structured database ever built. Most of what any business needs is already public — in directories, in tenders, in public records, in the footers of competitor sites. The work is not finding it. The work is collecting it without lying to yourself about what you collected.",
+      "The internet is the largest, worst-structured database ever built. Most of what any business needs is already public. In directories, in tenders, in public records, in the footers of competitor sites. The work is not finding it. The work is collecting it without lying to yourself about what you collected.",
       "We build ingestion pipelines that handle pagination, JavaScript rendering, anti-bot, geo-fencing, and the thousand small indignities of the open web. We deduplicate hard, normalise aggressively, and version every schema change so yesterday's data still means what it meant yesterday.",
       "Where terms of service allow it, we scrape. Where an API exists, we prefer it. Where a human is the source of truth, we build the form a human would actually want to fill in. The goal is always the same: a clean table at the other end, with provenance, timestamps, and a row count you can defend.",
-      "We also teach you to read your own data — because a pipeline that lands in a dashboard nobody opens is a pipeline that is slowly lying about itself.",
+      "We also teach you to read your own data, because a pipeline that lands in a dashboard nobody opens is a pipeline that is slowly lying about itself.",
     ],
     stack: ["Python", "Playwright", "Scrapy", "SerpAPI", "Postgres", "Redis"],
     relatedProjects: ["machinery-exchange", "murwisi-airfreight-cargo", "autoworld-zimbabwe"],
@@ -139,7 +139,7 @@ export const SERVICES = [
       "A website is the smallest contract a business can sign with a stranger. Load it in under a second. Say one true thing on the first screen. Make the second screen earn itself. That is the whole craft.",
       "We build marketing pages, storefronts, editorial sites, portfolios. They are typeset the way a book is typeset, laid out the way a room is laid out, and compressed the way a good photograph is compressed. Nothing moves that should not move. Nothing waits that should not wait.",
       "We write the copy or argue with yours. We take the photographs or argue with your stock. We hold onto your brand without becoming a hostage to it. The result is a page somebody's cousin in Bulawayo can open on a broken phone and still feel the room.",
-      "And then we measure. Lighthouse, real-user, conversion, bounce — not as dashboard theatre, but as a conversation with the next version of the site.",
+      "And then we measure. Lighthouse, real-user, conversion, bounce. Not as dashboard theatre, but as a conversation with the next version of the site.",
     ],
     stack: ["React", "Vite", "Tailwind v4", "Framer Motion", "Render"],
     relatedProjects: ["brompton-lodge", "lupane-timber", "umati-property-development"],
@@ -178,7 +178,7 @@ export const SERVICES = [
     title: "Brand + design systems",
     tagline: "We build the language before we build the page.",
     body: [
-      "A brand is not a logo. A brand is the posture a company holds when nobody is looking. We draw that posture out — through interviews, through arguments, through long afternoons with a pinboard — and we render it as a system: type, colour, rhythm, voice, image.",
+      "A brand is not a logo. A brand is the posture a company holds when nobody is looking. We draw that posture out. Through interviews, through arguments, through long afternoons with a pinboard, and we render it as a system: type, colour, rhythm, voice, image.",
       "We build design systems that are small enough to remember and large enough to actually cover the product. Tokens, components, documentation, voice guidelines, photography direction. The goal is a system your next designer or next engineer can inherit without a six-week tour.",
       "We believe in restraint. Two good typefaces instead of five, one accent colour instead of seven, a grid that holds instead of a grid that suggests. We believe a brand should be recognisable from across the street, in greyscale, at six point. Most brands fail that test. We build ours to pass it.",
       "And when the brand is right, the page almost writes itself. That is the tell.",
@@ -199,9 +199,9 @@ export const SERVICES = [
     title: "Deploy + operate",
     tagline: "We don't hand you a zip. We hand you a working thing.",
     body: [
-      "Deployment is the moment a project stops being an artifact and starts being a liability. We take that seriously. Render, Vercel, Railway, AWS, bare metal on a VPS in Harare — we meet the infrastructure where it is, not where a blog post said it should be.",
+      "Deployment is the moment a project stops being an artifact and starts being a liability. We take that seriously. Render, Vercel, Railway, AWS, bare metal on a VPS in Harare. We meet the infrastructure where it is, not where a blog post said it should be.",
       "We wire up domains, TLS, DNS, CI pipelines, preview environments, rollbacks, backups, log sinks, and the kind of status page that tells the truth. We set up monitoring that pages the right person at the right time and stays quiet the rest of the time.",
-      "Operating a system is a skill, not a checklist. We stay on — for a month, a quarter, a year — to watch a new thing through its first outage, its first traffic spike, its first misbehaving dependency. We document the runbook as we go so that, eventually, somebody inside your team can own it without flinching.",
+      "Operating a system is a skill, not a checklist. We stay on. For a month, a quarter, a year. To watch a new thing through its first outage, its first traffic spike, its first misbehaving dependency. We document the runbook as we go so that, eventually, somebody inside your team can own it without flinching.",
       "We believe software is a gift only if it keeps working after the launch email. That is the job, and we treat it like the job.",
     ],
     stack: ["Render", "Vercel", "GitHub Actions", "Cloudflare", "Grafana", "Sentry"],

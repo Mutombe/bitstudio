@@ -45,7 +45,7 @@ export default function SEO({
 }) {
   const url = path.startsWith("http") ? path : `${SITE_ORIGIN}${path}`;
   const fullTitle =
-    title && title !== SITE_NAME ? `${title} — ${SITE_NAME}` : SITE_NAME;
+    title && title !== SITE_NAME ? `${title}. ${SITE_NAME}` : SITE_NAME;
   const imageAbs = image.startsWith("http") ? image : `${SITE_ORIGIN}${image}`;
   const isDE = path === "/de" || path.startsWith("/de/");
   const langTag = isDE ? "de" : "en";
@@ -64,7 +64,7 @@ export default function SEO({
         content={noindex ? "noindex, nofollow" : "index, follow"}
       />
 
-      {/* Hreflang annotations — only emitted on pages with a known EN/DE pair */}
+      {/* Hreflang annotations. Only emitted on pages with a known EN/DE pair */}
       {hreflang && (
         <link rel="alternate" hrefLang="en" href={`${SITE_ORIGIN}${hreflang.en}`} />
       )}

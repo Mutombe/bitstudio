@@ -22,7 +22,7 @@ import { PhosphorIcon } from "./PhosphorIcon.jsx";
 import ServiceArtifact from "./service-artifacts/index.jsx";
 
 /**
- * Services — self-revealing showcase.
+ * Services. Self-revealing showcase.
  * Each card reveals progressively as it enters the viewport:
  *   000ms  number (tabular-nums mono)
  *   120ms  icon scale+fade 0.6 → 1
@@ -34,9 +34,9 @@ import ServiceArtifact from "./service-artifacts/index.jsx";
  *   820ms  SVG design artifact fades in
  *   900ms  border glow settles
  *
- * The hairline persists after the sweep — it becomes the card's identity.
+ * The hairline persists after the sweep. It becomes the card's identity.
  * The existing QuantumHover + glassmorphism remain on-hover.
- * Card body is now a design-artifact stack (tags + icons + glyph) — not prose.
+ * Card body is now a design-artifact stack (tags + icons + glyph). Not prose.
  */
 
 const ICON_MAP = {
@@ -103,7 +103,7 @@ export default function Services() {
 }
 
 /* ─────────────────────────────────────────────────────────────── */
-/*  Desktop card — self-revealing                                 */
+/*  Desktop card. Self-revealing                                 */
 /* ─────────────────────────────────────────────────────────────── */
 
 function ServiceCard({ s, index }) {
@@ -113,7 +113,7 @@ function ServiceCard({ s, index }) {
   const inView = useInView(ref, { once: true, amount: 0.35 });
   const reduced = useReducedMotionPreference();
 
-  // If reduced motion — show everything instantly
+  // If reduced motion. Show everything instantly
   const show = reduced || inView;
 
   return (
@@ -142,7 +142,7 @@ function ServiceCard({ s, index }) {
           aria-hidden
         />
 
-        {/* Chartreuse hairline — sweeps in at 250ms (600ms), persists after */}
+        {/* Chartreuse hairline. Sweeps in at 250ms (600ms), persists after */}
         <div className="absolute top-0 left-0 right-0 h-px overflow-hidden pointer-events-none" aria-hidden>
           <motion.div
             initial={{ scaleX: 0, transformOrigin: "left" }}
@@ -165,7 +165,7 @@ function ServiceCard({ s, index }) {
           aria-hidden
         />
 
-        {/* 1 — Index number (0ms) */}
+        {/* 1. Index number (0ms) */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={show ? { opacity: 1 } : { opacity: 0 }}
@@ -176,7 +176,7 @@ function ServiceCard({ s, index }) {
           <span className="text-bone-100/30"> / 08</span>
         </motion.p>
 
-        {/* 2 — Icon (120ms), scale + fade 0.6 → 1 */}
+        {/* 2. Icon (120ms), scale + fade 0.6 → 1 */}
         <motion.div
           initial={{ opacity: 0, scale: 0.6 }}
           animate={show ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.6 }}
@@ -186,7 +186,7 @@ function ServiceCard({ s, index }) {
           <Icon size={26} weight="regular" className="text-bone-100" />
         </motion.div>
 
-        {/* 4 — Title (380ms), motion-blur ghost sharpens */}
+        {/* 4. Title (380ms), motion-blur ghost sharpens */}
         <motion.h3
           initial={{ opacity: 0, filter: "blur(14px)", y: 6 }}
           animate={
@@ -200,7 +200,7 @@ function ServiceCard({ s, index }) {
           {s.title}
         </motion.h3>
 
-        {/* 4b — Tagline (single line, italic accent) */}
+        {/* 4b. Tagline (single line, italic accent) */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={show ? { opacity: 1 } : { opacity: 0 }}
@@ -210,7 +210,7 @@ function ServiceCard({ s, index }) {
           {s.tagline}
         </motion.p>
 
-        {/* 5 — Zone 1: hashtag chips */}
+        {/* 5. Zone 1: hashtag chips */}
         <div className="relative mt-4 flex flex-wrap gap-1.5">
           {(s.hashtags || []).map((tag, hi) => (
             <motion.span
@@ -228,7 +228,7 @@ function ServiceCard({ s, index }) {
           ))}
         </div>
 
-        {/* 6 — Zone 2: Phosphor icon cluster */}
+        {/* 6. Zone 2: Phosphor icon cluster */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={show ? { opacity: 0.6 } : { opacity: 0 }}
@@ -240,7 +240,7 @@ function ServiceCard({ s, index }) {
           ))}
         </motion.div>
 
-        {/* 7 — Zone 3: bespoke SVG design artifact */}
+        {/* 7. Zone 3: bespoke SVG design artifact */}
         <motion.div
           initial={{ opacity: 0, y: 6 }}
           animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
@@ -250,7 +250,7 @@ function ServiceCard({ s, index }) {
           <ServiceArtifact id={s.artifact} />
         </motion.div>
 
-        {/* "More →" CTA — visual only; the entire card is the Link */}
+        {/* "More →" CTA. Visual only; the entire card is the Link */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={show ? { opacity: 1 } : { opacity: 0 }}
@@ -281,7 +281,7 @@ function ServiceCard({ s, index }) {
 }
 
 /* ─────────────────────────────────────────────────────────────── */
-/*  Mobile carousel — reveal triggers when centred                */
+/*  Mobile carousel. Reveal triggers when centred                */
 /* ─────────────────────────────────────────────────────────────── */
 
 function ServicesCarousel() {
@@ -302,14 +302,14 @@ function ServicesCarousel() {
     return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
-  // IntersectionObserver — a card is "centered" when ≥70% of it is within the
+  // IntersectionObserver. A card is "centered" when ≥70% of it is within the
   // scroller's visible rect. That card receives forceActive=true so the
   // QuantumHover effects (particles, rings, glow, chromatic aberration) render
   // without needing a mouse, fading as the next card slides in.
   useEffect(() => {
     const root = scrollerRef.current;
     if (!root) return;
-    // Only on touch devices — desktop already uses mouse hover.
+    // Only on touch devices. Desktop already uses mouse hover.
     const isCoarse =
       typeof window !== "undefined" &&
       window.matchMedia &&
@@ -494,7 +494,7 @@ function MobileServiceCard({ s, index, isActive = false, registerRef }) {
         {s.tagline}
       </motion.p>
 
-      {/* Zone 1 — hashtag chips */}
+      {/* Zone 1. Hashtag chips */}
       <div className="relative flex flex-wrap gap-1.5 mb-4">
         {(s.hashtags || []).map((tag, hi) => (
           <motion.span
@@ -508,7 +508,7 @@ function MobileServiceCard({ s, index, isActive = false, registerRef }) {
         ))}
       </div>
 
-      {/* Zone 2 — Phosphor icon cluster */}
+      {/* Zone 2. Phosphor icon cluster */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={show ? { opacity: 0.6 } : { opacity: 0 }}
@@ -520,7 +520,7 @@ function MobileServiceCard({ s, index, isActive = false, registerRef }) {
         ))}
       </motion.div>
 
-      {/* Zone 3 — bespoke SVG design artifact */}
+      {/* Zone 3. Bespoke SVG design artifact */}
       <motion.div
         initial={{ opacity: 0, y: 6 }}
         animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}

@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useReducedMotionPreference } from "../../hooks/useReducedMotion.js";
 
 /**
- * Automations artifact — a clock face with 3 cron dots at :00 :20 :40.
+ * Automations artifact. A clock face with 3 cron dots at :00 :20 :40.
  * Idle: second-hand sweeps slowly (full rotation in 8s).
  * Hover: active dot (whatever the hand is passing) brightens.
  */

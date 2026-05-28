@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 
 /**
- * FusionField — two glowing orbs converging + separating, like stars colliding.
+ * FusionField. Two glowing orbs converging + separating, like stars colliding.
  * Pure CSS + framer-motion. No images. Drops into any section as a focal piece.
  *
  * Props:
@@ -19,7 +19,7 @@ export default function FusionField({ size = "md", className = "" }) {
       {/* Underlying ambient mesh */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(107,21,33,0.22),transparent_65%)]" />
 
-      {/* Orb A — maroon */}
+      {/* Orb A. Maroon */}
       <motion.div
         initial={{ x: "-18%" }}
         animate={{ x: ["-18%", "-2%", "-18%"] }}
@@ -32,7 +32,7 @@ export default function FusionField({ size = "md", className = "" }) {
         </div>
       </motion.div>
 
-      {/* Orb B — chartreuse */}
+      {/* Orb B. Chartreuse */}
       <motion.div
         initial={{ x: "18%" }}
         animate={{ x: ["18%", "2%", "18%"] }}
@@ -45,7 +45,7 @@ export default function FusionField({ size = "md", className = "" }) {
         </div>
       </motion.div>
 
-      {/* Halo — pulses at the fusion point */}
+      {/* Halo. Pulses at the fusion point */}
       <motion.div
         initial={{ scale: 0.6, opacity: 0.3 }}
         animate={{ scale: [0.6, 1.05, 0.6], opacity: [0.3, 0.7, 0.3] }}
@@ -53,7 +53,7 @@ export default function FusionField({ size = "md", className = "" }) {
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-bone-100 mix-blend-overlay blur-[40px]"
       />
 
-      {/* Orbital line — golden ratio spiral approximated as two ellipses */}
+      {/* Orbital line. Golden ratio spiral approximated as two ellipses */}
       <svg
         viewBox="0 0 800 400"
         className="absolute inset-0 w-full h-full opacity-[0.18]"
