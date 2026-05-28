@@ -31,6 +31,7 @@ import Terms from "./pages/Terms.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Lab from "./pages/Lab.jsx";
 import FieldManual from "./pages/FieldManual.jsx";
+import Writing from "./pages/Writing.jsx";
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -116,6 +117,7 @@ export default function App() {
               <Route path="/services/:slug" element={<ServiceDetail />} />
               <Route path="/lab" element={<Lab />} />
               <Route path="/field-manual" element={<FieldManual />} />
+              <Route path="/writing" element={<Writing />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

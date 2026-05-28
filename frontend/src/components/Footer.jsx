@@ -206,8 +206,11 @@ export default function Footer() {
               <li><Link to="/" {...hover} className="hover-line">Home</Link></li>
               <li><Link to="/work" {...hover} className="hover-line">Work</Link></li>
               <li><Link to="/live" {...hover} className="hover-line">Live</Link></li>
+              <li><Link to="/writing" {...hover} className="hover-line">Writing</Link></li>
               <li><Link to="/craft" {...hover} className="hover-line">Craft</Link></li>
               <li><Link to="/studio" {...hover} className="hover-line">Studio</Link></li>
+              <li><Link to="/field-manual" {...hover} className="hover-line">Field Manual</Link></li>
+              <li><Link to="/lab" {...hover} className="hover-line">Lab</Link></li>
               <li><Link to="/contact" {...hover} className="hover-line">Contact</Link></li>
             </ul>
           </div>
