@@ -15,7 +15,7 @@ import MeshField from "../components/MeshField.jsx";
 import Ticker from "../components/Ticker.jsx";
 import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
-import { PACKAGES, PROCESS_PHASES } from "../data/packages.js";
+import { PACKAGES, PACKAGE_TIERS, PROCESS_PHASES } from "../data/packages.js";
 
 /**
  * /packages. The international English face of three productised
@@ -75,37 +75,58 @@ export default function Packages() {
               fontSize: "clamp(2.5rem, 9vw, 9rem)",
             }}
           >
-            Three renewals.<br />
+            Nine engagements.<br />
             <span className="italic-accent text-signal font-light">Three slots a quarter.</span>
           </motion.h1>
 
           <p className="mt-10 max-w-2xl text-base md:text-lg text-bone-100/85 leading-relaxed">
-            Most studios sell time. We sell three sharply defined pieces
-            a quarter, on any continent. Fixed scope, fixed price, fixed
-            delivery date. Whoever fits knows before the first call.
-            Whoever does not fit is spared the choreography.
+            Most studios sell time. We sell sharply defined pieces, in
+            four tiers, on any continent. Fixed scope, fixed price,
+            fixed delivery date. Whoever fits knows before the first
+            call. Whoever does not fit is spared the choreography.
           </p>
 
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 max-w-3xl">
-            {PACKAGES.map((p) => (
-              <a
-                key={p.slug}
-                href={`#${p.slug}`}
-                {...hover}
-                className="group block border border-white/10 hover:border-signal/60 transition-colors p-4 md:p-5 rounded-sm bg-white/[0.02]"
-              >
-                <p className="font-mono text-[10px] tracking-[0.22em] uppercase mb-2" style={{ color: p.accent }}>
-                  {p.aesthetic}
-                </p>
-                <p className="font-display text-base md:text-lg text-bone-100 leading-[1.15] mb-3">
-                  {p.name_en}
-                </p>
-                <div className="flex items-center justify-between font-mono text-[10px] tracking-[0.18em] uppercase">
-                  <span className="text-bone-100/65">{p.price_en}</span>
-                  <span className="text-bone-100/45">{DAYS(p.timeline_days)}</span>
+          {/* Tier-grouped quickjump. Each tier holds the packages that
+              share its delivery cadence. The buyer reads the column
+              that matches the size of their next move. */}
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 max-w-6xl">
+            {PACKAGE_TIERS.map((tier) => {
+              const tierPkgs = PACKAGES.filter((p) => p.tier === tier.id);
+              return (
+                <div key={tier.id} className="flex flex-col gap-3">
+                  <div className="flex items-baseline justify-between gap-2 pb-2 border-b border-white/10">
+                    <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal">
+                      {tier.label_en}
+                    </p>
+                    <p className="font-mono text-[9px] tracking-[0.18em] uppercase text-bone-100/40">
+                      {tier.days}
+                    </p>
+                  </div>
+                  {tierPkgs.map((p) => (
+                    <a
+                      key={p.slug}
+                      href={`#${p.slug}`}
+                      {...hover}
+                      className="group block border border-white/10 hover:border-signal/60 transition-colors p-3.5 md:p-4 rounded-sm bg-white/[0.02]"
+                    >
+                      <p
+                        className="font-mono text-[9px] tracking-[0.22em] uppercase mb-1.5"
+                        style={{ color: p.accent }}
+                      >
+                        {p.aesthetic}
+                      </p>
+                      <p className="font-display text-[15px] md:text-base text-bone-100 leading-[1.15] mb-2.5">
+                        {p.name_en}
+                      </p>
+                      <div className="flex items-center justify-between font-mono text-[10px] tracking-[0.18em] uppercase">
+                        <span className="text-bone-100/70">{p.price_en}</span>
+                        <span className="text-bone-100/45">{DAYS(p.timeline_days)}</span>
+                      </div>
+                    </a>
+                  ))}
                 </div>
-              </a>
-            ))}
+              );
+            })}
           </div>
 
           <div className="mt-12 flex flex-wrap items-center gap-3">
