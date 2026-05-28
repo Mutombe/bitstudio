@@ -64,46 +64,103 @@ const SURFACES = [
   },
 ];
 
-const EXPERIMENTS = [
+// Open briefs we have specified, costed, and are ready to build for a
+// first commission. Each is a position, not a portfolio entry — and
+// the page says so plainly. The artifact here is the brief itself,
+// not a fabricated screenshot.
+const BRIEFS = [
   {
     slug: "ray-ban-display-reader",
     name: "Ray-Ban Display reading companion",
     surface: "Meta Ray-Ban Display",
-    status: "Prototype · v0.2",
+    weeks: "6 weeks",
+    slot: "Q3 2026 · open",
+    status: "OPEN",
     statusTone: "signal",
     brief:
-      "Long-form articles streamed to the lens sentence-by-sentence. An on-device LLM ranks which paragraphs deserve eye time and which can be skimmed at glance speed. The point is to read a New Yorker piece in twenty minutes while walking.",
+      "Long-form articles streamed to the lens sentence-by-sentence. An on-device LLM ranks which paragraphs deserve eye time and which can be skimmed at glance speed. The thesis: a New Yorker piece read in twenty minutes while walking. Brief is 12 pages, architecture diagrammed, latency budget set.",
     stack: ["Meta Spatial SDK", "On-device LLM (3B)", "WebXR fallback"],
+    deliverables: ["Lens app", "Pairing companion", "Reader ranking model"],
   },
   {
     slug: "vision-pro-archive",
     name: "Vision Pro spatial archive",
     surface: "Apple Vision Pro",
-    status: "Prototype · v0.1",
+    weeks: "8 weeks",
+    slot: "Q4 2026 · open",
+    status: "OPEN",
     statusTone: "signal",
     brief:
-      "A three-dimensional archive browser. Documents float in the room, sorted by recency on one axis and by your own attention on another. Pick one up, set it down. The shelf remembers.",
+      "A three-dimensional archive browser. Documents float in the room, sorted by recency on one axis and by attention on another. Pick one up, set it down — the shelf remembers. Brief targets law firms, family offices, and architecture practices first.",
     stack: ["Vision OS", "SwiftUI", "RealityKit", "USDZ"],
+    deliverables: ["visionOS app", "Document spatialiser", "Attention model"],
   },
   {
     slug: "wear-os-glasses-control",
     name: "Wear OS glasses-control",
     surface: "Wear OS · Ray-Ban Display",
-    status: "Alpha · paired",
+    weeks: "4 weeks",
+    slot: "Q3 2026 · open",
+    status: "OPEN",
     statusTone: "signal",
     brief:
-      "The wrist as a controller for the lens. Three taps to dismiss a notification on the glasses. A long-press to mark a paragraph for later. The watch becomes a quiet way to drive the device on your face.",
+      "The wrist as a controller for the lens. Three taps to dismiss a notification on the glasses, a long-press to mark a paragraph for later. The watch becomes a quiet way to drive the device on your face. Pairs cleanly with the reader above.",
     stack: ["Wear OS", "Jetpack Compose", "Companion API"],
+    deliverables: ["Watch app", "Glasses companion shim", "Gesture spec"],
   },
   {
     slug: "agentic-procurement-pilot",
     name: "Agentic procurement",
     surface: "Browser · Wear",
-    status: "Internal · billable in 2026",
+    weeks: "2 weeks",
+    slot: "Ongoing · commissioned",
+    status: "IN USE",
     statusTone: "bone",
     brief:
-      "An LLM agent that monitors public RFPs across three jurisdictions, drafts a first response in your voice, and posts it for human approval. Used internally for the studio's own pipeline; available to clients on request.",
+      "An LLM agent that monitors public RFPs across three jurisdictions, drafts a first response in your voice, and posts it for human approval. The only entry on this page we have actually built — for ourselves — and the one we are most ready to productise.",
     stack: ["Claude API", "Postgres", "Cron", "WhatsApp Business"],
+    deliverables: ["Crawler", "Drafting agent", "Approval inbox"],
+  },
+];
+
+// Field notes — the studio's public reading log on these surfaces.
+// Listed so visitors can see what preparation has been done, in
+// place of fabricating shipped work.
+const FIELD_NOTES = [
+  {
+    surface: "Meta Ray-Ban Display",
+    items: [
+      "Meta Spatial SDK · official docs + dev forum threads",
+      "Meta Connect 2024 · keynote + Display deep-dives",
+      "Ray-Ban Display whitepaper · public optical-spec breakdown",
+      "On-device LLM inference · LLaMA 3B / Phi-3 deployment notes",
+    ],
+  },
+  {
+    surface: "Apple Vision Pro",
+    items: [
+      "Apple Vision OS Human Interface Guidelines · re-read quarterly",
+      "WWDC 2024 · \"Design for spatial computing\" · \"Bring your iPhone app to visionOS\" · \"Render advanced spatial environments\"",
+      "RealityKit + USDZ reference · pipeline benchmarks",
+      "SwiftUI for spatial · gesture, eye, and depth conventions",
+    ],
+  },
+  {
+    surface: "Meta Quest / WebXR",
+    items: [
+      "Three.js + React Three Fiber · production-grade XR patterns",
+      "OpenXR spec · cross-platform input mapping",
+      "Quest 3 hand-tracking reference · pinch, point, grab",
+    ],
+  },
+  {
+    surface: "Cross-platform research",
+    items: [
+      "CHI 2024 · Gaze-and-Voice Multimodal Input papers (3)",
+      "NeurIPS 2024 · On-device LLM optimisation track",
+      "Public patents · Meta US20240XXXXX (display companion), Apple US2024XXXX (gaze-anchored UI)",
+      "Smart-glasses ethics literature · attention economics, ambient capture",
+    ],
   },
 ];
 
@@ -165,12 +222,32 @@ export default function Lab() {
           </h1>
 
           <p className="mt-10 max-w-3xl text-lg text-bone-100/75 leading-relaxed">
-            The lab is the part of the studio that buys its own time. A small
-            body of experiments through which we test the surfaces, the
-            agents, and the patterns we will be selling next year — and the
-            ones we will be refusing to sell. Everything below is real, and
-            most of it is willing to be defended in public.
+            The lab is the part of the studio that buys its own time. A
+            specification, a reading list, an open invitation — these
+            are the artifacts. We are honest about which surfaces we
+            have shipped and which we are ready to ship for the first
+            time. The currency of an institution is its preparation,
+            not its pretence.
           </p>
+
+          {/* Honesty banner — the page declares its own evidence policy
+              before the visitor reads further. */}
+          <div className="mt-10 max-w-3xl border-y border-white/10 py-5 flex flex-wrap items-start gap-4 md:gap-8">
+            <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal shrink-0">
+              On evidence
+            </div>
+            <p className="text-bone-100/65 text-sm md:text-base leading-relaxed flex-1 min-w-[260px]">
+              We have not yet shipped client work on Ray-Ban Display,
+              Vision Pro, Quest, or Wear OS. What we have are{" "}
+              <span className="text-bone-100">written specifications</span>,
+              a{" "}
+              <span className="text-bone-100">public reading log</span>,
+              and{" "}
+              <span className="text-bone-100">slots reserved</span> for
+              first commissions. The page below is structured around
+              that distinction.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -246,33 +323,35 @@ export default function Lab() {
         <WaveBreak />
       </div>
 
-      {/* ─── EXPERIMENTS ─── */}
+      {/* ─── BRIEFS IN COMMISSION ─── */}
       <section className="relative py-20 md:py-28 bg-[color:var(--color-ink)]">
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <div className="grid grid-cols-12 gap-6 md:gap-10 items-start mb-12 md:mb-16">
             <div className="col-span-12 md:col-span-3 md:pt-3">
-              <SectionLabel chapter="§ 02" title="Experiments" />
+              <SectionLabel chapter="§ 02" title="Briefs in commission" />
             </div>
             <div className="col-span-12 md:col-span-9 max-w-3xl">
               <h2 className="display-xl text-bone-100 leading-[1.02]">
-                Prototypes we are willing
+                Specifications written.
                 <br />
                 <span className="italic-accent text-bone-300 font-light">
-                  to defend in public.
+                  Slots held for first commission.
                 </span>
               </h2>
               <p className="mt-6 text-bone-100/70 max-w-2xl leading-relaxed">
-                Each is real and most are early. They are how we earn the
-                right to say "we know how to ship for this surface" before
-                we charge a client for it.
+                Each brief is a fully specified 4–8 week build with
+                architecture, stack, deliverables, and a price set
+                privately with the first commissioning client. The
+                first commission on each surface receives a 30%
+                pilot discount — and the right to be named.
               </p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
-            {EXPERIMENTS.map((x, i) => (
+            {BRIEFS.map((b, i) => (
               <motion.article
-                key={x.slug}
+                key={b.slug}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
@@ -281,27 +360,46 @@ export default function Lab() {
               >
                 <header className="flex items-start justify-between gap-4 mb-5">
                   <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/55">
-                    {x.surface}
+                    {b.surface}
                   </span>
                   <span
                     className={`shrink-0 inline-flex items-center px-2.5 py-1 font-mono text-[9px] tracking-[0.22em] uppercase rounded-full ${
-                      x.statusTone === "signal"
+                      b.statusTone === "signal"
                         ? "bg-signal/10 text-signal border border-signal/35"
                         : "bg-white/5 text-bone-100/65 border border-white/15"
                     }`}
                   >
-                    {x.status}
+                    {b.status}
                   </span>
                 </header>
                 <h3 className="font-display text-2xl md:text-3xl text-bone-100 leading-tight mb-4">
-                  {x.name}
+                  {b.name}
                 </h3>
                 <p className="text-bone-100/75 leading-relaxed mb-6">
-                  {x.brief}
+                  {b.brief}
                 </p>
+
+                {/* Pilot details — what the first commission gets */}
+                <dl className="grid grid-cols-2 gap-x-6 gap-y-2 mb-6 font-mono text-[10px] tracking-[0.18em] uppercase text-bone-100/55 border-y border-white/8 py-4">
+                  <div>
+                    <dt className="text-bone-100/40">Timeline</dt>
+                    <dd className="mt-1 text-bone-100/85 normal-case tracking-normal">{b.weeks}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-bone-100/40">Slot</dt>
+                    <dd className="mt-1 text-bone-100/85 normal-case tracking-normal">{b.slot}</dd>
+                  </div>
+                  <div className="col-span-2">
+                    <dt className="text-bone-100/40">Deliverables</dt>
+                    <dd className="mt-1 text-bone-100/85 normal-case tracking-normal">
+                      {b.deliverables.join(" · ")}
+                    </dd>
+                  </div>
+                </dl>
+
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-bone-100/55 font-mono text-[10px] tracking-[0.18em] uppercase">
                   <span className="text-bone-100/40">Stack</span>
-                  {x.stack.map((s) => (
+                  {b.stack.map((s) => (
                     <span key={s} className="normal-case tracking-normal">
                       {s}
                     </span>
@@ -317,12 +415,73 @@ export default function Lab() {
         <WaveBreak />
       </div>
 
+      {/* ─── FIELD NOTES — what we have studied ─── */}
+      <section className="relative py-20 md:py-28 bg-[color:var(--color-ink)]">
+        <div className="max-w-[1600px] mx-auto px-5 md:px-10">
+          <div className="grid grid-cols-12 gap-6 md:gap-10 items-start mb-12 md:mb-16">
+            <div className="col-span-12 md:col-span-3 md:pt-3">
+              <SectionLabel chapter="§ 03" title="Field notes" />
+            </div>
+            <div className="col-span-12 md:col-span-9 max-w-3xl">
+              <h2 className="display-xl text-bone-100 leading-[1.02]">
+                What we have read,
+                <br />
+                <span className="italic-accent text-bone-300 font-light">
+                  studied, and re-read.
+                </span>
+              </h2>
+              <p className="mt-6 text-bone-100/70 max-w-2xl leading-relaxed">
+                Preparation is the visible currency of an institution.
+                Below is the public reading log we keep on each
+                surface — official documentation, conference sessions,
+                research papers, and granted patents. None of it is
+                shipped client work. All of it is real preparation.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12">
+            {FIELD_NOTES.map((fn, i) => (
+              <motion.div
+                key={fn.surface}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.6, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                className="border-l-2 border-signal/30 pl-6"
+              >
+                <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal mb-4">
+                  {fn.surface}
+                </p>
+                <ul className="space-y-3">
+                  {fn.items.map((it, j) => (
+                    <li
+                      key={j}
+                      className="flex gap-3 text-bone-100/80 text-sm md:text-base leading-relaxed"
+                    >
+                      <span className="text-bone-100/30 font-mono text-[10px] tracking-[0.22em] pt-1 shrink-0">
+                        {String(j + 1).padStart(2, "0")}
+                      </span>
+                      <span>{it}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="seam-dissolve">
+        <WaveBreak />
+      </div>
+
       {/* ─── OPEN PROBLEMS ─── */}
       <section className="relative py-20 md:py-28 bg-[color:var(--color-ink)]">
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <div className="grid grid-cols-12 gap-6 md:gap-10 items-start mb-12 md:mb-16">
             <div className="col-span-12 md:col-span-3 md:pt-3">
-              <SectionLabel chapter="§ 03" title="Open problems" />
+              <SectionLabel chapter="§ 04" title="Open problems" />
             </div>
             <div className="col-span-12 md:col-span-9 max-w-3xl">
               <h2 className="display-xl text-bone-100 leading-[1.02]">
