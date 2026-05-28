@@ -30,7 +30,7 @@ export default function Work() {
     <PageTransition>
       <SEO
         title="Work"
-        description={`A ledger of ${TOTAL_ARTIFACTS} artifacts. Real URLs, real clients, sorted by aesthetic carriage — Atelier, Editorial, Cinematic, Brutalist, Heritage, Manifesto, Bento, Pastoral.`}
+        description={`A ledger of ${TOTAL_ARTIFACTS} artifacts. Real URLs, real clients, sorted by aesthetic carriage. Atelier, Editorial, Cinematic, Brutalist, Heritage, Manifesto, Bento, Pastoral.`}
         path="/work"
         keywords={["portfolio", "case studies", "design ledger", "Bit Studio work"]}
         jsonLd={[
@@ -110,7 +110,7 @@ export default function Work() {
               className="grid grid-cols-12 gap-6 md:gap-10"
             >
               {filtered.map((p, i) => {
-                // Bento rhythm — matches /home Selected Work so the ledger feels
+                // Bento rhythm. Matches /home Selected Work so the ledger feels
                 // continuous. 9-tile loop, each row sums to 12 cols.
                 const bento = ["lg", "sm", "sm", "sm", "sm", "sm", "lg", "md", "md"];
                 return (
@@ -135,8 +135,8 @@ export default function Work() {
       {/* ─── AGRI SHOW · HARARE 2026 ───
           A single fortnight, thirty-three bespoke sites for exhibitors of
           the Zimbabwe Agricultural Show. Every entry below is a real live
-          URL on Render. Each was built fresh — no template, no skeleton in
-          common — and presented as a gift to the named business. */}
+          URL on Render. Each was built fresh. No template, no skeleton in
+          common, and presented as a gift to the named business. */}
       <section className="relative pt-24 md:pt-32 pb-12 md:pb-16 overflow-hidden border-t border-white/5">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute bottom-[-20%] left-[-10%] w-[42vw] h-[42vw] rounded-full bg-signal/[0.06] blur-[180px]" />
@@ -160,8 +160,8 @@ export default function Work() {
           <div className="mt-10 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
             <p className="md:col-span-7 text-lg text-bone-100/75 max-w-2xl leading-relaxed">
               For the {new Date().getFullYear()} Zimbabwe Agricultural Show we picked thirty‑three
-              exhibitors — heritage manufacturers, founder‑led practices, family
-              dealerships, market‑leading distributors — and built each one a
+              exhibitors. Heritage manufacturers, founder‑led practices, family
+              dealerships, market‑leading distributors, and built each one a
               complete bespoke website on the house. Every site is a fresh
               React project. No template, no shared skeleton. Each carries one
               signature interaction and is presented as a gift to the named

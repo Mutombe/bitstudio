@@ -9,10 +9,10 @@ import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
 import WaveBreak from "../components/WaveBreak.jsx";
 
 /*
- * Field Manual — the studio's published operating doctrines.
+ * Field Manual. The studio's published operating doctrines.
  *
  * Twelve numbered opinions, defendable in public. Distinct from /craft
- * (which is the philosophical canon — Musashi, Werkbund, Vignelli) and
+ * (which is the philosophical canon. Musashi, Werkbund, Vignelli) and
  * from /studio (which is a manifesto on beauty/code/restraint/speed).
  * The field manual is operational doctrine: how we run the work.
  *
@@ -30,7 +30,7 @@ const DOCTRINES = [
   {
     title: "We refuse two kinds of brief.",
     body:
-      "The first already knows what it wants to look like — that brief contracts our craft. The second argues with its own users — that brief guarantees the product fails. Every other brief gets a real conversation.",
+      "The first already knows what it wants to look like. That brief contracts our craft. The second argues with its own users. That brief guarantees the product fails. Every other brief gets a real conversation.",
     pull: "A real brief is one we can still surprise.",
   },
   {
@@ -42,7 +42,7 @@ const DOCTRINES = [
   {
     title: "A deadline is a form of respect.",
     body:
-      "When we say Friday, the work appears on Friday. The client believes us because the date holds. Slippage is not a logistics problem. It is a respect problem — and we treat it as such.",
+      "When we say Friday, the work appears on Friday. The client believes us because the date holds. Slippage is not a logistics problem. It is a respect problem, and we treat it as such.",
     pull: "The date holds, or we should not have given it.",
   },
   {
@@ -60,7 +60,7 @@ const DOCTRINES = [
   {
     title: "The Lighthouse score is a confession, not a goal.",
     body:
-      "A 100 on the dashboard tells you what we measured. It does not tell you whether the page is alive. We measure the score after we ask whether the page is alive — and if the score is high but the page is not, we throw the score away.",
+      "A 100 on the dashboard tells you what we measured. It does not tell you whether the page is alive. We measure the score after we ask whether the page is alive, and if the score is high but the page is not, we throw the score away.",
     pull: "Aliveness first. Then the audit.",
   },
   {
@@ -84,13 +84,13 @@ const DOCTRINES = [
   {
     title: "We ship the runbook with the system.",
     body:
-      "A working thing is only working if somebody else can keep it working. We document as we build. The runbook is part of the deliverable — not an afterthought, not a separate engagement, not an upsell.",
+      "A working thing is only working if somebody else can keep it working. We document as we build. The runbook is part of the deliverable. Not an afterthought, not a separate engagement, not an upsell.",
     pull: "Hand-off is the second half of craft.",
   },
   {
     title: "We choose the work as much as the work chooses us.",
     body:
-      "Three slots a quarter. Any continent. The brief that finds the room is the brief that has earned the conversation. We are not a funnel. We do not close. We meet, we decide, we begin — or we do not.",
+      "Three slots a quarter. Any continent. The brief that finds the room is the brief that has earned the conversation. We are not a funnel. We do not close. We meet, we decide, we begin, or we do not.",
     pull: "Scarcity is not a strategy. It is the truth of the room.",
   },
 ];
@@ -146,7 +146,7 @@ export default function FieldManual() {
             <Link to="/craft" className="text-signal hover-line">/craft</Link>{" "}
             and the manifesto on{" "}
             <Link to="/studio" className="text-signal hover-line">/studio</Link>.
-            This is the operational layer — how we run the work and how
+            This is the operational layer. How we run the work and how
             we decide whether to take it on. Read it twice. If you
             disagree with three or more, we are unlikely to be the right
             studio for you, and we will say so politely.
@@ -252,7 +252,7 @@ export default function FieldManual() {
           "§ Field Manual",
           `${DOCTRINES.length} published doctrines`,
           "Read it twice",
-          "Disagree with three? — write to us anyway",
+          "Disagree with three?. Write to us anyway",
           "MMXXX · Read it twice",
         ]}
       />

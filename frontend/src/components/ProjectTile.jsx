@@ -6,9 +6,9 @@ import QuantumHover from "./QuantumHover.jsx";
 import { findService } from "../data/services.js";
 
 /**
- * ProjectTile — CLIENT identity first, Bit Studio signature second.
+ * ProjectTile. CLIENT identity first, Bit Studio signature second.
  *
- * Why: client feedback — tiles should be branded in the CLIENT's colors
+ * Why: client feedback. Tiles should be branded in the CLIENT's colors
  * (like the left panel of /work/:slug), not Bit Studio's maroon wash.
  *
  * Layout (strict positional zones, no overlap, no oversize):
@@ -23,7 +23,7 @@ import { findService } from "../data/services.js";
  *   3px chartreuse signature border runs down the left edge.
  */
 
-// Bento size config — varied col-spans + heights for a real irregular grid.
+// Bento size config. Varied col-spans + heights for a real irregular grid.
 // Mobile always full-width; tablet always half. Desktop gets the bento rhythm.
 const SIZE_CONFIG = {
   sm: {
@@ -59,12 +59,12 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
   const cfg = SIZE_CONFIG[size] || SIZE_CONFIG.md;
   const service = p.service ? findService(p.service) : null;
 
-  // Client palette — primary / secondary / paper. Fall back gracefully.
+  // Client palette. Primary / secondary / paper. Fall back gracefully.
   const primary = p.palette?.[0] || "#1A1215";
   const secondary = p.palette?.[1] || primary;
   const paper = p.palette?.[2] || "#F5EFE6";
 
-  // Contrast picker — if primary is dark, use paper/secondary for text; else ink.
+  // Contrast picker. If primary is dark, use paper/secondary for text; else ink.
   const primaryL = luminance(primary);
   const onPrimary = primaryL < 0.45
     ? (luminance(paper) > 0.7 ? paper : "#F5EFE6")
@@ -76,7 +76,7 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
     ? hex(onPrimary, 0.45)
     : hex("#0E0104", 0.45);
 
-  // Secondary accent — dot next to service name, small swatch dots
+  // Secondary accent. Dot next to service name, small swatch dots
   const accentDot = primaryL < 0.45 ? secondary : secondary;
 
   const urlShort = (p.url || "")
@@ -99,7 +99,7 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
         {...hover}
         className="block relative overflow-hidden rounded-sm transition-transform duration-500 group-hover:scale-[1.015] focus:outline-none focus-visible:ring-2 focus-visible:ring-signal focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-ink)]"
       >
-        {/* Tile body — CLIENT palette fusion (multi-orb mesh of all palette colors) + strict zone */}
+        {/* Tile body. CLIENT palette fusion (multi-orb mesh of all palette colors) + strict zone */}
         <div
           className={`relative flex flex-col ${cfg.padding} ${cfg.aspect} ${cfg.minH} overflow-hidden`}
           style={{
@@ -109,7 +109,7 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
             backgroundColor: primary,
           }}
         >
-          {/* Multi-color palette fusion — 3 big blurred orbs in client colors
+          {/* Multi-color palette fusion. 3 big blurred orbs in client colors
               (primary deepened, secondary, paper). They overlap and blend into
               a painterly mesh. 70% opacity so it actually reads. */}
           <div
@@ -124,7 +124,7 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
             }}
             aria-hidden
           />
-          {/* A secondary fusion veil for depth — darker pass, multiply blend */}
+          {/* A secondary fusion veil for depth. Darker pass, multiply blend */}
           <div
             className="absolute inset-0 opacity-40 pointer-events-none mix-blend-multiply"
             style={{
@@ -135,7 +135,7 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
             aria-hidden
           />
 
-          {/* Grain — barely there, gives the solid color tactility */}
+          {/* Grain. Barely there, gives the solid color tactility */}
           <div
             className="absolute inset-0 opacity-[0.06] mix-blend-overlay pointer-events-none"
             style={{
@@ -145,7 +145,7 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
             aria-hidden
           />
 
-          {/* Bit Studio signature — 3px chartreuse left border. Our quiet
+          {/* Bit Studio signature. 3px chartreuse left border. Our quiet
               presence, never competing with the client color. */}
           <span
             className="absolute left-0 top-0 bottom-0 w-[3px] pointer-events-none z-20"
@@ -156,7 +156,7 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
             aria-hidden
           />
 
-          {/* Chartreuse hairline frame on hover — a subtle bracket, never a wash */}
+          {/* Chartreuse hairline frame on hover. A subtle bracket, never a wash */}
           <span
             className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20"
             style={{
@@ -215,7 +215,7 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
               {p.year}
             </p>
 
-            {/* Title — mobile clamps to 1 line to keep the footer inside the card;
+            {/* Title. Mobile clamps to 1 line to keep the footer inside the card;
                 desktop gets 2 lines for breathing room. */}
             <h3
               className={`font-display ${cfg.title} leading-tight tracking-[-0.01em] max-w-[85%] line-clamp-1 md:line-clamp-2`}
@@ -224,7 +224,7 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
               {p.name}
             </h3>
 
-            {/* Brief — hidden on sm bento tiles to keep them tight. */}
+            {/* Brief. Hidden on sm bento tiles to keep them tight. */}
             {p.brief && !cfg.hideBrief && (
               <p
                 className="text-sm leading-snug line-clamp-1 md:line-clamp-2 max-w-[92%]"
@@ -258,14 +258,14 @@ export default function ProjectTile({ project, index = 0, size = "md" }) {
           </footer>
         </div>
 
-        {/* Footer row outside tile — palette swatches + mono hex values */}
+        {/* Footer row outside tile. Palette swatches + mono hex values */}
         <div className="flex items-center justify-between pt-4 text-bone-100/80">
           <div className="flex items-center gap-3 min-w-0">
             <div className="swatch-strip w-14 shrink-0">
               {p.palette.map((c) => <span key={c} style={{ background: c }} />)}
             </div>
             <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-bone-100/50 truncate">
-              {p.palette[0]} · {p.palette[1] || "—"}
+              {p.palette[0]}{p.palette[1] ? ` · ${p.palette[1]}` : ""}
             </p>
           </div>
           <p className="font-mono text-[10px] tracking-[0.2em] uppercase hover-line whitespace-nowrap shrink-0">

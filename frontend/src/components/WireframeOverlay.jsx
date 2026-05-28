@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 
 /**
- * WireframeOverlay — cross-sectional architectural linework.
- * Radiating vectors, golden-ratio spirals, orbital paths — in maroon-200/20.
+ * WireframeOverlay. Cross-sectional architectural linework.
+ * Radiating vectors, golden-ratio spirals, orbital paths. In maroon-200/20.
  * Pure SVG, no images.
  */
 export default function WireframeOverlay() {
@@ -58,7 +58,7 @@ export default function WireframeOverlay() {
         />
       ))}
 
-      {/* Golden ratio spiral — crude approximation as arcs */}
+      {/* Golden ratio spiral. Crude approximation as arcs */}
       <path
         d="
           M 200 600

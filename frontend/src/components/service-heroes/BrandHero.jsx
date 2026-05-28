@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useReducedMotionPreference } from "../../hooks/useReducedMotion.js";
 
 /**
- * BrandHero — Bit Studio monogram deconstructing / reconstructing.
+ * BrandHero. Bit Studio monogram deconstructing / reconstructing.
  * Pieces fly apart and reassemble in 3-4 color variations on loop.
  */
 const VARIANTS = [
@@ -77,7 +77,7 @@ export default function BrandHero() {
 }
 
 function Monogram({ color, accent, reduced, cycle }) {
-  // B/S monogram — a 3x3 grid of geometric blocks that fly apart and reassemble
+  // B/S monogram. A 3x3 grid of geometric blocks that fly apart and reassemble
   const blocks = [
     { x: 0, y: 0, w: 60, h: 80 },    // B stem
     { x: 60, y: 0, w: 60, h: 35 },   // B top bowl

@@ -16,11 +16,11 @@ import { useCursorHover } from "../../hooks/useCursor.jsx";
 import SEO, { breadcrumbJsonLd, articleJsonLd } from "../../components/SEO.jsx";
 
 /**
- * /de/handwerk — German edition of /craft.
+ * /de/handwerk. German edition of /craft.
  *
  * The Musashi material translates well into German. The Werkbund / Bauhaus
  * tradition already speaks this language (Sorgfalt, Werkkunst, Lehre).
- * We keep the kanji 道 as the visual anchor — Japan and Germany have a
+ * We keep the kanji 道 as the visual anchor. Japan and Germany have a
  * long, mutual respect for each other's craft cultures.
  */
 
@@ -39,7 +39,7 @@ const RINGE = [
     name: "Wasser",
     practice: "Fluss",
     body:
-      "Wasser nimmt die Form seines Gefäßes an. Unsere Arbeit bewegt sich durch ein Projekt — zuhören, entwerfen, zurückkehren — und wir halten keine Haltung länger, als das Projekt sie braucht. Eine Korrektur ist keine Niederlage. Ein Verworfenes ist kein Verlust. Die Form ist das Gespräch zwischen Briefing und Seite.",
+      "Wasser nimmt die Form seines Gefäßes an. Unsere Arbeit bewegt sich durch ein Projekt. Zuhören, entwerfen, zurückkehren. Und wir halten keine Haltung länger, als das Projekt sie braucht. Eine Korrektur ist keine Niederlage. Ein Verworfenes ist kein Verlust. Die Form ist das Gespräch zwischen Briefing und Seite.",
     pull:
       "Die Arbeit biegt sich. Der Maßstab nicht.",
   },
@@ -57,7 +57,7 @@ const RINGE = [
     name: "Wind",
     practice: "Luft",
     body:
-      "Wisse, was die anderen Schulen tun. Lies ihre Seiten. Öffne ihre Inspektoren. Bemerke, wonach sie greifen — und bemerke die Lücken in diesem Greifen. Werde dann nicht zu ihnen. Wind ist die Disziplin des Unterschieds, gehalten gegen die Disziplin des Studiums.",
+      "Wisse, was die anderen Schulen tun. Lies ihre Seiten. Öffne ihre Inspektoren. Bemerke, wonach sie greifen. Und bemerke die Lücken in diesem Greifen. Werde dann nicht zu ihnen. Wind ist die Disziplin des Unterschieds, gehalten gegen die Disziplin des Studiums.",
     pull:
       "Studiere jedes Studio. Werde keines davon.",
   },
@@ -66,7 +66,7 @@ const RINGE = [
     name: "Leere",
     practice: "Quelle",
     body:
-      "Das, worauf die Arbeit zeigt, ohne dass wir es ganz aussprechen können. Der Grund, weshalb eine Schrift richtig wirkt. Der Grund, weshalb eine Schaltfläche zurückdrückt. Die Leere ist das, was bleibt, nachdem Erde, Wasser, Feuer und Wind ihr Werk getan haben — die unaussprechliche Richtigkeit, die ein Betrachter spürt, aber nicht verteidigen kann. Wir benennen sie nicht. Wir zielen auf sie.",
+      "Das, worauf die Arbeit zeigt, ohne dass wir es ganz aussprechen können. Der Grund, weshalb eine Schrift richtig wirkt. Der Grund, weshalb eine Schaltfläche zurückdrückt. Die Leere ist das, was bleibt, nachdem Erde, Wasser, Feuer und Wind ihr Werk getan haben. Die unaussprechliche Richtigkeit, die ein Betrachter spürt, aber nicht verteidigen kann. Wir benennen sie nicht. Wir zielen auf sie.",
     pull:
       "Wir gestalten nicht. Wir erinnern uns, wie Schönheit war, bevor sie verhandelt wurde.",
   },
@@ -106,7 +106,7 @@ const AESTHETIC_BRIEF_DE = {
   brutalist:
     "Strukturelle Ehrlichkeit. Das Raster bekannt, die Schrift unverkleidet, die Dekoration entfernt.",
   heritage:
-    "Altes Papier, langsame Serifen, eine ruhige Hand. Gebaut, um älter zu wirken, als es ist — und gut zu altern.",
+    "Altes Papier, langsame Serifen, eine ruhige Hand. Gebaut, um älter zu wirken, als es ist. Und gut zu altern.",
   manifesto:
     "Typografische Erklärung. Die Arbeit ist die Aussage. Weiß­raum und ein Argument.",
   bento:
@@ -129,7 +129,7 @@ export default function CraftDE() {
     <PageTransition>
       <SEO
         title="Handwerk · Der Weg"
-        description="Wir haben das Machen von Miyamoto Musashi gelernt — einem Schwertmeister, der vor vierhundert Jahren lebte. Erde, Wasser, Feuer, Wind, Leere — die fünf Ringe unserer Praxis. Das Dokkōdō, zehn Vorsätze an der Studio-Wand."
+        description="Wir haben das Machen von Miyamoto Musashi gelernt. Einem Schwertmeister, der vor vierhundert Jahren lebte. Erde, Wasser, Feuer, Wind, Leere. Die fünf Ringe unserer Praxis. Das Dokkōdō, zehn Vorsätze an der Studio-Wand."
         path="/de/handwerk"
         keywords={[
           "Musashi",
@@ -147,7 +147,7 @@ export default function CraftDE() {
             { name: "Handwerk", path: "/de/handwerk" },
           ]),
           articleJsonLd({
-            headline: "Der Weg — Handwerk, nach Musashi",
+            headline: "Der Weg. Handwerk, nach Musashi",
             description:
               "Bit Studios Designphilosophie, organisiert nach den fünf Ringen aus Miyamoto Musashis Go Rin no Sho.",
             url: "https://bitstudio.co.zw/de/handwerk",
@@ -198,7 +198,7 @@ export default function CraftDE() {
               Jahrhunderten lebte. Sein Name war Miyamoto Musashi. Er focht
               sechzig Duelle und verlor keines davon. Am Ende seines Lebens zog
               er sich in eine Höhle zurück und schrieb ein Buch darüber, wie man
-              lebt — das{" "}
+              lebt. Das{" "}
               <span className="italic-accent text-bone-100">Go Rin no Sho</span>,
               das Buch der fünf Ringe. Wir haben es mehr als einmal gelesen. Die
               folgenden Seiten erklären, was wir mitgenommen haben.
@@ -230,7 +230,7 @@ export default function CraftDE() {
               Miyamoto Musashi
             </p>
             <p className="mt-1 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/45">
-              1584 — 1645
+              1584. 1645
             </p>
           </div>
 
@@ -250,7 +250,7 @@ export default function CraftDE() {
             <p className="text-base md:text-lg leading-relaxed">
               Musashi wurde in eine kleine Samurai-Familie im Japan des späten
               sechzehnten Jahrhunderts hineingeboren. Sein erstes Duell focht er
-              mit dreizehn, sein sechzigstes, bevor er dreißig wurde — und ging
+              mit dreizehn, sein sechzigstes, bevor er dreißig wurde. Und ging
               aus jedem davon lebend hervor, während sein Gegner es nicht tat.
               Er malte auch. Er schnitzte buddhistische Statuen. Er schrieb
               Kalligraphie. Er zog sich in eine Höhle auf dem Berg Iwato zurück
@@ -271,7 +271,7 @@ export default function CraftDE() {
 
             <blockquote className="mt-6 border-l-2 border-signal/60 pl-6 italic-accent text-bone-100 max-w-2xl leading-snug" style={{ fontSize: "clamp(1.125rem, 1.6vw, 1.5rem)" }}>
               „Ein Ding zu kennen, heißt zehntausend Dinge zu kennen.<br />
-              <span className="text-bone-100/60">— Musashi, Buch der fünf Ringe, Schriftrolle der Erde"</span>
+              <span className="text-bone-100/60">Musashi, Buch der fünf Ringe, Schriftrolle der Erde"</span>
             </blockquote>
           </div>
         </div>
@@ -288,7 +288,7 @@ export default function CraftDE() {
             </h2>
             <p className="mt-6 text-bone-100/70 max-w-xl">
               Er benannte fünf Ringe, in fünf Schriftrollen. Wir tragen sie als
-              die Übungsringe des Studios — die fünf Haltungen, die eine Arbeit
+              die Übungsringe des Studios. Die fünf Haltungen, die eine Arbeit
               durchlaufen muss, bevor wir sie ausliefern.
             </p>
           </div>
@@ -384,7 +384,7 @@ export default function CraftDE() {
               <span className="italic-accent text-bone-300 font-light">in denen ein Werk sich tragen kann.</span>
             </h2>
             <p className="mt-6 text-bone-100/70 max-w-xl">
-              Branche ist, was der Kunde macht. <span className="italic-accent text-bone-100">Ästhetik ist, wie sich die Arbeit bewegt.</span> Wir sortieren unsere eigene Arbeit nach dem zweiten — denn das ist die Frage, die wir beantworten.
+              Branche ist, was der Kunde macht. <span className="italic-accent text-bone-100">Ästhetik ist, wie sich die Arbeit bewegt.</span> Wir sortieren unsere eigene Arbeit nach dem zweiten. Denn das ist die Frage, die wir beantworten.
             </p>
           </div>
 

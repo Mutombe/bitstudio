@@ -10,12 +10,12 @@ import PhosphorIcon from "../components/PhosphorIcon.jsx";
 import WaveBreak from "../components/WaveBreak.jsx";
 
 /*
- * Lab — the studio's visible R&D arm.
+ * Lab. The studio's visible R&D arm.
  *
  * Three sections:
- *  1. Surfaces — the platforms we build for ahead of mainstream demand
- *  2. Experiments — the prototypes we are willing to defend in public
- *  3. Open problems — the things we are publicly noodling on
+ *  1. Surfaces. The platforms we build for ahead of mainstream demand
+ *  2. Experiments. The prototypes we are willing to defend in public
+ *  3. Open problems. The things we are publicly noodling on
  *
  * Voice: institutional, never apologetic. The room we work in,
  * shown from inside. See memory bitstudio-voice-institutional.
@@ -36,7 +36,7 @@ const SURFACES = [
     inputs: "Eye-tracking · Hands · Voice",
     output: "Full 6DOF spatial",
     note:
-      "The high-end of spatial computing. We build the editorial layer — documents, archives, dashboards — for the firms who will fund the next decade.",
+      "The high-end of spatial computing. We build the editorial layer. Documents, archives, dashboards. For the firms who will fund the next decade.",
   },
   {
     name: "Meta Quest",
@@ -52,7 +52,7 @@ const SURFACES = [
     inputs: "Wrist tap · Glance",
     output: "1.4-inch display · Haptic",
     note:
-      "The companion surface — every glasses-class device needs a wrist. We build the bridges that make the watch the controller.",
+      "The companion surface. Every glasses-class device needs a wrist. We build the bridges that make the watch the controller.",
   },
   {
     name: "Voice & ambient AI",
@@ -65,7 +65,7 @@ const SURFACES = [
 ];
 
 // Open briefs we have specified, costed, and are ready to build for a
-// first commission. Each is a position, not a portfolio entry — and
+// first commission. Each is a position, not a portfolio entry. And
 // the page says so plainly. The artifact here is the brief itself,
 // not a fabricated screenshot.
 const BRIEFS = [
@@ -91,7 +91,7 @@ const BRIEFS = [
     status: "OPEN",
     statusTone: "signal",
     brief:
-      "A three-dimensional archive browser. Documents float in the room, sorted by recency on one axis and by attention on another. Pick one up, set it down — the shelf remembers. Brief targets law firms, family offices, and architecture practices first.",
+      "A three-dimensional archive browser. Documents float in the room, sorted by recency on one axis and by attention on another. Pick one up, set it down. The shelf remembers. Brief targets law firms, family offices, and architecture practices first.",
     stack: ["Vision OS", "SwiftUI", "RealityKit", "USDZ"],
     deliverables: ["visionOS app", "Document spatialiser", "Attention model"],
   },
@@ -117,13 +117,13 @@ const BRIEFS = [
     status: "IN USE",
     statusTone: "bone",
     brief:
-      "An LLM agent that monitors public RFPs across three jurisdictions, drafts a first response in your voice, and posts it for human approval. The only entry on this page we have actually built — for ourselves — and the one we are most ready to productise.",
+      "An LLM agent that monitors public RFPs across three jurisdictions, drafts a first response in your voice, and posts it for human approval. The only entry on this page we have actually built. For ourselves, and the one we are most ready to productise.",
     stack: ["Claude API", "Postgres", "Cron", "WhatsApp Business"],
     deliverables: ["Crawler", "Drafting agent", "Approval inbox"],
   },
 ];
 
-// Field notes — the studio's public reading log across every surface
+// Field notes. The studio's public reading log across every surface
 // we build for. This is preparation in place of fabricated portfolios.
 // The breadth is the point: an infrastructure builder reads widely.
 const FIELD_NOTES = [
@@ -159,22 +159,22 @@ const FIELD_NOTES = [
       "React 19 + Vite 7 + Tailwind v4 · production patterns from 130+ shipped sites in our ledger",
       "TanStack Router + Query · async-state architecture and the boundary between routing and data",
       "React Server Components · when to use, when to refuse, what they replace",
-      "Web Vitals 2025 · INP, CLS, LCP — the new triad and what each actually measures",
-      "Edge runtimes · Vercel Edge, Cloudflare Workers, Deno Deploy — placement decisions for latency",
+      "Web Vitals 2025 · INP, CLS, LCP. The new triad and what each actually measures",
+      "Edge runtimes · Vercel Edge, Cloudflare Workers, Deno Deploy. Placement decisions for latency",
       "Better Auth / Clerk / Lucia · modern session design after the JWT decade",
     ],
   },
   {
     surface: "AI agents · MCP · multi-agent",
     items: [
-      "Anthropic Model Context Protocol (MCP, Nov 2024) · official spec — tools, resources, prompts, sampling",
+      "Anthropic Model Context Protocol (MCP, Nov 2024) · official spec. Tools, resources, prompts, sampling",
       "MCP server design · typed schemas, idempotency, paginated resources, capability negotiation",
       "Claude Code SDK + agent dispatch · patterns from running 30+ design-expert agents in parallel",
       "Tool use design · parallel execution, error envelopes, retry semantics, partial-failure replay",
-      "Multi-agent orchestration · Anthropic patterns, LangGraph, AutoGen, CrewAI — when each is right",
+      "Multi-agent orchestration · Anthropic patterns, LangGraph, AutoGen, CrewAI. When each is right",
       "Agent memory · file-backed persistent recall, semantic dedup, hash-based collision",
       "Eval discipline · golden-path regression, hallucination probes, prompt-cache hit-rate budgets",
-      "Open weights · LLaMA 3.3, Qwen 2.5, Phi-3 — quantisation cost and battery profile",
+      "Open weights · LLaMA 3.3, Qwen 2.5, Phi-3. Quantisation cost and battery profile",
     ],
   },
   {
@@ -182,7 +182,7 @@ const FIELD_NOTES = [
     items: [
       "Meta WhatsApp Cloud API · webhooks, template message governance, the 24-hour session window",
       "WATI / Vonage / Twilio · integrator trade-offs and ceiling effects (trial-end discovered the hard way)",
-      "whatsmeow (Go library) · direct-device pairing via 8-character phone code — patched in our toolkit",
+      "whatsmeow (Go library) · direct-device pairing via 8-character phone code. Patched in our toolkit",
       "WhatsApp Flows · native multi-step forms, server-side data fetching, ack semantics",
       "Multi-tenancy + number rotation · soft-ban detection, marketing-conversation rate-limit, opt-in flows",
       "Conversational commerce · catalogues, carts, payments, business profile verification",
@@ -191,10 +191,10 @@ const FIELD_NOTES = [
   {
     surface: "Cloud, data, infrastructure",
     items: [
-      "Render · Vercel · Fly.io · Railway · Cloudflare — placement decisions and the audit trail",
+      "Render · Vercel · Fly.io · Railway · Cloudflare. Placement decisions and the audit trail",
       "Postgres 16 + pgvector + RLS · the modern stack's single source of truth",
       "Neon · Turso · PlanetScale · edge-data and the read-replica latency question",
-      "Observability · Grafana, Sentry, OpenTelemetry — the three rooms a system must live in",
+      "Observability · Grafana, Sentry, OpenTelemetry. The three rooms a system must live in",
       "Migration patterns · dual-write, shadow traffic, expand-contract, blue-green",
       "Backups + DR · point-in-time recovery, cross-region replication, restoration drills",
     ],
@@ -210,14 +210,14 @@ const FIELD_NOTES = [
   },
 ];
 
-// Workshop output — internal tools the studio actually built and
+// Workshop output. Internal tools the studio actually built and
 // runs every week. These are not specifications; these are receipts.
 // They are how an institution proves it is what it says it is.
 const WORKSHOP = [
   {
     name: "Multi-agent design dispatch",
     note:
-      "The pattern we built to ship 33 bespoke React/Vite websites in parallel during a single fortnight. Each agent receives a per-business brief, scaffolds a fresh project, hand-builds 8–13 pages, audits its own Phosphor imports, verifies imagery context, and reports back. Powers the entire Agri Show campaign on /work.",
+      "The pattern we built to ship 33 bespoke React/Vite websites in parallel during a single fortnight. Each agent receives a per-business brief, scaffolds a fresh project, hand-builds 8-13 pages, audits its own Phosphor imports, verifies imagery context, and reports back. Powers the entire Agri Show campaign on /work.",
     tags: ["Claude Code SDK", "Vite", "React 19"],
   },
   {
@@ -235,13 +235,13 @@ const WORKSHOP = [
   {
     name: "Prerender + sitemap pipeline",
     note:
-      "Custom Puppeteer postbuild crawler that visits every SPA route and writes static HTML — powers SEO for this site's 174 routes. Pairs with a sitemap generator that reads slugs straight from source files (no build-time config drift). Both ship as a single 'npm run build:full' step.",
+      "Custom Puppeteer postbuild crawler that visits every SPA route and writes static HTML. Powers SEO for this site's 174 routes. Pairs with a sitemap generator that reads slugs straight from source files (no build-time config drift). Both ship as a single 'npm run build:full' step.",
     tags: ["Puppeteer", "Vite", "Node"],
   },
   {
     name: "Aesthetic-preset engine",
     note:
-      "Hash-based design-token generator that maps one brand brief to a unique aesthetic — palette, typography pairing, hero variant, signature gesture — across the 130-site portfolio without two ever looking the same. Eight aesthetic archetypes, hand-mapped by industry then varied per business.",
+      "Hash-based design-token generator that maps one brand brief to a unique aesthetic. Palette, typography pairing, hero variant, signature gesture. Across the 130-site portfolio without two ever looking the same. Eight aesthetic archetypes, hand-mapped by industry then varied per business.",
     tags: ["React 19", "Tailwind v4", "Aesthetic taxonomy"],
   },
   {
@@ -254,11 +254,11 @@ const WORKSHOP = [
 
 const OPEN_PROBLEMS = [
   "On-device LLM ranking that doesn't burn the battery before lunch.",
-  "Privacy-preserving capture on always-on glasses — what stays on-device, what leaves, who is told.",
-  "Calibrating peripheral attention as a UI input — the difference between glance and stare.",
-  "The grammar of micro-gestures across surfaces — what the same tap means on Vision Pro, on Quest, on Ray-Ban.",
+  "Privacy-preserving capture on always-on glasses. What stays on-device, what leaves, who is told.",
+  "Calibrating peripheral attention as a UI input. The difference between glance and stare.",
+  "The grammar of micro-gestures across surfaces. What the same tap means on Vision Pro, on Quest, on Ray-Ban.",
   "Documenting a system fast enough that a junior engineer can ship the second version without consulting the first.",
-  "The ethics of glasses-class commerce — when a brand can suggest a product into your peripheral vision, what should it not do.",
+  "The ethics of glasses-class commerce. When a brand can suggest a product into your peripheral vision, what should it not do.",
 ];
 
 export default function Lab() {
@@ -266,7 +266,7 @@ export default function Lab() {
     <PageTransition>
       <SEO
         title="Lab"
-        description="The studio's R&D arm. Surfaces we build for ahead of demand — Meta Ray-Ban Display, Apple Vision Pro, Quest, Wear OS — and the experiments we are willing to defend in public."
+        description="The studio's R&D arm. Surfaces we build for ahead of demand. Meta Ray-Ban Display, Apple Vision Pro, Quest, Wear OS, and the experiments we are willing to defend in public."
         path="/lab"
         keywords={[
           "spatial computing",
@@ -311,14 +311,14 @@ export default function Lab() {
 
           <p className="mt-10 max-w-3xl text-lg text-bone-100/75 leading-relaxed">
             The lab is the part of the studio that buys its own time. A
-            specification, a reading list, an open invitation — these
+            specification, a reading list, an open invitation. These
             are the artifacts. We are honest about which surfaces we
             have shipped and which we are ready to ship for the first
             time. The currency of an institution is its preparation,
             not its pretence.
           </p>
 
-          {/* Honesty banner — the page declares its own evidence policy
+          {/* Honesty banner. The page declares its own evidence policy
               before the visitor reads further. */}
           <div className="mt-10 max-w-3xl border-y border-white/10 py-5 flex flex-wrap items-start gap-4 md:gap-8">
             <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-signal shrink-0">
@@ -360,7 +360,7 @@ export default function Lab() {
               </h2>
               <p className="mt-6 text-bone-100/70 max-w-2xl leading-relaxed">
                 Every few years a new surface joins the room a business
-                must consider. We build for them ahead of demand — so when
+                must consider. We build for them ahead of demand, so when
                 a client decides to invest, the team has already shipped
                 something.
               </p>
@@ -427,11 +427,11 @@ export default function Lab() {
                 </span>
               </h2>
               <p className="mt-6 text-bone-100/70 max-w-2xl leading-relaxed">
-                Each brief is a fully specified 4–8 week build with
+                Each brief is a fully specified 4-8 week build with
                 architecture, stack, deliverables, and a price set
                 privately with the first commissioning client. The
                 first commission on each surface receives a 30%
-                pilot discount — and the right to be named.
+                pilot discount, and the right to be named.
               </p>
             </div>
           </div>
@@ -467,7 +467,7 @@ export default function Lab() {
                   {b.brief}
                 </p>
 
-                {/* Pilot details — what the first commission gets */}
+                {/* Pilot details. What the first commission gets */}
                 <dl className="grid grid-cols-2 gap-x-6 gap-y-2 mb-6 font-mono text-[10px] tracking-[0.18em] uppercase text-bone-100/55 border-y border-white/8 py-4">
                   <div>
                     <dt className="text-bone-100/40">Timeline</dt>
@@ -503,7 +503,7 @@ export default function Lab() {
         <WaveBreak />
       </div>
 
-      {/* ─── FIELD NOTES — what we have studied ─── */}
+      {/* ─── FIELD NOTES. What we have studied ─── */}
       <section className="relative py-20 md:py-28 bg-[color:var(--color-ink)]">
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <div className="grid grid-cols-12 gap-6 md:gap-10 items-start mb-12 md:mb-16">
@@ -521,7 +521,7 @@ export default function Lab() {
               <p className="mt-6 text-bone-100/70 max-w-2xl leading-relaxed">
                 Preparation is the visible currency of an institution.
                 Below is the public reading log we keep on each
-                surface — official documentation, conference sessions,
+                surface. Official documentation, conference sessions,
                 research papers, and granted patents. None of it is
                 shipped client work. All of it is real preparation.
               </p>
@@ -613,7 +613,7 @@ export default function Lab() {
         <WaveBreak />
       </div>
 
-      {/* ─── WORKSHOP OUTPUT — real internal tools we run ─── */}
+      {/* ─── WORKSHOP OUTPUT. Real internal tools we run ─── */}
       <section className="relative py-20 md:py-28 bg-[color:var(--color-ink)]">
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <div className="grid grid-cols-12 gap-6 md:gap-10 items-start mb-12 md:mb-16">

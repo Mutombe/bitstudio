@@ -154,7 +154,7 @@ export default function Live() {
   );
 }
 
-// ─── LIVE TILE — opens detail page on our site (card click) +
+// ─── LIVE TILE. Opens detail page on our site (card click) +
 //    explicit outbound CTA (button click → external, new tab) ────────────
 function LiveTile({ site, index }) {
   const hover = useCursorHover("view", "Open");

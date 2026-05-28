@@ -6,7 +6,7 @@ import App from "./App.jsx";
 import "./index.css";
 
 // Self-hosted fonts (was: dynamic <link> to fonts.googleapis.com).
-// Removes the LG München I 3 O 17493/20 grey zone — DSGVO clean.
+// Removes the LG München I 3 O 17493/20 grey zone. DSGVO clean.
 // Syne (display headings), Space Grotesk (body), Fraunces (italic accent),
 // JetBrains Mono (mono/labels). Weights match what the design system uses.
 import "@fontsource/syne/400.css";

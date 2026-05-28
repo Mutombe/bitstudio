@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useReducedMotionPreference } from "../../hooks/useReducedMotion.js";
 
 /**
- * WebAppsHero — wireframe browser morphing between 3 dashboard layouts
+ * WebAppsHero. Wireframe browser morphing between 3 dashboard layouts
  *   (stat cards → chart → table) on a 4s loop.
  */
 const LAYOUTS = ["stats", "chart", "table"];

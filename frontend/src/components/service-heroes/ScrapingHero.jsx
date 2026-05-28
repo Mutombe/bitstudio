@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useReducedMotionPreference } from "../../hooks/useReducedMotion.js";
 
 /**
- * ScrapingHero — DOM tree building itself, then collapsing into a single
+ * ScrapingHero. DOM tree building itself, then collapsing into a single
  * clean row of data.
  */
 

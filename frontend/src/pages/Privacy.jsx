@@ -6,7 +6,7 @@ import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 
 /**
- * /privacy — English-language Privacy Policy.
+ * /privacy. English-language Privacy Policy.
  *
  * Mirrors /datenschutz in content. Covers the same data flows under both
  * GDPR (for EU/UK visitors, extraterritorial via Art. 3.2) and US state
@@ -39,11 +39,11 @@ Bit Studio is incorporated outside the EU and the US. We treat personal data fro
 · Browser type, version, and operating system
 · Referrer URL (the page you came from)
 
-Legal basis under GDPR: Art. 6(1)(f) — legitimate interest in making the site available and secure. Logs are deleted after 30 days. Render processes data under the EU Standard Contractual Clauses pursuant to Art. 46 GDPR. For US visitors, this is "service provider" processing as defined in CCPA § 1798.140(ag).`,
+Legal basis under GDPR: Art. 6(1)(f). Legitimate interest in making the site available and secure. Logs are deleted after 30 days. Render processes data under the EU Standard Contractual Clauses pursuant to Art. 46 GDPR. For US visitors, this is "service provider" processing as defined in CCPA § 1798.140(ag).`,
   },
   {
     title: "Contact form & messages",
-    body: `If you contact us by email, WhatsApp, or the form at /contact, the information you provide (name, email, project description, anything else you choose to share) is used solely to handle your enquiry. The form dispatches your inputs through your chosen channel (WhatsApp or your mail client) — we don't store form data on a server.
+    body: `If you contact us by email, WhatsApp, or the form at /contact, the information you provide (name, email, project description, anything else you choose to share) is used solely to handle your enquiry. The form dispatches your inputs through your chosen channel (WhatsApp or your mail client). We don't store form data on a server.
 
 Legal basis under GDPR: Art. 6(1)(b) (contract initiation) and Art. 6(1)(f) (legitimate interest). We retain enquiry data until the matter is closed, and at most six months after our last contact.`,
   },
@@ -67,15 +67,15 @@ Fonts, icons, images, and the application bundle are all served from the same do
     title: "Your rights",
     body: `You may at any time exercise:
 
-· Access (GDPR Art. 15) — what data we hold about you
-· Rectification (Art. 16) — correction of inaccurate or incomplete data
-· Erasure (Art. 17) — deletion, subject to applicable retention obligations
+· Access (GDPR Art. 15). What data we hold about you
+· Rectification (Art. 16). Correction of inaccurate or incomplete data
+· Erasure (Art. 17). Deletion, subject to applicable retention obligations
 · Restriction of processing (Art. 18)
 · Data portability (Art. 20)
-· Objection (Art. 21) — to processing based on legitimate interest
+· Objection (Art. 21). To processing based on legitimate interest
 · Lodge a complaint with a supervisory authority (Art. 77)
 
-For US residents, you may additionally have rights under your state's privacy law — including the right to know, delete, correct, and opt out of certain processing. To exercise any of these, email admin@bitstudio.co.zw. We answer within the statutory time frame (one month under GDPR; 45 days under most US laws).`,
+For US residents, you may additionally have rights under your state's privacy law. Including the right to know, delete, correct, and opt out of certain processing. To exercise any of these, email admin@bitstudio.co.zw. We answer within the statutory time frame (one month under GDPR; 45 days under most US laws).`,
   },
   {
     title: "Children's data",
@@ -94,7 +94,7 @@ export default function Privacy() {
     <PageTransition>
       <SEO
         title="Privacy Policy"
-        description="How Bit Studio (Private) Limited handles personal data — under GDPR Art. 13/14 and US state privacy laws. Hosting, fonts, contact form, your rights."
+        description="How Bit Studio (Private) Limited handles personal data. Under GDPR Art. 13/14 and US state privacy laws. Hosting, fonts, contact form, your rights."
         path="/privacy"
         keywords={["privacy policy", "GDPR", "CCPA", "Bit Studio", "data protection"]}
         jsonLd={[
@@ -131,7 +131,7 @@ export default function Privacy() {
           </motion.h1>
           <p className="mt-8 max-w-2xl text-bone-100/75 text-base md:text-lg leading-relaxed">
             We process as little as possible. What we do process, you'll find
-            here — clearly, completely, and without legal hide-and-seek. The
+            here. Clearly, completely, and without legal hide-and-seek. The
             German-language version lives at{" "}
             <Link to="/datenschutz" {...hover} className="text-signal hover-line">
               /datenschutz

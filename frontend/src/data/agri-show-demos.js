@@ -1,11 +1,11 @@
-// Bit Studio — Agri Show Harare 2026 demo ledger
+// Bit Studio. Agri Show Harare 2026 demo ledger
 // 33 unique bespoke websites built for Zimbabwe Agricultural Show exhibitors
 // over a single fortnight in May 2026. Every entry is a live URL.
 //
 // Each site is hand-built (no template), with distinct page architecture,
 // industry-jargon page names, a signature interaction, and contextually
 // honest imagery. Rebuilt fresh after a first attempt scaffolded from
-// `src/generator/base_template/` was rejected as "basic" — the lesson is
+// `src/generator/base_template/` was rejected as "basic". The lesson is
 // now permanent in [[feedback-no-base-template-for-premium]].
 
 export const AGRI_SHOW_DEMOS = [
@@ -24,7 +24,7 @@ export const AGRI_SHOW_DEMOS = [
     brief:
       "Specialty foliar plant nutrition. The Agrilibrium range, framed as plant-science journal not chemical catalogue.",
     note:
-      "Their real site was offline. We rebuilt the science of the spray with a scroll-driven growth cycle — germination to yield.",
+      "Their real site was offline. We rebuilt the science of the spray with a scroll-driven growth cycle. Germination to yield.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
   },
   {
@@ -40,7 +40,7 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#0b3d2e", "#ffffff", "#c1272d"],
     typography: "Bricolage Grotesque / Archivo",
     brief:
-      "Half a century in steel — Strath, Andrew, Alastair. Farm sheds, structural steel, regional exports since 1976.",
+      "Half a century in steel. Strath, Andrew, Alastair. Farm sheds, structural steel, regional exports since 1976.",
     note:
       "Their SSL had expired so browsers blocked the site. We told the three-generation story with a 49-Year Ledger that pins to the viewport.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
@@ -76,7 +76,7 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#1b5e20", "#ffd54f", "#ffffff"],
     typography: "Fraunces / Archivo / IBM Plex Mono",
     brief:
-      "Thirty-seven seasons of better seed. Maize, soya, sugarbean, sorghum — a field-trial journal.",
+      "Thirty-seven seasons of better seed. Maize, soya, sugarbean, sorghum. A field-trial journal.",
     note:
       "Their site's page title still read 'New York' from the unchanged WordPress theme. We replaced it with a germination sequence and a crop selector.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
@@ -94,7 +94,7 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#1A3E72", "#C9A24F", "#FFFFFF"],
     typography: "Fraunces / Outfit",
     brief:
-      "Premium Brazilian farm equipment — Jacto, Baldan, Monosem — as curated collections, not a product grid.",
+      "Premium Brazilian farm equipment. Jacto, Baldan, Monosem. As curated collections, not a product grid.",
     note:
       "We treated Lozino like a watch house. Each marque composes in with a brass underline drawing across.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
@@ -130,7 +130,7 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#D7261E", "#1F1F1F", "#FFCC00"],
     typography: "Fraunces / Archivo",
     brief:
-      "Italian engineering in African red soil — since 1935. Generators, pumps, control panels.",
+      "Italian engineering in African red soil. Since 1935. Generators, pumps, control panels.",
     note:
       "The real site was HTTP 500. We built a brass rotary counter ticking off nine decades, installations, MW under maintenance.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
@@ -150,7 +150,7 @@ export const AGRI_SHOW_DEMOS = [
     brief:
       "Every input. Every season. One brain. Greenhouse construction and agronomy under one founder.",
     note:
-      "Their domain was refusing connections. We tickered the five-act practice — Seed · Spray · Soil · Scout · Sell — like a control-room marquee.",
+      "Their domain was refusing connections. We tickered the five-act practice. Seed · Spray · Soil · Scout · Sell. Like a control-room marquee.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
   },
   {
@@ -166,7 +166,7 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#F9A825", "#212121", "#FFFFFF"],
     typography: "Fraunces / Inter / JetBrains Mono",
     brief:
-      "Oloff and Sebastian Smyth. 620+ stations, 30,000 panels, 100 MWh per day — the brothers behind the mini-grids.",
+      "Oloff and Sebastian Smyth. 620+ stations, 30,000 panels, 100 MWh per day. The brothers behind the mini-grids.",
     note:
       "We built a live solar-harvest counter that accumulates kWh in real time across their installed fleet. The numbers move while you read.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
@@ -184,7 +184,7 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#D4001A", "#FFC107", "#FBF7EC"],
     typography: "Cormorant Garamond / Inter",
     brief:
-      "One name, many strengths. A diversified Zimbabwean group — hospitality, logistics, milling, agri — under Anthony Clever Pote.",
+      "One name, many strengths. A diversified Zimbabwean group. Hospitality, logistics, milling, agri. Under Anthony Clever Pote.",
     note:
       "Their real site was showing broken SVG placeholders. We made each subsidiary's wordmark compose in character-by-character, like calligraphy.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
@@ -204,7 +204,7 @@ export const AGRI_SHOW_DEMOS = [
     brief:
       "Every Zimbabwean lake, since 1970. Yamaha sole agent and in-house boat manufacturer, family-owned through three decades.",
     note:
-      "We rejected every Mediterranean yacht photo Unsplash returned. Kariba, Chivero, Mazvikadei, Mutirikwi — that's the whole map.",
+      "We rejected every Mediterranean yacht photo Unsplash returned. Kariba, Chivero, Mazvikadei, Mutirikwi. That's the whole map.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
   },
   {
@@ -238,7 +238,7 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#8B4513", "#F5C518", "#F4EBD8"],
     typography: "Fraunces / Inter / JetBrains Mono",
     brief:
-      "The thread Zimbabwean tobacco was tied with — for 75 years. Project Phoenix told as a chapter, not a banner.",
+      "The thread Zimbabwean tobacco was tied with. For 75 years. Project Phoenix told as a chapter, not a banner.",
     note:
       "A braided rope strand runs down the right gutter of every page and physically twists as you scroll. The product, embodied.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
@@ -256,9 +256,9 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#F4A300", "#0B2545", "#FBF8F1"],
     typography: "Fraunces / Inter Tight / JetBrains Mono",
     brief:
-      "The fuel behind the fleet. 100% indigenous, 35-site network, Aaron Chinhara founder — the story currently understated.",
+      "The fuel behind the fleet. 100% indigenous, 35-site network, Aaron Chinhara founder. The story currently understated.",
     note:
-      "A 7×5 grid of fuel-pump SVGs lights up one by one as you scroll — Las Vegas marquee for a forecourt network.",
+      "A 7×5 grid of fuel-pump SVGs lights up one by one as you scroll. Las Vegas marquee for a forecourt network.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
   },
   {
@@ -276,7 +276,7 @@ export const AGRI_SHOW_DEMOS = [
     brief:
       "The weave the country was built on. Eighty years of Russell-Smith family textile and geotextile manufacturing.",
     note:
-      "The background carries a woven texture; on the homepage the weave shuttle animates warp then weft — one thread at a time pulled through.",
+      "The background carries a woven texture; on the homepage the weave shuttle animates warp then weft. One thread at a time pulled through.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
   },
   {
@@ -292,7 +292,7 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#0073B7", "#7CB342", "#FBFAF6"],
     typography: "Fraunces / Inter Tight",
     brief:
-      "Every drop, deliberate. A Henson family company since 1995 — drip irrigation craft restored to the surface.",
+      "Every drop, deliberate. A Henson family company since 1995. Drip irrigation craft restored to the surface.",
     note:
       "A single droplet animates down the left margin on scroll. Lands in a different crop at each section.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
@@ -310,9 +310,9 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#0E3D1F", "#F6A623", "#F4EFE2"],
     typography: "Fraunces / Inter Tight / JetBrains Mono",
     brief:
-      "Europe's finest, for African soil. Pöttinger, Grimme, Hardi — distributed by Tombill Trading, with no standalone site until now.",
+      "Europe's finest, for African soil. Pöttinger, Grimme, Hardi. Distributed by Tombill Trading, with no standalone site until now.",
     note:
-      "A scroll-driven route line draws from Austria, Germany and Denmark down to Harare — depositing each marque's badge along the way.",
+      "A scroll-driven route line draws from Austria, Germany and Denmark down to Harare. Depositing each marque's badge along the way.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
   },
   {
@@ -330,7 +330,7 @@ export const AGRI_SHOW_DEMOS = [
     brief:
       "The workshop with sawdust on the doormat. STIHL and Briggs & Stratton sole agent, Ralph and Greg Stead, since 1996.",
     note:
-      "A chainsaw chain runs along the bottom edge of every page — each link cycles. The product, in motion.",
+      "A chainsaw chain runs along the bottom edge of every page. Each link cycles. The product, in motion.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
   },
   {
@@ -366,7 +366,7 @@ export const AGRI_SHOW_DEMOS = [
     brief:
       "The power behind the names you know. PG Bison, Anglo Coal Zibulo, Tanganda BESS, Golden Valley 6 MW.",
     note:
-      "We rendered the marquee projects as a documentary credits reel — each scrolling past with its megawatt figure.",
+      "We rendered the marquee projects as a documentary credits reel. Each scrolling past with its megawatt figure.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
   },
   {
@@ -382,7 +382,7 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#37474F", "#F57C00", "#FFFFFF"],
     typography: "Inter Tight / Fraunces / JetBrains Mono",
     brief:
-      "The floor every premium room stands on. Finfloor SA distribution — epoxy, vinyl, SPC.",
+      "The floor every premium room stands on. Finfloor SA distribution. Epoxy, vinyl, SPC.",
     note:
       "A 3D sample-board where each bento tile flips on hover to reveal floor system, finish, and the venue it was installed in.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
@@ -402,7 +402,7 @@ export const AGRI_SHOW_DEMOS = [
     brief:
       "When the bakkie won't crank. Mobile vehicle repair, Toyota D4D specialism, 24/7.",
     note:
-      "A pulsing response-radius ring expands from a Harare pin across the page on scroll. A live clock at the corner reads — we're awake.",
+      "A pulsing response-radius ring expands from a Harare pin across the page on scroll. A live clock at the corner reads. We're awake.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
   },
   {
@@ -418,7 +418,7 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#3E8E41", "#8B4513", "#F5DEB3"],
     typography: "Fraunces / Inter Tight",
     brief:
-      "Agriculture that gives the soil back. Kay, Currie and Meyer — biological inputs at field scale.",
+      "Agriculture that gives the soil back. Kay, Currie and Meyer. Biological inputs at field scale.",
     note:
       "A scroll-driven soil cross-section: the soil starts depleted and pale, then microbes, roots and earthworms compose it back to life.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
@@ -436,7 +436,7 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#388e3c", "#1b5e20", "#fbc02d"],
     typography: "Fraunces / Inter Tight / JetBrains Mono",
     brief:
-      "From 800 to 5,000 tonnes a month — in sixteen years. Tayler and Kirkman, finally on the page.",
+      "From 800 to 5,000 tonnes a month. In sixteen years. Tayler and Kirkman, finally on the page.",
     note:
       "A growth chart climbs the founder story while five depots light up in sequence on a Zim map. The growth, rendered as motion.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
@@ -454,9 +454,9 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#1F3D2A", "#5DAE3C", "#C9A36B"],
     typography: "Fraunces / Inter / JetBrains Mono",
     brief:
-      "The smell of rain on dry earth — literalised. Agrico flagship installations across Zimbabwe.",
+      "The smell of rain on dry earth. Literalised. Agrico flagship installations across Zimbabwe.",
     note:
-      "Leave the page idle for three seconds and soft rain ripples appear at random points on the screen. Quiet, atmospheric — never twee.",
+      "Leave the page idle for three seconds and soft rain ripples appear at random points on the screen. Quiet, atmospheric. Never twee.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
   },
   {
@@ -490,9 +490,9 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#1B7A3E", "#F5A623", "#FFFFFF"],
     typography: "Fraunces / Inter / JetBrains Mono",
     brief:
-      "Mechanise the farm. Mechanise the country. John Deere, New Holland, Case IH — under one roof.",
+      "Mechanise the farm. Mechanise the country. John Deere, New Holland, Case IH. Under one roof.",
     note:
-      "A Bloomberg-style ticker scrolls model numbers with horsepower and header-width specs — and a different set on every page.",
+      "A Bloomberg-style ticker scrolls model numbers with horsepower and header-width specs, and a different set on every page.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
   },
   {
@@ -508,9 +508,9 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#C8102E", "#1F1F1F", "#FFFFFF"],
     typography: "Anton / Archivo / JetBrains Mono",
     brief:
-      "Heat is a problem we solve. Heavy-equipment radiators, since 1996 — restored from an abandoned-looking 2008 site.",
+      "Heat is a problem we solve. Heavy-equipment radiators, since 1996. Restored from an abandoned-looking 2008 site.",
     note:
-      "A background heat-haze intensifies near product sections — like looking across a hot engine block. The radiator-grille becomes the design system.",
+      "A background heat-haze intensifies near product sections. Like looking across a hot engine block. The radiator-grille becomes the design system.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
   },
   {
@@ -528,7 +528,7 @@ export const AGRI_SHOW_DEMOS = [
     brief:
       "Sow it organic. Reap it regenerative. An ag-machinery specialist that until now lived only on Facebook.",
     note:
-      "A meandering worm-trail line draws itself down the left gutter on scroll — sprouting a small plant at the end of each section.",
+      "A meandering worm-trail line draws itself down the left gutter on scroll. Sprouting a small plant at the end of each section.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
   },
   {
@@ -544,9 +544,9 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#C8102E", "#1A1A1A", "#FFD200"],
     typography: "Anton / Inter Tight / JetBrains Mono",
     brief:
-      "Built for the heavy lift. Excavators, loaders, dozers, graders — a 30-employee yard finally with a site to match.",
+      "Built for the heavy lift. Excavators, loaders, dozers, graders. A 30-employee yard finally with a site to match.",
     note:
-      "Every equipment label gets a yellow construction-tape strike-through on hover — like a foreman's checklist marker.",
+      "Every equipment label gets a yellow construction-tape strike-through on hover. Like a foreman's checklist marker.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
   },
   {
@@ -562,7 +562,7 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#1A6FAD", "#7DBE3C", "#FFFFFF"],
     typography: "Fraunces / Inter / JetBrains Mono",
     brief:
-      "2,600 projects engineered. And counting. Centre-pivot, drip, pumping — under Graham Wright.",
+      "2,600 projects engineered. And counting. Centre-pivot, drip, pumping. Under Graham Wright.",
     note:
       "An animated centre-pivot SVG sweeps over an aerial photo. Live counters tick to 2,617 on first paint.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
@@ -580,7 +580,7 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#D4001A", "#F5C518", "#FFFCF6"],
     typography: "Fraunces / Inter Tight / JetBrains Mono",
     brief:
-      "Twelve million dollars. At scale. Davison Norupiri's Davipel plant — the one-pager replaced with a manifesto.",
+      "Twelve million dollars. At scale. Davison Norupiri's Davipel plant. The one-pager replaced with a manifesto.",
     note:
       "A falling-grain particle field drifts behind the hero. The scale stats count up. The mill, embodied.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],
@@ -598,7 +598,7 @@ export const AGRI_SHOW_DEMOS = [
     palette: ["#0B5F2D", "#F2A900", "#FFFFFF"],
     typography: "Fraunces / Inter Tight / JetBrains Mono",
     brief:
-      "On four in every ten hectares. 150,000 growers, ~40% national agrochemical share — finally claimed.",
+      "On four in every ten hectares. 150,000 growers, ~40% national agrochemical share. Finally claimed.",
     note:
       "A 10-cell grid in the hero fills four cells in brand-green on load. A quiet, confident visualisation of market share.",
     tech: ["React 18", "Vite 6", "Tailwind v4", "Framer Motion"],

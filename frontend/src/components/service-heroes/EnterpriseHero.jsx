@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useReducedMotionPreference } from "../../hooks/useReducedMotion.js";
 
 /**
- * EnterpriseHero — network graph of 12 nodes connecting/disconnecting with
+ * EnterpriseHero. Network graph of 12 nodes connecting/disconnecting with
  *   chartreuse edges. Like an org chart made of light.
  */
 const NODE_COUNT = 12;
@@ -11,7 +11,7 @@ const NODE_COUNT = 12;
 export default function EnterpriseHero() {
   const reduced = useReducedMotionPreference();
 
-  // Compute stable node positions once — arranged in a loose 2-ring pattern
+  // Compute stable node positions once. Arranged in a loose 2-ring pattern
   const nodes = useMemo(() => {
     const arr = [];
     for (let i = 0; i < NODE_COUNT; i++) {

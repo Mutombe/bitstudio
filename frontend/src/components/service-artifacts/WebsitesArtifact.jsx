@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useReducedMotionPreference } from "../../hooks/useReducedMotion.js";
 
 /**
- * Websites artifact — four ascending performance-score bars.
+ * Websites artifact. Four ascending performance-score bars.
  * Idle: bars breathe (slight scaleY pulse, staggered).
  * Hover (parent .group): bars intensify to signal chartreuse briefly.
  */

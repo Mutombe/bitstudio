@@ -18,14 +18,14 @@ import { useCursorHover } from "../../hooks/useCursor.jsx";
 import { PACKAGES, PROCESS_PHASES } from "../../data/packages.js";
 
 /**
- * /pakete — German-language Engagement page (the sales surface).
+ * /pakete. German-language Engagement page (the sales surface).
  *
  * Three Erneuerungs-Pakete with fixed scope, fixed price, three slots
  * per quarter. Each package has its own anchored section so cold emails
  * can deep-link (e.g. /pakete#manufaktur-buehne).
  *
  * The English mirror lives at /packages. Both share PACKAGES from
- * src/data/packages.js — change copy once, both update.
+ * src/data/packages.js. Change copy once, both update.
  */
 
 const NF_DAYS = (n) => `${n} Tage`;
@@ -86,7 +86,7 @@ export default function Pakete() {
 
           <p className="mt-10 max-w-2xl text-base md:text-lg text-bone-100/85 leading-relaxed">
             Die meisten Studios verkaufen Zeit. Wir verkaufen drei klar
-            umrissene Werkstücke pro Quartal — fester Umfang, fester Preis,
+            umrissene Werkstücke pro Quartal. Fester Umfang, fester Preis,
             festes Lieferdatum. Wer hineinpasst, weiß es vor dem ersten
             Gespräch. Wer nicht hineinpasst, spart sich die Mühe.
           </p>
@@ -136,7 +136,7 @@ export default function Pakete() {
             <p className="text-base md:text-lg">
               Die Plätze werden nicht nach Reihenfolge vergeben. Wir wählen die
               Projekte, in denen wir die größte Sorgfalt zur Wirkung bringen
-              können — Häuser, die ihre Geschichte ernst nehmen, und für die
+              können. Häuser, die ihre Geschichte ernst nehmen, und für die
               eine ehrliche Erneuerung den größten Unterschied macht.
             </p>
             <p className="text-base md:text-lg">
@@ -164,7 +164,7 @@ export default function Pakete() {
           <div className="mb-14 md:mb-20 max-w-3xl">
             <SectionLabel chapter="§ Ablauf" title="Vier Phasen" />
             <h2 className="mt-6 font-display text-bone-100 leading-[1.0]" style={{ fontSize: "clamp(2.25rem, 6vw, 5rem)", fontWeight: 700, letterSpacing: "-0.04em" }}>
-              Vom Briefing bis zum Launch —<br />
+              Vom Briefing bis zum Launch.<br />
               <span className="italic-accent text-bone-300 font-light">vier Phasen, transparent getaktet.</span>
             </h2>
           </div>
@@ -216,18 +216,18 @@ export default function Pakete() {
             />
             <Objection
               q="Bauen Sie auch in WordPress, Webflow oder Wix?"
-              a="Nein. Wir bauen auf React, Vite und Tailwind. Das ist die Plattform, auf der unsere Werke altern wie sie sollen — schnell, lesbar, langlebig. Wenn Sie eine bestehende WordPress-Site behalten möchten, sind wir nicht das richtige Studio."
+              a="Nein. Wir bauen auf React, Vite und Tailwind. Das ist die Plattform, auf der unsere Werke altern wie sie sollen. Schnell, lesbar, langlebig. Wenn Sie eine bestehende WordPress-Site behalten möchten, sind wir nicht das richtige Studio."
             />
             <Objection
               q="Wer hostet die fertige Seite?"
-              a="Render (USA, DSGVO-konform). Sechs Monate sind im Preis enthalten. Danach circa € 50 pro Monat — oder Sie übernehmen die Render-Rechnung selbst und wir übergeben den Zugang."
+              a="Render (USA, DSGVO-konform). Sechs Monate sind im Preis enthalten. Danach circa € 50 pro Monat. Oder Sie übernehmen die Render-Rechnung selbst und wir übergeben den Zugang."
             />
             <Objection
               q="Können wir das Projekt auch in Etappen bezahlen?"
-              a="Standard ist 50 / 50 — Anzahlung zum Start, Restzahlung bei Abnahme. Auf Wunsch teilen wir die Restzahlung in zwei Tranchen (25 / 25) bei Halbzeit und Abnahme. Schreiben Sie es einfach in die erste E-Mail."
+              a="Standard ist 50 / 50. Anzahlung zum Start, Restzahlung bei Abnahme. Auf Wunsch teilen wir die Restzahlung in zwei Tranchen (25 / 25) bei Halbzeit und Abnahme. Schreiben Sie es einfach in die erste E-Mail."
             />
             <Objection
-              q="Wir sind in Österreich / der Schweiz — gilt das Paket?"
+              q="Wir sind in Österreich / der Schweiz. Gilt das Paket?"
               a="Ja. Die Pakete sind identisch für DACH. Bei Reverse-Charge-fähigen Geschäftskunden gilt § 13b UStG (keine deutsche Mehrwertsteuer auf der Rechnung)."
             />
           </div>
@@ -247,7 +247,7 @@ export default function Pakete() {
           <p className="mt-10 max-w-2xl text-bone-100/75 text-lg leading-relaxed">
             Schreiben Sie uns einen Satz zu Ihrem Haus und das Paket, an dem
             Sie Interesse haben. Wir antworten an demselben Werktag mit zwei
-            oder drei präzisen Fragen — und schlagen einen 20-minütigen Anruf
+            oder drei präzisen Fragen. Und schlagen einen 20-minütigen Anruf
             vor, wenn das gegenseitige Interesse passt.
           </p>
 

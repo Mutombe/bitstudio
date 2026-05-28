@@ -18,7 +18,7 @@ export function useCursor() {
 }
 
 // Kept as a no-op so components that spread `{...useCursorHover(...)}` still
-// compile. Returns empty object (nothing to merge) — safer than returning
+// compile. Returns empty object (nothing to merge). Safer than returning
 // handler stubs that would overwrite real onMouseEnter/Leave on the target.
 export function useCursorHover(_variant = "hover", _label = "") {
   return {};

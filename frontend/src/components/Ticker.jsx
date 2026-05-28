@@ -2,11 +2,11 @@ import { toast } from "sonner";
 import Marquee from "./Marquee.jsx";
 
 /**
- * Ticker — a mono-type marquee strip of short tokens.
+ * Ticker. A mono-type marquee strip of short tokens.
  *
  * Items can be:
- *   • string       — the token text (click copies to clipboard)
- *   • object       — { label, href?, to?, onClick?, external? }
+ *   • string      . The token text (click copies to clipboard)
+ *   • object      . { label, href?, to?, onClick?, external? }
  *     - href      opens in a new tab (external link)
  *     - to        not used here (tickers stay inside the studio visual language)
  *     - onClick   custom action (e.g. open Summon)

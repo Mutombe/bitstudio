@@ -26,7 +26,7 @@ export default function LiveDetail() {
     [slug]
   );
 
-  // Adjacent — wrap around at edges
+  // Adjacent. Wrap around at edges
   const adjacent = useMemo(() => {
     if (!site) return { prev: null, next: null };
     const idx = LIVE_SITES.findIndex((s) => s.slug === site.slug);
@@ -233,7 +233,7 @@ export default function LiveDetail() {
             <div>
               <SectionLabel chapter="§ 02" title="Frame" />
               <h2 className="mt-4 font-display text-2xl md:text-4xl text-bone-100 leading-[1.05]">
-                A glimpse — the rest is at the public address.
+                A glimpse. The rest is at the public address.
               </h2>
             </div>
             <a
@@ -249,7 +249,7 @@ export default function LiveDetail() {
           </div>
 
           {/* Browser-chrome frame around an iframe of the live site.
-              Some sites block embedding via X-Frame-Options — the fallback is
+              Some sites block embedding via X-Frame-Options. The fallback is
               a styled placeholder with a clear "Visit live" CTA. */}
           <div className="relative rounded-sm border border-white/10 overflow-hidden bg-[color:var(--color-ink)]">
             <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/10 bg-white/[0.03]">
@@ -269,14 +269,14 @@ export default function LiveDetail() {
             <div className="relative aspect-[16/10] md:aspect-[16/8] bg-bone-100/5">
               <iframe
                 src={site.url}
-                title={`${site.name} — live preview`}
+                title={`${site.name}. Live preview`}
                 loading="lazy"
                 sandbox="allow-scripts allow-same-origin allow-popups"
                 referrerPolicy="no-referrer"
                 className="absolute inset-0 w-full h-full"
                 style={{ border: 0 }}
               />
-              {/* Fallback overlay — only visible if iframe fails (X-Frame-Options).
+              {/* Fallback overlay. Only visible if iframe fails (X-Frame-Options).
                   Sits BEHIND the iframe via z-0; if the iframe renders, you don't
                   see it. If the iframe blanks (browser blocked), this is what's there. */}
               <div className="absolute inset-0 -z-10 flex items-center justify-center">

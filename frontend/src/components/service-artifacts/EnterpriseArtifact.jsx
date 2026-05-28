@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useReducedMotionPreference } from "../../hooks/useReducedMotion.js";
 
 /**
- * Enterprise artifact — a tiny 3-node organisational graph.
+ * Enterprise artifact. A tiny 3-node organisational graph.
  * Idle: root node pulses softly, edges glow along the child branches.
  * Hover: edges brighten briefly to chartreuse.
  */

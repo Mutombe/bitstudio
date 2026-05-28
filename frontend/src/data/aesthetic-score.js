@@ -1,23 +1,23 @@
-// Bit Studio — aesthetic-score model
+// Bit Studio. Aesthetic-score model
 //
 // A small, opinionated scorer that ranks demos by four heuristics. The two
-// the principal cares about — "simplicity established from complexity" and
-// "colour fusion" — carry the heaviest weight. The other two (originality
+// the principal cares about. "simplicity established from complexity" and
+// "colour fusion". Carry the heaviest weight. The other two (originality
 // of mechanic, concept-to-business tie) are tiebreakers, but they do real
 // work in pulling editorial sites above conventional ones.
 //
 // Total out of 80:
-//   • Colour Fusion:        0–30  (palette harmony × contrast × saturation balance)
-//   • Simplicity:           0–20  (brief brevity + brief-tightness)
-//   • Originality:          0–15  (penalty for generic vocabulary, bonus for named mechanics)
-//   • Concept Tie:          0–15  (brief references business name / industry directly)
+//   • Colour Fusion:        0-30  (palette harmony × contrast × saturation balance)
+//   • Simplicity:           0-20  (brief brevity + brief-tightness)
+//   • Originality:          0-15  (penalty for generic vocabulary, bonus for named mechanics)
+//   • Concept Tie:          0-15  (brief references business name / industry directly)
 //
 // Two user-anchored slugs always come first regardless of score.
 
 // ─── COLOUR MATH ─────────────────────────────────────────────────────────
 
 /**
- * Hex → HSL ({ h: 0–360, s: 0–1, l: 0–1 }).
+ * Hex → HSL ({ h: 0-360, s: 0-1, l: 0-1 }).
  * Returns a neutral grey on parse failure so the scorer doesn't NaN out.
  */
 function hexToHSL(hex) {
@@ -44,7 +44,7 @@ function hexToHSL(hex) {
   return { h, s, l };
 }
 
-/** Shortest distance between two hues on the 0–360 colour wheel. */
+/** Shortest distance between two hues on the 0-360 colour wheel. */
 function hueDist(a, b) {
   let d = Math.abs(a - b) % 360;
   if (d > 180) d = 360 - d;
@@ -55,16 +55,16 @@ function hueDist(a, b) {
  * Score a 2-3-colour palette for harmony.
  * Reward classical relationships, punish dissonance.
  *
- *   analogous   (0–30°)   → 1.0
- *   complementary (150–180°) → 1.0
- *   triadic     (110–130°) → 0.85
- *   split-comp  (140–150°) → 0.7
+ *   analogous   (0-30°)   → 1.0
+ *   complementary (150-180°) → 1.0
+ *   triadic     (110-130°) → 0.85
+ *   split-comp  (140-150°) → 0.7
  *   neutral-against-anything → 1.0 (cream/ivory partners with everything)
- *   anything else        → 0.25–0.45
+ *   anything else        → 0.25-0.45
  */
 function harmonyBetween(h1, h2, s1, s2) {
   // If either colour is near-neutral (low saturation) treat the relationship
-  // as harmonious — the neutral acts as a canvas.
+  // as harmonious. The neutral acts as a canvas.
   if (s1 < 0.15 || s2 < 0.15) return 1.0;
   const d = hueDist(h1, h2);
   if (d < 30) return 1.0;
@@ -76,11 +76,11 @@ function harmonyBetween(h1, h2, s1, s2) {
 }
 
 /**
- * Score colour fusion (0–30).
- *  • Contrast  — how wide the luminance range is (bold light/dark juxtaposition).
- *  • Saturation balance — the palette wants at least one *rich* hue and at
+ * Score colour fusion (0-30).
+ *  • Contrast . How wide the luminance range is (bold light/dark juxtaposition).
+ *  • Saturation balance. The palette wants at least one *rich* hue and at
  *    least one near-neutral (cream, ivory, ink). Three saturated hues = gaudy.
- *  • Harmony — average of pairwise hue relationships, with neutrals waiving.
+ *  • Harmony. Average of pairwise hue relationships, with neutrals waiving.
  */
 function scoreColourFusion(palette) {
   if (!Array.isArray(palette) || palette.length === 0) return 0;
@@ -92,24 +92,24 @@ function scoreColourFusion(palette) {
   // Contrast: reward a 0.6+ luminance range.
   const ls = hsl.map((c) => c.l);
   const lumRange = Math.max(...ls) - Math.min(...ls);
-  const contrastScore = Math.min(lumRange / 0.7, 1) * 10; // 0–10
+  const contrastScore = Math.min(lumRange / 0.7, 1) * 10; // 0-10
 
   // Saturation balance:
   //   • reward having at least one hue ≥ 0.45 sat (the "rich" key colour)
   //   • reward having at least one hue ≤ 0.15 sat (the "neutral" canvas)
-  //   • punish three saturated hues (gaudy) — softly.
+  //   • punish three saturated hues (gaudy). Softly.
   const sats = hsl.map((c) => c.s);
   const maxSat = Math.max(...sats);
   const minSat = Math.min(...sats);
-  const richness = Math.min(maxSat / 0.5, 1); // 0–1
-  const neutralPresence = Math.max(0, 1 - minSat / 0.18); // 0–1
+  const richness = Math.min(maxSat / 0.5, 1); // 0-1
+  const neutralPresence = Math.max(0, 1 - minSat / 0.18); // 0-1
   const gaudyPenalty = sats.filter((s) => s > 0.6).length >= 3 ? 0.25 : 0;
-  const satScore = Math.max(0, (richness + neutralPresence) * 5 - gaudyPenalty * 5); // 0–10
+  const satScore = Math.max(0, (richness + neutralPresence) * 5 - gaudyPenalty * 5); // 0-10
 
   // Harmony: average of (primary↔secondary) and (primary↔accent).
   const h12 = harmonyBetween(hsl[0].h, hsl[1].h, hsl[0].s, hsl[1].s);
   const h13 = harmonyBetween(hsl[0].h, hsl[2].h, hsl[0].s, hsl[2].s);
-  const harmonyScore = ((h12 + h13) / 2) * 10; // 0–10
+  const harmonyScore = ((h12 + h13) / 2) * 10; // 0-10
 
   return contrastScore + satScore + harmonyScore;
 }
@@ -131,7 +131,7 @@ const NAMED_MECHANICS = [
   "split-flap", "watermark", "fade", "kenburns", "mosaic",
 ];
 
-/** 0–15. Penalises tired adjectives, rewards specific named mechanics. */
+/** 0-15. Penalises tired adjectives, rewards specific named mechanics. */
 function scoreOriginality(brief) {
   if (!brief || typeof brief !== "string") return 0;
   const lower = brief.toLowerCase();
@@ -149,13 +149,13 @@ function scoreOriginality(brief) {
 }
 
 /**
- * 0–20. "Simplicity established from complexity": shorter, tighter briefs
+ * 0-20. "Simplicity established from complexity": shorter, tighter briefs
  * imply a single editorial idea did the heavy lifting. Long verbose briefs
  * imply the design tried to do many things at once.
  *
  *   ≤ 12 words:  full marks (15) + bonus 5 if it names a single mechanic
- *   13–22:       12
- *   23–35:        7
+ *   13-22:       12
+ *   23-35:        7
  *   36+:          3
  */
 function scoreSimplicity(brief) {
@@ -167,8 +167,8 @@ function scoreSimplicity(brief) {
   else if (words <= 35) base = 7;
   else base = 3;
 
-  // Bonus: brief invokes exactly ONE named mechanic — the discipline of a
-  // single editorial idea — adds 5.
+  // Bonus: brief invokes exactly ONE named mechanic. The discipline of a
+  // single editorial idea. Adds 5.
   const lower = brief.toLowerCase();
   const hits = NAMED_MECHANICS.filter((w) => lower.includes(w)).length;
   if (hits === 1 && words <= 22) base += 5;
@@ -176,7 +176,7 @@ function scoreSimplicity(brief) {
   return Math.min(20, base);
 }
 
-/** 0–15. Bonus when the brief references the business name or its industry. */
+/** 0-15. Bonus when the brief references the business name or its industry. */
 function scoreConceptTie(project) {
   if (!project.brief || !project.name) return 0;
   const briefL = project.brief.toLowerCase();
@@ -247,7 +247,7 @@ export function sortByAesthetic(projects) {
 }
 
 /**
- * Fisher-Yates shuffle — for the homepage, where tiles should rotate on every
+ * Fisher-Yates shuffle. For the homepage, where tiles should rotate on every
  * fresh page load so visitors don't see the same six names every time.
  */
 export function shuffleProjects(projects) {

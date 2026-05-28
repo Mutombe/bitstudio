@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useReducedMotionPreference } from "../../hooks/useReducedMotion.js";
 
 /**
- * Scraping artifact — a 3-line JSON fragment with syntax highlighting:
+ * Scraping artifact. A 3-line JSON fragment with syntax highlighting:
  *   chartreuse keys, bone strings, dimmed punctuation.
  * Idle: "source" value ticks between hostnames every ~2.8s, like streaming ingest.
  * Hover: keys brighten to full signal.

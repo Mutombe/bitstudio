@@ -6,7 +6,7 @@ import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 
 /**
- * /legal — English-language Legal Notice.
+ * /legal. English-language Legal Notice.
  *
  * Mirrors /impressum in content. The German Impressum is a statutory
  * obligation under § 5 TMG and § 18 MStV; this English version exists
@@ -55,7 +55,7 @@ const SECTIONS = [
     rows: [
       [
         "VAT identification",
-        "Not applicable — the company is incorporated outside the European Union (Zimbabwe). For B2B services to EU customers, reverse-charge applies (Art. 196 VAT Directive / § 13b UStG).",
+        "Not applicable. The company is incorporated outside the European Union (Zimbabwe). For B2B services to EU customers, reverse-charge applies (Art. 196 VAT Directive / § 13b UStG).",
       ],
     ],
   },
@@ -76,7 +76,7 @@ export default function Legal() {
     <PageTransition>
       <SEO
         title="Legal Notice"
-        description="Company information for Bit Studio (Private) Limited — directors, registration, registered office, copyright and link liability."
+        description="Company information for Bit Studio (Private) Limited. Directors, registration, registered office, copyright and link liability."
         path="/legal"
         keywords={["legal notice", "Bit Studio", "Harare", "Zimbabwe", "company registration"]}
         jsonLd={[

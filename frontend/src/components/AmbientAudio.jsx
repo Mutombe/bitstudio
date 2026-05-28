@@ -4,15 +4,15 @@ import { SpeakerHighIcon, SpeakerSlashIcon } from "@phosphor-icons/react";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 
 /**
- * AmbientAudio — a user-opt-in Mozart loop.
- * Default OFF. Respects Web Audio autoplay policy — only starts on click.
+ * AmbientAudio. A user-opt-in Mozart loop.
+ * Default OFF. Respects Web Audio autoplay policy. Only starts on click.
  * Persists state to localStorage as "bit:ambient".
  */
 
-// Served locally from public/ — no network dependency, instant start.
+// Served locally from public/. No network dependency, instant start.
 const SRC = "/mozart.mp3";
 const STORAGE_KEY = "bit:ambient";
-const TARGET_VOLUME = 0.08; // quiet — elegant not noisy
+const TARGET_VOLUME = 0.08; // quiet. Elegant not noisy
 const FADE_MS = 1200;       // 1.2s fade-in/out
 
 export default function AmbientAudio() {
@@ -20,7 +20,7 @@ export default function AmbientAudio() {
   const audioRef = useRef(null);
   const hover = useCursorHover("hover", "");
 
-  // Read persisted state; do NOT autoplay — just remember intent and wait.
+  // Read persisted state; do NOT autoplay. Just remember intent and wait.
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -39,14 +39,14 @@ export default function AmbientAudio() {
     } catch (_) {}
   }, []);
 
-  // Smooth gain-curve fader — ramps volume from `from` to `to` over FADE_MS.
+  // Smooth gain-curve fader. Ramps volume from `from` to `to` over FADE_MS.
   const fadeVolume = (from, to, onDone) => {
     const a = audioRef.current;
     if (!a) return;
     const start = performance.now();
     const step = (now) => {
       const t = Math.min(1, (now - start) / FADE_MS);
-      // Ease-out cubic — gentle approach to target
+      // Ease-out cubic. Gentle approach to target
       const e = 1 - Math.pow(1 - t, 3);
       a.volume = from + (to - from) * e;
       if (t < 1) requestAnimationFrame(step);
@@ -73,7 +73,7 @@ export default function AmbientAudio() {
         fadeVolume(0, TARGET_VOLUME);
         try { localStorage.setItem(STORAGE_KEY, "1"); } catch (_) {}
       }).catch((err) => {
-        // Browser blocked OR network/media error — stay silent
+        // Browser blocked OR network/media error. Stay silent
         console.warn("[AmbientAudio] could not play:", err && err.message);
         setOn(false);
       });

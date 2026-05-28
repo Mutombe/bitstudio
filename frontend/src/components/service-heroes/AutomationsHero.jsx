@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useReducedMotionPreference } from "../../hooks/useReducedMotion.js";
 
 /**
- * AutomationsHero — 3 concentric cron circles with tiny marker dots orbiting
+ * AutomationsHero. 3 concentric cron circles with tiny marker dots orbiting
  * each at different speeds, occasionally triggering a pulse that travels outward.
  */
 const RINGS = [

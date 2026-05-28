@@ -6,14 +6,14 @@ import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 
 /**
- * Datenschutzerklärung — privacy policy under DSGVO (German GDPR).
+ * Datenschutzerklärung. Privacy policy under DSGVO (German GDPR).
  *
  * Bit Studio operates from Zimbabwe but targets EU users with this site,
  * which means GDPR applies extraterritorially (Art. 3 Abs. 2 DSGVO). This
  * page is the user-facing disclosure required by Art. 13 / Art. 14 DSGVO.
  *
  * Two known DSGVO grey zones live on the site today:
- *   1) Google Fonts is loaded dynamically from googleapis.com — the
+ *   1) Google Fonts is loaded dynamically from googleapis.com. The
  *      2022 LG München ruling (3 O 17493/20) makes that a violation
  *      without consent. We disclose it here and plan to self-host.
  *   2) Render Hosting (USA) processes server-side logs incl. IP. The
@@ -50,7 +50,7 @@ Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der Berei
   },
   {
     title: "Kontaktaufnahme",
-    body: `Bei Kontaktaufnahme per E-Mail, WhatsApp oder über das Formular auf /contact werden die übermittelten Angaben (Name, E-Mail, Projektbeschreibung, ggf. weitere freiwillig gemachte Angaben) zur Bearbeitung der Anfrage verarbeitet. Das Formular versendet Ihre Eingaben über den von Ihnen gewählten Kanal (WhatsApp oder E-Mail-Client) — wir speichern keine Daten zwischen.
+    body: `Bei Kontaktaufnahme per E-Mail, WhatsApp oder über das Formular auf /contact werden die übermittelten Angaben (Name, E-Mail, Projektbeschreibung, ggf. weitere freiwillig gemachte Angaben) zur Bearbeitung der Anfrage verarbeitet. Das Formular versendet Ihre Eingaben über den von Ihnen gewählten Kanal (WhatsApp oder E-Mail-Client). Wir speichern keine Daten zwischen.
 
 Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragsanbahnung) bzw. Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse). Die Daten werden bis zur abschließenden Bearbeitung Ihrer Anfrage aufbewahrt, längstens jedoch sechs Monate nach dem letzten Kontakt.`,
   },
@@ -74,12 +74,12 @@ Schriften, Icons, Bilder und Anwendungs-JavaScript werden von der gleichen Domai
     title: "Ihre Rechte",
     body: `Sie haben jederzeit das Recht auf:
 
-· Auskunft (Art. 15 DSGVO) — welche Daten wir zu Ihrer Person verarbeiten
-· Berichtigung (Art. 16) — falscher oder unvollständiger Daten
-· Löschung (Art. 17) — soweit keine gesetzlichen Aufbewahrungspflichten entgegenstehen
+· Auskunft (Art. 15 DSGVO). Welche Daten wir zu Ihrer Person verarbeiten
+· Berichtigung (Art. 16). Falscher oder unvollständiger Daten
+· Löschung (Art. 17). Soweit keine gesetzlichen Aufbewahrungspflichten entgegenstehen
 · Einschränkung der Verarbeitung (Art. 18)
 · Datenübertragbarkeit (Art. 20)
-· Widerspruch (Art. 21) — gegen Verarbeitungen, die auf berechtigtem Interesse beruhen
+· Widerspruch (Art. 21). Gegen Verarbeitungen, die auf berechtigtem Interesse beruhen
 · Beschwerde bei einer Datenschutz-Aufsichtsbehörde (Art. 77)
 
 Wenden Sie sich für die Ausübung dieser Rechte an admin@bitstudio.co.zw. Wir antworten innerhalb der gesetzlichen Frist von einem Monat.`,
@@ -137,7 +137,7 @@ export default function Datenschutz() {
             className="mt-6 font-display text-bone-100 leading-[0.85] tracking-[-0.04em] block w-full max-w-full break-words"
             style={{
               fontWeight: 700,
-              // "Datenschutz." is 12 chars — even tighter clamp than Impressum
+              // "Datenschutz." is 12 chars. Even tighter clamp than Impressum
               // so it never reaches the right gutter.
               fontSize: "clamp(2.25rem, 11vw, 12rem)",
             }}
@@ -145,7 +145,7 @@ export default function Datenschutz() {
             Datenschutz.
           </motion.h1>
           <p className="mt-8 max-w-2xl text-bone-100/75 text-base md:text-lg leading-relaxed">
-            Wir verarbeiten so wenig wie möglich. Was wir verarbeiten, steht hier — klar,
+            Wir verarbeiten so wenig wie möglich. Was wir verarbeiten, steht hier. Klar,
             vollständig, und ohne juristisches Versteckspiel.
           </p>
         </div>

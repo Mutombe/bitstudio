@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { CommandIcon, ListIcon, XIcon, PlanetIcon } from "@phosphor-icons/react";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 
-// Two navigation sets — English (default) and German (/de/*).
+// Two navigation sets. English (default) and German (/de/*).
 // We pick which one to render based on the current pathname.
 const LINKS_EN = [
   { to: "/", label: "Index", n: "01" },
@@ -40,7 +40,7 @@ export default function Nav({ onSummon }) {
 
   useEffect(() => setOpen(false), [loc.pathname]);
 
-  // Locale routing — anything under /de/* is the German edition.
+  // Locale routing. Anything under /de/* is the German edition.
   const isDE = loc.pathname === "/de" || loc.pathname.startsWith("/de/");
   const LINKS = isDE ? LINKS_DE : LINKS_EN;
 
@@ -77,7 +77,7 @@ export default function Nav({ onSummon }) {
             to="/"
             {...hover}
             className="flex items-center gap-3 group"
-            aria-label="Bit Studio — Home"
+            aria-label="Bit Studio. Home"
           >
             <img
               src="/logo.png"
@@ -93,7 +93,7 @@ export default function Nav({ onSummon }) {
           <nav className="hidden md:flex items-center gap-8">
             {LINKS.map((l) => {
               if (l.hash) {
-                // Hash link — uses <Link> so SPA navigation + hash scroll works
+                // Hash link. Uses <Link> so SPA navigation + hash scroll works
                 const active = loc.hash === "#services" && loc.pathname === "/";
                 return (
                   <Link
@@ -147,7 +147,7 @@ export default function Nav({ onSummon }) {
           </nav>
 
           <div className="flex items-center gap-2 md:gap-4">
-            {/* Language toggle — DE ↔ EN. Always visible. */}
+            {/* Language toggle. DE ↔ EN. Always visible. */}
             <Link
               to={toggleHref}
               {...hover}
@@ -168,12 +168,12 @@ export default function Nav({ onSummon }) {
               <span>{isDE ? "Suchen" : "Summon"}</span>
               <span className="text-bone-100/40 ml-1">⌘K</span>
             </button>
-            {/* Mobile: alien Orbit search — opens CommandPalette */}
+            {/* Mobile: alien Orbit search. Opens CommandPalette */}
             <button
               {...hover}
               onClick={onSummon}
               className="md:hidden p-2 text-bone-100 relative"
-              aria-label="Summon — search projects and pages"
+              aria-label="Summon. Search projects and pages"
             >
               <PlanetIcon size={22} weight="regular" className="text-signal" />
             </button>

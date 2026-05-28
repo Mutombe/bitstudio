@@ -1,7 +1,7 @@
 /**
- * Brand artifact — 4 color chips in a row, each with its hex label.
+ * Brand artifact. 4 color chips in a row, each with its hex label.
  * The palette is Bit Studio's own: maroon · oxblood · bone · signal.
- * Idle: no motion (this one stays still — a chip is a chip).
+ * Idle: no motion (this one stays still. A chip is a chip).
  * Hover: ring around each chip pulses subtly via group-hover CSS.
  */
 const CHIPS = [

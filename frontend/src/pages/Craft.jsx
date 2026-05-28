@@ -16,7 +16,7 @@ import { useCursorHover } from "../hooks/useCursor.jsx";
 import SEO, { breadcrumbJsonLd, articleJsonLd } from "../components/SEO.jsx";
 
 // ─── THE FIVE RINGS ──────────────────────────────────────────────────────
-// Musashi's Go Rin no Sho (1645) is organised in five rings — Earth, Water,
+// Musashi's Go Rin no Sho (1645) is organised in five rings. Earth, Water,
 // Fire, Wind, Void. We translate them into the rings of our practice.
 
 const RINGS = [
@@ -34,7 +34,7 @@ const RINGS = [
     name: "Water",
     practice: "Flow",
     body:
-      "Water takes the shape of its container. Our work moves through a project — listening, drafting, returning — and we do not hold a posture longer than the project needs us to. A revision is not a defeat. A scrap is not a waste. The shape is the conversation between the brief and the page.",
+      "Water takes the shape of its container. Our work moves through a project. Listening, drafting, returning, and we do not hold a posture longer than the project needs us to. A revision is not a defeat. A scrap is not a waste. The shape is the conversation between the brief and the page.",
     pull:
       "The work bends. The standard does not.",
   },
@@ -61,13 +61,13 @@ const RINGS = [
     name: "Void",
     practice: "Source",
     body:
-      "The thing the work is pointing to that we cannot quite say. The reason a typeface feels right. The reason a button presses back. The void is what is left after Earth, Water, Fire, and Wind have done their work — the unspeakable rightness that a viewer feels but cannot defend. We do not name it. We aim for it.",
+      "The thing the work is pointing to that we cannot quite say. The reason a typeface feels right. The reason a button presses back. The void is what is left after Earth, Water, Fire, and Wind have done their work. The unspeakable rightness that a viewer feels but cannot defend. We do not name it. We aim for it.",
     pull:
       "We do not design. We remember what beauty was before it was contested.",
   },
 ];
 
-// ─── DOKKŌDŌ — selected precepts ────────────────────────────────────────
+// ─── DOKKŌDŌ. Selected precepts ────────────────────────────────────────
 // Musashi's 21 rules of solitary walking, written days before his death.
 // We carry the ones that bear directly on the studio's discipline.
 
@@ -98,7 +98,7 @@ export default function Craft() {
     <PageTransition>
       <SEO
         title="Craft · The Way"
-        description="We learnt to make from Miyamoto Musashi, a swordsman who lived four centuries ago. Earth, Water, Fire, Wind, Void — the five rings of our practice. The Dokkōdō, ten precepts taped to the studio wall."
+        description="We learnt to make from Miyamoto Musashi, a swordsman who lived four centuries ago. Earth, Water, Fire, Wind, Void. The five rings of our practice. The Dokkōdō, ten precepts taped to the studio wall."
         path="/craft"
         keywords={["Musashi", "Book of Five Rings", "Dokkodo", "craft", "mastery", "design philosophy", "aesthetic taxonomy"]}
         jsonLd={[
@@ -107,7 +107,7 @@ export default function Craft() {
             { name: "Craft", path: "/craft" },
           ]),
           articleJsonLd({
-            headline: "The Way — Craft, after Musashi",
+            headline: "The Way. Craft, after Musashi",
             description: "Bit Studio's design philosophy, organised around the five rings of Miyamoto Musashi's Go Rin no Sho.",
             url: "https://bitstudio.co.zw/craft",
             image: "https://bitstudio.co.zw/logo.png",
@@ -123,7 +123,7 @@ export default function Craft() {
         <MeshField tint="oxblood" intensity="med" />
         <WireframeOverlay />
 
-        {/* Big ghosted kanji — the page's spiritual centre */}
+        {/* Big ghosted kanji. The page's spiritual centre */}
         <div className="absolute inset-0 flex items-center justify-end pointer-events-none select-none pr-[5vw] opacity-[0.07]">
           <span
             className="text-bone-100 leading-none"
@@ -159,7 +159,7 @@ export default function Craft() {
               none of them. He retired to a cave at the end of his life and
               wrote a book about how to live, called the{" "}
               <span className="italic-accent text-bone-100">Go Rin no Sho</span>{" "}
-              — the Book of Five Rings. We have read it more than once. The
+             . The Book of Five Rings. We have read it more than once. The
               following pages explain what we took.
             </p>
 
@@ -189,7 +189,7 @@ export default function Craft() {
               Miyamoto Musashi
             </p>
             <p className="mt-1 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/45">
-              1584 — 1645
+              1584. 1645
             </p>
           </div>
 
@@ -229,7 +229,7 @@ export default function Craft() {
 
             <blockquote className="mt-6 border-l-2 border-signal/60 pl-6 italic-accent text-bone-100 max-w-2xl leading-snug" style={{ fontSize: "clamp(1.125rem, 1.6vw, 1.5rem)" }}>
               "To know one thing is to know ten thousand things. <br />
-              <span className="text-bone-100/60">— Musashi, Book of Five Rings, Ground Scroll</span>"
+              <span className="text-bone-100/60">Musashi, Book of Five Rings, Ground Scroll</span>"
             </blockquote>
           </div>
         </div>
@@ -247,7 +247,7 @@ export default function Craft() {
             </h2>
             <p className="mt-6 text-bone-100/70 max-w-xl">
               He named five rings, in five scrolls. We carry them as the
-              practice rings of the studio — the five postures a piece of work
+              practice rings of the studio. The five postures a piece of work
               has to pass through before it ships.
             </p>
           </div>
@@ -335,7 +335,7 @@ export default function Craft() {
         </div>
       </section>
 
-      {/* ─── V · HOW IT SHOWS UP — AESTHETIC TAXONOMY ──────────────── */}
+      {/* ─── V · HOW IT SHOWS UP. AESTHETIC TAXONOMY ──────────────── */}
       <section className="relative py-24 md:py-32 bg-[color:var(--color-ink)]">
         <div className="max-w-[1600px] mx-auto px-5 md:px-10">
           <div className="mb-12 md:mb-16 max-w-3xl">

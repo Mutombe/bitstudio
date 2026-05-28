@@ -2,7 +2,7 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 /**
- * QuantumHover — wraps a card/tile and, on hover (or long-press on touch),
+ * QuantumHover. Wraps a card/tile and, on hover (or long-press on touch),
  * reveals a particle field + orbital rings + chromatic aberration + a subtle
  * 3D tilt toward the cursor. "Zoom into the fabric of the universe."
  *
@@ -33,7 +33,7 @@ export default function QuantumHover({ children, className = "", strength = 3, f
   const moveRaf = useRef(0);
 
   // Effects show when mouse-hovered OR when parent pins forceActive
-  // (e.g. mobile carousel says "this card is centered — light it up").
+  // (e.g. mobile carousel says "this card is centered. Light it up").
   const active = hoverActive || forceActive;
 
   useEffect(() => () => {
@@ -89,7 +89,7 @@ export default function QuantumHover({ children, className = "", strength = 3, f
       className={`quantum-hover relative ${className}`}
       style={{ perspective: "1200px" }}
     >
-      {/* Outer breathing radial glow (maroon) — fades in on hover */}
+      {/* Outer breathing radial glow (maroon). Fades in on hover */}
       <AnimatePresence>
         {active && (
           <motion.div
@@ -118,7 +118,7 @@ export default function QuantumHover({ children, className = "", strength = 3, f
         )}
       </AnimatePresence>
 
-      {/* Orbital rings — slow rotate */}
+      {/* Orbital rings. Slow rotate */}
       <AnimatePresence>
         {active && (
           <motion.div
@@ -172,7 +172,7 @@ export default function QuantumHover({ children, className = "", strength = 3, f
               </svg>
             </motion.div>
 
-            {/* Particle constellation — rotates slowly as a group */}
+            {/* Particle constellation. Rotates slowly as a group */}
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
@@ -203,7 +203,7 @@ export default function QuantumHover({ children, className = "", strength = 3, f
         )}
       </AnimatePresence>
 
-      {/* Chromatic aberration wrap — fades in on hover */}
+      {/* Chromatic aberration wrap. Fades in on hover */}
       <motion.div
         animate={
           active

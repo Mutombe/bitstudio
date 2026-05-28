@@ -1,4 +1,4 @@
-// Aesthetics — the eight ways a Bit Studio artifact can carry itself.
+// Aesthetics. The eight ways a Bit Studio artifact can carry itself.
 //
 // We do not sort by industry anymore. Industry is what the client does;
 // aesthetic is how the work moves. A bakery and a tobacco house can both
@@ -72,7 +72,7 @@ export const AESTHETIC_LIST = Object.values(AESTHETICS);
 // nudge for the few industries we haven't explicitly mapped.
 
 const INDUSTRY_TO_AESTHETIC = {
-  // Atelier — bespoke, refined, signature
+  // Atelier. Bespoke, refined, signature
   "Luxury Hospitality": "atelier",
   "Tourism": "atelier",
   "Hospitality": "atelier",
@@ -84,7 +84,7 @@ const INDUSTRY_TO_AESTHETIC = {
   "Restaurants": "atelier",
   "Cafe": "atelier",
 
-  // Editorial — magazine voice, photo-led
+  // Editorial. Magazine voice, photo-led
   "Personal": "editorial",
   "Brand": "editorial",
   "Influencer": "editorial",
@@ -94,7 +94,7 @@ const INDUSTRY_TO_AESTHETIC = {
   "Records": "editorial",
   "Bakery": "editorial",
 
-  // Cinematic — dark, dramatic, in motion
+  // Cinematic. Dark, dramatic, in motion
   "Auto": "cinematic",
   "Motors": "cinematic",
   "Aviation": "cinematic",
@@ -103,7 +103,7 @@ const INDUSTRY_TO_AESTHETIC = {
   "Cyber": "cinematic",
   "Crypto": "cinematic",
 
-  // Brutalist — raw, structural
+  // Brutalist. Raw, structural
   "Construction": "brutalist",
   "Industrial": "brutalist",
   "Shopfitting": "brutalist",
@@ -112,7 +112,7 @@ const INDUSTRY_TO_AESTHETIC = {
   "Aluminium Shopfitting": "brutalist",
   "Security": "brutalist",
 
-  // Heritage — old-world, serif
+  // Heritage. Old-world, serif
   "Finance": "heritage",
   "Insurance": "heritage",
   "Tobacco": "heritage",
@@ -123,17 +123,17 @@ const INDUSTRY_TO_AESTHETIC = {
   "Group": "heritage",
   "Consultancy": "heritage",
 
-  // Manifesto — type-led declaration
+  // Manifesto. Type-led declaration
   "Tech": "manifesto",
   "Technology": "manifesto",
   "Forum": "manifesto",
   "Studio": "manifesto",
 
-  // Bento — modular gallery (industries with many disparate offerings)
+  // Bento. Modular gallery (industries with many disparate offerings)
   "Electronics": "bento",
   "Retail": "bento",
 
-  // Pastoral — earthy, organic
+  // Pastoral. Earthy, organic
   "Health": "pastoral",
   "Healthcare": "pastoral",
   "Energy": "pastoral",
@@ -190,13 +190,13 @@ export function inferAesthetic(input) {
     return AESTHETICS[INDUSTRY_TO_AESTHETIC[raw]];
   }
 
-  // 2) Case-insensitive partial — handles "Restaurant & Cafe", "Auto Body", etc.
+  // 2) Case-insensitive partial. Handles "Restaurant & Cafe", "Auto Body", etc.
   const lower = String(raw).toLowerCase();
   for (const [key, val] of Object.entries(INDUSTRY_TO_AESTHETIC)) {
     if (lower.includes(key.toLowerCase())) return AESTHETICS[val];
   }
 
-  // 3) Hash fall-back — deterministic per slug, distributes the unknowns
+  // 3) Hash fall-back. Deterministic per slug, distributes the unknowns
   const idx = hashSlug(slug || raw || "x") % FALLBACK_ORDER.length;
   return AESTHETICS[FALLBACK_ORDER[idx]];
 }

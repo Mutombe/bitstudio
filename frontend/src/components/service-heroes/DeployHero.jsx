@@ -8,7 +8,7 @@ import {
 import { useReducedMotionPreference } from "../../hooks/useReducedMotion.js";
 
 /**
- * DeployHero — pipeline visualized as 4 stations (Build → Test → Ship → Monitor).
+ * DeployHero. Pipeline visualized as 4 stations (Build → Test → Ship → Monitor).
  * A chartreuse packet travels left-to-right on a loop, arriving at each station in turn.
  */
 const STATIONS = [

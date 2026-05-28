@@ -4,7 +4,7 @@ import { CircleNotchIcon } from "@phosphor-icons/react";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 
 /**
- * FilterChips — editorial, memorable chip cluster.
+ * FilterChips. Editorial, memorable chip cluster.
  *   - Inactive: transparent bg, maroon-400/30 border, bone-100/70 text
  *   - Active:   solid maroon-600 bg, bone-100 text, chartreuse bottom-border 2px
  *   - Each chip shows a count bubble
