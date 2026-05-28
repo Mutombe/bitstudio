@@ -475,7 +475,7 @@ export default function CraftDE() {
           "Der Weg · 道",
           "Erde · Wasser · Feuer · Wind · Leere",
           "Nach Musashi, 1645",
-          "Bit Studio · MMXXX",
+          "MMXXX · Erde, Wasser, Feuer, Wind, Leere",
         ]}
       />
     </PageTransition>

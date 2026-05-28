@@ -271,7 +271,7 @@ export default function Packages() {
           "Three slots per quarter",
           "Fixed price · Fixed delivery",
           "Harare → the open internet",
-          "Bit Studio · MMXXX",
+          "MMXXX · Three slots a quarter",
         ]}
       />
     </PageTransition>

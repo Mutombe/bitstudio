@@ -147,7 +147,7 @@ export default function Live() {
           `${LIVE_SITES.length + PROJECTS.length} artifacts in the catalogue`,
           `${LIVE_SITES.length} broadcasting on their own domain`,
           "Custom-domain verified",
-          "Bit Studio · MMXXX",
+          "MMXXX · Broadcasting from their own domains",
         ]}
       />
     </PageTransition>

@@ -712,12 +712,12 @@ export default function Lab() {
 
       <Ticker
         items={[
-          "Lab · Bit Studio",
+          "§ Lab",
           "Surfaces · Experiments · Open problems",
           "Updated quarterly",
           "Three slots a quarter",
           "Any continent",
-          "Bit Studio · MMXXX",
+          "MMXXX · Updated quarterly",
         ]}
       />
     </PageTransition>

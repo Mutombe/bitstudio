@@ -274,7 +274,7 @@ export default function Pakete() {
           "Drei Plätze pro Quartal",
           "Festpreis · Festes Lieferdatum",
           "DACH · Mitteleuropäische Zeit",
-          "Bit Studio · MMXXX",
+          "MMXXX · Drei Plätze pro Quartal",
         ]}
       />
     </PageTransition>

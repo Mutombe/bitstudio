@@ -249,11 +249,11 @@ export default function FieldManual() {
 
       <Ticker
         items={[
-          "Field Manual · Bit Studio",
+          "§ Field Manual",
           `${DOCTRINES.length} published doctrines`,
           "Read it twice",
           "Disagree with three? — write to us anyway",
-          "Bit Studio · MMXXX",
+          "MMXXX · Read it twice",
         ]}
       />
     </PageTransition>
