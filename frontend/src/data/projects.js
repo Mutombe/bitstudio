@@ -1,5 +1,6 @@
 import { sortByAesthetic } from './aesthetic-score.js';
 import { AESTHETIC_LIST, inferAesthetic } from './aesthetics.js';
+import { AGRI_SHOW_DEMOS } from './agri-show-demos.js';
 // Bit Studio — project ledger
 // Every entry is a real artifact. Recently-live or experimentation. Filterable by tag.
 
@@ -1209,13 +1210,27 @@ export function filterProjects(projects, filter) {
 }
 
 export function findProject(slug) {
-  return PROJECTS.find((p) => p.slug === slug);
+  // Search the main ledger first, then fall through to the campaign
+  // collections so dynamic /work/:slug detail pages work for Agri Show
+  // demos as well.
+  return (
+    PROJECTS.find((p) => p.slug === slug) ||
+    AGRI_SHOW_DEMOS.find((p) => p.slug === slug) ||
+    null
+  );
 }
 
 export function adjacentProjects(slug) {
-  const idx = PROJECTS.findIndex((p) => p.slug === slug);
+  // Navigation wraps within whichever list owns the slug so prev/next on
+  // an Agri Show detail page stays inside that campaign.
+  let list = PROJECTS;
+  let idx = list.findIndex((p) => p.slug === slug);
+  if (idx < 0) {
+    list = AGRI_SHOW_DEMOS;
+    idx = list.findIndex((p) => p.slug === slug);
+  }
   if (idx < 0) return { prev: null, next: null };
-  const prev = PROJECTS[(idx - 1 + PROJECTS.length) % PROJECTS.length];
-  const next = PROJECTS[(idx + 1) % PROJECTS.length];
+  const prev = list[(idx - 1 + list.length) % list.length];
+  const next = list[(idx + 1) % list.length];
   return { prev, next };
 }

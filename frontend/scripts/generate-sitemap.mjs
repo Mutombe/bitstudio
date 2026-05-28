@@ -76,15 +76,19 @@ function urlElement({ path: p, priority = "0.5", changefreq = "monthly" }) {
 async function main() {
   await fs.mkdir(DIST, { recursive: true });
 
-  const [projectSlugs, liveSlugs, serviceSlugs] = await Promise.all([
+  const [projectSlugs, liveSlugs, serviceSlugs, agriSlugs] = await Promise.all([
     extractSlugs(path.join(SRC, "data/projects.js")),
     extractSlugs(path.join(SRC, "data/live-sites.js")),
     extractSlugs(path.join(SRC, "data/services.js")),
+    extractSlugs(path.join(SRC, "data/agri-show-demos.js")),
   ]);
 
+  // Agri Show demos resolve under /work/:slug too (findProject falls through
+  // to AGRI_SHOW_DEMOS), so they go under the work tree in the sitemap.
   const dynamic = [
     ...projectSlugs.map((s) => ({ path: `/work/${s}`, priority: "0.7", changefreq: "monthly" })),
-    ...liveSlugs.map((s) => ({ path: `/live/${s}`,    priority: "0.7", changefreq: "monthly" })),
+    ...agriSlugs.map((s)    => ({ path: `/work/${s}`, priority: "0.7", changefreq: "monthly" })),
+    ...liveSlugs.map((s)    => ({ path: `/live/${s}`,    priority: "0.7", changefreq: "monthly" })),
     ...serviceSlugs.map((s) => ({ path: `/services/${s}`, priority: "0.6", changefreq: "monthly" })),
   ];
 
@@ -127,8 +131,8 @@ Crawl-delay: 0
 
   console.log(
     `[sitemap] wrote ${unique.length} routes (${projectSlugs.length} projects, ` +
-    `${liveSlugs.length} live, ${serviceSlugs.length} services + ` +
-    `${STATIC_ROUTES.length} static)`
+    `${agriSlugs.length} agri-show demos, ${liveSlugs.length} live, ` +
+    `${serviceSlugs.length} services + ${STATIC_ROUTES.length} static)`
   );
 }
 
