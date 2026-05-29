@@ -69,13 +69,20 @@ async function extractSlugs(file) {
 
 async function startPreview() {
   return new Promise((resolve, reject) => {
+    const isWin = process.platform === "win32";
     const proc = spawn(
       "npx",
       ["vite", "preview", "--port", String(PORT), "--strictPort"],
       {
         cwd: ROOT,
         stdio: ["ignore", "pipe", "pipe"],
-        shell: true, // Windows compat — npx is a .cmd shim, needs a shell
+        // Windows: npx is a .cmd shim and needs a shell wrapper.
+        // POSIX (Render): spawn in its own process group so we can
+        // SIGKILL the whole group in the finally block; without this
+        // vite's node child outlives our .kill() and Render times us
+        // out with SIGTERM (exit 143).
+        shell: isWin,
+        detached: !isWin,
       }
     );
 
@@ -204,12 +211,26 @@ async function main() {
     const dt = ((Date.now() - t0) / 1000).toFixed(1);
     console.log(`[prerender] done — ${done}/${routes.length} routes in ${dt}s`);
   } finally {
-    if (browser) await browser.close();
-    preview.kill();
+    // Browser cleanup — never throw, we are about to exit either way.
+    if (browser) {
+      try { await browser.close(); } catch {}
+    }
+    // Vite preview was spawned with shell:true on Windows so .kill() only
+    // signals the wrapper shell on POSIX, leaving the vite node child
+    // running and keeping the event loop alive — which makes Render kill
+    // the whole build with SIGTERM (exit 143) even though we finished.
+    // Belt and braces: SIGKILL the wrapper, kill the process group on
+    // POSIX, then exit the parent explicitly.
+    try { preview.kill("SIGKILL"); } catch {}
+    if (process.platform !== "win32" && preview && preview.pid) {
+      try { process.kill(-preview.pid, "SIGKILL"); } catch {}
+    }
   }
 }
 
-main().catch((e) => {
-  console.error("[prerender] failed:", e);
-  process.exit(1);
-});
+main()
+  .then(() => process.exit(0))
+  .catch((e) => {
+    console.error("[prerender] failed:", e);
+    process.exit(1);
+  });
