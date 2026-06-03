@@ -22,17 +22,6 @@ const _LIVE = [
       "Bard Global Finance Institute. Daily editorial coverage of African capital markets, plus long-form research from Finance Africa Quarterly.",
   },
   {
-    slug: "taqon",
-    name: "Taqon",
-    domain: "taqon.co.zw",
-    url: "https://taqon.co.zw",
-    tag: "Energy",
-    palette: ["#0F2A4B", "#F26522", "#FAFAF6"],
-    featured: true,
-    brief:
-      "Solar shop, package builder, and advisor platform. The sun's interface.",
-  },
-  {
     slug: "ecolusgroup",
     name: "Ecolus Group",
     domain: "ecolusgroup.co.zw",
