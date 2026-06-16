@@ -12,6 +12,7 @@ import Ticker from "../components/Ticker.jsx";
 import FilterChips, { computeCounts } from "../components/FilterChips.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
+import { KW } from "../data/seo-keywords.js";
 
 const TOTAL_ARTIFACTS = PROJECTS.length + LIVE_SITES.length + AGRI_SHOW_DEMOS.length;
 
@@ -30,9 +31,9 @@ export default function Work() {
     <PageTransition>
       <SEO
         title="Work"
-        description={`A ledger of ${TOTAL_ARTIFACTS} artifacts. Real URLs, real clients, sorted by aesthetic carriage. Atelier, Editorial, Cinematic, Brutalist, Heritage, Manifesto, Bento, Pastoral.`}
+        description={`A ledger of ${TOTAL_ARTIFACTS} systems shipped. Custom software, ERP and CRM platforms, web and mobile apps, and automation built for real businesses across Zimbabwe. Real URLs, real clients.`}
         path="/work"
-        keywords={["portfolio", "case studies", "design ledger", "Bit Studio work"]}
+        keywords={["Bit Studio portfolio", "software case studies Zimbabwe", ...KW.software.slice(0, 6), ...KW.web.slice(0, 4)]}
         jsonLd={[
           breadcrumbJsonLd([
             { name: "Index", path: "/" },

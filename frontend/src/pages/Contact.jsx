@@ -11,6 +11,7 @@ import PageTransition from "../components/PageTransition.jsx";
 import SectionLabel from "../components/SectionLabel.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
+import { KW } from "../data/seo-keywords.js";
 
 export default function Contact() {
   const hover = useCursorHover("hover", "");
@@ -52,9 +53,9 @@ export default function Contact() {
     <PageTransition>
       <SEO
         title="Contact · Open a transmission"
-        description="WhatsApp, email, or the form. Harare hours, but we read from anywhere. Deposit 50% to begin, the rest on completion. FBC Bank account details on this page."
+        description="Get a quote for custom software, ERP, CRM, AI automation, a website or mobile app. WhatsApp, email, or the form. Based in Harare, serving all of Zimbabwe. Deposit 50% to begin, the rest on completion."
         path="/contact"
-        keywords={["contact Bit Studio", "Harare design studio", "WhatsApp", "hire a studio"]}
+        keywords={["contact Bit Studio", "software company Harare", "software developers Zimbabwe", ...KW.money]}
         jsonLd={[
           breadcrumbJsonLd([
             { name: "Index", path: "/" },

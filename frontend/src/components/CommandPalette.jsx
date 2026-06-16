@@ -14,15 +14,17 @@ import {
 import { PROJECTS } from "../data/projects.js";
 import { LIVE_SITES } from "../data/live-sites.js";
 import { SERVICES } from "../data/services.js";
+import { OFFERS } from "../data/offers.js";
 
 const STATIC_ITEMS = [
   { kind: "page", label: "Home",     to: "/",          hint: "Index" },
-  { kind: "page", label: "Work",     to: "/work",      hint: `Ledger of ${PROJECTS.length + LIVE_SITES.length} artifacts` },
+  { kind: "page", label: "Offers",   to: "/offers",    hint: "Software that automates your business" },
+  { kind: "page", label: "Work",     to: "/work",      hint: `Ledger of ${PROJECTS.length + LIVE_SITES.length} systems shipped` },
   { kind: "page", label: "Live",     to: "/live",      hint: `${LIVE_SITES.length} broadcasting on their own domain` },
   { kind: "page", label: "Craft",    to: "/craft",     hint: "The Way · after Musashi, 1645" },
-  { kind: "page", label: "Services", to: "/#services", hint: "Eight things we love to solve" },
+  { kind: "page", label: "Services", to: "/#services", hint: "The problems we love to solve" },
   { kind: "page", label: "Studio",   to: "/studio",    hint: "Philosophy, unapologetically" },
-  { kind: "page", label: "Contact",  to: "/contact",   hint: "Open a transmission" },
+  { kind: "page", label: "Contact",  to: "/contact",   hint: "Get a quote" },
   { kind: "action", label: "WhatsApp us", href: "https://wa.me/263785948128", hint: "Preferred channel" },
   { kind: "action", label: "Email us",    href: "mailto:admin@bitstudio.co.zw", hint: "admin@bitstudio.co.zw" },
 ];
@@ -42,6 +44,12 @@ export default function CommandPalette({ open, onClose }) {
   }, [open]);
 
   const items = useMemo(() => {
+    const offerItems = OFFERS.map((o) => ({
+      kind: "offer",
+      label: o.name,
+      to: `/offers/${o.slug}`,
+      hint: `${o.industry} · ${o.eyebrow}`,
+    }));
     const serviceItems = SERVICES.map((s) => ({
       kind: "service",
       label: s.title,
@@ -55,7 +63,7 @@ export default function CommandPalette({ open, onClose }) {
       hint: `${p.tag} · ${p.kind}`,
       palette: p.palette,
     }));
-    const all = [...STATIC_ITEMS, ...serviceItems, ...projectItems];
+    const all = [...STATIC_ITEMS, ...offerItems, ...serviceItems, ...projectItems];
     if (!q.trim()) return all;
     const t = q.toLowerCase();
     return all.filter(

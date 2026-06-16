@@ -1,0 +1,231 @@
+// Bit Studio. Master keyword ledger.
+//
+// The full search-intent vocabulary the studio ranks for, grouped by
+// cluster. Pages import the clusters they own; the Offers index imports
+// ALL_KEYWORDS so nothing in the master list goes unused.
+//
+// Positioning rule (read before editing): we are not "a software
+// company." We are the company that automates businesses. Lead every
+// surface with the outcome, not the tool.
+
+export const KW = {
+  software: [
+    "software development company Zimbabwe",
+    "custom software development Zimbabwe",
+    "software developers Zimbabwe",
+    "enterprise software Zimbabwe",
+    "software engineering Zimbabwe",
+    "bespoke software development",
+    "business software solutions",
+    "cloud software development",
+    "custom business systems",
+    "digital transformation Zimbabwe",
+    "software company Harare",
+    "software developers Harare",
+    "custom ERP Zimbabwe",
+    "custom CRM Zimbabwe",
+  ],
+  web: [
+    "web design Zimbabwe",
+    "website development Zimbabwe",
+    "website designers Harare",
+    "ecommerce website Zimbabwe",
+    "corporate website development",
+    "professional website design",
+    "responsive website design",
+    "SEO website Zimbabwe",
+    "custom website development",
+    "website redesign Zimbabwe",
+    "web application development",
+  ],
+  mobile: [
+    "mobile app development Zimbabwe",
+    "Android app development Zimbabwe",
+    "iOS app development Zimbabwe",
+    "app developers Harare",
+    "mobile application company Zimbabwe",
+    "custom mobile apps",
+    "business mobile applications",
+    "enterprise mobile apps",
+  ],
+  ai: [
+    "AI automation Zimbabwe",
+    "AI chatbot Zimbabwe",
+    "AI consulting Zimbabwe",
+    "business automation Zimbabwe",
+    "artificial intelligence Zimbabwe",
+    "AI for business Zimbabwe",
+    "AI customer support",
+    "AI lead generation",
+    "AI assistant development",
+    "WhatsApp AI chatbot",
+    "ChatGPT integration Zimbabwe",
+    "AI workflow automation",
+    "AI document processing",
+  ],
+  erp: [
+    "ERP software Zimbabwe",
+    "ERP development Zimbabwe",
+    "custom ERP system",
+    "inventory management software",
+    "procurement management software",
+    "business management software",
+    "enterprise resource planning",
+    "ERP implementation Zimbabwe",
+    "ERP consulting Zimbabwe",
+  ],
+  crm: [
+    "CRM software Zimbabwe",
+    "customer relationship management software",
+    "CRM development Zimbabwe",
+    "sales management software",
+    "lead tracking software",
+    "customer management system",
+    "CRM implementation Zimbabwe",
+  ],
+  automation: [
+    "automate business processes",
+    "business process automation",
+    "workflow automation",
+    "office automation",
+    "digital transformation services",
+    "replace Excel with software",
+    "automate manual processes",
+    "automate data entry",
+    "automate reporting",
+    "automate operations",
+  ],
+  realEstate: [
+    "property management software Zimbabwe",
+    "real estate CRM Zimbabwe",
+    "tenant management system",
+    "rental management software",
+    "rent collection software",
+    "property management ERP",
+    "landlord software Zimbabwe",
+    "real estate automation",
+  ],
+  school: [
+    "school management system Zimbabwe",
+    "student management software",
+    "school ERP",
+    "school automation software",
+    "university management software",
+    "online learning platform Zimbabwe",
+    "school administration software",
+  ],
+  healthcare: [
+    "hospital management system Zimbabwe",
+    "clinic management software",
+    "patient records software",
+    "healthcare ERP",
+    "medical billing software",
+    "healthcare automation",
+    "hospital software Zimbabwe",
+  ],
+  logistics: [
+    "fleet management software",
+    "logistics software Zimbabwe",
+    "transport management system",
+    "vehicle tracking software",
+    "trucking ERP",
+    "dispatch software",
+    "fleet automation",
+  ],
+  construction: [
+    "construction management software",
+    "construction ERP",
+    "project management software Zimbabwe",
+    "contractor management software",
+    "procurement software construction",
+    "construction automation",
+  ],
+  retail: [
+    "POS software Zimbabwe",
+    "retail management software",
+    "inventory software Zimbabwe",
+    "retail ERP",
+    "stock management software",
+    "retail automation",
+  ],
+  accounting: [
+    "accounting software Zimbabwe",
+    "cloud accounting software",
+    "accounting automation",
+    "bookkeeping software",
+    "invoicing software Zimbabwe",
+    "finance management software",
+    "accounting ERP",
+  ],
+  ngo: [
+    "NGO management software",
+    "donor management system",
+    "beneficiary management system",
+    "NGO ERP",
+    "grant management software",
+    "impact reporting software",
+  ],
+  painPoints: [
+    "replace Excel spreadsheets",
+    "automate business operations",
+    "reduce administrative costs",
+    "reduce manual data entry",
+    "improve operational efficiency",
+    "digitize business processes",
+    "reduce paperwork",
+    "business process optimization",
+    "automate reporting",
+    "centralize business data",
+  ],
+  money: [
+    "software development cost Zimbabwe",
+    "website development cost Zimbabwe",
+    "ERP development cost",
+    "CRM implementation cost",
+    "custom software pricing",
+    "software project quotation",
+    "business software quote",
+  ],
+  local: [
+    "software development Harare",
+    "software development Bulawayo",
+    "software development Mutare",
+    "software development Gweru",
+    "software development Masvingo",
+    "web design Harare",
+    "web design Bulawayo",
+    "AI automation Harare",
+  ],
+};
+
+// Every keyword, de-duplicated, in cluster order. Imported by the Offers
+// index so the master list is fully represented at least once on-site.
+export const ALL_KEYWORDS = Array.from(
+  new Set(Object.values(KW).flat())
+);
+
+// The cities the studio serves, surfaced as visible copy + JSON-LD
+// areaServed for local SEO.
+export const SERVICE_CITIES = [
+  "Harare",
+  "Bulawayo",
+  "Mutare",
+  "Gweru",
+  "Masvingo",
+];
+
+// A compact, high-intent set for the homepage and global surfaces.
+export const HOME_KEYWORDS = [
+  "software development company Zimbabwe",
+  "custom software development Zimbabwe",
+  "business automation Zimbabwe",
+  "ERP software Zimbabwe",
+  "CRM software Zimbabwe",
+  "AI automation Zimbabwe",
+  "web design Zimbabwe",
+  "mobile app development Zimbabwe",
+  "digital transformation Zimbabwe",
+  "replace Excel with software",
+  "software company Harare",
+  "automate business processes",
+];

@@ -117,22 +117,76 @@ export function organizationJsonLd() {
     url: SITE_ORIGIN,
     logo: `${SITE_ORIGIN}/logo.png`,
     description:
-      "Bit Studio is a design and engineering studio from Harare. We build interfaces, brand systems, and software that age into heirlooms.",
+      "Bit Studio is a software development and business automation company in Zimbabwe. We automate businesses: custom software, ERP and CRM systems, web and mobile apps, and AI automation that replace spreadsheets and manual work.",
+    slogan: "The company that automates businesses.",
+    knowsAbout: [
+      "Custom software development",
+      "Business process automation",
+      "ERP development",
+      "CRM development",
+      "AI automation",
+      "Web development",
+      "Mobile app development",
+      "Digital transformation",
+    ],
     sameAs: ["https://github.com/Mutombe"],
     address: {
       "@type": "PostalAddress",
       addressLocality: "Harare",
       addressCountry: "ZW",
     },
+    areaServed: [
+      "Harare",
+      "Bulawayo",
+      "Mutare",
+      "Gweru",
+      "Masvingo",
+      "Zimbabwe",
+    ].map((name) => ({ "@type": "Place", name })),
     contactPoint: [
       {
         "@type": "ContactPoint",
-        contactType: "customer support",
+        contactType: "sales",
         email: "admin@bitstudio.co.zw",
         telephone: "+263785948128",
-        areaServed: "Worldwide",
+        areaServed: "ZW",
       },
     ],
+  };
+}
+
+// Service + offer schema for /offers/:slug pages. Surfaces the productised
+// offer (name, description, provider, price tiers) to search engines.
+export function offerJsonLd({ name, description, url, slug, tiers = [] }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name,
+    description,
+    serviceType: name,
+    url: url || `${SITE_ORIGIN}/offers/${slug}`,
+    provider: {
+      "@type": "Organization",
+      name: "Bit Studio",
+      url: SITE_ORIGIN,
+    },
+    areaServed: { "@type": "Country", name: "Zimbabwe" },
+    ...(tiers.length > 0
+      ? {
+          offers: tiers.map((t) => ({
+            "@type": "Offer",
+            name: t.name,
+            description: (t.value || []).join(". "),
+            priceCurrency: "USD",
+            price: String(t.price || "").replace(/[^0-9]/g, ""),
+            priceSpecification: {
+              "@type": "PriceSpecification",
+              priceCurrency: "USD",
+              price: String(t.price || "").replace(/[^0-9]/g, ""),
+            },
+          })),
+        }
+      : {}),
   };
 }
 

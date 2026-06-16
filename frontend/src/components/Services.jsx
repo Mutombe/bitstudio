@@ -70,13 +70,13 @@ export default function Services() {
             <h2 className="mt-6 display-xl text-bone-100">
               The beauty of <span className="italic-accent text-signal font-light">logic</span>.
               <br />
-              <span className="italic-accent text-bone-300">Eight problems we love to solve.</span>
+              <span className="italic-accent text-bone-300">The problems we love to solve.</span>
             </h2>
           </div>
           <p className="label-mono text-bone-100/40 max-w-sm">
-            Not packages. Not tiers. A list of the things we are
-            <span className="text-bone-100/70"> stupid enough to care about </span>
-            at four in the afternoon.
+            The capabilities behind the work. Want it priced and packaged?
+            <Link to="/offers" className="text-signal hover-line"> See the offers</Link>
+            <span className="text-bone-100/70"> — a problem named, a price attached.</span>
           </p>
         </div>
 

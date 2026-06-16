@@ -25,22 +25,23 @@ import WireframeOverlay from "../components/WireframeOverlay.jsx";
 import WaveBreak from "../components/WaveBreak.jsx";
 import FusionField from "../components/FusionField.jsx";
 import FilterChips, { computeCounts } from "../components/FilterChips.jsx";
+import { HOME_KEYWORDS } from "../data/seo-keywords.js";
 
 // Total artifacts = demos + live-domain sites
 const TOTAL_ARTIFACTS = PROJECTS.length + LIVE_SITES.length;
 
 const TICKER_ITEMS = [
-  "Endpoint OK",
-  "React 19 · Vite 7 · Tailwind v4",
-  "Harare → Signal",
-  "Transmission received",
-  `${TOTAL_ARTIFACTS} artifacts on-air`,
-  "Grain delivered",
-  "Deploy green",
-  "Lighthouse 100 · floor",
-  "Cursor: maroon · 10px · difference",
+  "We automate businesses",
+  "Replace Excel with a real system",
+  "ERP · CRM · AI automation",
+  "Reduce admin cost",
+  "Scale without hiring",
+  `${TOTAL_ARTIFACTS} systems shipped`,
+  "Harare → all of Zimbabwe",
+  "Custom software · Web · Mobile",
+  "Automate the work nobody enjoys",
   "Uptime 99.94%",
-  "Latency 41ms",
+  "Same-day reply",
 ];
 
 // Homepage Selected Work uses the same aesthetic ranking that anchors /work
@@ -86,10 +87,10 @@ export default function Home({ onSummon }) {
   return (
     <PageTransition>
       <SEO
-        title="Bit Studio"
-        description="A design and engineering studio from Harare. We build interfaces, brand systems, and software that age into heirlooms. After Musashi, 1645."
+        title="Bit Studio · The company that automates businesses"
+        description="Bit Studio is a software development and business automation company in Zimbabwe. We build custom software, ERP and CRM systems, web and mobile apps, and AI automation that replace spreadsheets and cut admin cost. Serving Harare, Bulawayo & all of Zimbabwe."
         path="/"
-        keywords={["Bit Studio", "design studio", "Harare", "Zimbabwe", "brand systems", "interface design", "Musashi"]}
+        keywords={HOME_KEYWORDS}
         jsonLd={[organizationJsonLd(), websiteJsonLd()]}
       />
       {/* ─── 00 · HERO. Viewport-fit on desktop, natural on mobile ─── */}
@@ -148,13 +149,18 @@ export default function Home({ onSummon }) {
             <div className="grid grid-cols-12 gap-6 md:gap-10 items-end">
               <div className="col-span-12 md:col-span-6 lg:col-span-5">
                 <p className="text-base md:text-lg lg:text-[1.05rem] text-bone-100/85 leading-relaxed max-w-[48ch]">
-                  Interfaces. Systems. Brands. A practice for businesses
-                  that need
-                  <span className="italic-accent text-signal"> real beauty, durable infrastructure, true scale, and longevity</span>{" "}
-                  past the next quarter. After Musashi, 1645.
+                  Custom software, ERP &amp; CRM systems, and AI automation for
+                  Zimbabwean businesses. We replace the spreadsheets, retire the
+                  manual work, and build systems that
+                  <span className="italic-accent text-signal"> scale without new hires</span>.
+                  Built with real beauty, made to last past the next quarter.
                 </p>
                 <div className="mt-6 md:mt-8 flex flex-wrap items-center gap-3">
-                  <Link to="/work" {...hover} className="btn btn-primary">
+                  <Link to="/offers" {...hover} className="btn btn-primary">
+                    See Offers
+                    <ArrowRightIcon size={14} weight="bold" />
+                  </Link>
+                  <Link to="/work" {...hover} className="btn btn-ghost">
                     See Work
                     <ArrowRightIcon size={14} weight="bold" />
                   </Link>

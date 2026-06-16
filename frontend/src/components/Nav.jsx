@@ -8,21 +8,23 @@ import { useCursorHover } from "../hooks/useCursor.jsx";
 // We pick which one to render based on the current pathname.
 const LINKS_EN = [
   { to: "/", label: "Index", n: "01" },
-  { to: "/work", label: "Work", n: "02" },
-  { to: "/live", label: "Live", n: "03" },
-  { to: "/lab", label: "Lab", n: "04" },
-  { to: "/writing", label: "Writing", n: "05" },
-  { to: "/packages", label: "Packages", n: "06" },
-  { to: "/contact", label: "Contact", n: "07" },
+  { to: "/offers", label: "Offers", n: "02" },
+  { to: "/work", label: "Work", n: "03" },
+  { to: "/live", label: "Live", n: "04" },
+  { to: "/lab", label: "Lab", n: "05" },
+  { to: "/writing", label: "Writing", n: "06" },
+  { to: "/packages", label: "Packages", n: "07" },
+  { to: "/contact", label: "Contact", n: "08" },
 ];
 const LINKS_DE = [
   { to: "/de", label: "Index", n: "01" },
-  { to: "/work", label: "Arbeit", n: "02" },
-  { to: "/live", label: "Live", n: "03" },
-  { to: "/lab", label: "Labor", n: "04" },
-  { to: "/writing", label: "Schriften", n: "05" },
-  { to: "/pakete", label: "Pakete", n: "06" },
-  { to: "/de/kontakt", label: "Kontakt", n: "07" },
+  { to: "/offers", label: "Angebote", n: "02" },
+  { to: "/work", label: "Arbeit", n: "03" },
+  { to: "/live", label: "Live", n: "04" },
+  { to: "/lab", label: "Labor", n: "05" },
+  { to: "/writing", label: "Schriften", n: "06" },
+  { to: "/pakete", label: "Pakete", n: "07" },
+  { to: "/de/kontakt", label: "Kontakt", n: "08" },
 ];
 
 export default function Nav({ onSummon }) {

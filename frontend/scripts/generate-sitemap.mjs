@@ -23,6 +23,7 @@ const STATIC_ROUTES = [
   // English
   { path: "/",            priority: "1.0", changefreq: "weekly"  },
   { path: "/work",          priority: "0.9", changefreq: "weekly"  },
+  { path: "/offers",        priority: "0.95", changefreq: "weekly" },
   { path: "/live",          priority: "0.9", changefreq: "weekly"  },
   { path: "/lab",           priority: "0.9", changefreq: "monthly" },
   { path: "/field-manual",  priority: "0.8", changefreq: "monthly" },
@@ -79,11 +80,12 @@ function urlElement({ path: p, priority = "0.5", changefreq = "monthly" }) {
 async function main() {
   await fs.mkdir(DIST, { recursive: true });
 
-  const [projectSlugs, liveSlugs, serviceSlugs, agriSlugs] = await Promise.all([
+  const [projectSlugs, liveSlugs, serviceSlugs, agriSlugs, offerSlugs] = await Promise.all([
     extractSlugs(path.join(SRC, "data/projects.js")),
     extractSlugs(path.join(SRC, "data/live-sites.js")),
     extractSlugs(path.join(SRC, "data/services.js")),
     extractSlugs(path.join(SRC, "data/agri-show-demos.js")),
+    extractSlugs(path.join(SRC, "data/offers.js")),
   ]);
 
   // Agri Show demos resolve under /work/:slug too (findProject falls through
@@ -93,6 +95,7 @@ async function main() {
     ...agriSlugs.map((s)    => ({ path: `/work/${s}`, priority: "0.7", changefreq: "monthly" })),
     ...liveSlugs.map((s)    => ({ path: `/live/${s}`,    priority: "0.7", changefreq: "monthly" })),
     ...serviceSlugs.map((s) => ({ path: `/services/${s}`, priority: "0.6", changefreq: "monthly" })),
+    ...offerSlugs.map((s)   => ({ path: `/offers/${s}`,   priority: "0.85", changefreq: "weekly" })),
   ];
 
   const all = [...STATIC_ROUTES, ...dynamic];
