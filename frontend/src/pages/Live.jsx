@@ -10,6 +10,7 @@ import Ticker from "../components/Ticker.jsx";
 import FilterChips, { computeCounts } from "../components/FilterChips.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
+import { KW } from "../data/seo-keywords.js";
 
 // Build chip set from tags actually present in LIVE_SITES
 const LIVE_CHIPS = [
@@ -45,9 +46,9 @@ export default function Live() {
     <PageTransition>
       <SEO
         title="Live"
-        description={`${LIVE_SITES.length} of our artifacts broadcasting from their own public addresses, right now. Live URLs, real clients, sorted by aesthetic carriage.`}
+        description={`${LIVE_SITES.length} live client websites and platforms broadcasting from their own domains right now. Corporate websites, ecommerce, and web apps built and shipped by Bit Studio in Zimbabwe.`}
         path="/live"
-        keywords={["live websites", "production sites", "on-air", "broadcasting"]}
+        keywords={["live client websites Zimbabwe", ...KW.web.slice(0, 8)]}
         jsonLd={[
           breadcrumbJsonLd([
             { name: "Index", path: "/" },

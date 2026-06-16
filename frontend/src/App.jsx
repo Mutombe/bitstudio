@@ -27,6 +27,8 @@ import ProjectDetail from "./pages/ProjectDetail.jsx";
 import Studio from "./pages/Studio.jsx";
 import Contact from "./pages/Contact.jsx";
 import ServiceDetail from "./pages/ServiceDetail.jsx";
+import Offers from "./pages/Offers.jsx";
+import OfferDetail from "./pages/OfferDetail.jsx";
 import Terms from "./pages/Terms.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Lab from "./pages/Lab.jsx";
@@ -115,6 +117,8 @@ export default function App() {
               <Route path="/studio" element={<Studio />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/services/:slug" element={<ServiceDetail />} />
+              <Route path="/offers" element={<Offers />} />
+              <Route path="/offers/:slug" element={<OfferDetail />} />
               <Route path="/lab" element={<Lab />} />
               <Route path="/field-manual" element={<FieldManual />} />
               <Route path="/writing" element={<Writing />} />

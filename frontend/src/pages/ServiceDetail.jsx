@@ -24,6 +24,7 @@ import {
   RocketLaunchIcon,
   WrenchIcon,
   GearIcon,
+  CheckCircleIcon,
 } from "@phosphor-icons/react";
 import PageTransition from "../components/PageTransition.jsx";
 import SectionLabel from "../components/SectionLabel.jsx";
@@ -98,10 +99,10 @@ export default function ServiceDetail() {
   return (
     <PageTransition>
       <SEO
-        title={`${service.title} · Service`}
-        description={service.tagline || `Bit Studio's ${service.title} service.`}
+        title={`${service.title} · Zimbabwe`}
+        description={service.tagline ? `${service.tagline} ${service.title} for businesses in Zimbabwe by Bit Studio.` : `Bit Studio's ${service.title} service in Zimbabwe.`}
         path={`/services/${service.slug}`}
-        keywords={[service.title, "Bit Studio service", "Harare design"].filter(Boolean)}
+        keywords={(service.keywords && service.keywords.length ? service.keywords : [service.title, "software developers Zimbabwe", "software company Harare"]).filter(Boolean)}
         jsonLd={[
           breadcrumbJsonLd([
             { name: "Index", path: "/" },
@@ -229,19 +230,19 @@ export default function ServiceDetail() {
         </div>
       </section>
 
-      {/* ─── Stack ─── */}
+      {/* ─── Capabilities ─── */}
       <section className="py-14 md:py-20 border-t border-white/5 bg-maroon-950/30">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10 grid grid-cols-12 gap-6 md:gap-10">
           <div className="col-span-12 md:col-span-4">
-            <SectionLabel chapter="§ Stack" title="How we build it" />
+            <SectionLabel chapter="§ Capability" title="What you get" />
             <p className="mt-6 font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/40 max-w-xs">
-              Tools chosen, not inherited.
+              Outcomes, not tools.
             </p>
           </div>
           <div className="col-span-12 md:col-span-8">
             <div className="flex flex-wrap gap-2 md:gap-3">
-              {service.stack.map((t, i) => {
-                const TIcon = STACK_ICON[t] || CodeIcon;
+              {(service.capabilities || []).map((t, i) => {
+                const TIcon = STACK_ICON[t] || CheckCircleIcon;
                 return (
                   <motion.span
                     key={t}

@@ -45,6 +45,7 @@ const STATIC_ROUTES = [
   "/field-manual",
   "/writing",
   "/packages",
+  "/offers",
   "/contact",
   "/terms",
   "/legal",
@@ -141,17 +142,19 @@ function diskPathFor(route) {
 
 async function main() {
   // Discover all routes
-  const [proj, agri, live, svc] = await Promise.all([
+  const [proj, agri, live, svc, offers] = await Promise.all([
     extractSlugs(path.join(SRC, "data/projects.js")),
     extractSlugs(path.join(SRC, "data/agri-show-demos.js")),
     extractSlugs(path.join(SRC, "data/live-sites.js")),
     extractSlugs(path.join(SRC, "data/services.js")),
+    extractSlugs(path.join(SRC, "data/offers.js")),
   ]);
   const dynamic = [
     ...proj.map((s) => `/work/${s}`),
     ...agri.map((s) => `/work/${s}`),
     ...live.map((s) => `/live/${s}`),
     ...svc.map((s) => `/services/${s}`),
+    ...offers.map((s) => `/offers/${s}`),
   ];
   const routes = [...new Set([...STATIC_ROUTES, ...dynamic])];
 

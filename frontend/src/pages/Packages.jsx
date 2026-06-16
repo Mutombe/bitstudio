@@ -226,8 +226,8 @@ export default function Packages() {
               a="Additions are agreed as small change orders with their own fixed price. Never quietly. Never as a 'small extra' on an invoice."
             />
             <Objection
-              q="Do you build in WordPress, Webflow, or Wix?"
-              a="No. We build on React, Vite, and Tailwind. That is the platform on which the work ages the way it should. Fast, legible, durable. If you intend to keep an existing WordPress site, we are not the right studio."
+              q="Do you build on WordPress, Webflow, or Wix?"
+              a="No. We build custom, on a foundation chosen so the work stays fast, legible, and durable for years. You own it outright, and it ages the way it should. If you intend to keep an existing template site, we are not the right studio."
             />
             <Objection
               q="Who hosts the finished site?"
