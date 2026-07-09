@@ -2,8 +2,13 @@
 User-agent: *
 Allow: /
 
+# The CRM. Staff only. Never indexed. The pages also emit
+# <meta name="robots" content="noindex, nofollow, noarchive">.
+Disallow: /admin
+Disallow: /admin/
+
 # Where the map lives
 Sitemap: https://bitstudio.co.zw/sitemap.xml
 
-# Be nice to crawlers — we have ~125 routes and we want all of them
+# Be nice to crawlers. We have ~180 routes and we want all of them
 Crawl-delay: 0

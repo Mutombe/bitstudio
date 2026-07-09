@@ -1,7 +1,7 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { HelmetProvider } from "react-helmet-async";
-import { useEffect, useState, Component } from "react";
+import { useEffect, useState, Component, Suspense, lazy } from "react";
 import Nav from "./components/Nav.jsx";
 import Footer from "./components/Footer.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
@@ -34,6 +34,9 @@ import NotFound from "./pages/NotFound.jsx";
 import Lab from "./pages/Lab.jsx";
 import FieldManual from "./pages/FieldManual.jsx";
 import Writing from "./pages/Writing.jsx";
+
+// The CRM is code-split: a visitor reading /offers never downloads it.
+const AdminRoutes = lazy(() => import("./admin/AdminRoutes.jsx"));
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -73,6 +76,7 @@ class ErrorBoundary extends Component {
 export default function App() {
   const location = useLocation();
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const isAdmin = location.pathname.startsWith("/admin");
 
   // Cmd/Ctrl-K + ESC bindings
   useEffect(() => {
@@ -87,6 +91,28 @@ export default function App() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  // The CRM gets none of the marketing chrome: no nav, no footer, no
+  // command palette, no ambient audio, no custom cursor. It is a tool.
+  if (isAdmin) {
+    return (
+      <HelmetProvider>
+        <ErrorBoundary>
+          <Suspense
+            fallback={
+              <div className="min-h-screen bg-[color:var(--color-ink)] flex items-center justify-center">
+                <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50">
+                  Loading…
+                </p>
+              </div>
+            }
+          >
+            <AdminRoutes />
+          </Suspense>
+        </ErrorBoundary>
+      </HelmetProvider>
+    );
+  }
 
   return (
     <HelmetProvider>

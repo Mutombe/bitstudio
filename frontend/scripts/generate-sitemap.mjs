@@ -120,12 +120,26 @@ ${unique.map(urlElement).join("\n")}
 User-agent: *
 Allow: /
 
+# The CRM. Staff only. Never indexed. The pages also emit
+# <meta name="robots" content="noindex, nofollow, noarchive">.
+Disallow: /admin
+Disallow: /admin/
+
 # Where the map lives
 Sitemap: ${SITE}/sitemap.xml
 
-# Be nice to crawlers — we have ~125 routes and we want all of them
+# Be nice to crawlers. We have ~180 routes and we want all of them
 Crawl-delay: 0
 `;
+
+  // Guard: the sitemap is generated from data files, so an /admin route can
+  // only appear here by mistake. Fail the build rather than publish it.
+  const leaked = unique.filter((r) => r.path.startsWith("/admin"));
+  if (leaked.length > 0) {
+    throw new Error(
+      `Refusing to publish: ${leaked.length} /admin route(s) in the sitemap.`
+    );
+  }
 
   await fs.writeFile(path.join(DIST, "robots.txt"), robots, "utf8");
 

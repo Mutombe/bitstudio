@@ -1,6 +1,22 @@
 from django.contrib import admin
 
-from .models import Lead
+from .models import Activity, Lead, Task
+
+
+class ActivityInline(admin.TabularInline):
+    model = Activity
+    extra = 0
+    readonly_fields = ("kind", "body", "actor", "created_at")
+    can_delete = False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
+class TaskInline(admin.TabularInline):
+    model = Task
+    extra = 0
+    fields = ("title", "due_date", "assignee", "is_done")
 
 
 @admin.register(Lead)
@@ -16,6 +32,8 @@ class LeadAdmin(admin.ModelAdmin):
     search_fields = ("name", "email", "company", "message", "offer_slug")
     date_hierarchy = "created_at"
     list_per_page = 50
+    inlines = [TaskInline, ActivityInline]
+    list_select_related = ("owner",)
 
     # Everything the buyer or the server wrote is a fact, not a form field.
     readonly_fields = (
@@ -65,3 +83,11 @@ class LeadAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         # Leads arrive from the website, not from the admin.
         return False
+
+
+@admin.register(Task)
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ("title", "lead", "due_date", "assignee", "is_done")
+    list_filter = ("is_done", "assignee", "due_date")
+    search_fields = ("title", "lead__name")
+    list_select_related = ("lead", "assignee")

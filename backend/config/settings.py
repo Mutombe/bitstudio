@@ -38,8 +38,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "corsheaders",
     "rest_framework",
+    "accounts",
     "leads",
 ]
+
+AUTH_USER_MODEL = "accounts.User"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -77,7 +80,16 @@ TEMPLATES = [
 # pooling, so we keep it at 0 and let the pooler do the pooling.
 DATABASE_URL = os.getenv("DATABASE_URL", "")
 
-if DATABASE_URL:
+if TESTING:
+    # Never point the test runner at a real database. It creates and drops
+    # databases, and a misread env var should not be able to touch Neon.
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": ":memory:",
+        }
+    }
+elif DATABASE_URL:
     DATABASES = {
         "default": dj_database_url.parse(
             DATABASE_URL,
@@ -130,8 +142,28 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_THROTTLE_RATES": {
         "lead_create": "10/hour",
+        "login": "10/min",
     },
+    # An unbounded list endpoint is a slow query waiting to happen. The
+    # Kanban board asks for a bigger page explicitly.
+    "DEFAULT_PAGINATION_CLASS": "config.pagination.StandardPagination",
+    "PAGE_SIZE": 50,
+    # The browsable API renders forms against every endpoint. Useful while
+    # developing, not something to expose on a public production service.
+    "DEFAULT_RENDERER_CLASSES": (
+        [
+            "rest_framework.renderers.JSONRenderer",
+            "rest_framework.renderers.BrowsableAPIRenderer",
+        ]
+        if DEBUG
+        else ["rest_framework.renderers.JSONRenderer"]
+    ),
 }
+
+if TESTING:
+    # Default hasher is deliberately slow. Across a suite that creates many
+    # users it dominates the runtime.
+    PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 
 # ─── CORS ────────────────────────────────────────────────────────────
 # Strict allowlist. The marketing site is the only caller.
@@ -140,6 +172,20 @@ CORS_ALLOWED_ORIGINS = env_list(
 )
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [o for o in CORS_ALLOWED_ORIGINS if o.startswith("https://")]
+
+# The CRM authenticates with a session cookie. Host the API on a subdomain
+# of the site (api.bitstudio.co.zw) so the cookie stays *same-site* and
+# SameSite=Lax works. Set SESSION_COOKIE_DOMAIN=.bitstudio.co.zw in prod.
+#
+# If the API ever lives on a different registrable domain (a raw
+# *.onrender.com host), the browser treats the cookie as cross-site and it
+# will be dropped unless SameSite=None; Secure. Prefer the subdomain.
+SESSION_COOKIE_DOMAIN = os.getenv("SESSION_COOKIE_DOMAIN") or None
+CSRF_COOKIE_DOMAIN = SESSION_COOKIE_DOMAIN
+SESSION_COOKIE_SAMESITE = os.getenv("COOKIE_SAMESITE", "Lax")
+CSRF_COOKIE_SAMESITE = SESSION_COOKIE_SAMESITE
+# The SPA reads this to echo back as the X-CSRFToken header.
+CSRF_COOKIE_HTTPONLY = False
 
 # ─── Production hardening ────────────────────────────────────────────
 if not DEBUG and not TESTING:

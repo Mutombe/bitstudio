@@ -1,11 +1,12 @@
 # Bit Studio. Backend
 
-Django + DRF service behind the marketing site. Phase 1 is lead capture:
-every enquiry from `/contact` and the offer pages is persisted with its
-source attribution, instead of being handed to WhatsApp and forgotten.
+Django + DRF service behind the marketing site. It does two jobs:
 
-Phase 2 turns the same `Lead` table into the CRM pipeline the sales team
-works in (`status` and `owner` already exist on the model).
+1. **Captures leads.** Every enquiry from `/contact` and the offer pages is
+   persisted with its source attribution, instead of being handed to
+   WhatsApp and forgotten.
+2. **Runs the CRM.** The sales team signs in at `/admin` on the site and
+   works the pipeline: stages, assignment, notes, follow-ups.
 
 ## Run it locally
 
@@ -16,29 +17,66 @@ python -m venv .venv
 # source .venv/bin/activate   # macOS / Linux
 
 pip install -r requirements.txt
-cp .env.example .env          # then set SECRET_KEY and DEBUG=True
+cp .env.example .env          # set SECRET_KEY, DEBUG=True, leave DATABASE_URL blank
 
 python manage.py migrate
-python manage.py createsuperuser
+python seed_dev.py            # dev users + sample leads (SQLite only)
 python manage.py runserver
 ```
 
-- API: `POST http://localhost:8000/api/leads/`
-- Admin (where sales reads leads today): `http://localhost:8000/admin/`
-- Health: `http://localhost:8000/healthz`
+Then run the frontend with `VITE_API_URL=http://localhost:8000` in
+`frontend/.env.local` and open `http://localhost:5173/admin`.
 
-Point the frontend at it with `VITE_API_URL=http://localhost:8000` in
-`frontend/.env.local`.
+Seeded logins: `manager / devpassword`, `sales / devpassword`.
+`seed_dev.py` refuses to run against anything but SQLite.
+
+For a real account: `python manage.py createsuperuser`.
+
+- CRM UI: `/admin` on the frontend
+- Django admin: `http://localhost:8000/admin/`
+- Health: `http://localhost:8000/healthz`
 
 ## Tests
 
 ```bash
-python manage.py test leads
+python manage.py test leads accounts
 ```
+
+Tests always run against in-memory SQLite, never `DATABASE_URL` — the runner
+creates and drops databases and must not be able to reach Neon.
+
+## Roles
+
+Set on the user (`accounts.User.role`):
+
+| Role | Sees | Can assign |
+|---|---|---|
+| `admin` | all leads | anyone |
+| `manager` | all leads | anyone |
+| `sales` | own + unassigned | only to themselves (claim) |
+
+Enforced server-side in `leads.views.scoped_leads` and
+`LeadUpdateSerializer.validate_owner`, not in the UI.
+
+## API
+
+| Method | Path | Auth |
+|---|---|---|
+| `POST` | `/api/leads/` | **anonymous** (public intake) |
+| `GET` | `/api/leads/` | session; role-scoped |
+| `GET/PATCH` | `/api/leads/<id>/` | session; role-scoped |
+| `POST` | `/api/leads/<id>/notes/` | session |
+| `GET/POST` | `/api/leads/<id>/tasks/` | session |
+| `PATCH/DELETE` | `/api/tasks/<id>/` | session |
+| `GET` | `/api/stats/` | session |
+| `GET` | `/api/team/` | session; managers/admins |
+| `GET` | `/api/auth/csrf/` | anonymous |
+| `POST` | `/api/auth/login/` `/logout/` | — |
+| `GET` | `/api/auth/me/` | session |
 
 ## Neon Postgres
 
-Use the **pooled** connection string — the host contains `-pooler`.
+Use the **pooled** connection string. The host contains `-pooler`.
 
 ```
 DATABASE_URL=postgresql://user:pass@ep-xxx-pooler.region.aws.neon.tech/db?sslmode=require
@@ -49,26 +87,40 @@ persistent connections do not survive that, so `settings.py` pins
 `conn_max_age=0` and lets the pooler pool. Raising it is the classic way to
 get random `server closed the connection unexpectedly` errors in production.
 
-Without `DATABASE_URL`, the project falls back to local SQLite so it runs
-before Neon is provisioned.
+Without `DATABASE_URL`, the project falls back to local SQLite.
 
 ## Deploying (Render)
 
 - **Build**: `pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate`
 - **Start**: `gunicorn config.wsgi:application`
-- **Env**: `SECRET_KEY`, `DEBUG=False`, `ALLOWED_HOSTS=<your-host>`,
+- **Env**: `SECRET_KEY`, `DEBUG=False`, `ALLOWED_HOSTS=<host>`,
   `DATABASE_URL=<neon pooled url>`,
-  `CORS_ALLOWED_ORIGINS=https://bitstudio.co.zw,https://www.bitstudio.co.zw`
+  `CORS_ALLOWED_ORIGINS=https://bitstudio.co.zw,https://www.bitstudio.co.zw`,
+  `SESSION_COOKIE_DOMAIN=.bitstudio.co.zw`
 
-`DEBUG=False` turns on HSTS, the SSL redirect, and secure cookies.
+`DEBUG=False` turns on HSTS, the SSL redirect, secure cookies, and disables
+the browsable API.
+
+**Host the API on a subdomain of the site** (`api.bitstudio.co.zw`). The CRM
+authenticates with a session cookie; on a subdomain it stays *same-site* and
+`SameSite=Lax` works. On a raw `*.onrender.com` host the browser treats the
+cookie as cross-site and silently drops it, so nobody can log in.
 
 ## Security notes
 
 - `POST /api/leads/` is the only anonymous write. It is create-only, so an
-  enquiry can be submitted but never enumerated. Reading leads requires an
-  authenticated session.
-- The endpoint is throttled (`10/hour` per IP) and carries a `website`
-  honeypot field that must be empty.
-- `status` and `owner` are server-controlled; the browser cannot set them.
+  enquiry can be submitted but never enumerated. Throttled 10/hour per IP,
+  with a `website` honeypot that must be empty.
+- `status`, `owner`, `ip_address`, `user_agent` are server-set. The browser
+  cannot set them, and buyer-supplied facts are immutable in the CRM.
+- Leads have no `destroy` route. They are won or lost, never deleted.
+- `/auth/login/` is explicitly `csrf_protect`'d. DRF's `SessionAuthentication`
+  skips the CSRF check on anonymous requests, which would otherwise leave the
+  endpoint open to login CSRF. Pinned by `LoginCsrfTests`.
+- The public intake stays CSRF-exempt on purpose: the marketing site posts
+  cross-origin with no session.
+- `/admin` is `noindex, nofollow, noarchive`, disallowed in `robots.txt`, and
+  excluded from the sitemap and prerender. The sitemap generator fails the
+  build if an `/admin` route ever appears in it.
 - `ip_address` and `user_agent` are stored to defend the public endpoint
   against abuse. **Update the site's privacy policy to disclose this.**
