@@ -171,7 +171,16 @@ CORS_ALLOWED_ORIGINS = env_list(
     "CORS_ALLOWED_ORIGINS", "http://localhost:5173"
 )
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = [o for o in CORS_ALLOWED_ORIGINS if o.startswith("https://")]
+
+# Django validates the browser's Origin header on every unsafe request. The
+# SPA lives on a different origin from the API, so that header never matches
+# the API's own host and the origin must be trusted explicitly — otherwise
+# every login returns 403 no matter how good the CSRF token is.
+#
+# Filtering this to https:// would silently break local development, and the
+# only thing that catches it is a real browser: curl sends no Origin header.
+# The origins allowed to call us are exactly the ones we trust.
+CSRF_TRUSTED_ORIGINS = list(CORS_ALLOWED_ORIGINS)
 
 # The CRM authenticates with a session cookie. Host the API on a subdomain
 # of the site (api.bitstudio.co.zw) so the cookie stays *same-site* and

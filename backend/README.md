@@ -39,11 +39,23 @@ For a real account: `python manage.py createsuperuser`.
 ## Tests
 
 ```bash
-python manage.py test leads accounts
+python manage.py test leads accounts   # 29 unit tests
 ```
 
 Tests always run against in-memory SQLite, never `DATABASE_URL` — the runner
 creates and drops databases and must not be able to reach Neon.
+
+For the browser end-to-end suite (boots this API + Vite, drives real Chrome):
+
+```bash
+cd ../frontend && npm run e2e
+```
+
+It covers the things unit tests cannot: the login gate redirecting, a card
+actually dragging between pipeline columns and *persisting*, a sales rep not
+seeing a manager's lead, and the marketing contact form reaching this API
+across origins with its offer attribution intact. Screenshots land in
+`frontend/e2e-artifacts/`.
 
 ## Roles
 
@@ -117,6 +129,11 @@ cookie as cross-site and silently drops it, so nobody can log in.
 - `/auth/login/` is explicitly `csrf_protect`'d. DRF's `SessionAuthentication`
   skips the CSRF check on anonymous requests, which would otherwise leave the
   endpoint open to login CSRF. Pinned by `LoginCsrfTests`.
+- `CSRF_TRUSTED_ORIGINS` must contain every origin the SPA is served from.
+  Django validates the browser's `Origin` header, which never matches the
+  API's own host once the SPA lives on another origin — so a missing entry
+  makes *every* login return 403 regardless of the token. `curl` sends no
+  `Origin`, so only a real browser catches this. Pinned by two tests.
 - The public intake stays CSRF-exempt on purpose: the marketing site posts
   cross-origin with no session.
 - `/admin` is `noindex, nofollow, noarchive`, disallowed in `robots.txt`, and
