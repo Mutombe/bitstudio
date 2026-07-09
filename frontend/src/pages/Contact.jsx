@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import {
@@ -12,10 +13,14 @@ import SectionLabel from "../components/SectionLabel.jsx";
 import { useCursorHover } from "../hooks/useCursor.jsx";
 import SEO, { breadcrumbJsonLd } from "../components/SEO.jsx";
 import { KW } from "../data/seo-keywords.js";
+import { attributionFrom, captureLead } from "../lib/api.js";
 
 export default function Contact() {
   const hover = useCursorHover("hover", "");
+  const [search] = useSearchParams();
   const [form, setForm] = useState({ name: "", project: "", email: "" });
+  // Honeypot. Hidden from humans; bots fill it and get rejected server-side.
+  const [website, setWebsite] = useState("");
   const [channel, setChannel] = useState("whatsapp");
   const [sending, setSending] = useState(false);
 
@@ -28,6 +33,19 @@ export default function Contact() {
       return;
     }
     setSending(true);
+
+    // Persist the lead before we hand the visitor off. Fire-and-forget on
+    // purpose: the buyer's route to WhatsApp or email must never wait on,
+    // or be broken by, our API. A dropped lead is our problem to log.
+    captureLead({
+      name: form.name,
+      email: form.email,
+      message: form.project,
+      channel,
+      website,
+      ...attributionFrom(search),
+    }).catch((err) => console.error(err));
+
     const msg = `Name: ${form.name}\nProject: ${form.project}\nEmail: ${form.email}\n\nSent from bitstudio.co.zw`;
     setTimeout(() => {
       if (channel === "whatsapp") {
@@ -146,6 +164,21 @@ export default function Contact() {
               className="md:col-span-7 bg-[color:var(--color-ink)] text-bone-100 rounded-sm p-5 sm:p-6 md:p-10 space-y-6 md:space-y-8 border border-white/10"
             >
               <SectionLabel chapter="§ Form" title="Three fields, no ceremony" />
+
+              {/* Honeypot. Positioned off-screen rather than display:none —
+                  headless bots skip hidden fields but fill positioned ones. */}
+              <div aria-hidden className="absolute -left-[9999px] w-px h-px overflow-hidden">
+                <label htmlFor="website">Website</label>
+                <input
+                  id="website"
+                  name="website"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                />
+              </div>
 
               <Field
                 label="Name"
