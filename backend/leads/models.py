@@ -1,5 +1,6 @@
 import uuid
 
+from django.conf import settings
 from django.db import models
 
 
@@ -65,7 +66,7 @@ class Lead(models.Model):
         max_length=20, choices=Status.choices, default=Status.NEW, db_index=True
     )
     owner = models.ForeignKey(
-        "auth.User",
+        settings.AUTH_USER_MODEL,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -87,3 +88,59 @@ class Lead(models.Model):
     def __str__(self):
         label = self.offer_slug or self.get_source_display()
         return f"{self.name} · {label}"
+
+
+class Activity(models.Model):
+    """
+    The audit trail on a lead. Notes are written by humans; the rest are
+    written by the system when a lead moves stage or changes hands, so the
+    history of a deal survives the person who worked it.
+    """
+
+    class Kind(models.TextChoices):
+        CREATED = "created", "Created"
+        NOTE = "note", "Note"
+        STATUS_CHANGE = "status_change", "Status change"
+        ASSIGNMENT = "assignment", "Assignment"
+
+    lead = models.ForeignKey(Lead, on_delete=models.CASCADE, related_name="activities")
+    kind = models.CharField(max_length=20, choices=Kind.choices, default=Kind.NOTE)
+    body = models.TextField(blank=True)
+    actor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="activities",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name_plural = "activities"
+
+    def __str__(self):
+        return f"{self.get_kind_display()} on {self.lead_id}"
+
+
+class Task(models.Model):
+    """A follow-up somebody owes this lead by a date."""
+
+    lead = models.ForeignKey(Lead, on_delete=models.CASCADE, related_name="tasks")
+    title = models.CharField(max_length=300)
+    due_date = models.DateField(null=True, blank=True)
+    assignee = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="tasks",
+    )
+    is_done = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["is_done", "due_date", "-created_at"]
+
+    def __str__(self):
+        return self.title
