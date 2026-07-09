@@ -68,6 +68,18 @@ seeds = [
         "message": "Can you replace our spreadsheets?",
         "source": Lead.Source.CONTACT_FORM,
     },
+    # Owned by the manager. A sales rep must NOT see this one — it is what
+    # makes role scoping observable in the UI, not just in a unit test.
+    {
+        "name": "Nyasha Chirwa",
+        "email": "nyasha@example.co.zw",
+        "company": "Chirwa Construction",
+        "message": "Projects keep going over budget and we find out too late.",
+        "source": Lead.Source.OFFER_PAGE,
+        "offer_slug": "construction",
+        "status": Lead.Status.PROPOSAL,
+        "owner": manager,
+    },
 ]
 
 for data in seeds:

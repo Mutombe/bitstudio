@@ -51,6 +51,9 @@ export function AuthProvider({ children }) {
   );
 }
 
+// Colocated with the provider on purpose; splitting a two-line hook into its
+// own module buys nothing but an import.
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) throw new Error("useAuth must be used inside <AuthProvider>");

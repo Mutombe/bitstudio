@@ -4,9 +4,12 @@ import { crm } from "../lib/api.js";
 import { AdminHead } from "./AdminLayout.jsx";
 import { STAGES } from "./constants.js";
 
-function Stat({ label, value, hint, accent = "#D4FF3A" }) {
+function Stat({ label, value, hint, accent = "#D4FF3A", testId }) {
   return (
-    <div className="border border-white/10 rounded-sm p-5 bg-maroon-950/20">
+    <div
+      data-testid={testId}
+      className="border border-white/10 rounded-sm p-5 bg-maroon-950/20"
+    >
       <p className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/45 mb-3">
         {label}
       </p>
@@ -55,7 +58,7 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-        <Stat label="Total leads" value={stats.total} />
+        <Stat label="Total leads" value={stats.total} testId="stat-total" />
         <Stat label="New this week" value={stats.new_this_week} accent="#22D3EE" />
         <Stat label="Assigned to me" value={stats.mine} accent="#9F6BFF" />
         <Stat

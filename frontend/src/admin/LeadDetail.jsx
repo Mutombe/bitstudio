@@ -158,6 +158,7 @@ export default function LeadDetail() {
                   Stage
                 </span>
                 <select
+                  data-testid="stage-select"
                   value={lead.status}
                   onChange={(e) => patch({ status: e.target.value })}
                   className="mt-2 w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm px-3 py-2 text-sm"
@@ -176,6 +177,7 @@ export default function LeadDetail() {
                 </span>
                 {user?.can_assign_leads ? (
                   <select
+                    data-testid="owner-select"
                     value={lead.owner?.id || ""}
                     onChange={(e) =>
                       patch({ owner: e.target.value ? Number(e.target.value) : null })
@@ -197,6 +199,7 @@ export default function LeadDetail() {
                     </span>
                     {lead.owner?.id !== user?.id && (
                       <button
+                        data-testid="claim-button"
                         onClick={() => patch({ owner: user.id })}
                         className="font-mono text-[10px] tracking-[0.18em] uppercase text-signal hover:underline"
                       >
@@ -233,6 +236,7 @@ export default function LeadDetail() {
 
             <form onSubmit={submitNote} className="mb-6">
               <textarea
+                data-testid="note-input"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 rows={2}
@@ -244,9 +248,9 @@ export default function LeadDetail() {
               </button>
             </form>
 
-            <ol className="space-y-4">
+            <ol data-testid="activity-list" className="space-y-4">
               {lead.activities.map((item) => (
-                <li key={item.id} className="flex gap-3">
+                <li key={item.id} data-testid="activity-item" className="flex gap-3">
                   <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-signal shrink-0" />
                   <div className="min-w-0">
                     <p className={`text-sm ${ACTIVITY_TONE[item.kind] || "text-bone-100"}`}>

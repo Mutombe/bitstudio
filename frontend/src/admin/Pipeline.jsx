@@ -86,6 +86,7 @@ export default function Pipeline() {
           return (
             <section
               key={stage.id}
+              data-testid={`column-${stage.id}`}
               onDragOver={(e) => {
                 e.preventDefault();
                 setDragOver(stage.id);
@@ -114,6 +115,8 @@ export default function Pipeline() {
                 {column.map((lead) => (
                   <article
                     key={lead.id}
+                    data-testid="lead-card"
+                    data-lead-id={lead.id}
                     draggable
                     onDragStart={(e) => e.dataTransfer.setData("text/plain", lead.id)}
                     className="group rounded-sm border border-white/10 bg-[color:var(--color-ink)] p-3 cursor-grab active:cursor-grabbing hover:border-signal/50 transition-colors"

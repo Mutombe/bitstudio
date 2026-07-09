@@ -9,6 +9,7 @@
     "build": "npm run build:fast && npm run prerender",
     "prerender": "node scripts/prerender.mjs",
     "sitemap": "node scripts/generate-sitemap.mjs",
+    "e2e": "node scripts/e2e-crm.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

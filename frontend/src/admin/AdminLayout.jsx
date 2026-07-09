@@ -63,23 +63,26 @@ export default function AdminLayout() {
               </span>
             </Link>
             <nav className="flex items-center gap-1">
-              {NAV.map(({ to, label, icon: Icon, end }) => (
-                <NavLink
-                  key={to}
-                  to={to}
-                  end={end}
-                  className={({ isActive }) =>
-                    `flex items-center gap-2 px-3 py-1.5 rounded-sm font-mono text-[10px] tracking-[0.2em] uppercase transition-colors ${
-                      isActive
-                        ? "text-signal bg-signal/10"
-                        : "text-bone-100/60 hover:text-bone-100"
-                    }`
-                  }
-                >
-                  <Icon size={14} />
-                  <span className="hidden sm:inline">{label}</span>
-                </NavLink>
-              ))}
+              {NAV.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    end={item.end}
+                    className={({ isActive }) =>
+                      `flex items-center gap-2 px-3 py-1.5 rounded-sm font-mono text-[10px] tracking-[0.2em] uppercase transition-colors ${
+                        isActive
+                          ? "text-signal bg-signal/10"
+                          : "text-bone-100/60 hover:text-bone-100"
+                      }`
+                    }
+                  >
+                    <Icon size={14} />
+                    <span className="hidden sm:inline">{item.label}</span>
+                  </NavLink>
+                );
+              })}
             </nav>
           </div>
 

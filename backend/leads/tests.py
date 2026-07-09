@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
-from django.test import Client, TestCase
+from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
 from .models import Activity, Lead
@@ -316,3 +316,26 @@ class LoginCsrfTests(TestCase):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 201)
+
+    def _login_from(self, origin):
+        self.client.get(reverse("auth-csrf"))
+        token = self.client.cookies["csrftoken"].value
+        return self.client.post(
+            self.url,
+            self.credentials,
+            content_type="application/json",
+            HTTP_X_CSRFTOKEN=token,
+            HTTP_ORIGIN=origin,
+        )
+
+    @override_settings(CSRF_TRUSTED_ORIGINS=["https://bitstudio.co.zw"])
+    def test_login_from_a_trusted_origin_is_accepted(self):
+        # Django checks the browser's Origin header against this list. The SPA
+        # always sends one, and it never matches the API's own host — so a
+        # missing entry here means every login 403s, however good the token.
+        # curl sends no Origin, which is why only a browser catches it.
+        self.assertEqual(self._login_from("https://bitstudio.co.zw").status_code, 200)
+
+    @override_settings(CSRF_TRUSTED_ORIGINS=["https://bitstudio.co.zw"])
+    def test_login_from_an_untrusted_origin_is_rejected(self):
+        self.assertEqual(self._login_from("https://evil.example").status_code, 403)
