@@ -42,7 +42,7 @@ export default function LeadsList() {
         <select
           value={filters.status}
           onChange={update("status")}
-          className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm px-3 py-2 text-sm"
+          className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm"
         >
           <option value="">All stages</option>
           {STAGES.map((s) => (
@@ -54,7 +54,7 @@ export default function LeadsList() {
         <select
           value={filters.owner}
           onChange={update("owner")}
-          className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm px-3 py-2 text-sm"
+          className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm"
         >
           <option value="">Anyone</option>
           <option value="me">Assigned to me</option>
