@@ -161,7 +161,7 @@ export default function LeadDetail() {
                   data-testid="stage-select"
                   value={lead.status}
                   onChange={(e) => patch({ status: e.target.value })}
-                  className="mt-2 w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm px-3 py-2 text-sm"
+                  className="mt-2 w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm"
                 >
                   {STAGES.map((s) => (
                     <option key={s.id} value={s.id}>
@@ -182,7 +182,7 @@ export default function LeadDetail() {
                     onChange={(e) =>
                       patch({ owner: e.target.value ? Number(e.target.value) : null })
                     }
-                    className="mt-2 w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm px-3 py-2 text-sm"
+                    className="mt-2 w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm"
                   >
                     <option value="">Unassigned</option>
                     {team.map((member) => (

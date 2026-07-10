@@ -52,6 +52,12 @@
 @layer base {
   :root {
     --grain-opacity: 0.06;
+
+    /* Tells the browser this is a dark document. Without it, native
+       controls — <select>, its dropdown popup, date pickers, checkboxes —
+       are painted in the OS light theme: white boxes with dark text on an
+       ink page. This is the single declaration that fixes them all. */
+    color-scheme: dark;
   }
 
   html {
@@ -61,6 +67,71 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "ss01", "ss02", "cv11";
+  }
+
+  /* ─── Form controls ───────────────────────────────────────────────
+     Inputs inherit the page's type and colour rather than the browser's. */
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+    color: var(--color-bone-100);
+    accent-color: var(--color-signal);
+  }
+
+  /* `color-scheme: dark` fixes the dropdown popup, but Chrome on Windows
+     still paints the closed <select> with the native OS widget, ignoring the
+     author background entirely — the computed style reads ink while the pixels
+     come out white. Opting out of the native appearance is the only reliable
+     fix, so we draw the chevron ourselves. */
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%23F5EFE6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 0.7rem;
+    padding-right: 2.25rem;
+  }
+
+  /* The dropdown list is rendered by the OS, so the options need colouring
+     explicitly — color-scheme alone leaves them grey on some platforms. */
+  select option {
+    background-color: var(--color-ink);
+    color: var(--color-bone-100);
+  }
+
+  ::placeholder {
+    color: color-mix(in srgb, var(--color-bone-100) 35%, transparent);
+    opacity: 1; /* Firefox dims placeholders by default */
+  }
+
+  /* Chrome repaints autofilled fields with its own near-white background and
+     ignores `background-color`. The only reliable override is to flood the
+     field with an inset shadow and set the text fill directly — otherwise a
+     saved password turns the login form into three white boxes.
+     The absurd transition delay stops the flash on first paint. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-text-fill-color: var(--color-bone-100);
+    caret-color: var(--color-bone-100);
+    -webkit-box-shadow: 0 0 0 1000px var(--color-ink) inset;
+    box-shadow: 0 0 0 1000px var(--color-ink) inset;
+    transition: background-color 600000s 0s, color 600000s 0s;
+  }
+
+  /* The little calendar glyph ships black. Invert it onto the dark field. */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.55;
+    cursor: pointer;
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
   }
 
   body {
