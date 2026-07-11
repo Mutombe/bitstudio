@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import {
   ChartBarIcon,
   KanbanIcon,
+  ListChecksIcon,
   ListDashesIcon,
   SignOutIcon,
 } from "@phosphor-icons/react";
@@ -45,6 +46,7 @@ export function RequireAuth({ children }) {
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: ChartBarIcon, end: true },
   { to: "/admin/pipeline", label: "Pipeline", icon: KanbanIcon },
+  { to: "/admin/follow-ups", label: "Follow-ups", icon: ListChecksIcon },
   { to: "/admin/leads", label: "Leads", icon: ListDashesIcon },
 ];
 

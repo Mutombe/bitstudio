@@ -21,6 +21,18 @@ export const SOURCE_LABEL = {
   other: "Other",
 };
 
+// Whole-dollar USD. Deal values are round numbers, so cents are noise.
+const USD = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  maximumFractionDigits: 0,
+});
+
+export function formatMoney(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? USD.format(number) : "$0";
+}
+
 export function formatDate(value) {
   if (!value) return "—";
   return new Date(value).toLocaleDateString("en-GB", {

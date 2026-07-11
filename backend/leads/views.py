@@ -1,6 +1,7 @@
 from datetime import timedelta
+from decimal import Decimal
 
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Sum
 from django.utils import timezone
 from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import action
@@ -8,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Activity, Lead, Task
+from .pricing import resolve_lead_value
 from .serializers import (
     ActivitySerializer,
     LeadCreateSerializer,
@@ -15,8 +17,17 @@ from .serializers import (
     LeadListSerializer,
     LeadUpdateSerializer,
     NoteCreateSerializer,
+    TaskListSerializer,
     TaskSerializer,
 )
+
+# Stages where a deal is still live and its value counts toward the pipeline.
+OPEN_STATUSES = [
+    Lead.Status.NEW,
+    Lead.Status.CONTACTED,
+    Lead.Status.QUALIFIED,
+    Lead.Status.PROPOSAL,
+]
 
 
 def client_ip(request):
@@ -104,9 +115,15 @@ class LeadViewSet(
         return queryset
 
     def perform_create(self, serializer):
+        # Seed the deal value from the offer + tier the buyer clicked, so the
+        # lead lands on the board already worth something.
         lead = serializer.save(
             ip_address=client_ip(self.request),
             user_agent=self.request.META.get("HTTP_USER_AGENT", "")[:400],
+            value=resolve_lead_value(
+                serializer.validated_data.get("offer_slug", ""),
+                serializer.validated_data.get("tier", ""),
+            ),
         )
         Activity.objects.create(
             lead=lead,
@@ -166,19 +183,34 @@ class LeadViewSet(
 
 
 class TaskViewSet(
+    mixins.ListModelMixin,
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
-    """Tick a follow-up off, or drop it. Scoped to leads you can see."""
+    """
+    List, tick off, or drop follow-ups — scoped to leads you can see.
 
-    serializer_class = TaskSerializer
+    `?assignee=me` powers the "my follow-ups" view; `?open=1` hides completed
+    ones. Ordered soonest-due first so overdue work floats to the top.
+    """
+
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_serializer_class(self):
+        return TaskListSerializer if self.action == "list" else TaskSerializer
+
     def get_queryset(self):
-        return Task.objects.filter(
+        queryset = Task.objects.filter(
             lead__in=scoped_leads(self.request.user)
-        ).select_related("assignee")
+        ).select_related("assignee", "lead")
+
+        params = self.request.query_params
+        if params.get("assignee") == "me":
+            queryset = queryset.filter(assignee=self.request.user)
+        if params.get("open") in ("1", "true"):
+            queryset = queryset.filter(is_done=False)
+        return queryset
 
 
 class StatsView(APIView):
@@ -190,10 +222,44 @@ class StatsView(APIView):
         queryset = scoped_leads(request.user)
         week_ago = timezone.now() - timedelta(days=7)
 
-        by_status = {
-            row["status"]: row["count"]
-            for row in queryset.values("status").annotate(count=Count("id"))
-        }
+        rows = queryset.values("status").annotate(
+            count=Count("id"), value=Sum("value")
+        )
+        by_status = {r["status"]: r["count"] for r in rows}
+        value_by_status = {r["status"]: (r["value"] or Decimal("0")) for r in rows}
+
+        won = by_status.get(Lead.Status.WON, 0)
+        lost = by_status.get(Lead.Status.LOST, 0)
+        decided = won + lost
+
+        # Conversion by offer page: which of the offers we built and ranked
+        # for actually turns into money. Open value is still in play; won
+        # value has closed.
+        by_offer = []
+        offer_rows = (
+            queryset.exclude(offer_slug="")
+            .values("offer_slug")
+            .annotate(total=Count("id"))
+            .order_by("-total")
+        )
+        for row in offer_rows:
+            slug = row["offer_slug"]
+            leads_for_offer = queryset.filter(offer_slug=slug)
+            by_offer.append(
+                {
+                    "offer_slug": slug,
+                    "total": row["total"],
+                    "won": leads_for_offer.filter(status=Lead.Status.WON).count(),
+                    "pipeline_value": leads_for_offer.filter(
+                        status__in=OPEN_STATUSES
+                    ).aggregate(v=Sum("value"))["v"]
+                    or 0,
+                    "won_value": leads_for_offer.filter(
+                        status=Lead.Status.WON
+                    ).aggregate(v=Sum("value"))["v"]
+                    or 0,
+                }
+            )
 
         return Response(
             {
@@ -208,5 +274,15 @@ class StatsView(APIView):
                 "open_tasks": Task.objects.filter(
                     lead__in=queryset, is_done=False
                 ).count(),
+                # Money.
+                "pipeline_value": sum(
+                    (value_by_status.get(s, Decimal("0")) for s in OPEN_STATUSES),
+                    Decimal("0"),
+                ),
+                "won_value": value_by_status.get(Lead.Status.WON, Decimal("0")),
+                # None (not 0) when nothing has been decided, so the UI can say
+                # "no data yet" rather than "0% win rate".
+                "win_rate": round(won / decided, 3) if decided else None,
+                "by_offer": by_offer,
             }
         )

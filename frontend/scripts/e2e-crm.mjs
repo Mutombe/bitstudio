@@ -42,6 +42,19 @@ function check(name, condition, detail = "") {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+async function assertPortFree(url, label) {
+  // A stale server left on the port answers with old code, so our fresh one
+  // never binds and the whole run tests the wrong build. Refuse to start.
+  try {
+    await fetch(url);
+  } catch {
+    return; // nothing listening — good
+  }
+  throw new Error(
+    `${label} is already responding at ${url}. Kill the stale process before running e2e.`
+  );
+}
+
 async function waitForServer(url, label, timeoutMs = 60_000) {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
@@ -111,6 +124,21 @@ function stopServers({ django, vite }) {
   if (isWin) {
     // Vite is spawned through the npx shim, so killing the shell orphans node.
     spawnSync("taskkill", ["/F", "/T", "/PID", String(vite.pid)], { stdio: "ignore" });
+    // Belt and braces: sweep anything still bound to our ports, so a failed
+    // run never strands a server that masks the next run.
+    for (const port of [8000, 5173]) {
+      const out = spawnSync("netstat", ["-ano"], { encoding: "utf8" }).stdout || "";
+      const pids = new Set(
+        out
+          .split(/\r?\n/)
+          .filter((line) => line.includes(`:${port}`) && line.includes("LISTENING"))
+          .map((line) => line.trim().split(/\s+/).pop())
+          .filter(Boolean)
+      );
+      for (const pid of pids) {
+        spawnSync("taskkill", ["/F", "/PID", pid], { stdio: "ignore" });
+      }
+    }
   }
 }
 
@@ -213,13 +241,26 @@ async function run(page) {
   await page.goto(`${WEB}/admin`, { waitUntil: "networkidle0" });
   await page.waitForSelector('[data-testid="stat-total"]', { timeout: 15_000 });
   const total = await textOf(page, '[data-testid="stat-total"] p:nth-of-type(2)');
-  check("manager dashboard shows 4 total leads", total === "4", `got "${total}"`);
+  check("manager dashboard shows 6 total leads", total === "6", `got "${total}"`);
+
+  // Revenue layer: the dashboard talks in money, and the conversion table
+  // renders. Seeded pipeline = 5k + 6k + 10k (open) = 21,000.
+  const pipelineValue = await textOf(page, '[data-testid="stat-pipeline-value"] p:nth-of-type(2)');
+  check(
+    "dashboard shows pipeline value in dollars",
+    /\$[\d,]+/.test(pipelineValue || ""),
+    `got "${pipelineValue}"`
+  );
+  check(
+    "conversion-by-offer table renders",
+    (await page.$('[data-testid="by-offer-table"]')) !== null
+  );
   await page.screenshot({ path: path.join(SHOTS, "01-dashboard.png") });
 
   // ─── 5. Pipeline renders the board ────────────────────────────────
   await page.goto(`${WEB}/admin/pipeline`, { waitUntil: "networkidle0" });
   await page.waitForSelector('[data-testid="lead-card"]');
-  check("pipeline shows 4 cards for the manager", (await countOf(page, '[data-testid="lead-card"]')) === 4);
+  check("pipeline shows 6 cards for the manager", (await countOf(page, '[data-testid="lead-card"]')) === 6);
 
   const inNew = () => countOf(page, '[data-testid="column-new"] [data-testid="lead-card"]');
   const inContacted = () =>
@@ -291,7 +332,28 @@ async function run(page) {
     "manager sees the owner dropdown",
     (await page.$('[data-testid="owner-select"]')) !== null
   );
+
+  // Deal value is present and editable.
+  const seededValue = await page.$eval('[data-testid="value-input"]', (el) => el.value);
+  check("lead detail shows a seeded deal value", Number(seededValue) > 0, `got "${seededValue}"`);
+
+  // Add a follow-up (defaults to the creator), then confirm it lands in
+  // "my follow-ups".
+  await page.type('[data-testid="task-title"]', "Call Tendai back");
+  await page.click('[data-testid="add-task"]');
+  await page.waitForFunction(
+    () => document.body.innerText.includes("Call Tendai back"),
+    { timeout: 10_000 }
+  );
   await page.screenshot({ path: path.join(SHOTS, "03-lead-detail.png") });
+
+  await page.goto(`${WEB}/admin/follow-ups`, { waitUntil: "networkidle0" });
+  await page.waitForSelector('[data-testid="followups-count"]', { timeout: 15_000 });
+  check(
+    "the follow-up appears in my follow-ups",
+    (await page.evaluate(() => document.body.innerText)).includes("Call Tendai back")
+  );
+  await page.screenshot({ path: path.join(SHOTS, "06-follow-ups.png") });
 
   // ─── 8. Role scoping is visible in the UI ─────────────────────────
   await logout(page);
@@ -300,7 +362,7 @@ async function run(page) {
   await page.waitForSelector('[data-testid="lead-card"]');
 
   const salesCards = await countOf(page, '[data-testid="lead-card"]');
-  check("sales rep sees 3 of the 4 leads", salesCards === 3, `saw ${salesCards}`);
+  check("sales rep sees 5 of the 6 leads", salesCards === 5, `saw ${salesCards}`);
 
   const salesNames = await page.$$eval('[data-testid="lead-card"]', (cards) =>
     cards.map((c) => c.textContent)
@@ -367,12 +429,16 @@ async function run(page) {
   await page.waitForSelector("table");
   const table = await textOf(page, "table");
   check("the captured lead appears in the CRM leads list", table?.includes("E2E Buyer"));
+  check("the leads list shows deal value in dollars", /\$[\d,]+/.test(table || ""));
   await page.screenshot({ path: path.join(SHOTS, "05-leads-list.png") });
 }
 
 async function main() {
   rmSync(SHOTS, { recursive: true, force: true });
   mkdirSync(SHOTS, { recursive: true });
+
+  await assertPortFree(`${API}/healthz`, "django (port 8000)");
+  await assertPortFree(WEB, "vite (port 5173)");
 
   resetDatabase();
   console.log("• starting django + vite");
@@ -382,6 +448,14 @@ async function main() {
   try {
     await waitForServer(`${API}/healthz`, "django");
     await waitForServer(WEB, "vite");
+
+    // Pre-warm the dev server. Vite compiles a route on first request, and the
+    // lazy admin chunk on a cold start can take longer than a nav timeout —
+    // which looks like a failure but is just the first compile.
+    console.log("• warming routes");
+    for (const route of ["/admin/login", "/contact"]) {
+      await fetch(`${WEB}${route}`).catch(() => {});
+    }
     console.log("• both up. launching chrome\n");
 
     browser = await puppeteer.launch({
@@ -391,6 +465,8 @@ async function main() {
     });
     const page = await browser.newPage();
     await page.setViewport({ width: 1440, height: 900 });
+    // Cold Vite compiles can outlast the 30s default on a loaded machine.
+    page.setDefaultNavigationTimeout(60_000);
     page.on("pageerror", (err) => console.log(`  [page error] ${err.message}`));
     page.on("console", (msg) => {
       if (msg.type() === "error") console.log(`  [console] ${msg.text()}`);

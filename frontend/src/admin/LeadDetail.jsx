@@ -53,12 +53,24 @@ export default function LeadDetail() {
   const [lead, setLead] = useState(null);
   const [team, setTeam] = useState([]);
   const [note, setNote] = useState("");
-  const [task, setTask] = useState({ title: "", due_date: "" });
+  const [task, setTask] = useState({ title: "", due_date: "", assignee_id: "" });
+  const [valueDraft, setValueDraft] = useState("");
   const [error, setError] = useState("");
 
   const load = useCallback(() => {
-    crm.getLead(id).then(setLead).catch(() => setError("Could not load this lead."));
+    crm
+      .getLead(id)
+      .then((data) => {
+        setLead(data);
+        setValueDraft(String(Math.round(Number(data.value) || 0)));
+      })
+      .catch(() => setError("Could not load this lead."));
   }, [id]);
+
+  const saveValue = () => {
+    const next = Math.max(0, Math.round(Number(valueDraft) || 0));
+    if (next !== Math.round(Number(lead.value) || 0)) patch({ value: next });
+  };
 
   useEffect(load, [load]);
 
@@ -86,11 +98,15 @@ export default function LeadDetail() {
   const submitTask = async (event) => {
     event.preventDefault();
     if (!task.title.trim()) return;
+    // Default the follow-up to whoever created it, so it lands in a real
+    // person's "my follow-ups" instead of floating unassigned.
+    const assigneeId = task.assignee_id ? Number(task.assignee_id) : user?.id;
     await crm.addTask(id, {
       title: task.title.trim(),
       due_date: task.due_date || null,
+      assignee_id: assigneeId ?? null,
     });
-    setTask({ title: "", due_date: "" });
+    setTask({ title: "", due_date: "", assignee_id: "" });
     load();
   };
 
@@ -210,6 +226,48 @@ export default function LeadDetail() {
                 )}
               </label>
             </div>
+
+            <div className="grid sm:grid-cols-2 gap-4 mt-4">
+              <label className="block">
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">
+                  Deal value (USD)
+                </span>
+                <div className="mt-2 flex items-center border border-white/15 rounded-sm focus-within:border-signal">
+                  <span className="pl-3 text-bone-100/50">$</span>
+                  <input
+                    data-testid="value-input"
+                    type="number"
+                    min="0"
+                    step="500"
+                    value={valueDraft}
+                    onChange={(e) => setValueDraft(e.target.value)}
+                    onBlur={saveValue}
+                    className="w-full bg-transparent outline-none px-2 py-2 text-sm tabular-nums"
+                  />
+                </div>
+                <span className="mt-1 block text-[10px] text-bone-100/35">
+                  Seeded from the offer; edit to the real number.
+                </span>
+              </label>
+
+              {lead.status === "lost" && (
+                <label className="block">
+                  <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-maroon-400">
+                    Why it was lost
+                  </span>
+                  <input
+                    data-testid="lost-reason-input"
+                    defaultValue={lead.lost_reason}
+                    onBlur={(e) => {
+                      if (e.target.value !== lead.lost_reason)
+                        patch({ lost_reason: e.target.value });
+                    }}
+                    placeholder="Price, timing, went with a competitor…"
+                    className="mt-2 w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm"
+                  />
+                </label>
+              )}
+            </div>
           </section>
 
           <section className="border border-white/10 rounded-sm p-5 bg-maroon-950/20">
@@ -276,6 +334,7 @@ export default function LeadDetail() {
 
             <form onSubmit={submitTask} className="space-y-2 mb-5">
               <input
+                data-testid="task-title"
                 value={task.title}
                 onChange={(e) => setTask((t) => ({ ...t, title: e.target.value }))}
                 placeholder="Send the proposal"
@@ -287,7 +346,26 @@ export default function LeadDetail() {
                 onChange={(e) => setTask((t) => ({ ...t, due_date: e.target.value }))}
                 className="w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm px-3 py-2 text-sm"
               />
-              <button type="submit" disabled={!task.title.trim()} className="btn btn-ghost w-full justify-center">
+              {user?.can_assign_leads && team.length > 0 && (
+                <select
+                  value={task.assignee_id}
+                  onChange={(e) => setTask((t) => ({ ...t, assignee_id: e.target.value }))}
+                  className="w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm"
+                >
+                  <option value="">Assign to me</option>
+                  {team.map((member) => (
+                    <option key={member.id} value={member.id}>
+                      {member.name}
+                    </option>
+                  ))}
+                </select>
+              )}
+              <button
+                type="submit"
+                data-testid="add-task"
+                disabled={!task.title.trim()}
+                className="btn btn-ghost w-full justify-center"
+              >
                 Add follow-up
               </button>
             </form>

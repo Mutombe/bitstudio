@@ -227,6 +227,133 @@ class LeadPipelineTests(BaseCRMTest):
         self.assertTrue(self.lead.tasks.get().is_done)
 
 
+class RevenueTests(BaseCRMTest):
+    """Deal value on capture, and the money the dashboard reports."""
+
+    def setUp(self):
+        super().setUp()
+        self.manager = User.objects.create_user("mgr", password="x", role=User.Role.MANAGER)
+
+    def test_capture_seeds_value_from_offer_and_tier(self):
+        self.client.post(
+            self.list_url,
+            {
+                "name": "A",
+                "email": "a@b.co",
+                "message": "hi",
+                "source": "offer_page",
+                "offer_slug": "real-estate-automation",
+                "tier": "Property ERP",
+            },
+            content_type="application/json",
+        )
+        self.assertEqual(Lead.objects.get().value, 16000)
+
+    def test_capture_without_tier_uses_starting_price(self):
+        self.client.post(
+            self.list_url,
+            {
+                "name": "A",
+                "email": "a@b.co",
+                "message": "hi",
+                "source": "offer_page",
+                "offer_slug": "real-estate-automation",
+            },
+            content_type="application/json",
+        )
+        self.assertEqual(Lead.objects.get().value, 5000)
+
+    def test_browser_cannot_set_value_on_capture(self):
+        self.client.post(
+            self.list_url,
+            {
+                "name": "A",
+                "email": "a@b.co",
+                "message": "hi",
+                "offer_slug": "real-estate-automation",
+                "tier": "Property ERP",
+                "value": "999999",
+            },
+            content_type="application/json",
+        )
+        # value comes from pricing, never from the untrusted payload.
+        self.assertEqual(Lead.objects.get().value, 16000)
+
+    def test_dashboard_reports_pipeline_and_won_value(self):
+        Lead.objects.create(name="Open1", email="o1@x.co", message="x", status="new", value=5000)
+        Lead.objects.create(name="Open2", email="o2@x.co", message="x", status="proposal", value=8000)
+        Lead.objects.create(name="Won", email="w@x.co", message="x", status="won", value=15000)
+        Lead.objects.create(name="Lost", email="l@x.co", message="x", status="lost", value=3000)
+
+        self.client.force_login(self.manager)
+        stats = self.client.get(reverse("stats")).json()
+
+        self.assertEqual(float(stats["pipeline_value"]), 13000)  # open only
+        self.assertEqual(float(stats["won_value"]), 15000)
+        self.assertEqual(stats["win_rate"], 0.5)  # 1 won of (1 won + 1 lost)
+
+    def test_win_rate_is_null_before_anything_closes(self):
+        Lead.objects.create(name="Open", email="o@x.co", message="x", status="new", value=5000)
+        self.client.force_login(self.manager)
+        self.assertIsNone(self.client.get(reverse("stats")).json()["win_rate"])
+
+    def test_conversion_by_offer(self):
+        Lead.objects.create(name="A", email="a@x.co", message="x", offer_slug="ai-automation", status="won", value=3500)
+        Lead.objects.create(name="B", email="b@x.co", message="x", offer_slug="ai-automation", status="new", value=9000)
+        self.client.force_login(self.manager)
+
+        by_offer = {o["offer_slug"]: o for o in self.client.get(reverse("stats")).json()["by_offer"]}
+        self.assertEqual(by_offer["ai-automation"]["total"], 2)
+        self.assertEqual(by_offer["ai-automation"]["won"], 1)
+        self.assertEqual(float(by_offer["ai-automation"]["won_value"]), 3500)
+        self.assertEqual(float(by_offer["ai-automation"]["pipeline_value"]), 9000)
+
+    def test_staff_can_record_lost_reason(self):
+        lead = Lead.objects.create(name="A", email="a@x.co", message="x")
+        self.client.force_login(self.manager)
+        self.client.patch(
+            self.detail_url(lead),
+            {"status": "lost", "lost_reason": "Too expensive."},
+            content_type="application/json",
+        )
+        lead.refresh_from_db()
+        self.assertEqual(lead.status, "lost")
+        self.assertEqual(lead.lost_reason, "Too expensive.")
+
+
+class TaskListTests(BaseCRMTest):
+    """The flat /api/tasks/ list that powers 'my follow-ups'."""
+
+    def setUp(self):
+        super().setUp()
+        self.sales = User.objects.create_user("sales", password="x", role=User.Role.SALES)
+        self.manager = User.objects.create_user("mgr", password="x", role=User.Role.MANAGER)
+        self.lead = Lead.objects.create(name="A", email="a@x.co", message="x", owner=self.sales)
+
+    def test_assignee_me_and_open_filters(self):
+        from .models import Task
+
+        mine_open = Task.objects.create(lead=self.lead, title="Call", assignee=self.sales)
+        Task.objects.create(lead=self.lead, title="Done", assignee=self.sales, is_done=True)
+        Task.objects.create(lead=self.lead, title="Theirs", assignee=self.manager)
+
+        self.client.force_login(self.sales)
+        results = self.client.get(reverse("task-list"), {"assignee": "me", "open": "1"}).json()["results"]
+
+        self.assertEqual([t["id"] for t in results], [mine_open.id])
+        self.assertEqual(results[0]["lead_name"], "A")
+
+    def test_task_can_be_created_with_an_assignee(self):
+        self.client.force_login(self.manager)
+        response = self.client.post(
+            reverse("lead-tasks", args=[self.lead.id]),
+            {"title": "Send proposal", "assignee_id": self.sales.id},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(self.lead.tasks.get().assignee, self.sales)
+
+
 class AuthTests(BaseCRMTest):
     def setUp(self):
         super().setUp()
