@@ -87,6 +87,31 @@ class TaskSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "lead", "created_at"]
 
 
+class TaskListSerializer(serializers.ModelSerializer):
+    """
+    Task with just enough of its lead to render a "my follow-ups" row and link
+    back. Used by the flat /api/tasks/ list, not the per-lead view.
+    """
+
+    assignee = UserSerializer(read_only=True)
+    lead_id = serializers.UUIDField(source="lead.id", read_only=True)
+    lead_name = serializers.CharField(source="lead.name", read_only=True)
+
+    class Meta:
+        model = Task
+        fields = [
+            "id",
+            "lead_id",
+            "lead_name",
+            "title",
+            "due_date",
+            "assignee",
+            "is_done",
+            "created_at",
+        ]
+        read_only_fields = fields
+
+
 class LeadListSerializer(serializers.ModelSerializer):
     """The Kanban card. Small on purpose — a board loads hundreds of these."""
 
@@ -103,6 +128,7 @@ class LeadListSerializer(serializers.ModelSerializer):
             "offer_slug",
             "tier",
             "status",
+            "value",
             "owner",
             "created_at",
         ]
@@ -133,6 +159,8 @@ class LeadDetailSerializer(serializers.ModelSerializer):
             "utm_medium",
             "utm_campaign",
             "status",
+            "value",
+            "lost_reason",
             "owner",
             "created_at",
             "updated_at",
@@ -145,12 +173,18 @@ class LeadDetailSerializer(serializers.ModelSerializer):
 class LeadUpdateSerializer(serializers.ModelSerializer):
     """
     The only fields the CRM may change. Buyer-supplied facts stay immutable —
-    nobody edits what the lead actually said.
+    nobody edits what the lead actually said, but staff may correct the deal
+    value and record why a deal was lost.
     """
 
     class Meta:
         model = Lead
-        fields = ["status", "owner"]
+        fields = ["status", "owner", "value", "lost_reason"]
+
+    def validate_value(self, value):
+        if value is not None and value < 0:
+            raise serializers.ValidationError("Value cannot be negative.")
+        return value
 
     def validate_owner(self, value):
         user = self.context["request"].user

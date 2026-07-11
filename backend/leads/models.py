@@ -65,6 +65,16 @@ class Lead(models.Model):
     status = models.CharField(
         max_length=20, choices=Status.choices, default=Status.NEW, db_index=True
     )
+    # Estimated deal value in USD. Seeded from the offer + tier the buyer
+    # clicked (see pricing.resolve_lead_value), editable by staff afterwards.
+    # This is what lets the dashboard talk in money instead of lead counts.
+    value = models.DecimalField(
+        max_digits=12, decimal_places=2, default=0,
+        help_text="Estimated deal value in USD.",
+    )
+    # Why a deal was lost. Only meaningful once status is 'lost'; kept so the
+    # team can learn from the pattern instead of just counting losses.
+    lost_reason = models.CharField(max_length=300, blank=True)
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,

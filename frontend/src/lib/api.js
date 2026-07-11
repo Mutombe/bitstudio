@@ -147,6 +147,8 @@ export const crm = {
   stats: () => request("/api/stats/"),
   team: () => request("/api/team/"),
 
+  listTasks: (params) => request(`/api/tasks/${queryString(params)}`),
+
   listLeads: (params) => request(`/api/leads/${queryString(params)}`),
   getLead: (id) => request(`/api/leads/${id}/`),
   updateLead: (id, patch) =>

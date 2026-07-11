@@ -2,26 +2,33 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { crm } from "../lib/api.js";
 import { AdminHead } from "./AdminLayout.jsx";
-import { SOURCE_LABEL, STAGES, STAGE_LABEL, formatDate } from "./constants.js";
+import { STAGES, STAGE_LABEL, formatDate, formatMoney } from "./constants.js";
+
+const PAGE_SIZE = 50; // matches DRF's default page size
 
 export default function LeadsList() {
   const [page, setPage] = useState(null);
   const [filters, setFilters] = useState({ q: "", status: "", owner: "" });
+  const [pageNum, setPageNum] = useState(1);
   const [error, setError] = useState("");
 
   useEffect(() => {
     // Debounce the search box; every keystroke should not hit the API.
     const timer = setTimeout(() => {
       crm
-        .listLeads(filters)
+        .listLeads({ ...filters, page: pageNum })
         .then(setPage)
         .catch(() => setError("Could not load leads."));
     }, 250);
     return () => clearTimeout(timer);
-  }, [filters]);
+  }, [filters, pageNum]);
 
-  const update = (key) => (event) =>
+  // Any filter change resets to the first page — otherwise you can be stranded
+  // on page 3 of a result set that now has one page.
+  const update = (key) => (event) => {
+    setPageNum(1);
     setFilters((f) => ({ ...f, [key]: event.target.value }));
+  };
 
   return (
     <div>
@@ -68,7 +75,7 @@ export default function LeadsList() {
         <table className="w-full text-sm min-w-[720px]">
           <thead>
             <tr className="border-b border-white/10 text-left">
-              {["Name", "Offer", "Source", "Stage", "Owner", "Arrived"].map((h) => (
+              {["Name", "Offer", "Value", "Stage", "Owner", "Arrived"].map((h) => (
                 <th
                   key={h}
                   className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45 px-4 py-3"
@@ -90,8 +97,8 @@ export default function LeadsList() {
                 <td className="px-4 py-3 text-bone-100/70 text-xs">
                   {lead.offer_slug || "—"}
                 </td>
-                <td className="px-4 py-3 text-bone-100/60 text-xs">
-                  {SOURCE_LABEL[lead.source] || lead.source}
+                <td className="px-4 py-3 text-bone-100/80 tabular-nums text-xs">
+                  {Number(lead.value) > 0 ? formatMoney(lead.value) : "—"}
                 </td>
                 <td className="px-4 py-3">
                   <span className="font-mono text-[9px] tracking-[0.15em] uppercase px-2 py-1 rounded-full border border-white/15">
@@ -115,6 +122,33 @@ export default function LeadsList() {
           </p>
         )}
       </div>
+
+      {/* Pagination. Without this the list silently stopped at 50 rows while
+          claiming a higher total. */}
+      {page && page.count > PAGE_SIZE && (
+        <div className="flex items-center justify-between mt-4 font-mono text-[10px] tracking-[0.18em] uppercase text-bone-100/50">
+          <span>
+            Page {pageNum} of {Math.ceil(page.count / PAGE_SIZE)}
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setPageNum((n) => Math.max(1, n - 1))}
+              disabled={!page.previous}
+              className="px-3 py-1.5 border border-white/15 rounded-sm hover:border-signal disabled:opacity-30 disabled:hover:border-white/15"
+            >
+              Prev
+            </button>
+            <button
+              data-testid="next-page"
+              onClick={() => setPageNum((n) => n + 1)}
+              disabled={!page.next}
+              className="px-3 py-1.5 border border-white/15 rounded-sm hover:border-signal disabled:opacity-30 disabled:hover:border-white/15"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

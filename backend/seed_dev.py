@@ -19,6 +19,7 @@ from django.conf import settings  # noqa: E402
 from django.contrib.auth import get_user_model  # noqa: E402
 
 from leads.models import Activity, Lead  # noqa: E402
+from leads.pricing import resolve_lead_value  # noqa: E402
 
 engine = settings.DATABASES["default"]["ENGINE"]
 if "sqlite" not in engine:
@@ -77,12 +78,42 @@ seeds = [
         "message": "Projects keep going over budget and we find out too late.",
         "source": Lead.Source.OFFER_PAGE,
         "offer_slug": "construction",
+        "tier": "Construction Operations Platform",
         "status": Lead.Status.PROPOSAL,
         "owner": manager,
+    },
+    # A closed win and a closed loss, so the dashboard has a win rate and
+    # some won revenue to display, not just "no data yet".
+    {
+        "name": "Rudo Katsande",
+        "email": "rudo@example.co.zw",
+        "company": "Katsande Motors",
+        "message": "We closed. Rolling out the dealership system.",
+        "source": Lead.Source.OFFER_PAGE,
+        "offer_slug": "car-dealerships",
+        "tier": "Digital Dealership System",
+        "status": Lead.Status.WON,
+        "owner": sales,
+    },
+    {
+        "name": "Simba Nyoni",
+        "email": "simba@example.co.zw",
+        "message": "Went with a competitor on price.",
+        "source": Lead.Source.OFFER_PAGE,
+        "offer_slug": "ai-automation",
+        "tier": "AI Assistant",
+        "status": Lead.Status.LOST,
+        "lost_reason": "Price — chose a cheaper competitor.",
+        "owner": sales,
     },
 ]
 
 for data in seeds:
+    # Seed the value the same way the capture endpoint does.
+    data.setdefault(
+        "value",
+        resolve_lead_value(data.get("offer_slug", ""), data.get("tier", "")),
+    )
     lead, created = Lead.objects.get_or_create(email=data["email"], defaults=data)
     if created:
         Activity.objects.create(
