@@ -27,6 +27,18 @@ if "sqlite" not in engine:
 
 User = get_user_model()
 
+# A local team covering all three roles, so you can log in and see how the
+# CRM changes per role. Dev only — these passwords are deliberately known.
+# For real accounts on Neon, use `python manage.py createuser` (see README).
+owner, _ = User.objects.get_or_create(
+    username="owner",
+    defaults={"first_name": "Studio", "last_name": "Owner", "role": User.Role.ADMIN},
+)
+owner.set_password("devpassword")
+owner.is_staff = True
+owner.is_superuser = True
+owner.save()
+
 manager, _ = User.objects.get_or_create(
     username="manager",
     defaults={"first_name": "Rutendo", "last_name": "Chikafu", "role": User.Role.MANAGER},
@@ -123,4 +135,7 @@ for data in seeds:
         )
 
 print(f"users: {User.objects.count()}  leads: {Lead.objects.count()}")
-print("login: manager / devpassword   (or) sales / devpassword")
+print("logins (all password 'devpassword'):")
+print("  owner   - admin / superuser (sees everything + Django admin)")
+print("  manager - sees all leads, assigns to anyone")
+print("  sales   - sees own + unassigned only")
