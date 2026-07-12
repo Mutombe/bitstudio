@@ -30,7 +30,38 @@ Then run the frontend with `VITE_API_URL=http://localhost:8000` in
 Seeded logins: `manager / devpassword`, `sales / devpassword`.
 `seed_dev.py` refuses to run against anything but SQLite.
 
-For a real account: `python manage.py createsuperuser`.
+## Creating real users
+
+Use the `createuser` command — it sets the CRM `role`, which `createsuperuser`
+can't. Passwords are prompted for and never echoed, so they stay out of your
+shell history and any logs.
+
+```bash
+# Prompts for a password (typed, hidden):
+python manage.py createuser rutendo --role manager --name "Rutendo Chikafu" --email rutendo@bitstudio.co.zw
+python manage.py createuser tapiwa  --role sales   --name "Tapiwa Ncube"
+
+# The owner / you — full access to everything, including Django admin:
+python manage.py createuser owner --superuser --name "Your Name"
+
+# When you'll deliver the password over a secure channel instead of typing it:
+python manage.py createuser tendai --role sales --name "Tendai M" --generate-password
+```
+
+Roles: `sales` sees their own + unassigned leads; `manager` and `admin` see
+all; `admin` and `--superuser` also get the Django admin at `/admin`.
+
+**To create users on the live (Neon) database**, point `DATABASE_URL` at the
+pooled connection string in the same shell you run the command in:
+
+```bash
+# rotate the Neon password first if it was ever shared, then:
+DATABASE_URL="postgresql://…-pooler…/neondb?sslmode=require" \
+  python manage.py createuser rutendo --role manager --name "Rutendo Chikafu"
+```
+
+Run it in a real terminal (not a captured/non-interactive one) so the hidden
+password prompt works.
 
 - CRM UI: `/admin` on the frontend
 - Django admin: `http://localhost:8000/admin/`
