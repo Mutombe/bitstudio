@@ -355,6 +355,43 @@ async function run(page) {
   );
   await page.screenshot({ path: path.join(SHOTS, "06-follow-ups.png") });
 
+  // ─── 7b. Manual lead CRUD ─────────────────────────────────────────
+  await page.goto(`${WEB}/admin/leads/new`, { waitUntil: "networkidle0" });
+  await page.waitForSelector('[data-testid="new-name"]', { timeout: 15_000 });
+  await page.type('[data-testid="new-name"]', "Walk-in Winston");
+  await page.type('input[type="email"]', "winston@example.co.zw");
+  await page.click('[data-testid="create-lead"]');
+  await page.waitForSelector('[data-testid="edit-lead-btn"]', { timeout: 15_000 });
+  check(
+    "created a lead by hand and landed on its detail",
+    (await page.evaluate(() => document.querySelector("h1")?.textContent)) === "Walk-in Winston"
+  );
+
+  // Edit: fill in the (empty) company field — unambiguous, no select-all.
+  await page.click('[data-testid="edit-lead-btn"]');
+  await page.waitForSelector('[data-testid="edit-company"]', { timeout: 10_000 });
+  await page.type('[data-testid="edit-company"]', "Winston Holdings");
+  await page.click('[data-testid="save-edit"]');
+  await page.waitForFunction(
+    () => document.body.innerText.includes("Winston Holdings"),
+    { timeout: 10_000 }
+  );
+  check("edited the lead's contact details", true);
+
+  // Log a call.
+  await page.click('[data-testid="log-kind-call"]');
+  await page.type('[data-testid="note-input"]', "Called, wants a rent-collection demo.");
+  await page.click('[data-testid="log-submit"]');
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-testid="activity-list"]')
+        ?.textContent.includes("rent-collection demo"),
+    { timeout: 10_000 }
+  );
+  check("logged a call on the activity timeline", true);
+  await page.screenshot({ path: path.join(SHOTS, "07-lead-edit-log.png") });
+
   // ─── 8. Role scoping is visible in the UI ─────────────────────────
   await logout(page);
   await login(page, "sales", "devpassword");
@@ -362,7 +399,7 @@ async function run(page) {
   await page.waitForSelector('[data-testid="lead-card"]');
 
   const salesCards = await countOf(page, '[data-testid="lead-card"]');
-  check("sales rep sees 5 of the 6 leads", salesCards === 5, `saw ${salesCards}`);
+  check("sales rep sees only their own + unassigned (5)", salesCards === 5, `saw ${salesCards}`);
 
   const salesNames = await page.$$eval('[data-testid="lead-card"]', (cards) =>
     cards.map((c) => c.textContent)
@@ -431,6 +468,29 @@ async function run(page) {
   check("the captured lead appears in the CRM leads list", table?.includes("E2E Buyer"));
   check("the leads list shows deal value in dollars", /\$[\d,]+/.test(table || ""));
   await page.screenshot({ path: path.join(SHOTS, "05-leads-list.png") });
+
+  // ─── 11. User administration (admin only) ─────────────────────────
+  // Sales must not even have the Users nav.
+  check(
+    "sales rep does not see the Users nav",
+    (await page.$('a[href="/admin/users"]')) === null
+  );
+
+  await logout(page);
+  await login(page, "owner", "devpassword");
+  await page.goto(`${WEB}/admin/users`, { waitUntil: "networkidle0" });
+  await page.waitForSelector('[data-testid="users-table"]', { timeout: 15_000 });
+
+  await page.type('[data-testid="new-username"]', "e2e_rep");
+  await page.type('[data-testid="new-password"]', "e2e-str0ng-pass!");
+  await page.click('[data-testid="create-user"]');
+  await page.waitForFunction(
+    () =>
+      document.querySelector('[data-testid="users-table"]')?.textContent.includes("e2e_rep"),
+    { timeout: 10_000 }
+  );
+  check("admin created a new user", true);
+  await page.screenshot({ path: path.join(SHOTS, "08-users.png") });
 }
 
 async function main() {

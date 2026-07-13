@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { PlusIcon } from "@phosphor-icons/react";
 import { crm } from "../lib/api.js";
 import { AdminHead } from "./AdminLayout.jsx";
 import { STAGES, STAGE_LABEL, formatDate, formatMoney } from "./constants.js";
@@ -34,10 +35,24 @@ export default function LeadsList() {
     <div>
       <AdminHead title="Leads" />
 
-      <h1 className="font-display text-3xl md:text-4xl mb-1">Leads</h1>
-      <p className="text-sm text-bone-100/55 mb-6">
-        {page ? `${page.count} matching` : "Loading…"}
-      </p>
+      <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
+        <div>
+          <h1 className="font-display text-3xl md:text-4xl mb-1">Leads</h1>
+          <p className="text-sm text-bone-100/55">
+            {page ? `${page.count} matching` : "Loading…"}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          {/* Plain anchor: the CSV download carries the session cookie and
+              honours the current filters. */}
+          <a href={crm.exportUrl(filters)} className="btn btn-ghost">
+            Export CSV
+          </a>
+          <Link to="/admin/leads/new" data-testid="new-lead-btn" className="btn btn-primary">
+            <PlusIcon size={14} weight="bold" /> New lead
+          </Link>
+        </div>
+      </div>
 
       <div className="flex flex-wrap gap-3 mb-6">
         <input

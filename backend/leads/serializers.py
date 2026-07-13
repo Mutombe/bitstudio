@@ -62,6 +62,13 @@ class NoteCreateSerializer(serializers.Serializer):
     body = serializers.CharField(allow_blank=False)
 
 
+class ActivityLogSerializer(serializers.Serializer):
+    """A hand-logged touch: a call, an email, a meeting, a WhatsApp, a note."""
+
+    kind = serializers.ChoiceField(choices=sorted(Activity.LOGGABLE_KINDS), default="note")
+    body = serializers.CharField(allow_blank=False)
+
+
 class TaskSerializer(serializers.ModelSerializer):
     assignee = UserSerializer(read_only=True)
     assignee_id = serializers.PrimaryKeyRelatedField(
@@ -170,16 +177,41 @@ class LeadDetailSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
-class LeadUpdateSerializer(serializers.ModelSerializer):
+class LeadWriteSerializer(serializers.ModelSerializer):
     """
-    The only fields the CRM may change. Buyer-supplied facts stay immutable —
-    nobody edits what the lead actually said, but staff may correct the deal
-    value and record why a deal was lost.
+    Staff create and edit. Unlike the public intake, signed-in staff own the
+    record: they can add a lead by hand (a phone call, a walk-in, a referral)
+    and correct any field on it later. Attribution the browser captured
+    (ip_address, user_agent, page_url, referrer, utm_*) stays read-only —
+    that's a record of how a web lead actually arrived, not something to edit.
     """
 
     class Meta:
         model = Lead
-        fields = ["status", "owner", "value", "lost_reason"]
+        fields = [
+            "id",
+            "name",
+            "email",
+            "phone",
+            "company",
+            "message",
+            "channel",
+            "source",
+            "offer_slug",
+            "tier",
+            "status",
+            "value",
+            "lost_reason",
+            "owner",
+        ]
+        read_only_fields = ["id"]
+        extra_kwargs = {
+            # A lead phoned in may have only a name and a number.
+            "email": {"required": False, "allow_blank": True},
+            "message": {"required": False, "allow_blank": True},
+            "phone": {"required": False, "allow_blank": True},
+            "company": {"required": False, "allow_blank": True},
+        }
 
     def validate_value(self, value):
         if value is not None and value < 0:

@@ -18,7 +18,30 @@ export const SOURCE_LABEL = {
   contact_form: "Contact form",
   offer_page: "Offer page",
   package_page: "Package page",
+  manual: "Added by staff",
+  referral: "Referral",
+  phone: "Phone call",
+  walk_in: "Walk-in",
   other: "Other",
+};
+
+// Sources a staff member can pick when adding a lead by hand (web-only
+// sources like contact_form are set by the website, not chosen here).
+export const MANUAL_SOURCES = ["manual", "referral", "phone", "walk_in", "other"];
+
+// Touches a human can log on a lead. Keys match Activity.LOGGABLE_KINDS.
+export const ACTIVITY_KINDS = [
+  { id: "note", label: "Note" },
+  { id: "call", label: "Call" },
+  { id: "email", label: "Email" },
+  { id: "meeting", label: "Meeting" },
+  { id: "whatsapp", label: "WhatsApp" },
+];
+
+export const ROLE_LABEL = {
+  admin: "Admin",
+  manager: "Manager",
+  sales: "Sales",
 };
 
 // Whole-dollar USD. Deal values are round numbers, so cents are noise.

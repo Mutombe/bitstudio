@@ -1,12 +1,32 @@
 from django.contrib.auth import authenticate, login, logout
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
-from rest_framework import permissions, status
+from rest_framework import mixins, permissions, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import User
-from .serializers import LoginSerializer, UserSerializer
+from .serializers import (
+    LoginSerializer,
+    PasswordResetSerializer,
+    UserCreateSerializer,
+    UserManageSerializer,
+    UserSerializer,
+)
+
+
+class IsAdmin(permissions.BasePermission):
+    """User administration is for admins and superusers only."""
+
+    def has_permission(self, request, view):
+        user = request.user
+        return bool(
+            user
+            and user.is_authenticated
+            and (user.is_superuser or user.role == User.Role.ADMIN)
+        )
 
 
 @method_decorator(ensure_csrf_cookie, name="get")
@@ -78,3 +98,47 @@ class SalesTeamView(APIView):
             return Response([], status=status.HTTP_200_OK)
         users = User.objects.filter(is_active=True).order_by("username")
         return Response(UserSerializer(users, many=True).data)
+
+
+class UserViewSet(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
+    """
+    User administration, admins only. Users are deactivated (is_active=False),
+    never deleted — so the leads, notes, and activity they created keep their
+    author. There's no destroy route for the same reason.
+    """
+
+    queryset = User.objects.order_by("username")
+    permission_classes = [IsAdmin]
+
+    def get_serializer_class(self):
+        return UserCreateSerializer if self.action == "create" else UserManageSerializer
+
+    def _guard_not_self_lockout(self, target):
+        # An admin must not deactivate or demote themselves and get locked out.
+        if target == self.request.user:
+            raise ValidationError("You cannot change your own access here.")
+
+    def perform_update(self, serializer):
+        target = self.get_object()
+        changing_access = (
+            "is_active" in serializer.validated_data
+            or "role" in serializer.validated_data
+        )
+        if changing_access:
+            self._guard_not_self_lockout(target)
+        serializer.save()
+
+    @action(detail=True, methods=["post"], url_path="reset-password")
+    def reset_password(self, request, pk=None):
+        user = self.get_object()
+        serializer = PasswordResetSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user.set_password(serializer.validated_data["password"])
+        user.save(update_fields=["password"])
+        return Response({"detail": "Password reset."})
