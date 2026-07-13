@@ -13,9 +13,12 @@ $root = $PSScriptRoot
 Write-Host "Starting Bit Studio CRM..." -ForegroundColor Green
 
 # Backend: Django on :8000 (SQLite, from backend/.env).
+# Call the venv's python directly rather than Activate.ps1 — script activation
+# is blocked by the default Windows execution policy and silently kills this
+# window before Django ever starts.
 Start-Process powershell -ArgumentList @(
     "-NoExit", "-Command",
-    "Set-Location '$root\backend'; .\.venv\Scripts\Activate.ps1; python manage.py runserver 8000"
+    "Set-Location '$root\backend'; .\.venv\Scripts\python.exe manage.py runserver 8000"
 )
 
 # Frontend: Vite on :5173. Point it at the local API (also in .env.local,
