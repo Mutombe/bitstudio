@@ -1,22 +1,25 @@
+import csv
 from datetime import timedelta
 from decimal import Decimal
 
 from django.db.models import Count, Q, Sum
+from django.http import HttpResponse
 from django.utils import timezone
 from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Activity, Lead, Task
 from .pricing import resolve_lead_value
 from .serializers import (
+    ActivityLogSerializer,
     ActivitySerializer,
     LeadCreateSerializer,
     LeadDetailSerializer,
     LeadListSerializer,
-    LeadUpdateSerializer,
-    NoteCreateSerializer,
+    LeadWriteSerializer,
     TaskListSerializer,
     TaskSerializer,
 )
@@ -60,12 +63,16 @@ class LeadViewSet(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
     """
-    `create` is the public intake — the only anonymous write on the service.
-    Everything else requires a session. There is deliberately no `destroy`:
-    leads are won or lost, never deleted.
+    One create endpoint serves two callers: an anonymous POST is the public
+    website intake (narrow, throttled, honeypotted); an authenticated POST is
+    a staff member adding a lead by hand, with full control over its fields.
+
+    Deleting a lead is restricted to managers and admins — a rep can't erase
+    their own losses.
     """
 
     def get_permissions(self):
@@ -74,18 +81,26 @@ class LeadViewSet(
         return [permissions.IsAuthenticated()]
 
     def get_throttles(self):
-        # Only the public intake is rate-limited. ScopedRateThrottle is a
-        # no-op when throttle_scope is None.
-        self.throttle_scope = "lead_create" if self.action == "create" else None
+        # Only the anonymous public intake is rate-limited. A signed-in staff
+        # member adding leads should never be throttled.
+        anonymous_create = self.action == "create" and not self.request.user.is_authenticated
+        self.throttle_scope = "lead_create" if anonymous_create else None
         return super().get_throttles()
 
     def get_serializer_class(self):
+        if self.action == "create":
+            # Staff creating a lead get the full write serializer; the public
+            # website gets the narrow, honeypotted intake one.
+            return (
+                LeadWriteSerializer
+                if self.request.user.is_authenticated
+                else LeadCreateSerializer
+            )
         return {
-            "create": LeadCreateSerializer,
             "list": LeadListSerializer,
             "retrieve": LeadDetailSerializer,
-            "update": LeadUpdateSerializer,
-            "partial_update": LeadUpdateSerializer,
+            "update": LeadWriteSerializer,
+            "partial_update": LeadWriteSerializer,
         }.get(self.action, LeadListSerializer)
 
     def get_queryset(self):
@@ -115,8 +130,31 @@ class LeadViewSet(
         return queryset
 
     def perform_create(self, serializer):
-        # Seed the deal value from the offer + tier the buyer clicked, so the
-        # lead lands on the board already worth something.
+        if self.request.user.is_authenticated:
+            # Staff-entered lead. Default it to the creator and to the "manual"
+            # source, and price it from the offer/tier if they picked one and
+            # didn't type a value.
+            data = serializer.validated_data
+            defaults = {}
+            if not data.get("owner"):
+                defaults["owner"] = self.request.user
+            if not data.get("source"):
+                defaults["source"] = Lead.Source.MANUAL
+            if not data.get("value"):
+                defaults["value"] = resolve_lead_value(
+                    data.get("offer_slug", ""), data.get("tier", "")
+                )
+            lead = serializer.save(**defaults)
+            Activity.objects.create(
+                lead=lead,
+                kind=Activity.Kind.CREATED,
+                actor=self.request.user,
+                body=f"Added by {self.request.user.get_full_name() or self.request.user.username}.",
+            )
+            return
+
+        # Anonymous public intake. Seed value from the offer + tier the buyer
+        # clicked, and record the request for abuse forensics.
         lead = serializer.save(
             ip_address=client_ip(self.request),
             user_agent=self.request.META.get("HTTP_USER_AGENT", "")[:400],
@@ -134,6 +172,9 @@ class LeadViewSet(
     def perform_update(self, serializer):
         before = self.get_object()
         old_status, old_owner = before.status, before.owner
+        # Snapshot the editable contact fields to detect a plain edit.
+        tracked = ["name", "email", "phone", "company", "message", "value", "tier", "offer_slug"]
+        old_values = {f: getattr(before, f) for f in tracked}
 
         lead = serializer.save()
         actor = self.request.user
@@ -152,22 +193,64 @@ class LeadViewSet(
                 actor=actor,
                 body=f"Assigned to {lead.owner or 'nobody'}",
             )
+        changed = [f for f in tracked if getattr(lead, f) != old_values[f]]
+        if changed:
+            Activity.objects.create(
+                lead=lead,
+                kind=Activity.Kind.EDITED,
+                actor=actor,
+                body="Edited " + ", ".join(changed) + ".",
+            )
+
+    def perform_destroy(self, instance):
+        if not self.request.user.can_see_all_leads:
+            raise PermissionDenied("Only managers can delete leads.")
+        instance.delete()
 
     @action(detail=True, methods=["post"])
     def notes(self, request, pk=None):
+        """Log a touch: a note, or a call / email / meeting / WhatsApp."""
         lead = self.get_object()
-        serializer = NoteCreateSerializer(data=request.data)
+        serializer = ActivityLogSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         activity = Activity.objects.create(
             lead=lead,
-            kind=Activity.Kind.NOTE,
+            kind=serializer.validated_data["kind"],
             body=serializer.validated_data["body"],
             actor=request.user,
         )
         return Response(
             ActivitySerializer(activity).data, status=status.HTTP_201_CREATED
         )
+
+    @action(detail=False, methods=["get"])
+    def export(self, request):
+        """CSV of the leads the caller can see, honouring the active filters."""
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="leads.csv"'
+        writer = csv.writer(response)
+        writer.writerow(
+            ["Name", "Email", "Phone", "Company", "Source", "Offer", "Tier",
+             "Stage", "Value (USD)", "Owner", "Created"]
+        )
+        for lead in self.filter_queryset(self.get_queryset()):
+            writer.writerow(
+                [
+                    lead.name,
+                    lead.email,
+                    lead.phone,
+                    lead.company,
+                    lead.get_source_display(),
+                    lead.offer_slug,
+                    lead.tier,
+                    lead.get_status_display(),
+                    lead.value,
+                    lead.owner.get_full_name() if lead.owner else "",
+                    lead.created_at.isoformat(),
+                ]
+            )
+        return response
 
     @action(detail=True, methods=["get", "post"])
     def tasks(self, request, pk=None):

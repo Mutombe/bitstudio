@@ -5,6 +5,7 @@ import {
   KanbanIcon,
   ListChecksIcon,
   ListDashesIcon,
+  UsersThreeIcon,
   SignOutIcon,
 } from "@phosphor-icons/react";
 import { useAuth } from "./AuthContext.jsx";
@@ -48,10 +49,12 @@ const NAV = [
   { to: "/admin/pipeline", label: "Pipeline", icon: KanbanIcon },
   { to: "/admin/follow-ups", label: "Follow-ups", icon: ListChecksIcon },
   { to: "/admin/leads", label: "Leads", icon: ListDashesIcon },
+  { to: "/admin/users", label: "Users", icon: UsersThreeIcon, adminOnly: true },
 ];
 
 export default function AdminLayout() {
   const { user, logout } = useAuth();
+  const nav = NAV.filter((item) => !item.adminOnly || user?.role === "admin");
 
   return (
     <div className="min-h-screen bg-[color:var(--color-ink)] text-bone-100">
@@ -65,7 +68,7 @@ export default function AdminLayout() {
               </span>
             </Link>
             <nav className="flex items-center gap-1">
-              {NAV.map((item) => {
+              {nav.map((item) => {
                 const Icon = item.icon;
                 return (
                   <NavLink

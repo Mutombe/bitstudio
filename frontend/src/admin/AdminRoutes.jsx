@@ -5,8 +5,10 @@ import Login from "./Login.jsx";
 import Dashboard from "./Dashboard.jsx";
 import Pipeline from "./Pipeline.jsx";
 import LeadsList from "./LeadsList.jsx";
+import LeadNew from "./LeadNew.jsx";
 import LeadDetail from "./LeadDetail.jsx";
 import FollowUps from "./FollowUps.jsx";
+import Users from "./Users.jsx";
 
 /**
  * The CRM, mounted at /admin. Loaded lazily by App so none of it ships in
@@ -30,7 +32,9 @@ export default function AdminRoutes() {
           <Route path="pipeline" element={<Pipeline />} />
           <Route path="follow-ups" element={<FollowUps />} />
           <Route path="leads" element={<LeadsList />} />
+          <Route path="leads/new" element={<LeadNew />} />
           <Route path="leads/:id" element={<LeadDetail />} />
+          <Route path="users" element={<Users />} />
         </Route>
       </Routes>
     </AuthProvider>

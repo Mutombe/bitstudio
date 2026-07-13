@@ -151,14 +151,29 @@ export const crm = {
 
   listLeads: (params) => request(`/api/leads/${queryString(params)}`),
   getLead: (id) => request(`/api/leads/${id}/`),
+  createLead: (lead) => request("/api/leads/", { method: "POST", body: lead }),
   updateLead: (id, patch) =>
     request(`/api/leads/${id}/`, { method: "PATCH", body: patch }),
+  deleteLead: (id) => request(`/api/leads/${id}/`, { method: "DELETE" }),
+  // The CSV export isn't JSON — hand back the URL for a plain browser download,
+  // which carries the session cookie automatically.
+  exportUrl: (params) => `${API_URL}/api/leads/export/${queryString(params)}`,
 
-  addNote: (id, body) =>
-    request(`/api/leads/${id}/notes/`, { method: "POST", body: { body } }),
+  // kind: note | call | email | meeting | whatsapp
+  logActivity: (id, kind, body) =>
+    request(`/api/leads/${id}/notes/`, { method: "POST", body: { kind, body } }),
 
   addTask: (id, task) =>
     request(`/api/leads/${id}/tasks/`, { method: "POST", body: task }),
   updateTask: (taskId, patch) =>
     request(`/api/tasks/${taskId}/`, { method: "PATCH", body: patch }),
+  deleteTask: (taskId) => request(`/api/tasks/${taskId}/`, { method: "DELETE" }),
+};
+
+export const admin = {
+  listUsers: () => request("/api/users/"),
+  createUser: (user) => request("/api/users/", { method: "POST", body: user }),
+  updateUser: (id, patch) => request(`/api/users/${id}/`, { method: "PATCH", body: patch }),
+  resetPassword: (id, password) =>
+    request(`/api/users/${id}/reset-password/`, { method: "POST", body: { password } }),
 };

@@ -21,6 +21,10 @@ class Lead(models.Model):
         CONTACT_FORM = "contact_form", "Contact form"
         OFFER_PAGE = "offer_page", "Offer page"
         PACKAGE_PAGE = "package_page", "Package page"
+        MANUAL = "manual", "Added by staff"
+        REFERRAL = "referral", "Referral"
+        PHONE = "phone", "Phone call"
+        WALK_IN = "walk_in", "Walk-in"
         OTHER = "other", "Other"
 
     class Channel(models.TextChoices):
@@ -110,8 +114,16 @@ class Activity(models.Model):
     class Kind(models.TextChoices):
         CREATED = "created", "Created"
         NOTE = "note", "Note"
+        CALL = "call", "Call logged"
+        EMAIL = "email", "Email logged"
+        MEETING = "meeting", "Meeting logged"
+        WHATSAPP = "whatsapp", "WhatsApp logged"
         STATUS_CHANGE = "status_change", "Status change"
         ASSIGNMENT = "assignment", "Assignment"
+        EDITED = "edited", "Edited"
+
+    # Kinds a human may log by hand (the rest are written by the system).
+    LOGGABLE_KINDS = {"note", "call", "email", "meeting", "whatsapp"}
 
     lead = models.ForeignKey(Lead, on_delete=models.CASCADE, related_name="activities")
     kind = models.CharField(max_length=20, choices=Kind.choices, default=Kind.NOTE)

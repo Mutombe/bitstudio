@@ -163,10 +163,12 @@ class LeadScopingTests(BaseCRMTest):
         self.unassigned.refresh_from_db()
         self.assertEqual(self.unassigned.owner, self.other)
 
-    def test_leads_cannot_be_deleted(self):
+    def test_manager_can_delete_a_lead(self):
+        # Deletion is a manager/admin power; sales scoping is covered in
+        # LeadCrudTests.test_manager_can_delete_but_sales_cannot.
         self.client.force_login(self.manager)
         response = self.client.delete(self.detail_url(self.mine))
-        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.status_code, 204)
 
 
 class LeadPipelineTests(BaseCRMTest):
@@ -319,6 +321,106 @@ class RevenueTests(BaseCRMTest):
         lead.refresh_from_db()
         self.assertEqual(lead.status, "lost")
         self.assertEqual(lead.lost_reason, "Too expensive.")
+
+
+class LeadCrudTests(BaseCRMTest):
+    """Staff creating, editing, deleting, exporting, and logging on leads."""
+
+    def setUp(self):
+        super().setUp()
+        self.manager = User.objects.create_user("mgr", password="x", role=User.Role.MANAGER)
+        self.sales = User.objects.create_user("sales", password="x", role=User.Role.SALES)
+        self.other = User.objects.create_user("other", password="x", role=User.Role.SALES)
+
+    def test_staff_can_create_a_lead_by_hand(self):
+        self.client.force_login(self.manager)
+        response = self.client.post(
+            self.list_url,
+            {"name": "Walk-in Winston", "phone": "+263771234567", "company": "Winston Co"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 201)
+        # The response must carry the new id so the UI can navigate to it.
+        self.assertIn("id", response.json())
+        lead = Lead.objects.get(name="Walk-in Winston")
+        self.assertEqual(str(lead.id), response.json()["id"])
+        self.assertEqual(lead.source, Lead.Source.MANUAL)  # defaulted
+        self.assertEqual(lead.owner, self.manager)          # defaulted to creator
+        self.assertEqual(lead.activities.get().kind, Activity.Kind.CREATED)
+
+    def test_staff_create_prices_from_offer(self):
+        self.client.force_login(self.manager)
+        self.client.post(
+            self.list_url,
+            {"name": "Priced", "offer_slug": "ai-automation", "tier": "AI Assistant"},
+            content_type="application/json",
+        )
+        self.assertEqual(Lead.objects.get(name="Priced").value, 3500)
+
+    def test_sales_cannot_create_lead_owned_by_someone_else(self):
+        self.client.force_login(self.sales)
+        response = self.client.post(
+            self.list_url,
+            {"name": "X", "owner": self.other.id},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_staff_can_edit_contact_fields(self):
+        lead = Lead.objects.create(name="Old", email="old@x.co", message="hi", owner=self.manager)
+        self.client.force_login(self.manager)
+        response = self.client.patch(
+            self.detail_url(lead),
+            {"name": "New Name", "phone": "+263770000000", "company": "Newco"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        lead.refresh_from_db()
+        self.assertEqual(lead.name, "New Name")
+        self.assertEqual(lead.company, "Newco")
+        self.assertTrue(lead.activities.filter(kind=Activity.Kind.EDITED).exists())
+
+    def test_manager_can_delete_but_sales_cannot(self):
+        lead = Lead.objects.create(name="Doomed", email="d@x.co", message="x", owner=self.sales)
+
+        self.client.force_login(self.sales)
+        self.assertEqual(self.client.delete(self.detail_url(lead)).status_code, 403)
+        self.assertTrue(Lead.objects.filter(id=lead.id).exists())
+
+        self.client.force_login(self.manager)
+        self.assertEqual(self.client.delete(self.detail_url(lead)).status_code, 204)
+        self.assertFalse(Lead.objects.filter(id=lead.id).exists())
+
+    def test_export_returns_csv(self):
+        Lead.objects.create(name="Row One", email="r1@x.co", message="x", owner=self.manager)
+        self.client.force_login(self.manager)
+        response = self.client.get(reverse("lead-export"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "text/csv")
+        body = response.content.decode()
+        self.assertIn("Name,Email,Phone", body)
+        self.assertIn("Row One", body)
+
+    def test_log_a_call_activity(self):
+        lead = Lead.objects.create(name="A", email="a@x.co", message="x", owner=self.manager)
+        self.client.force_login(self.manager)
+        response = self.client.post(
+            reverse("lead-notes", args=[lead.id]),
+            {"kind": "call", "body": "Spoke for 10 minutes, wants a quote."},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(lead.activities.get(kind="call").body, "Spoke for 10 minutes, wants a quote.")
+
+    def test_invalid_activity_kind_is_rejected(self):
+        lead = Lead.objects.create(name="A", email="a@x.co", message="x", owner=self.manager)
+        self.client.force_login(self.manager)
+        response = self.client.post(
+            reverse("lead-notes", args=[lead.id]),
+            {"kind": "status_change", "body": "sneaky"},  # not human-loggable
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 400)
 
 
 class TaskListTests(BaseCRMTest):
