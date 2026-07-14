@@ -1,6 +1,45 @@
 from django.contrib import admin
 
-from .models import Activity, Lead, Task
+from .models import (
+    Activity,
+    AuditLog,
+    Company,
+    Contact,
+    CustomFieldDef,
+    EmailTemplate,
+    IntakeKey,
+    Lead,
+    Notification,
+    SavedView,
+    Tag,
+    Task,
+)
+
+admin.site.register(Tag)
+admin.site.register(Company)
+admin.site.register(Contact)
+admin.site.register(EmailTemplate)
+admin.site.register(CustomFieldDef)
+admin.site.register(SavedView)
+
+
+@admin.register(IntakeKey)
+class IntakeKeyAdmin(admin.ModelAdmin):
+    list_display = ("name", "key", "is_active", "created_at")
+    readonly_fields = ("key",)
+
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ("recipient", "text", "is_read", "created_at")
+    list_filter = ("is_read",)
+
+
+@admin.register(AuditLog)
+class AuditLogAdmin(admin.ModelAdmin):
+    list_display = ("created_at", "actor", "verb", "target")
+    list_filter = ("verb",)
+    search_fields = ("target", "summary")
 
 
 class ActivityInline(admin.TabularInline):

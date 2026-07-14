@@ -127,6 +127,23 @@ STORAGES = {
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# ─── Email + notifications ───────────────────────────────────────────
+# Where the CRM lives, for links inside notification emails.
+SITE_ORIGIN = os.getenv("SITE_ORIGIN", "http://localhost:5173")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "Bit Studio CRM <crm@bitstudio.co.zw>")
+
+# No SMTP host → print emails to the console (dev). Set EMAIL_HOST and friends
+# in prod and mail sends for real. Nothing here breaks if it's unset.
+EMAIL_HOST = os.getenv("EMAIL_HOST", "")
+if EMAIL_HOST:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
+    EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+    EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+    EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True").lower() == "true"
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 # ─── API ─────────────────────────────────────────────────────────────
 # The public lead endpoint is the only anonymous write on the service, so
 # it is throttled hard. Everything else will require auth (phase 2).
