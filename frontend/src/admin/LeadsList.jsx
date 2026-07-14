@@ -4,13 +4,14 @@ import { CaretDownIcon, CaretUpIcon, PlusIcon, UploadSimpleIcon, XIcon } from "@
 import { crm } from "../lib/api.js";
 import { useAuth } from "./AuthContext.jsx";
 import { AdminHead } from "./AdminLayout.jsx";
-import { STAGES, STAGE_LABEL, formatDate, formatMoney } from "./constants.js";
+import { STAGES, STAGE_LABEL, formatDate, formatMoney, scoreColor } from "./constants.js";
 
 const PAGE_SIZE = 50; // matches DRF's default page size
 
 // Which columns can be sorted, and the field name the API expects.
 const COLUMNS = [
   { label: "Name", sort: "name" },
+  { label: "Score", sort: "score" },
   { label: "Offer", sort: null },
   { label: "Value", sort: "value" },
   { label: "Stage", sort: "status" },
@@ -39,7 +40,33 @@ export default function LeadsList() {
   const [sort, setSort] = useState({ sort: "created_at", dir: "desc" });
   const [pageNum, setPageNum] = useState(1);
   const [selected, setSelected] = useState(new Set());
+  const [views, setViews] = useState([]);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    crm.listViews().then(setViews).catch(() => setViews([]));
+  }, []);
+
+  const applyView = (v) => {
+    const p = v.params || {};
+    setFilters({ q: p.q || "", status: p.status || "", owner: p.owner || "", tag: p.tag || "" });
+    setSort({ sort: p.sort || "created_at", dir: p.dir || "desc" });
+    setPageNum(1);
+    setSelected(new Set());
+  };
+
+  const saveView = async () => {
+    const name = window.prompt("Name this view:");
+    if (!name?.trim()) return;
+    const v = await crm.createView({ name: name.trim(), params: { ...filters, ...sort }, shared: false });
+    setViews((prev) => [...prev, v]);
+  };
+
+  const deleteView = async (id, e) => {
+    e.stopPropagation();
+    await crm.deleteView(id);
+    setViews((prev) => prev.filter((v) => v.id !== id));
+  };
 
   const load = useCallback(() => {
     crm
@@ -145,6 +172,26 @@ export default function LeadsList() {
         </select>
       </div>
 
+      {/* Saved views */}
+      <div className="flex flex-wrap items-center gap-2 mb-4">
+        <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/35">Views:</span>
+        {views.map((v) => (
+          <span
+            key={v.id}
+            onClick={() => applyView(v)}
+            className="group inline-flex items-center gap-1.5 cursor-pointer font-mono text-[10px] tracking-[0.12em] uppercase px-2.5 py-1 rounded-sm border border-white/15 text-bone-100/70 hover:border-signal hover:text-signal"
+          >
+            {v.name}
+            <button onClick={(e) => deleteView(v.id, e)} className="opacity-0 group-hover:opacity-100 hover:text-maroon-400" aria-label={`Delete ${v.name}`}>
+              <XIcon size={10} />
+            </button>
+          </span>
+        ))}
+        <button onClick={saveView} data-testid="save-view" className="font-mono text-[10px] tracking-[0.12em] uppercase px-2.5 py-1 rounded-sm border border-dashed border-white/20 text-bone-100/50 hover:text-signal hover:border-signal">
+          + Save current
+        </button>
+      </div>
+
       {/* Bulk action bar */}
       {selected.size > 0 && (
         <div data-testid="bulk-bar" className="flex flex-wrap items-center gap-3 mb-4 p-3 border border-signal/40 rounded-sm bg-signal/5">
@@ -232,6 +279,15 @@ export default function LeadsList() {
                       {lead.tags.map((t) => <TagChip key={t.id} tag={t} />)}
                     </div>
                   )}
+                </td>
+                <td className="px-4 py-3">
+                  <span
+                    className="inline-flex items-center justify-center min-w-[28px] px-1.5 py-0.5 rounded-sm font-mono text-[11px] tabular-nums font-bold"
+                    style={{ color: scoreColor(lead.score), border: `1px solid ${scoreColor(lead.score)}44` }}
+                    title="Lead score"
+                  >
+                    {lead.score}
+                  </span>
                 </td>
                 <td className="px-4 py-3 text-bone-100/70 text-xs">{lead.offer_slug || "—"}</td>
                 <td className="px-4 py-3 text-bone-100/80 tabular-nums text-xs">

@@ -10,6 +10,10 @@ import LeadImport from "./LeadImport.jsx";
 import LeadDetail from "./LeadDetail.jsx";
 import FollowUps from "./FollowUps.jsx";
 import Users from "./Users.jsx";
+import Companies from "./Companies.jsx";
+import CompanyDetail from "./CompanyDetail.jsx";
+import Reports from "./Reports.jsx";
+import Settings from "./Settings.jsx";
 
 /**
  * The CRM, mounted at /admin. Loaded lazily by App so none of it ships in
@@ -36,7 +40,11 @@ export default function AdminRoutes() {
           <Route path="leads/new" element={<LeadNew />} />
           <Route path="leads/import" element={<LeadImport />} />
           <Route path="leads/:id" element={<LeadDetail />} />
+          <Route path="companies" element={<Companies />} />
+          <Route path="companies/:id" element={<CompanyDetail />} />
+          <Route path="reports" element={<Reports />} />
           <Route path="users" element={<Users />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
     </AuthProvider>

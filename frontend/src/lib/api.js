@@ -201,6 +201,38 @@ export const crm = {
   updateTask: (taskId, patch) =>
     request(`/api/tasks/${taskId}/`, { method: "PATCH", body: patch }),
   deleteTask: (taskId) => request(`/api/tasks/${taskId}/`, { method: "DELETE" }),
+  taskIcsUrl: (taskId) => `${API_URL}/api/tasks/${taskId}/ics/`,
+
+  // Email
+  sendEmail: (id, subject, body) =>
+    request(`/api/leads/${id}/send-email/`, { method: "POST", body: { subject, body } }),
+  listEmailTemplates: () => request("/api/email-templates/"),
+  createEmailTemplate: (t) => request("/api/email-templates/", { method: "POST", body: t }),
+  deleteEmailTemplate: (id) => request(`/api/email-templates/${id}/`, { method: "DELETE" }),
+
+  // Reports
+  report: (params) => request(`/api/reports/${queryString(params)}`),
+
+  // Companies + contacts
+  listCompanies: (params) => request(`/api/companies/${queryString(params)}`),
+  getCompany: (id) => request(`/api/companies/${id}/`),
+  createCompany: (c) => request("/api/companies/", { method: "POST", body: c }),
+  listContacts: (params) => request(`/api/contacts/${queryString(params)}`),
+  createContact: (c) => request("/api/contacts/", { method: "POST", body: c }),
+
+  // Saved views
+  listViews: () => request("/api/saved-views/"),
+  createView: (v) => request("/api/saved-views/", { method: "POST", body: v }),
+  deleteView: (id) => request(`/api/saved-views/${id}/`, { method: "DELETE" }),
+
+  // Custom field definitions
+  listCustomFields: () => request("/api/custom-fields/"),
+};
+
+export const notifications = {
+  list: () => request("/api/notifications/"),
+  unreadCount: () => request("/api/notifications/unread-count/"),
+  markAllRead: () => request("/api/notifications/mark-all-read/", { method: "POST" }),
 };
 
 export const admin = {
@@ -209,4 +241,16 @@ export const admin = {
   updateUser: (id, patch) => request(`/api/users/${id}/`, { method: "PATCH", body: patch }),
   resetPassword: (id, password) =>
     request(`/api/users/${id}/reset-password/`, { method: "POST", body: { password } }),
+
+  // Custom fields (admin write)
+  createCustomField: (f) => request("/api/custom-fields/", { method: "POST", body: f }),
+  deleteCustomField: (id) => request(`/api/custom-fields/${id}/`, { method: "DELETE" }),
+
+  // Web-to-lead keys
+  listIntakeKeys: () => request("/api/intake-keys/"),
+  createIntakeKey: (k) => request("/api/intake-keys/", { method: "POST", body: k }),
+  updateIntakeKey: (id, patch) => request(`/api/intake-keys/${id}/`, { method: "PATCH", body: patch }),
+
+  // Audit log
+  auditLog: (params) => request(`/api/audit-log/${queryString(params)}`),
 };
