@@ -18,7 +18,7 @@ django.setup()
 from django.conf import settings  # noqa: E402
 from django.contrib.auth import get_user_model  # noqa: E402
 
-from leads.models import Activity, Lead, Tag  # noqa: E402
+from leads.models import Activity, Company, EmailTemplate, Lead, Tag  # noqa: E402
 from leads.pricing import resolve_lead_value  # noqa: E402
 
 engine = settings.DATABASES["default"]["ENGINE"]
@@ -140,6 +140,16 @@ enterprise, _ = Tag.objects.get_or_create(name="Enterprise", defaults={"color": 
 first = Lead.objects.filter(email="tendai@example.co.zw").first()
 if first:
     first.tags.add(hot)
+
+# A company and an email template so those surfaces aren't empty locally.
+Company.objects.get_or_create(name="Moyo Properties", defaults={"industry": "Real Estate", "owner": manager})
+EmailTemplate.objects.get_or_create(
+    name="Intro + demo offer",
+    defaults={
+        "subject": "Automating {{company}}, {{first_name}}",
+        "body": "Hi {{first_name}},\n\nThanks for the interest in {{offer}}. Shall we set up a short demo this week?\n\nBit Studio",
+    },
+)
 
 print(f"users: {User.objects.count()}  leads: {Lead.objects.count()}  tags: {Tag.objects.count()}")
 print("logins (all password 'devpassword'):")

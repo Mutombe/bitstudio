@@ -457,6 +457,61 @@ async function run(page) {
   await page.waitForSelector('[data-testid="dup-warning"]', { timeout: 10_000 });
   check("New Lead form warns on a duplicate email", true);
 
+  // ─── 7f. Lead score + email + calendar on a lead ──────────────────
+  await page.goto(`${WEB}/admin/leads`, { waitUntil: "networkidle0" });
+  await page.waitForSelector("tbody tr", { timeout: 15_000 });
+  const scoreCells = await page.$$eval(
+    "tbody tr td:nth-child(3)",
+    (tds) => tds.map((t) => t.textContent.trim())
+  );
+  check("leads list shows a numeric score column", scoreCells.some((s) => /^\d+$/.test(s)));
+
+  // Open a lead with an email (Tendai), send a templated email.
+  await page.evaluate(() => {
+    const link = [...document.querySelectorAll("tbody tr a")].find((a) => a.textContent.includes("Tendai"));
+    link?.click();
+  });
+  await page.waitForSelector('[data-testid="lead-score"]', { timeout: 15_000 });
+  check("lead detail shows the score badge", true);
+
+  await page.click('[data-testid="email-btn"]');
+  await page.waitForSelector('[data-testid="email-subject"]', { timeout: 10_000 });
+  await page.type('[data-testid="email-subject"]', "Quick hello");
+  await page.type('[data-testid="email-body"]', "Testing {{name}} from the CRM.");
+  await page.click('[data-testid="email-send"]');
+  await page.waitForFunction(
+    () => document.querySelector('[data-testid="activity-list"]')?.textContent.includes("Sent email"),
+    { timeout: 10_000 }
+  );
+  check("sent an email and it logged to the timeline", true);
+
+  // ─── 7g. Reports ──────────────────────────────────────────────────
+  await page.goto(`${WEB}/admin/reports`, { waitUntil: "networkidle0" });
+  await page.waitForSelector('[data-testid="report-rows"]', { timeout: 15_000 });
+  check(
+    "reports page renders grouped rows",
+    (await countOf(page, '[data-testid="report-rows"] > div')) > 0
+  );
+  await page.screenshot({ path: path.join(SHOTS, "11-reports.png") });
+
+  // ─── 7h. Companies ────────────────────────────────────────────────
+  await page.goto(`${WEB}/admin/companies`, { waitUntil: "networkidle0" });
+  await page.waitForSelector('[data-testid="new-company-btn"]', { timeout: 15_000 });
+  await page.click('[data-testid="new-company-btn"]');
+  await page.waitForSelector('[data-testid="company-name"]', { timeout: 10_000 });
+  await page.type('[data-testid="company-name"]', "Acme Holdings");
+  await page.click('[data-testid="create-company"]');
+  await page.waitForFunction(
+    () => document.querySelector('[data-testid="companies-table"]')?.textContent.includes("Acme Holdings"),
+    { timeout: 10_000 }
+  );
+  check("created a company account", true);
+
+  // ─── 7i. Notification bell ────────────────────────────────────────
+  await page.click('[data-testid="notif-bell"]');
+  await page.waitForSelector('[data-testid="notif-panel"]', { timeout: 10_000 });
+  check("notification bell opens a panel", true);
+
   // ─── 8. Role scoping is visible in the UI ─────────────────────────
   await logout(page);
   await login(page, "sales", "devpassword");
@@ -556,6 +611,37 @@ async function run(page) {
   );
   check("admin created a new user", true);
   await page.screenshot({ path: path.join(SHOTS, "08-users.png") });
+
+  // ─── 12. Settings (admin): custom field, web-to-lead key, audit ───
+  await page.goto(`${WEB}/admin/settings`, { waitUntil: "networkidle0" });
+  await page.waitForSelector('[data-testid="cf-label"]', { timeout: 15_000 });
+  await page.type('[data-testid="cf-label"]', "Budget band");
+  await page.click('[data-testid="cf-add"]');
+  await page.waitForFunction(
+    () => document.body.innerText.includes("Budget band"),
+    { timeout: 10_000 }
+  );
+  check("admin created a custom field", true);
+
+  await page.click('[data-testid="tab-web-to-lead"]');
+  await page.waitForSelector('[data-testid="key-add"]', { timeout: 10_000 });
+  await page.type('input[placeholder^="Source name"]', "Partner site");
+  await page.click('[data-testid="key-add"]');
+  await page.waitForFunction(
+    () => document.body.innerText.includes("Partner site"),
+    { timeout: 10_000 }
+  );
+  check("admin generated a web-to-lead key", true);
+
+  await page.click('[data-testid="tab-audit"]');
+  await page.waitForSelector('[data-testid="audit-table"]', { timeout: 10_000 });
+  // The table shell renders before its fetch resolves — wait for a real row.
+  await page.waitForFunction(
+    () => document.querySelectorAll('[data-testid="audit-table"] tbody tr').length > 0,
+    { timeout: 10_000 }
+  );
+  check("audit log shows recorded actions", true);
+  await page.screenshot({ path: path.join(SHOTS, "12-settings.png") });
 }
 
 async function main() {

@@ -5,10 +5,14 @@ import {
   KanbanIcon,
   ListChecksIcon,
   ListDashesIcon,
+  BuildingsIcon,
+  ChartLineUpIcon,
+  GearIcon,
   UsersThreeIcon,
   SignOutIcon,
 } from "@phosphor-icons/react";
 import { useAuth } from "./AuthContext.jsx";
+import NotificationBell from "./NotificationBell.jsx";
 
 /**
  * Every admin surface is noindex. The marketing site is deliberately, and
@@ -47,9 +51,12 @@ export function RequireAuth({ children }) {
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: ChartBarIcon, end: true },
   { to: "/admin/pipeline", label: "Pipeline", icon: KanbanIcon },
-  { to: "/admin/follow-ups", label: "Follow-ups", icon: ListChecksIcon },
+  { to: "/admin/follow-ups", label: "Tasks", icon: ListChecksIcon },
   { to: "/admin/leads", label: "Leads", icon: ListDashesIcon },
+  { to: "/admin/companies", label: "Companies", icon: BuildingsIcon },
+  { to: "/admin/reports", label: "Reports", icon: ChartLineUpIcon },
   { to: "/admin/users", label: "Users", icon: UsersThreeIcon, adminOnly: true },
+  { to: "/admin/settings", label: "Settings", icon: GearIcon, adminOnly: true },
 ];
 
 export default function AdminLayout() {
@@ -91,7 +98,8 @@ export default function AdminLayout() {
             </nav>
           </div>
 
-          <div className="flex items-center gap-4 shrink-0">
+          <div className="flex items-center gap-3 shrink-0">
+            <NotificationBell />
             <div className="text-right hidden sm:block">
               <p className="text-sm text-bone-100 leading-tight">{user?.name}</p>
               <p className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">

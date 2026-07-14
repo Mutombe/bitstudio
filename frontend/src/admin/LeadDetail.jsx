@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeftIcon,
+  CalendarPlusIcon,
   CheckCircleIcon,
   CircleIcon,
   PencilSimpleIcon,
@@ -13,7 +14,7 @@ import {
 import { crm } from "../lib/api.js";
 import { useAuth } from "./AuthContext.jsx";
 import { AdminHead } from "./AdminLayout.jsx";
-import { ACTIVITY_KINDS, SOURCE_LABEL, STAGES, formatDateTime } from "./constants.js";
+import { ACTIVITY_KINDS, SOURCE_LABEL, STAGES, formatDateTime, scoreColor } from "./constants.js";
 
 const ACTIVITY_TONE = {
   created: "text-bone-100/50",
@@ -71,6 +72,12 @@ export default function LeadDetail() {
   const [lead, setLead] = useState(null);
   const [team, setTeam] = useState([]);
   const [allTags, setAllTags] = useState([]);
+  const [companies, setCompanies] = useState([]);
+  const [customDefs, setCustomDefs] = useState([]);
+  const [templates, setTemplates] = useState([]);
+  const [emailOpen, setEmailOpen] = useState(false);
+  const [emailDraft, setEmailDraft] = useState({ subject: "", body: "" });
+  const [emailSent, setEmailSent] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState(null);
   const [log, setLog] = useState({ kind: "note", body: "" });
@@ -96,7 +103,32 @@ export default function LeadDetail() {
 
   useEffect(() => {
     crm.listTags().then(setAllTags).catch(() => setAllTags([]));
+    crm.listCompanies({}).then((p) => setCompanies(p.results || p)).catch(() => setCompanies([]));
+    crm.listCustomFields().then(setCustomDefs).catch(() => setCustomDefs([]));
+    crm.listEmailTemplates().then(setTemplates).catch(() => setTemplates([]));
   }, []);
+
+  const sendEmail = async (e) => {
+    e.preventDefault();
+    try {
+      await crm.sendEmail(id, emailDraft.subject, emailDraft.body);
+      setEmailSent(true);
+      setEmailOpen(false);
+      setEmailDraft({ subject: "", body: "" });
+      load();
+    } catch (err) {
+      setError(err.data?.detail || "Could not send the email.");
+    }
+  };
+
+  const applyTemplate = (tplId) => {
+    const tpl = templates.find((t) => String(t.id) === String(tplId));
+    if (tpl) setEmailDraft({ subject: tpl.subject, body: tpl.body });
+  };
+
+  const setCustom = async (key, value) => {
+    await patch({ custom: { ...(lead.custom || {}), [key]: value } });
+  };
 
   const setTags = async (tagIds) => {
     await patch({ tag_ids: tagIds });
@@ -223,11 +255,22 @@ export default function LeadDetail() {
       </Link>
 
       <div className="flex flex-wrap items-start justify-between gap-4 mb-8">
-        <div>
-          <h1 className="font-display text-3xl md:text-4xl">{lead.name}</h1>
-          <p className="text-sm text-bone-100/50 mt-1">
-            {lead.company ? `${lead.company} · ` : ""}Added {formatDateTime(lead.created_at)}
-          </p>
+        <div className="flex items-start gap-4">
+          <span
+            data-testid="lead-score"
+            className="shrink-0 mt-1 inline-flex flex-col items-center justify-center w-14 h-14 rounded-sm border font-mono"
+            style={{ color: scoreColor(lead.score), borderColor: `${scoreColor(lead.score)}55` }}
+            title={Object.entries(lead.score_breakdown || {}).map(([k, v]) => `${k}: +${v}`).join("\n")}
+          >
+            <span className="text-xl font-bold tabular-nums leading-none">{lead.score}</span>
+            <span className="text-[7px] tracking-[0.15em] uppercase mt-0.5">score</span>
+          </span>
+          <div>
+            <h1 className="font-display text-3xl md:text-4xl">{lead.name}</h1>
+            <p className="text-sm text-bone-100/50 mt-1">
+              {lead.company ? `${lead.company} · ` : ""}Added {formatDateTime(lead.created_at)}
+            </p>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           {whatsapp && (
@@ -236,9 +279,9 @@ export default function LeadDetail() {
             </a>
           )}
           {lead.email && (
-            <a href={`mailto:${lead.email}`} className="btn btn-ghost">
+            <button data-testid="email-btn" onClick={() => { setEmailSent(false); setEmailOpen(true); }} className="btn btn-ghost">
               <EnvelopeSimpleIcon size={14} /> Email
-            </a>
+            </button>
           )}
           <button data-testid="edit-lead-btn" onClick={startEdit} className="btn btn-ghost">
             <PencilSimpleIcon size={14} /> Edit
@@ -259,6 +302,49 @@ export default function LeadDetail() {
         <p role="alert" className="mb-4 text-sm text-maroon-400">
           {error}
         </p>
+      )}
+      {emailSent && (
+        <p className="mb-4 text-sm text-[#25D366]">Email sent and logged to the timeline.</p>
+      )}
+
+      {/* Email composer */}
+      {emailOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-start justify-center pt-[10vh] px-4" onClick={() => setEmailOpen(false)}>
+          <form
+            onSubmit={sendEmail}
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-lg bg-maroon-950 border border-white/15 rounded-sm p-6"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-display text-xl">Email {lead.name}</h2>
+              <button type="button" onClick={() => setEmailOpen(false)} className="text-bone-100/40 hover:text-bone-100"><XIcon size={16} /></button>
+            </div>
+            {templates.length > 0 && (
+              <select onChange={(e) => applyTemplate(e.target.value)} className="w-full mb-3 bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm">
+                <option value="">Start from a template…</option>
+                {templates.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+              </select>
+            )}
+            <input
+              data-testid="email-subject"
+              value={emailDraft.subject}
+              onChange={(e) => setEmailDraft((d) => ({ ...d, subject: e.target.value }))}
+              placeholder="Subject"
+              className="w-full mb-3 bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm"
+              required
+            />
+            <textarea
+              data-testid="email-body"
+              value={emailDraft.body}
+              onChange={(e) => setEmailDraft((d) => ({ ...d, body: e.target.value }))}
+              rows={6}
+              placeholder="Message — {{name}}, {{company}} are filled in."
+              className="w-full mb-4 bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm resize-y"
+              required
+            />
+            <button type="submit" data-testid="email-send" className="btn btn-primary">Send email</button>
+          </form>
+        </div>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -379,6 +465,50 @@ export default function LeadDetail() {
                 </button>
               </div>
             </div>
+
+            {/* Company link */}
+            <div className="mt-4 grid sm:grid-cols-2 gap-4">
+              <label className="block">
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Company (account)</span>
+                <select
+                  data-testid="company-select"
+                  value={lead.company_ref?.id || ""}
+                  onChange={(e) => patch({ company_ref: e.target.value ? Number(e.target.value) : null })}
+                  className="mt-2 w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm"
+                >
+                  <option value="">Not linked</option>
+                  {companies.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+                </select>
+              </label>
+            </div>
+
+            {/* Custom fields */}
+            {customDefs.length > 0 && (
+              <div className="mt-4 grid sm:grid-cols-2 gap-4">
+                {customDefs.map((f) => (
+                  <label key={f.id} className="block">
+                    <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">{f.label}</span>
+                    {f.field_type === "select" ? (
+                      <select
+                        defaultValue={lead.custom?.[f.key] || ""}
+                        onChange={(e) => setCustom(f.key, e.target.value)}
+                        className="mt-2 w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm"
+                      >
+                        <option value="">—</option>
+                        {(f.options || []).map((o) => <option key={o} value={o}>{o}</option>)}
+                      </select>
+                    ) : (
+                      <input
+                        type={f.field_type === "number" ? "number" : f.field_type === "date" ? "date" : "text"}
+                        defaultValue={lead.custom?.[f.key] || ""}
+                        onBlur={(e) => { if (e.target.value !== (lead.custom?.[f.key] || "")) setCustom(f.key, e.target.value); }}
+                        className="mt-2 w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm"
+                      />
+                    )}
+                  </label>
+                ))}
+              </div>
+            )}
           </section>
 
           {/* Contact + message: read-only, or an edit form */}
@@ -556,6 +686,14 @@ export default function LeadDetail() {
                       <p className="text-[10px] text-bone-100/35">{item.assignee.name}</p>
                     )}
                   </div>
+                  <a
+                    href={crm.taskIcsUrl(item.id)}
+                    aria-label="Add to calendar"
+                    title="Add to calendar (.ics)"
+                    className="mt-0.5 shrink-0 text-bone-100/25 hover:text-signal"
+                  >
+                    <CalendarPlusIcon size={14} />
+                  </a>
                   <button
                     onClick={() => deleteTask(item)}
                     aria-label="Delete follow-up"

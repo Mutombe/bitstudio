@@ -44,6 +44,14 @@ export const ROLE_LABEL = {
   sales: "Sales",
 };
 
+// Lead score → colour. Warm high, cool low.
+export function scoreColor(score) {
+  if (score >= 70) return "#25D366";
+  if (score >= 40) return "#D4FF3A";
+  if (score >= 20) return "#F5C518";
+  return "#9DA6B0";
+}
+
 // Whole-dollar USD. Deal values are round numbers, so cents are noise.
 const USD = new Intl.NumberFormat("en-US", {
   style: "currency",
