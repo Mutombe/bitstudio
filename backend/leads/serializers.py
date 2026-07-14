@@ -2,7 +2,21 @@ from rest_framework import serializers
 
 from accounts.serializers import UserSerializer
 
-from .models import Activity, Lead, Tag, Task
+from .models import (
+    Activity,
+    AuditLog,
+    Company,
+    Contact,
+    CustomFieldDef,
+    EmailTemplate,
+    IntakeKey,
+    Lead,
+    Notification,
+    SavedView,
+    Tag,
+    Task,
+)
+from .scoring import score_breakdown
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -11,6 +25,78 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ["id", "name", "color", "lead_count"]
+
+
+class CompanySerializer(serializers.ModelSerializer):
+    owner = UserSerializer(read_only=True)
+    lead_count = serializers.IntegerField(source="leads.count", read_only=True)
+    contact_count = serializers.IntegerField(source="contacts.count", read_only=True)
+
+    class Meta:
+        model = Company
+        fields = [
+            "id", "name", "website", "industry", "phone", "notes",
+            "owner", "lead_count", "contact_count", "created_at",
+        ]
+        read_only_fields = ["id", "owner", "lead_count", "contact_count", "created_at"]
+
+
+class ContactSerializer(serializers.ModelSerializer):
+    company_name = serializers.CharField(source="company.name", read_only=True)
+
+    class Meta:
+        model = Contact
+        fields = ["id", "name", "email", "phone", "title", "company", "company_name", "notes", "created_at"]
+        read_only_fields = ["id", "company_name", "created_at"]
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ["id", "text", "link", "is_read", "created_at"]
+        read_only_fields = fields
+
+
+class AuditLogSerializer(serializers.ModelSerializer):
+    actor = UserSerializer(read_only=True)
+
+    class Meta:
+        model = AuditLog
+        fields = ["id", "actor", "verb", "target", "summary", "created_at"]
+        read_only_fields = fields
+
+
+class SavedViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SavedView
+        fields = ["id", "name", "params", "shared", "created_at"]
+        read_only_fields = ["id", "created_at"]
+
+
+class EmailTemplateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmailTemplate
+        fields = ["id", "name", "subject", "body", "created_at"]
+        read_only_fields = ["id", "created_at"]
+
+
+class CustomFieldDefSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomFieldDef
+        fields = ["id", "label", "key", "field_type", "options", "order"]
+        read_only_fields = ["id"]
+
+
+class IntakeKeySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IntakeKey
+        fields = ["id", "name", "key", "is_active", "created_at"]
+        read_only_fields = ["id", "key", "created_at"]
+
+
+class SendEmailSerializer(serializers.Serializer):
+    subject = serializers.CharField()
+    body = serializers.CharField()
 
 
 class LeadCreateSerializer(serializers.ModelSerializer):
@@ -145,6 +231,7 @@ class LeadListSerializer(serializers.ModelSerializer):
             "tier",
             "status",
             "value",
+            "score",
             "owner",
             "tags",
             "created_at",
@@ -155,8 +242,10 @@ class LeadListSerializer(serializers.ModelSerializer):
 class LeadDetailSerializer(serializers.ModelSerializer):
     owner = UserSerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
+    company_ref = CompanySerializer(read_only=True)
     activities = ActivitySerializer(many=True, read_only=True)
     tasks = TaskSerializer(many=True, read_only=True)
+    score_breakdown = serializers.SerializerMethodField()
 
     class Meta:
         model = Lead
@@ -166,6 +255,7 @@ class LeadDetailSerializer(serializers.ModelSerializer):
             "email",
             "phone",
             "company",
+            "company_ref",
             "message",
             "channel",
             "source",
@@ -178,6 +268,9 @@ class LeadDetailSerializer(serializers.ModelSerializer):
             "utm_campaign",
             "status",
             "value",
+            "score",
+            "score_breakdown",
+            "custom",
             "lost_reason",
             "tags",
             "owner",
@@ -187,6 +280,9 @@ class LeadDetailSerializer(serializers.ModelSerializer):
             "tasks",
         ]
         read_only_fields = fields
+
+    def get_score_breakdown(self, obj):
+        return score_breakdown(obj)
 
 
 class LeadWriteSerializer(serializers.ModelSerializer):
@@ -221,6 +317,8 @@ class LeadWriteSerializer(serializers.ModelSerializer):
             "lost_reason",
             "tags",
             "tag_ids",
+            "company_ref",
+            "custom",
             "owner",
         ]
         read_only_fields = ["id"]

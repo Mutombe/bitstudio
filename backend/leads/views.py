@@ -13,24 +13,49 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Activity, Lead, Tag, Task
+from accounts.views import IsAdmin
+
+from .models import (
+    Activity,
+    AuditLog,
+    Company,
+    Contact,
+    CustomFieldDef,
+    EmailTemplate,
+    IntakeKey,
+    Lead,
+    Notification,
+    SavedView,
+    Tag,
+    Task,
+)
 from .pricing import resolve_lead_value
 from .serializers import (
     ActivityLogSerializer,
     ActivitySerializer,
+    AuditLogSerializer,
     BulkActionSerializer,
+    CompanySerializer,
+    ContactSerializer,
+    CustomFieldDefSerializer,
+    EmailTemplateSerializer,
+    IntakeKeySerializer,
     LeadCreateSerializer,
     LeadDetailSerializer,
     LeadListSerializer,
     LeadWriteSerializer,
+    NotificationSerializer,
+    SavedViewSerializer,
+    SendEmailSerializer,
     TagSerializer,
     TaskListSerializer,
     TaskSerializer,
 )
+from . import services
 
 # Leads may be sorted by these columns; the rest are ignored to keep the
 # ordering an allow-list rather than arbitrary user input.
-SORTABLE = {"created_at", "name", "value", "status", "company"}
+SORTABLE = {"created_at", "name", "value", "status", "company", "score"}
 
 # Stages where a deal is still live and its value counts toward the pipeline.
 OPEN_STATUSES = [
@@ -170,6 +195,8 @@ class LeadViewSet(
                 actor=self.request.user,
                 body=f"Added by {self.request.user.get_full_name() or self.request.user.username}.",
             )
+            services.audit(self.request.user, "created", f"Lead: {lead.name}")
+            services.notify_new_lead(lead)
             return
 
         # Anonymous public intake. Seed value from the offer + tier the buyer
@@ -187,6 +214,7 @@ class LeadViewSet(
             kind=Activity.Kind.CREATED,
             body=f"Lead arrived from {lead.get_source_display().lower()}.",
         )
+        services.notify_new_lead(lead)
 
     def perform_update(self, serializer):
         before = self.get_object()
@@ -212,6 +240,7 @@ class LeadViewSet(
                 actor=actor,
                 body=f"Assigned to {lead.owner or 'nobody'}",
             )
+            services.notify_assignment(lead, lead.owner, actor)
         changed = [f for f in tracked if getattr(lead, f) != old_values[f]]
         if changed:
             Activity.objects.create(
@@ -220,10 +249,12 @@ class LeadViewSet(
                 actor=actor,
                 body="Edited " + ", ".join(changed) + ".",
             )
+            services.audit(actor, "updated", f"Lead: {lead.name}", ", ".join(changed))
 
     def perform_destroy(self, instance):
         if not self.request.user.can_see_all_leads:
             raise PermissionDenied("Only managers can delete leads.")
+        services.audit(self.request.user, "deleted", f"Lead: {instance.name}")
         instance.delete()
 
     @action(detail=True, methods=["post"])
@@ -242,6 +273,28 @@ class LeadViewSet(
         return Response(
             ActivitySerializer(activity).data, status=status.HTTP_201_CREATED
         )
+
+    @action(detail=True, methods=["post"], url_path="send-email")
+    def send_email(self, request, pk=None):
+        """Send an email to the lead and log it on the timeline."""
+        from django.core.mail import send_mail
+
+        lead = self.get_object()
+        if not lead.email:
+            raise ValidationError("This lead has no email address.")
+        serializer = SendEmailSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        subject = services.render_template(serializer.validated_data["subject"], lead)
+        body = services.render_template(serializer.validated_data["body"], lead)
+
+        from django.conf import settings as dj_settings
+        send_mail(subject, body, dj_settings.DEFAULT_FROM_EMAIL, [lead.email], fail_silently=True)
+
+        Activity.objects.create(
+            lead=lead, kind=Activity.Kind.EMAIL, actor=request.user,
+            body=f"Sent email: {subject}",
+        )
+        return Response({"detail": "Email sent."}, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=["get"])
     def export(self, request):
@@ -461,6 +514,14 @@ class TaskViewSet(
             queryset = queryset.filter(is_done=False)
         return queryset
 
+    @action(detail=True, methods=["get"])
+    def ics(self, request, pk=None):
+        """Download this follow-up as a calendar invite."""
+        task = self.get_object()
+        response = HttpResponse(services.task_to_ics(task), content_type="text/calendar")
+        response["Content-Disposition"] = f'attachment; filename="followup-{task.id}.ics"'
+        return response
+
 
 class TagViewSet(viewsets.ModelViewSet):
     """Tags are shared across the team; any signed-in user manages them."""
@@ -469,6 +530,189 @@ class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = None  # a flat list of labels, never enough to paginate
+
+
+class CompanyViewSet(viewsets.ModelViewSet):
+    """Companies (accounts). Any signed-in user; new ones default to creator."""
+
+    serializer_class = CompanySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        qs = Company.objects.select_related("owner")
+        if q := self.request.query_params.get("q"):
+            qs = qs.filter(Q(name__icontains=q) | Q(industry__icontains=q))
+        return qs
+
+    def perform_create(self, serializer):
+        company = serializer.save(owner=self.request.user)
+        services.audit(self.request.user, "created", f"Company: {company.name}")
+
+
+class ContactViewSet(viewsets.ModelViewSet):
+    serializer_class = ContactSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        qs = Contact.objects.select_related("company")
+        if company := self.request.query_params.get("company"):
+            qs = qs.filter(company_id=company)
+        if q := self.request.query_params.get("q"):
+            qs = qs.filter(Q(name__icontains=q) | Q(email__icontains=q))
+        return qs
+
+
+class NotificationViewSet(
+    mixins.ListModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
+):
+    """Your own notifications. Nobody sees anyone else's."""
+
+    serializer_class = NotificationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Notification.objects.filter(recipient=self.request.user)
+
+    @action(detail=False, methods=["get"], url_path="unread-count")
+    def unread_count(self, request):
+        return Response({"count": self.get_queryset().filter(is_read=False).count()})
+
+    @action(detail=False, methods=["post"], url_path="mark-all-read")
+    def mark_all_read(self, request):
+        self.get_queryset().filter(is_read=False).update(is_read=True)
+        return Response({"detail": "All marked read."})
+
+
+class SavedViewViewSet(viewsets.ModelViewSet):
+    """A user sees their own saved views plus any the team has shared."""
+
+    serializer_class = SavedViewSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
+
+    def get_queryset(self):
+        return SavedView.objects.filter(Q(owner=self.request.user) | Q(shared=True))
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    def perform_destroy(self, instance):
+        # You can only delete your own views, even if you can see shared ones.
+        if instance.owner != self.request.user:
+            raise PermissionDenied("You can only delete your own views.")
+        instance.delete()
+
+
+class EmailTemplateViewSet(viewsets.ModelViewSet):
+    queryset = EmailTemplate.objects.all()
+    serializer_class = EmailTemplateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
+
+
+class CustomFieldDefViewSet(viewsets.ModelViewSet):
+    """Everyone reads the field definitions; only admins change them."""
+
+    queryset = CustomFieldDef.objects.all()
+    serializer_class = CustomFieldDefSerializer
+    pagination_class = None
+
+    def get_permissions(self):
+        if self.action in ("list", "retrieve"):
+            return [permissions.IsAuthenticated()]
+        return [IsAdmin()]
+
+
+class IntakeKeyViewSet(viewsets.ModelViewSet):
+    """Web-to-lead API keys. Admins only."""
+
+    queryset = IntakeKey.objects.all()
+    serializer_class = IntakeKeySerializer
+    permission_classes = [IsAdmin]
+    pagination_class = None
+
+    def perform_create(self, serializer):
+        import secrets
+
+        serializer.save(key=secrets.token_urlsafe(24))
+
+
+class AuditLogView(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """The cross-CRM audit trail. Admins only."""
+
+    serializer_class = AuditLogSerializer
+    permission_classes = [IsAdmin]
+
+    def get_queryset(self):
+        return AuditLog.objects.select_related("actor")
+
+
+class ReportView(APIView):
+    """
+    A tiny report builder: group the leads you can see by one dimension and
+    measure count or summed value. `?group_by=source&measure=count`.
+    """
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    GROUPS = {
+        "status": "status",
+        "source": "source",
+        "owner": "owner__username",
+        "offer": "offer_slug",
+    }
+
+    def get(self, request):
+        group_by = request.query_params.get("group_by", "status")
+        measure = request.query_params.get("measure", "count")
+        field = self.GROUPS.get(group_by, "status")
+
+        qs = scoped_leads(request.user).values(field)
+        if measure == "value":
+            qs = qs.annotate(total=Sum("value"))
+        else:
+            qs = qs.annotate(total=Count("id"))
+
+        rows = [
+            {"label": r[field] or "—", "total": float(r["total"] or 0)}
+            for r in qs.order_by("-total")
+        ]
+        return Response({"group_by": group_by, "measure": measure, "rows": rows})
+
+
+class IntakeView(APIView):
+    """
+    Web-to-lead beyond our own contact form. An external site POSTs a lead
+    with a valid X-Api-Key header (see IntakeKey). Same honeypot + throttle
+    as the public form.
+    """
+
+    permission_classes = [permissions.AllowAny]
+    throttle_scope = "lead_create"  # ScopedRateThrottle is the global default
+
+    def post(self, request):
+        key = request.headers.get("X-Api-Key", "")
+        source = IntakeKey.objects.filter(key=key, is_active=True).first()
+        if not source:
+            return Response({"detail": "Invalid API key."}, status=status.HTTP_403_FORBIDDEN)
+
+        serializer = LeadCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        lead = serializer.save(
+            source=Lead.Source.OTHER,
+            utm_source=source.name[:100],
+            ip_address=client_ip(request),
+            value=resolve_lead_value(
+                serializer.validated_data.get("offer_slug", ""),
+                serializer.validated_data.get("tier", ""),
+            ),
+        )
+        Activity.objects.create(
+            lead=lead, kind=Activity.Kind.CREATED,
+            body=f"Submitted via web-to-lead ({source.name}).",
+        )
+        services.notify_new_lead(lead)
+        return Response({"id": str(lead.id)}, status=status.HTTP_201_CREATED)
 
 
 class StatsView(APIView):

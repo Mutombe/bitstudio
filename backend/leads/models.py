@@ -94,6 +94,16 @@ class Lead(models.Model):
     # team can learn from the pattern instead of just counting losses.
     lost_reason = models.CharField(max_length=300, blank=True)
     tags = models.ManyToManyField(Tag, blank=True, related_name="leads")
+    # Optional link to a first-class Company record (the free-text `company`
+    # above stays for web leads that arrive with just a string).
+    company_ref = models.ForeignKey(
+        "Company", null=True, blank=True, on_delete=models.SET_NULL, related_name="leads"
+    )
+    # 0-100 rule-based lead score (see scoring.compute_score), recomputed on
+    # save so the list can rank leads by how promising they look.
+    score = models.PositiveSmallIntegerField(default=0, db_index=True)
+    # Values for admin-defined custom fields, keyed by CustomFieldDef.key.
+    custom = models.JSONField(default=dict, blank=True)
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,
@@ -113,6 +123,12 @@ class Lead(models.Model):
     class Meta:
         ordering = ["-created_at"]
         indexes = [models.Index(fields=["status", "-created_at"])]
+
+    def save(self, *args, **kwargs):
+        from .scoring import compute_score
+
+        self.score = compute_score(self)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         label = self.offer_slug or self.get_source_display()
@@ -181,3 +197,158 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Company(models.Model):
+    """A first-class account, so a repeat client isn't just a string on N leads."""
+
+    name = models.CharField(max_length=200, unique=True)
+    website = models.URLField(blank=True, max_length=300)
+    industry = models.CharField(max_length=100, blank=True)
+    phone = models.CharField(max_length=40, blank=True)
+    notes = models.TextField(blank=True)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True,
+        on_delete=models.SET_NULL, related_name="companies",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name_plural = "companies"
+
+    def __str__(self):
+        return self.name
+
+
+class Contact(models.Model):
+    """A person at a company."""
+
+    name = models.CharField(max_length=200)
+    email = models.EmailField(blank=True)
+    phone = models.CharField(max_length=40, blank=True)
+    title = models.CharField(max_length=120, blank=True)
+    company = models.ForeignKey(
+        Company, null=True, blank=True, on_delete=models.SET_NULL, related_name="contacts"
+    )
+    notes = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
+class Notification(models.Model):
+    """An in-app alert for a user (a lead assigned to them, a new web lead)."""
+
+    recipient = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notifications"
+    )
+    text = models.CharField(max_length=300)
+    link = models.CharField(max_length=300, blank=True)  # in-app path, e.g. /admin/leads/<id>
+    is_read = models.BooleanField(default=False, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.recipient_id}: {self.text}"
+
+
+class AuditLog(models.Model):
+    """
+    A cross-cutting record of who did what, across the whole CRM — distinct
+    from per-lead Activity. Admins read this to answer 'who deleted that?'.
+    """
+
+    actor = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True,
+        on_delete=models.SET_NULL, related_name="audit_entries",
+    )
+    verb = models.CharField(max_length=40)          # created / updated / deleted / logged_in …
+    target = models.CharField(max_length=120, blank=True)  # "Lead: Tendai Moyo"
+    summary = models.CharField(max_length=300, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.actor_id} {self.verb} {self.target}"
+
+
+class SavedView(models.Model):
+    """A named set of list filters/sort a user can jump back to."""
+
+    name = models.CharField(max_length=100)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="saved_views"
+    )
+    params = models.JSONField(default=dict)  # {q, status, owner, tag, sort, dir}
+    shared = models.BooleanField(default=False)  # visible to the whole team
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
+class EmailTemplate(models.Model):
+    """A reusable email with {{name}} / {{company}} / {{offer}} placeholders."""
+
+    name = models.CharField(max_length=120)
+    subject = models.CharField(max_length=250)
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
+class CustomFieldDef(models.Model):
+    """An admin-defined extra field on leads. Values live in Lead.custom."""
+
+    class FieldType(models.TextChoices):
+        TEXT = "text", "Text"
+        NUMBER = "number", "Number"
+        DATE = "date", "Date"
+        SELECT = "select", "Select"
+
+    label = models.CharField(max_length=100)
+    key = models.SlugField(max_length=60, unique=True)
+    field_type = models.CharField(max_length=20, choices=FieldType.choices, default=FieldType.TEXT)
+    options = models.JSONField(default=list, blank=True)  # for select
+    order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return self.label
+
+
+class IntakeKey(models.Model):
+    """
+    An API key that lets an external site POST leads to us (web-to-lead beyond
+    our own contact form). Each keyed submission is attributed to its source.
+    """
+
+    name = models.CharField(max_length=120)
+    key = models.CharField(max_length=48, unique=True, db_index=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.name

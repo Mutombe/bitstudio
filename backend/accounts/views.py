@@ -70,6 +70,8 @@ class LoginView(APIView):
             )
 
         login(request, user)
+        from leads.services import audit  # local import avoids an import cycle
+        audit(user, "logged in", f"User: {user.username}")
         return Response(UserSerializer(user).data)
 
 
@@ -124,7 +126,15 @@ class UserViewSet(
         if target == self.request.user:
             raise ValidationError("You cannot change your own access here.")
 
+    def perform_create(self, serializer):
+        from leads.services import audit
+
+        user = serializer.save()
+        audit(self.request.user, "created", f"User: {user.username}", f"role={user.role}")
+
     def perform_update(self, serializer):
+        from leads.services import audit
+
         target = self.get_object()
         changing_access = (
             "is_active" in serializer.validated_data
@@ -132,7 +142,8 @@ class UserViewSet(
         )
         if changing_access:
             self._guard_not_self_lockout(target)
-        serializer.save()
+        user = serializer.save()
+        audit(self.request.user, "updated", f"User: {user.username}")
 
     @action(detail=True, methods=["post"], url_path="reset-password")
     def reset_password(self, request, pk=None):
