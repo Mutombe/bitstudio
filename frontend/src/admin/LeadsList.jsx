@@ -1,34 +1,101 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { PlusIcon } from "@phosphor-icons/react";
+import { CaretDownIcon, CaretUpIcon, PlusIcon, UploadSimpleIcon, XIcon } from "@phosphor-icons/react";
 import { crm } from "../lib/api.js";
+import { useAuth } from "./AuthContext.jsx";
 import { AdminHead } from "./AdminLayout.jsx";
 import { STAGES, STAGE_LABEL, formatDate, formatMoney } from "./constants.js";
 
 const PAGE_SIZE = 50; // matches DRF's default page size
 
+// Which columns can be sorted, and the field name the API expects.
+const COLUMNS = [
+  { label: "Name", sort: "name" },
+  { label: "Offer", sort: null },
+  { label: "Value", sort: "value" },
+  { label: "Stage", sort: "status" },
+  { label: "Owner", sort: null },
+  { label: "Arrived", sort: "created_at" },
+];
+
+function TagChip({ tag }) {
+  return (
+    <span
+      className="inline-block font-mono text-[8px] tracking-[0.12em] uppercase px-1.5 py-0.5 rounded-sm border"
+      style={{ color: tag.color, borderColor: `${tag.color}55` }}
+    >
+      {tag.name}
+    </span>
+  );
+}
+
 export default function LeadsList() {
+  const { user } = useAuth();
+  const canManage = user?.can_assign_leads;
+
   const [page, setPage] = useState(null);
-  const [filters, setFilters] = useState({ q: "", status: "", owner: "" });
+  const [tags, setTags] = useState([]);
+  const [filters, setFilters] = useState({ q: "", status: "", owner: "", tag: "" });
+  const [sort, setSort] = useState({ sort: "created_at", dir: "desc" });
   const [pageNum, setPageNum] = useState(1);
+  const [selected, setSelected] = useState(new Set());
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    // Debounce the search box; every keystroke should not hit the API.
-    const timer = setTimeout(() => {
-      crm
-        .listLeads({ ...filters, page: pageNum })
-        .then(setPage)
-        .catch(() => setError("Could not load leads."));
-    }, 250);
-    return () => clearTimeout(timer);
-  }, [filters, pageNum]);
+  const load = useCallback(() => {
+    crm
+      .listLeads({ ...filters, ...sort, page: pageNum })
+      .then(setPage)
+      .catch(() => setError("Could not load leads."));
+  }, [filters, sort, pageNum]);
 
-  // Any filter change resets to the first page — otherwise you can be stranded
-  // on page 3 of a result set that now has one page.
+  useEffect(() => {
+    const timer = setTimeout(load, 250); // debounce the search box
+    return () => clearTimeout(timer);
+  }, [load]);
+
+  useEffect(() => {
+    crm.listTags().then(setTags).catch(() => setTags([]));
+  }, []);
+
   const update = (key) => (event) => {
     setPageNum(1);
+    setSelected(new Set());
     setFilters((f) => ({ ...f, [key]: event.target.value }));
+  };
+
+  const toggleSort = (field) => {
+    if (!field) return;
+    setPageNum(1);
+    setSort((s) =>
+      s.sort === field
+        ? { sort: field, dir: s.dir === "asc" ? "desc" : "asc" }
+        : { sort: field, dir: "asc" }
+    );
+  };
+
+  const rows = page?.results || [];
+  const allSelected = rows.length > 0 && rows.every((r) => selected.has(r.id));
+
+  const toggleRow = (id) =>
+    setSelected((s) => {
+      const next = new Set(s);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  const toggleAll = () =>
+    setSelected(allSelected ? new Set() : new Set(rows.map((r) => r.id)));
+
+  const runBulk = async (action, value) => {
+    const ids = [...selected];
+    if (ids.length === 0) return;
+    if (action === "delete" && !window.confirm(`Delete ${ids.length} lead(s)?`)) return;
+    try {
+      await crm.bulk(ids, action, value);
+      setSelected(new Set());
+      load();
+    } catch (err) {
+      setError(err.data?.detail || "Bulk action failed.");
+    }
   };
 
   return (
@@ -43,9 +110,10 @@ export default function LeadsList() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          {/* Plain anchor: the CSV download carries the session cookie and
-              honours the current filters. */}
-          <a href={crm.exportUrl(filters)} className="btn btn-ghost">
+          <Link to="/admin/leads/import" className="btn btn-ghost">
+            <UploadSimpleIcon size={14} /> Import
+          </Link>
+          <a href={crm.exportUrl({ ...filters, ...sort })} className="btn btn-ghost">
             Export CSV
           </a>
           <Link to="/admin/leads/new" data-testid="new-lead-btn" className="btn btn-primary">
@@ -54,64 +122,118 @@ export default function LeadsList() {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-3 mb-6">
+      {/* Filters */}
+      <div className="flex flex-wrap gap-3 mb-4">
         <input
           value={filters.q}
           onChange={update("q")}
           placeholder="Search name, email, company, offer…"
           className="flex-1 min-w-[240px] bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm"
         />
-        <select
-          value={filters.status}
-          onChange={update("status")}
-          className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm"
-        >
+        <select value={filters.status} onChange={update("status")} className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm">
           <option value="">All stages</option>
-          {STAGES.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.label}
-            </option>
-          ))}
+          {STAGES.map((s) => <option key={s.id} value={s.id}>{s.label}</option>)}
         </select>
-        <select
-          value={filters.owner}
-          onChange={update("owner")}
-          className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm"
-        >
+        <select value={filters.owner} onChange={update("owner")} className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm">
           <option value="">Anyone</option>
           <option value="me">Assigned to me</option>
           <option value="unassigned">Unassigned</option>
         </select>
+        <select value={filters.tag} onChange={update("tag")} className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm">
+          <option value="">All tags</option>
+          {tags.map((t) => <option key={t.id} value={t.id}>{t.name} ({t.lead_count})</option>)}
+        </select>
       </div>
+
+      {/* Bulk action bar */}
+      {selected.size > 0 && (
+        <div data-testid="bulk-bar" className="flex flex-wrap items-center gap-3 mb-4 p-3 border border-signal/40 rounded-sm bg-signal/5">
+          <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-signal">
+            {selected.size} selected
+          </span>
+          <select
+            data-testid="bulk-stage"
+            defaultValue=""
+            onChange={(e) => { if (e.target.value) { runBulk("status", e.target.value); e.target.value = ""; } }}
+            className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-2 pr-7 py-1.5 text-xs"
+          >
+            <option value="">Set stage…</option>
+            {STAGES.map((s) => <option key={s.id} value={s.id}>{s.label}</option>)}
+          </select>
+          {tags.length > 0 && (
+            <select
+              defaultValue=""
+              onChange={(e) => { if (e.target.value) { runBulk("add_tag", e.target.value); e.target.value = ""; } }}
+              className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-2 pr-7 py-1.5 text-xs"
+            >
+              <option value="">Add tag…</option>
+              {tags.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+            </select>
+          )}
+          {canManage && (
+            <button onClick={() => runBulk("assign", user.id)} className="font-mono text-[10px] tracking-[0.15em] uppercase text-bone-100/70 hover:text-signal">
+              Assign to me
+            </button>
+          )}
+          {canManage && (
+            <button onClick={() => runBulk("assign", "")} className="font-mono text-[10px] tracking-[0.15em] uppercase text-bone-100/70 hover:text-signal">
+              Unassign
+            </button>
+          )}
+          {canManage && (
+            <button data-testid="bulk-delete" onClick={() => runBulk("delete")} className="font-mono text-[10px] tracking-[0.15em] uppercase text-maroon-400 hover:underline">
+              Delete
+            </button>
+          )}
+          <button onClick={() => setSelected(new Set())} className="ml-auto text-bone-100/40 hover:text-bone-100">
+            <XIcon size={14} />
+          </button>
+        </div>
+      )}
 
       {error && <p className="text-maroon-400 mb-4">{error}</p>}
 
       <div className="border border-white/10 rounded-sm overflow-x-auto">
-        <table className="w-full text-sm min-w-[720px]">
+        <table className="w-full text-sm min-w-[820px]">
           <thead>
             <tr className="border-b border-white/10 text-left">
-              {["Name", "Offer", "Value", "Stage", "Owner", "Arrived"].map((h) => (
+              <th className="px-4 py-3 w-8">
+                <input type="checkbox" data-testid="select-all" checked={allSelected} onChange={toggleAll} aria-label="Select all" />
+              </th>
+              {COLUMNS.map((col) => (
                 <th
-                  key={h}
-                  className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45 px-4 py-3"
+                  key={col.label}
+                  onClick={() => toggleSort(col.sort)}
+                  className={`font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45 px-4 py-3 ${col.sort ? "cursor-pointer hover:text-bone-100 select-none" : ""}`}
                 >
-                  {h}
+                  <span className="inline-flex items-center gap-1">
+                    {col.label}
+                    {sort.sort === col.sort && col.sort && (
+                      sort.dir === "asc" ? <CaretUpIcon size={10} /> : <CaretDownIcon size={10} />
+                    )}
+                  </span>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {page?.results.map((lead) => (
-              <tr key={lead.id} className="border-b border-white/5 hover:bg-white/[0.02]">
+            {rows.map((lead) => (
+              <tr key={lead.id} className={`border-b border-white/5 hover:bg-white/[0.02] ${selected.has(lead.id) ? "bg-signal/[0.04]" : ""}`}>
+                <td className="px-4 py-3">
+                  <input type="checkbox" checked={selected.has(lead.id)} onChange={() => toggleRow(lead.id)} aria-label={`Select ${lead.name}`} />
+                </td>
                 <td className="px-4 py-3">
                   <Link to={`/admin/leads/${lead.id}`} className="text-bone-100 hover:text-signal">
                     {lead.name}
                   </Link>
                   <p className="text-xs text-bone-100/40">{lead.company || lead.email}</p>
+                  {lead.tags?.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-1.5">
+                      {lead.tags.map((t) => <TagChip key={t.id} tag={t} />)}
+                    </div>
+                  )}
                 </td>
-                <td className="px-4 py-3 text-bone-100/70 text-xs">
-                  {lead.offer_slug || "—"}
-                </td>
+                <td className="px-4 py-3 text-bone-100/70 text-xs">{lead.offer_slug || "—"}</td>
                 <td className="px-4 py-3 text-bone-100/80 tabular-nums text-xs">
                   {Number(lead.value) > 0 ? formatMoney(lead.value) : "—"}
                 </td>
@@ -131,34 +253,19 @@ export default function LeadsList() {
           </tbody>
         </table>
 
-        {page?.results.length === 0 && (
-          <p className="text-center text-bone-100/40 py-12 text-sm">
-            No leads match those filters.
-          </p>
+        {rows.length === 0 && (
+          <p className="text-center text-bone-100/40 py-12 text-sm">No leads match those filters.</p>
         )}
       </div>
 
-      {/* Pagination. Without this the list silently stopped at 50 rows while
-          claiming a higher total. */}
       {page && page.count > PAGE_SIZE && (
         <div className="flex items-center justify-between mt-4 font-mono text-[10px] tracking-[0.18em] uppercase text-bone-100/50">
-          <span>
-            Page {pageNum} of {Math.ceil(page.count / PAGE_SIZE)}
-          </span>
+          <span>Page {pageNum} of {Math.ceil(page.count / PAGE_SIZE)}</span>
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => setPageNum((n) => Math.max(1, n - 1))}
-              disabled={!page.previous}
-              className="px-3 py-1.5 border border-white/15 rounded-sm hover:border-signal disabled:opacity-30 disabled:hover:border-white/15"
-            >
+            <button onClick={() => { setPageNum((n) => Math.max(1, n - 1)); setSelected(new Set()); }} disabled={!page.previous} className="px-3 py-1.5 border border-white/15 rounded-sm hover:border-signal disabled:opacity-30 disabled:hover:border-white/15">
               Prev
             </button>
-            <button
-              data-testid="next-page"
-              onClick={() => setPageNum((n) => n + 1)}
-              disabled={!page.next}
-              className="px-3 py-1.5 border border-white/15 rounded-sm hover:border-signal disabled:opacity-30 disabled:hover:border-white/15"
-            >
+            <button data-testid="next-page" onClick={() => { setPageNum((n) => n + 1); setSelected(new Set()); }} disabled={!page.next} className="px-3 py-1.5 border border-white/15 rounded-sm hover:border-signal disabled:opacity-30 disabled:hover:border-white/15">
               Next
             </button>
           </div>

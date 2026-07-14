@@ -18,7 +18,7 @@ django.setup()
 from django.conf import settings  # noqa: E402
 from django.contrib.auth import get_user_model  # noqa: E402
 
-from leads.models import Activity, Lead  # noqa: E402
+from leads.models import Activity, Lead, Tag  # noqa: E402
 from leads.pricing import resolve_lead_value  # noqa: E402
 
 engine = settings.DATABASES["default"]["ENGINE"]
@@ -134,7 +134,14 @@ for data in seeds:
             body=f"Lead arrived from {lead.get_source_display().lower()}.",
         )
 
-print(f"users: {User.objects.count()}  leads: {Lead.objects.count()}")
+# A couple of shared tags so the filter, bulk-tag, and editor have options.
+hot, _ = Tag.objects.get_or_create(name="Hot", defaults={"color": "#B54656"})
+enterprise, _ = Tag.objects.get_or_create(name="Enterprise", defaults={"color": "#22D3EE"})
+first = Lead.objects.filter(email="tendai@example.co.zw").first()
+if first:
+    first.tags.add(hot)
+
+print(f"users: {User.objects.count()}  leads: {Lead.objects.count()}  tags: {Tag.objects.count()}")
 print("logins (all password 'devpassword'):")
 print("  owner   - admin / superuser (sees everything + Django admin)")
 print("  manager - sees all leads, assigns to anyone")

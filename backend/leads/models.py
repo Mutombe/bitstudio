@@ -4,6 +4,20 @@ from django.conf import settings
 from django.db import models
 
 
+class Tag(models.Model):
+    """A flexible label on leads: 'Hot', 'Enterprise', 'Follow up in Q3'."""
+
+    name = models.CharField(max_length=50, unique=True)
+    color = models.CharField(max_length=7, default="#D4FF3A")  # hex, for the chip
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
 class Lead(models.Model):
     """
     An inbound enquiry from the marketing site.
@@ -79,6 +93,7 @@ class Lead(models.Model):
     # Why a deal was lost. Only meaningful once status is 'lost'; kept so the
     # team can learn from the pattern instead of just counting losses.
     lost_reason = models.CharField(max_length=300, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True, related_name="leads")
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,

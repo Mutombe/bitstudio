@@ -390,7 +390,72 @@ async function run(page) {
     { timeout: 10_000 }
   );
   check("logged a call on the activity timeline", true);
+
+  // Tag this lead, then confirm it shows.
+  await page.select('[data-testid="add-tag-select"]', await page.$eval(
+    '[data-testid="add-tag-select"] option:nth-child(2)', (o) => o.value
+  ));
+  await page.waitForFunction(
+    () => document.querySelector('[data-testid="lead-tags"]')?.querySelectorAll("span").length > 0,
+    { timeout: 10_000 }
+  );
+  check("added a tag to the lead", true);
   await page.screenshot({ path: path.join(SHOTS, "07-lead-edit-log.png") });
+
+  // ─── 7c. Bulk actions + sorting on the leads list ─────────────────
+  await page.goto(`${WEB}/admin/leads`, { waitUntil: "networkidle0" });
+  await page.waitForSelector('[data-testid="select-all"]', { timeout: 15_000 });
+
+  // Sort by value: clicking the header re-orders the table.
+  const firstNameBefore = await textOf(page, "tbody tr:first-child td:nth-child(2)");
+  await page.evaluate(() => {
+    const th = [...document.querySelectorAll("th")].find((t) => t.textContent.includes("Value"));
+    th?.click();
+  });
+  await sleep(600);
+  const firstNameAfter = await textOf(page, "tbody tr:first-child td:nth-child(2)");
+  check("sorting by a column reorders the list", firstNameBefore !== firstNameAfter, `${firstNameBefore} vs ${firstNameAfter}`);
+
+  // Select all, bulk-move to Qualified.
+  await page.click('[data-testid="select-all"]');
+  await page.waitForSelector('[data-testid="bulk-bar"]', { timeout: 10_000 });
+  check("selecting rows reveals the bulk bar", true);
+
+  const beforeQualified = await page.$$eval(
+    "tbody tr",
+    (rows) => rows.filter((r) => r.textContent.includes("Qualified")).length
+  );
+  await page.select('[data-testid="bulk-stage"]', "qualified");
+  await page.waitForFunction(
+    (before) =>
+      [...document.querySelectorAll("tbody tr")].filter((r) => r.textContent.includes("Qualified")).length > before,
+    { timeout: 10_000 },
+    beforeQualified
+  );
+  check("bulk stage change updated the rows", true);
+  await page.screenshot({ path: path.join(SHOTS, "09-leads-bulk.png") });
+
+  // ─── 7d. CSV import ───────────────────────────────────────────────
+  await page.goto(`${WEB}/admin/leads/import`, { waitUntil: "networkidle0" });
+  const fileInput = await page.waitForSelector('[data-testid="import-file"]', { timeout: 15_000 });
+  const csvPath = path.join(SHOTS, "_import.csv");
+  const { writeFileSync } = await import("node:fs");
+  writeFileSync(csvPath, "name,email,company,value\nImported Ada,ada@import.co.zw,Ada Co,7000\nImported Ben,ben@import.co.zw,,\n");
+  await fileInput.uploadFile(csvPath);
+  await page.click('[data-testid="import-submit"]');
+  await page.waitForSelector('[data-testid="import-result"]', { timeout: 15_000 });
+  check(
+    "CSV import reports leads created",
+    (await textOf(page, '[data-testid="import-result"]'))?.includes("created")
+  );
+  await page.screenshot({ path: path.join(SHOTS, "10-import.png") });
+
+  // ─── 7e. Duplicate warning on the New Lead form ───────────────────
+  await page.goto(`${WEB}/admin/leads/new`, { waitUntil: "networkidle0" });
+  await page.waitForSelector('input[type="email"]', { timeout: 15_000 });
+  await page.type('input[type="email"]', "ada@import.co.zw"); // just imported
+  await page.waitForSelector('[data-testid="dup-warning"]', { timeout: 10_000 });
+  check("New Lead form warns on a duplicate email", true);
 
   // ─── 8. Role scoping is visible in the UI ─────────────────────────
   await logout(page);

@@ -119,6 +119,30 @@ export function attributionFrom(search) {
   };
 }
 
+/**
+ * Upload a CSV of leads. Multipart, not JSON, so it can't go through
+ * request() — but it still needs the session cookie and CSRF token.
+ */
+export async function importLeadsCsv(file) {
+  const form = new FormData();
+  form.append("file", file);
+  const headers = {};
+  const token = readCookie("csrftoken");
+  if (token) headers["X-CSRFToken"] = token;
+
+  const response = await fetch(`${API_URL}/api/leads/import_csv/`, {
+    method: "POST",
+    headers,
+    credentials: "include",
+    body: form,
+  });
+  const data = await response.json().catch(() => null);
+  if (!response.ok) {
+    throw new ApiError(data?.detail || "Import failed", response.status, data);
+  }
+  return data;
+}
+
 // ─── Auth ────────────────────────────────────────────────────────────
 
 export const auth = {
@@ -158,6 +182,15 @@ export const crm = {
   // The CSV export isn't JSON — hand back the URL for a plain browser download,
   // which carries the session cookie automatically.
   exportUrl: (params) => `${API_URL}/api/leads/export/${queryString(params)}`,
+  checkDuplicate: (params) =>
+    request(`/api/leads/check-duplicate/${queryString(params)}`),
+  bulk: (ids, action, value) =>
+    request("/api/leads/bulk/", { method: "POST", body: { ids, action, value } }),
+
+  // Tags
+  listTags: () => request("/api/tags/"),
+  createTag: (tag) => request("/api/tags/", { method: "POST", body: tag }),
+  deleteTag: (id) => request(`/api/tags/${id}/`, { method: "DELETE" }),
 
   // kind: note | call | email | meeting | whatsapp
   logActivity: (id, kind, body) =>

@@ -2,7 +2,15 @@ from rest_framework import serializers
 
 from accounts.serializers import UserSerializer
 
-from .models import Activity, Lead, Task
+from .models import Activity, Lead, Tag, Task
+
+
+class TagSerializer(serializers.ModelSerializer):
+    lead_count = serializers.IntegerField(source="leads.count", read_only=True)
+
+    class Meta:
+        model = Tag
+        fields = ["id", "name", "color", "lead_count"]
 
 
 class LeadCreateSerializer(serializers.ModelSerializer):
@@ -123,6 +131,7 @@ class LeadListSerializer(serializers.ModelSerializer):
     """The Kanban card. Small on purpose — a board loads hundreds of these."""
 
     owner = UserSerializer(read_only=True)
+    tags = TagSerializer(many=True, read_only=True)
 
     class Meta:
         model = Lead
@@ -137,6 +146,7 @@ class LeadListSerializer(serializers.ModelSerializer):
             "status",
             "value",
             "owner",
+            "tags",
             "created_at",
         ]
         read_only_fields = fields
@@ -144,6 +154,7 @@ class LeadListSerializer(serializers.ModelSerializer):
 
 class LeadDetailSerializer(serializers.ModelSerializer):
     owner = UserSerializer(read_only=True)
+    tags = TagSerializer(many=True, read_only=True)
     activities = ActivitySerializer(many=True, read_only=True)
     tasks = TaskSerializer(many=True, read_only=True)
 
@@ -168,6 +179,7 @@ class LeadDetailSerializer(serializers.ModelSerializer):
             "status",
             "value",
             "lost_reason",
+            "tags",
             "owner",
             "created_at",
             "updated_at",
@@ -186,6 +198,11 @@ class LeadWriteSerializer(serializers.ModelSerializer):
     that's a record of how a web lead actually arrived, not something to edit.
     """
 
+    tags = TagSerializer(many=True, read_only=True)
+    tag_ids = serializers.PrimaryKeyRelatedField(
+        source="tags", queryset=Tag.objects.all(), many=True, required=False, write_only=True
+    )
+
     class Meta:
         model = Lead
         fields = [
@@ -202,6 +219,8 @@ class LeadWriteSerializer(serializers.ModelSerializer):
             "status",
             "value",
             "lost_reason",
+            "tags",
+            "tag_ids",
             "owner",
         ]
         read_only_fields = ["id"]
@@ -225,3 +244,14 @@ class LeadWriteSerializer(serializers.ModelSerializer):
                 "You may only assign leads to yourself."
             )
         return value
+
+
+class BulkActionSerializer(serializers.Serializer):
+    """Apply one action to many leads at once."""
+
+    ids = serializers.ListField(child=serializers.UUIDField(), allow_empty=False)
+    action = serializers.ChoiceField(
+        choices=["assign", "status", "add_tag", "remove_tag", "delete"]
+    )
+    # Meaning depends on action: a user id, a status value, or a tag id.
+    value = serializers.CharField(required=False, allow_null=True, allow_blank=True)

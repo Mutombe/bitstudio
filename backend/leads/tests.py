@@ -3,7 +3,7 @@ from django.core.cache import cache
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
-from .models import Activity, Lead
+from .models import Activity, Lead, Tag
 
 User = get_user_model()
 
@@ -421,6 +421,115 @@ class LeadCrudTests(BaseCRMTest):
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 400)
+
+
+class TagsAndBulkTests(BaseCRMTest):
+    def setUp(self):
+        super().setUp()
+        self.manager = User.objects.create_user("mgr", password="x", role=User.Role.MANAGER)
+        self.sales = User.objects.create_user("sales", password="x", role=User.Role.SALES)
+        self.tag = Tag.objects.create(name="Hot", color="#D4FF3A")
+        self.a = Lead.objects.create(name="A", email="a@x.co", message="x", owner=self.manager)
+        self.b = Lead.objects.create(name="B", email="b@x.co", message="x", owner=self.manager)
+        self.client.force_login(self.manager)
+
+    def test_tag_a_lead_via_write(self):
+        response = self.client.patch(
+            self.detail_url(self.a),
+            {"tag_ids": [self.tag.id]},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(list(self.a.tags.values_list("name", flat=True)), ["Hot"])
+        # And the read serializer surfaces it.
+        self.assertEqual(response.json()["tags"][0]["name"], "Hot")
+
+    def test_filter_leads_by_tag(self):
+        self.a.tags.add(self.tag)
+        results = self.client.get(self.list_url, {"tag": self.tag.id}).json()["results"]
+        self.assertEqual([r["name"] for r in results], ["A"])
+
+    def test_sort_by_value_desc(self):
+        self.a.value = 100
+        self.a.save()
+        self.b.value = 900
+        self.b.save()
+        results = self.client.get(self.list_url, {"sort": "value", "dir": "desc"}).json()["results"]
+        self.assertEqual([r["name"] for r in results], ["B", "A"])
+
+    def test_bulk_status_change(self):
+        response = self.client.post(
+            reverse("lead-bulk"),
+            {"ids": [str(self.a.id), str(self.b.id)], "action": "status", "value": "qualified"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["updated"], 2)
+        self.a.refresh_from_db()
+        self.assertEqual(self.a.status, "qualified")
+        self.assertTrue(self.a.activities.filter(kind="status_change").exists())
+
+    def test_bulk_add_tag(self):
+        self.client.post(
+            reverse("lead-bulk"),
+            {"ids": [str(self.a.id)], "action": "add_tag", "value": str(self.tag.id)},
+            content_type="application/json",
+        )
+        self.assertIn(self.tag, self.a.tags.all())
+
+    def test_bulk_delete_manager_only(self):
+        self.client.force_login(self.sales)
+        blocked = self.client.post(
+            reverse("lead-bulk"),
+            {"ids": [str(self.a.id)], "action": "delete"},
+            content_type="application/json",
+        )
+        self.assertEqual(blocked.status_code, 403)
+        self.assertTrue(Lead.objects.filter(id=self.a.id).exists())
+
+        self.client.force_login(self.manager)
+        ok = self.client.post(
+            reverse("lead-bulk"),
+            {"ids": [str(self.a.id)], "action": "delete"},
+            content_type="application/json",
+        )
+        self.assertEqual(ok.status_code, 200)
+        self.assertFalse(Lead.objects.filter(id=self.a.id).exists())
+
+    def test_check_duplicate_finds_existing_email(self):
+        matches = self.client.get(
+            reverse("lead-check-duplicate"), {"email": "A@X.CO"}
+        ).json()
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0]["name"], "A")
+
+    def test_check_duplicate_empty_when_no_match(self):
+        self.assertEqual(
+            self.client.get(reverse("lead-check-duplicate"), {"email": "nobody@x.co"}).json(),
+            [],
+        )
+
+    def test_csv_import_creates_and_dedupes(self):
+        from io import BytesIO
+
+        csv_bytes = (
+            b"name,email,phone,company,value\n"
+            b"Imported One,new1@x.co,+263771,Acme,5000\n"
+            b"Imported Two,new2@x.co,,,\n"
+            b"Dup,a@x.co,,,\n"          # a@x.co already exists -> skipped
+            b",noemail@x.co,,,\n"        # missing name -> error
+        )
+        upload = BytesIO(csv_bytes)
+        upload.name = "leads.csv"
+        response = self.client.post(
+            reverse("lead-import-csv"), {"file": upload}, format="multipart"
+        )
+        self.assertEqual(response.status_code, 201)
+        body = response.json()
+        self.assertEqual(body["created"], 2)
+        self.assertEqual(body["skipped"], 1)
+        self.assertEqual(len(body["errors"]), 1)
+        self.assertEqual(Lead.objects.get(email="new1@x.co").value, 5000)
 
 
 class TaskListTests(BaseCRMTest):
