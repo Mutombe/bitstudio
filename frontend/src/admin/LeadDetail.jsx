@@ -70,6 +70,7 @@ export default function LeadDetail() {
 
   const [lead, setLead] = useState(null);
   const [team, setTeam] = useState([]);
+  const [allTags, setAllTags] = useState([]);
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState(null);
   const [log, setLog] = useState({ kind: "note", body: "" });
@@ -92,6 +93,36 @@ export default function LeadDetail() {
   useEffect(() => {
     if (user?.can_assign_leads) crm.team().then(setTeam).catch(() => setTeam([]));
   }, [user]);
+
+  useEffect(() => {
+    crm.listTags().then(setAllTags).catch(() => setAllTags([]));
+  }, []);
+
+  const setTags = async (tagIds) => {
+    await patch({ tag_ids: tagIds });
+  };
+
+  const addTag = async (tagId) => {
+    if (!tagId) return;
+    const ids = lead.tags.map((t) => t.id);
+    if (!ids.includes(tagId)) await setTags([...ids, tagId]);
+  };
+
+  const removeTag = async (tagId) => {
+    await setTags(lead.tags.filter((t) => t.id !== tagId).map((t) => t.id));
+  };
+
+  const createAndAddTag = async () => {
+    const name = window.prompt("New tag name:");
+    if (!name?.trim()) return;
+    try {
+      const tag = await crm.createTag({ name: name.trim() });
+      setAllTags((prev) => [...prev, tag]);
+      await addTag(tag.id);
+    } catch {
+      setError("Could not create the tag (is the name taken?).");
+    }
+  };
 
   const patch = async (changes) => {
     try {
@@ -314,6 +345,39 @@ export default function LeadDetail() {
                   />
                 </label>
               )}
+            </div>
+
+            {/* Tags */}
+            <div className="mt-4">
+              <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Tags</span>
+              <div className="mt-2 flex flex-wrap items-center gap-2" data-testid="lead-tags">
+                {lead.tags.map((t) => (
+                  <span
+                    key={t.id}
+                    className="inline-flex items-center gap-1.5 font-mono text-[9px] tracking-[0.12em] uppercase px-2 py-1 rounded-sm border"
+                    style={{ color: t.color, borderColor: `${t.color}55` }}
+                  >
+                    {t.name}
+                    <button onClick={() => removeTag(t.id)} aria-label={`Remove ${t.name}`} className="hover:text-maroon-400">
+                      <XIcon size={10} />
+                    </button>
+                  </span>
+                ))}
+                <select
+                  data-testid="add-tag-select"
+                  value=""
+                  onChange={(e) => { addTag(Number(e.target.value)); e.target.value = ""; }}
+                  className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-2 pr-7 py-1 text-xs"
+                >
+                  <option value="">+ Add tag</option>
+                  {allTags
+                    .filter((t) => !lead.tags.some((lt) => lt.id === t.id))
+                    .map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+                </select>
+                <button onClick={createAndAddTag} className="font-mono text-[9px] tracking-[0.15em] uppercase text-bone-100/50 hover:text-signal">
+                  New tag
+                </button>
+              </div>
             </div>
           </section>
 

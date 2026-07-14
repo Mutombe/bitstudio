@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeftIcon } from "@phosphor-icons/react";
+import { ArrowLeftIcon, WarningIcon } from "@phosphor-icons/react";
 import { crm } from "../lib/api.js";
 import { OFFERS } from "../data/offers.js";
 import { useAuth } from "./AuthContext.jsx";
@@ -37,12 +37,27 @@ export default function LeadNew() {
     value: "",
     owner: "",
   });
+  const [dupes, setDupes] = useState([]);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     if (user?.can_assign_leads) crm.team().then(setTeam).catch(() => setTeam([]));
   }, [user]);
+
+  // Warn (never block) when an email or phone already exists on file.
+  useEffect(() => {
+    const email = form.email.trim();
+    const phone = form.phone.trim();
+    if (!email && !phone) {
+      setDupes([]);
+      return;
+    }
+    const timer = setTimeout(() => {
+      crm.checkDuplicate({ email, phone }).then(setDupes).catch(() => setDupes([]));
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [form.email, form.phone]);
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
@@ -89,6 +104,26 @@ export default function LeadNew() {
         <p role="alert" className="mb-4 text-sm text-maroon-400 break-words">
           {error}
         </p>
+      )}
+
+      {dupes.length > 0 && (
+        <div data-testid="dup-warning" className="mb-5 p-4 border border-[#F5C518]/40 rounded-sm bg-[#F5C518]/5">
+          <p className="flex items-center gap-2 text-sm text-[#F5C518] mb-2">
+            <WarningIcon size={16} weight="fill" />
+            Possible duplicate — {dupes.length} lead{dupes.length > 1 ? "s" : ""} already on file
+          </p>
+          <ul className="space-y-1">
+            {dupes.map((d) => (
+              <li key={d.id} className="text-sm">
+                <Link to={`/admin/leads/${d.id}`} className="text-bone-100 hover:text-signal underline">
+                  {d.name}
+                </Link>
+                <span className="text-bone-100/45"> · {d.email}{d.owner ? ` · ${d.owner.name}` : ""}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="text-[11px] text-bone-100/40 mt-2">You can still create this lead.</p>
+        </div>
       )}
 
       <form onSubmit={submit} className="space-y-5">
