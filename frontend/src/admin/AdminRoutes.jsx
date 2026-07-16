@@ -5,8 +5,6 @@ import Login from "./Login.jsx";
 import Dashboard from "./Dashboard.jsx";
 import Pipeline from "./Pipeline.jsx";
 import LeadsList from "./LeadsList.jsx";
-import LeadNew from "./LeadNew.jsx";
-import LeadImport from "./LeadImport.jsx";
 import LeadDetail from "./LeadDetail.jsx";
 import FollowUps from "./FollowUps.jsx";
 import Users from "./Users.jsx";
@@ -37,8 +35,6 @@ export default function AdminRoutes() {
           <Route path="pipeline" element={<Pipeline />} />
           <Route path="follow-ups" element={<FollowUps />} />
           <Route path="leads" element={<LeadsList />} />
-          <Route path="leads/new" element={<LeadNew />} />
-          <Route path="leads/import" element={<LeadImport />} />
           <Route path="leads/:id" element={<LeadDetail />} />
           <Route path="companies" element={<Companies />} />
           <Route path="companies/:id" element={<CompanyDetail />} />

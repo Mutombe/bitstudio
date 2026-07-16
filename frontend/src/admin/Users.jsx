@@ -1,15 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
 import { PlusIcon } from "@phosphor-icons/react";
+import { toast } from "sonner";
 import { admin } from "../lib/api.js";
 import { AdminHead } from "./AdminLayout.jsx";
 import { ROLE_LABEL, formatDate } from "./constants.js";
+import Modal from "./Modal.jsx";
 
 const inputCls =
   "mt-2 w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm";
 const selectCls =
   "mt-2 w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm";
 
-function NewUserForm({ onCreated }) {
+function NewUserForm({ onCreated, onCancel }) {
   const blank = { username: "", first_name: "", last_name: "", email: "", role: "sales", password: "" };
   const [form, setForm] = useState(blank);
   const [error, setError] = useState("");
@@ -23,6 +25,7 @@ function NewUserForm({ onCreated }) {
     try {
       await admin.createUser(form);
       setForm(blank);
+      toast.success("User created.");
       onCreated();
     } catch (err) {
       const d = err.data || {};
@@ -36,10 +39,7 @@ function NewUserForm({ onCreated }) {
   };
 
   return (
-    <form onSubmit={submit} className="border border-white/10 rounded-sm p-5 bg-maroon-950/20 mb-8">
-      <h2 className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/45 mb-4">
-        Add a user
-      </h2>
+    <form onSubmit={submit}>
       {error && <p role="alert" className="mb-4 text-sm text-maroon-400">{error}</p>}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <label className="block">
@@ -71,15 +71,19 @@ function NewUserForm({ onCreated }) {
           <input data-testid="new-password" type="password" value={form.password} onChange={set("password")} className={inputCls} required autoComplete="new-password" />
         </label>
       </div>
-      <button type="submit" data-testid="create-user" disabled={busy} className="btn btn-primary mt-4">
-        <PlusIcon size={14} weight="bold" /> {busy ? "Creating…" : "Create user"}
-      </button>
+      <div className="flex items-center gap-3 mt-5">
+        <button type="submit" data-testid="create-user" disabled={busy} className="btn btn-primary">
+          <PlusIcon size={14} weight="bold" /> {busy ? "Creating…" : "Create user"}
+        </button>
+        <button type="button" onClick={onCancel} className="btn btn-ghost">Cancel</button>
+      </div>
     </form>
   );
 }
 
 export default function Users() {
   const [users, setUsers] = useState([]);
+  const [addOpen, setAddOpen] = useState(false);
   const [error, setError] = useState("");
 
   const load = useCallback(() => {
@@ -123,14 +127,23 @@ export default function Users() {
   return (
     <div>
       <AdminHead title="Users" />
-      <h1 className="font-display text-3xl md:text-4xl mb-1">Users</h1>
-      <p className="text-sm text-bone-100/55 mb-8">
-        The team. Deactivate instead of deleting, so their leads keep an author.
-      </p>
+      <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
+        <div>
+          <h1 className="font-display text-3xl md:text-4xl mb-1">Users</h1>
+          <p className="text-sm text-bone-100/55">
+            The team. Deactivate instead of deleting, so their leads keep an author.
+          </p>
+        </div>
+        <button data-testid="add-user-btn" onClick={() => setAddOpen(true)} className="btn btn-primary">
+          <PlusIcon size={14} weight="bold" /> Add user
+        </button>
+      </div>
 
       {error && <p role="alert" className="text-maroon-400 mb-4">{error}</p>}
 
-      <NewUserForm onCreated={load} />
+      <Modal open={addOpen} onClose={() => setAddOpen(false)} title="Add user" size="3xl">
+        <NewUserForm onCreated={() => { setAddOpen(false); load(); }} onCancel={() => setAddOpen(false)} />
+      </Modal>
 
       <div className="border border-white/10 rounded-sm overflow-x-auto">
         <table className="w-full text-sm min-w-[720px]" data-testid="users-table">
