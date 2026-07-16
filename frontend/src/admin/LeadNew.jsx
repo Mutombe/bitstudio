@@ -107,8 +107,8 @@ export default function LeadNew() {
       )}
 
       {dupes.length > 0 && (
-        <div data-testid="dup-warning" className="mb-5 p-4 border border-[#F5C518]/40 rounded-sm bg-[#F5C518]/5">
-          <p className="flex items-center gap-2 text-sm text-[#F5C518] mb-2">
+        <div data-testid="dup-warning" className="mb-5 p-4 border border-[#C9A24B]/40 rounded-sm bg-[#C9A24B]/5">
+          <p className="flex items-center gap-2 text-sm text-[#C9A24B] mb-2">
             <WarningIcon size={16} weight="fill" />
             Possible duplicate — {dupes.length} lead{dupes.length > 1 ? "s" : ""} already on file
           </p>

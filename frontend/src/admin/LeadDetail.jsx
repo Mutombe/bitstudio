@@ -19,12 +19,12 @@ import { ACTIVITY_KINDS, SOURCE_LABEL, STAGES, formatDateTime, scoreColor } from
 const ACTIVITY_TONE = {
   created: "text-bone-100/50",
   note: "text-bone-100",
-  call: "text-[#22D3EE]",
-  email: "text-[#22D3EE]",
-  meeting: "text-[#22D3EE]",
-  whatsapp: "text-[#25D366]",
+  call: "text-[#8A93A3]",
+  email: "text-[#8A93A3]",
+  meeting: "text-[#8A93A3]",
+  whatsapp: "text-[#4B9E6B]",
   status_change: "text-signal",
-  assignment: "text-[#9F6BFF]",
+  assignment: "text-[#8A93A3]",
   edited: "text-bone-100/50",
 };
 
@@ -304,7 +304,7 @@ export default function LeadDetail() {
         </p>
       )}
       {emailSent && (
-        <p className="mb-4 text-sm text-[#25D366]">Email sent and logged to the timeline.</p>
+        <p className="mb-4 text-sm text-[#4B9E6B]">Email sent and logged to the timeline.</p>
       )}
 
       {/* Email composer */}

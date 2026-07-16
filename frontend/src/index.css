@@ -535,3 +535,56 @@
     .motion-blur-type::before { filter: blur(6px); opacity: 0.3; }
   }
 }
+
+/* ─── CRM (internal tool) neutral theme ──────────────────────────────
+ * The marketing palette — maroon + radioactive chartreuse — is for the
+ * public site. The admin CRM is a work tool, so inside `.crm-theme` we
+ * override the Tailwind colour variables to a neutral slate system with a
+ * single restrained blue accent and muted semantic colours. This recolours
+ * every `text-signal` / `bg-maroon-950` / `text-bone-100` utility used in
+ * /admin at once — no per-component edits. Unlayered, so the button
+ * overrides beat the layered `.btn-*` defaults.
+ * ──────────────────────────────────────────────────────────────────── */
+.crm-theme {
+  color-scheme: dark;
+
+  --color-ink: #0E0F13;          /* page background */
+  --color-bone-50:  #F2F4F7;
+  --color-bone-100: #E6E8EC;     /* primary text */
+  --color-bone-200: #C7CCD4;
+  --color-bone-300: #9AA0AC;     /* muted text */
+
+  /* One restrained accent: interactive, active nav, links, focus rings. */
+  --color-signal: #5B82F0;
+  --color-signal-muted: #4D6FD0;
+
+  /* Maroon is repurposed: the 900s become neutral surfaces; 400/500 stay a
+     muted red used only for danger and the notification badge. */
+  --color-maroon-950: #16181D;   /* card surface */
+  --color-maroon-900: #1C1F26;   /* hover / elevated */
+  --color-maroon-800: #22262F;
+  --color-maroon-700: #2A2E37;
+  --color-maroon-600: #C46A6A;
+  --color-maroon-500: #B5555A;   /* notification badge */
+  --color-maroon-400: #C46A6A;   /* danger text */
+  --color-maroon-300: #D4999E;
+}
+
+/* Buttons in the tool are compact and don't hop on hover. */
+.crm-theme .btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.66rem;
+  border-radius: 0.375rem;
+}
+.crm-theme .btn:hover { transform: none; }
+.crm-theme .btn-primary { background: var(--color-signal); color: #fff; }
+.crm-theme .btn-primary:hover { background: var(--color-signal-muted); }
+.crm-theme .btn-ghost {
+  color: var(--color-bone-100);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.crm-theme .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-bone-100);
+  border-color: rgba(255, 255, 255, 0.25);
+}

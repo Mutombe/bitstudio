@@ -164,7 +164,7 @@ export default function Users() {
                   </select>
                 </td>
                 <td className="px-4 py-3">
-                  <span className={u.is_active ? "text-[#25D366]" : "text-maroon-400"}>
+                  <span className={u.is_active ? "text-[#4B9E6B]" : "text-maroon-400"}>
                     {u.is_active ? "Active" : "Deactivated"}
                   </span>
                 </td>
