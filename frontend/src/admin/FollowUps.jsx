@@ -4,6 +4,7 @@ import { CheckCircleIcon, CircleIcon } from "@phosphor-icons/react";
 import { crm } from "../lib/api.js";
 import { AdminHead } from "./AdminLayout.jsx";
 import { formatDate } from "./constants.js";
+import { Skeleton } from "./Skeleton.jsx";
 
 // Local YYYY-MM-DD for "today", so comparisons match the date input's value.
 function todayISO() {
@@ -56,9 +57,14 @@ export default function FollowUps() {
 
   if (loading) {
     return (
-      <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50">
-        Loading…
-      </p>
+      <div>
+        <Skeleton className="h-8 w-48 mb-6" />
+        <div className="space-y-3 max-w-3xl">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-14 w-full" />
+          ))}
+        </div>
+      </div>
     );
   }
 

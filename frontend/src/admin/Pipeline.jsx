@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { crm } from "../lib/api.js";
 import { AdminHead } from "./AdminLayout.jsx";
 import { SOURCE_LABEL, STAGES, formatDate } from "./constants.js";
+import { BoardSkeleton } from "./Skeleton.jsx";
 
 /**
  * Kanban board over Lead.status.
@@ -55,9 +56,10 @@ export default function Pipeline() {
 
   if (loading) {
     return (
-      <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50">
-        Loading…
-      </p>
+      <div>
+        <h1 className="font-display text-3xl md:text-4xl mb-6">Pipeline</h1>
+        <BoardSkeleton columns={6} />
+      </div>
     );
   }
 

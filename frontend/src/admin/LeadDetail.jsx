@@ -11,10 +11,12 @@ import {
   EnvelopeSimpleIcon,
   XIcon,
 } from "@phosphor-icons/react";
+import { toast } from "sonner";
 import { crm } from "../lib/api.js";
 import { useAuth } from "./AuthContext.jsx";
 import { AdminHead } from "./AdminLayout.jsx";
 import { ACTIVITY_KINDS, SOURCE_LABEL, STAGES, formatDateTime, scoreColor } from "./constants.js";
+import { DetailSkeleton } from "./Skeleton.jsx";
 
 const ACTIVITY_TONE = {
   created: "text-bone-100/50",
@@ -77,7 +79,6 @@ export default function LeadDetail() {
   const [templates, setTemplates] = useState([]);
   const [emailOpen, setEmailOpen] = useState(false);
   const [emailDraft, setEmailDraft] = useState({ subject: "", body: "" });
-  const [emailSent, setEmailSent] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState(null);
   const [log, setLog] = useState({ kind: "note", body: "" });
@@ -112,12 +113,12 @@ export default function LeadDetail() {
     e.preventDefault();
     try {
       await crm.sendEmail(id, emailDraft.subject, emailDraft.body);
-      setEmailSent(true);
       setEmailOpen(false);
       setEmailDraft({ subject: "", body: "" });
       load();
+      toast.success("Email sent and logged to the timeline.");
     } catch (err) {
-      setError(err.data?.detail || "Could not send the email.");
+      toast.error(err.data?.detail || "Could not send the email.");
     }
   };
 
@@ -156,20 +157,27 @@ export default function LeadDetail() {
     }
   };
 
-  const patch = async (changes) => {
+  // Optimistic: apply `optimistic` to the lead immediately so the UI feels
+  // instant, then reconcile with the server. Roll back and toast on failure.
+  const patch = async (changes, optimistic) => {
+    const prev = lead;
+    if (optimistic) setLead((l) => ({ ...l, ...optimistic }));
     try {
       await crm.updateLead(id, changes);
       load();
       return true;
     } catch (err) {
-      setError(err.data?.owner?.[0] || err.data?.email?.[0] || "That change was rejected.");
+      if (optimistic) setLead(prev);
+      toast.error(
+        err.data?.owner?.[0] || err.data?.email?.[0] || "That change was rejected."
+      );
       return false;
     }
   };
 
   const saveValue = () => {
     const next = Math.max(0, Math.round(Number(valueDraft) || 0));
-    if (next !== Math.round(Number(lead.value) || 0)) patch({ value: next });
+    if (next !== Math.round(Number(lead.value) || 0)) patch({ value: next }, { value: next });
   };
 
   const startEdit = () => {
@@ -185,15 +193,33 @@ export default function LeadDetail() {
 
   const saveEdit = async (event) => {
     event.preventDefault();
-    if (await patch(editForm)) setEditing(false);
+    if (await patch(editForm, editForm)) {
+      setEditing(false);
+      toast.success("Lead updated.");
+    }
   };
 
   const submitLog = async (event) => {
     event.preventDefault();
-    if (!log.body.trim()) return;
-    await crm.logActivity(id, log.kind, log.body.trim());
+    const body = log.body.trim();
+    if (!body) return;
+    // Optimistically drop the note into the timeline, then reconcile.
+    const temp = {
+      id: `temp-${Date.now()}`,
+      kind: log.kind,
+      body,
+      actor: { name: user?.name },
+      created_at: new Date().toISOString(),
+    };
+    setLead((l) => ({ ...l, activities: [temp, ...l.activities] }));
     setLog({ kind: log.kind, body: "" });
-    load();
+    try {
+      await crm.logActivity(id, temp.kind, body);
+      load();
+    } catch {
+      setLead((l) => ({ ...l, activities: l.activities.filter((a) => a.id !== temp.id) }));
+      toast.error("Could not log that.");
+    }
   };
 
   const submitTask = async (event) => {
@@ -207,36 +233,50 @@ export default function LeadDetail() {
     });
     setTask({ title: "", due_date: "", assignee_id: "" });
     load();
+    toast.success("Follow-up added.");
   };
 
   const toggleTask = async (item) => {
-    await crm.updateTask(item.id, { is_done: !item.is_done });
-    load();
+    // Optimistic tick.
+    setLead((l) => ({
+      ...l,
+      tasks: l.tasks.map((t) => (t.id === item.id ? { ...t, is_done: !t.is_done } : t)),
+    }));
+    try {
+      await crm.updateTask(item.id, { is_done: !item.is_done });
+      load();
+    } catch {
+      setLead((l) => ({
+        ...l,
+        tasks: l.tasks.map((t) => (t.id === item.id ? { ...t, is_done: item.is_done } : t)),
+      }));
+      toast.error("Could not update the task.");
+    }
   };
 
   const deleteTask = async (item) => {
-    await crm.deleteTask(item.id);
-    load();
+    setLead((l) => ({ ...l, tasks: l.tasks.filter((t) => t.id !== item.id) }));
+    try {
+      await crm.deleteTask(item.id);
+    } catch {
+      toast.error("Could not delete the follow-up.");
+      load();
+    }
   };
 
   const deleteLead = async () => {
     if (!window.confirm(`Delete ${lead.name}? This cannot be undone.`)) return;
     try {
       await crm.deleteLead(id);
+      toast.success("Lead deleted.");
       navigate("/admin/leads");
     } catch {
-      setError("Only managers can delete leads.");
+      toast.error("Only managers can delete leads.");
     }
   };
 
   if (error && !lead) return <p className="text-maroon-400">{error}</p>;
-  if (!lead) {
-    return (
-      <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50">
-        Loading…
-      </p>
-    );
-  }
+  if (!lead) return <DetailSkeleton />;
 
   const whatsapp = lead.phone
     ? `https://wa.me/${lead.phone.replace(/[^0-9]/g, "")}`
@@ -279,7 +319,7 @@ export default function LeadDetail() {
             </a>
           )}
           {lead.email && (
-            <button data-testid="email-btn" onClick={() => { setEmailSent(false); setEmailOpen(true); }} className="btn btn-ghost">
+            <button data-testid="email-btn" onClick={() => setEmailOpen(true)} className="btn btn-ghost">
               <EnvelopeSimpleIcon size={14} /> Email
             </button>
           )}
@@ -303,10 +343,6 @@ export default function LeadDetail() {
           {error}
         </p>
       )}
-      {emailSent && (
-        <p className="mb-4 text-sm text-[#4B9E6B]">Email sent and logged to the timeline.</p>
-      )}
-
       {/* Email composer */}
       {emailOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-start justify-center pt-[10vh] px-4" onClick={() => setEmailOpen(false)}>
@@ -357,7 +393,7 @@ export default function LeadDetail() {
                 <select
                   data-testid="stage-select"
                   value={lead.status}
-                  onChange={(e) => patch({ status: e.target.value })}
+                  onChange={(e) => patch({ status: e.target.value }, { status: e.target.value })}
                   className="mt-2 w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm"
                 >
                   {STAGES.map((s) => (

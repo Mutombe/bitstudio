@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CaretDownIcon, CaretUpIcon, PlusIcon, UploadSimpleIcon, XIcon } from "@phosphor-icons/react";
+import { toast } from "sonner";
 import { crm } from "../lib/api.js";
 import { useAuth } from "./AuthContext.jsx";
 import { AdminHead } from "./AdminLayout.jsx";
 import { STAGES, STAGE_LABEL, formatDate, formatMoney, scoreColor } from "./constants.js";
+import { TableSkeleton } from "./Skeleton.jsx";
 
 const PAGE_SIZE = 50; // matches DRF's default page size
 
@@ -117,11 +119,12 @@ export default function LeadsList() {
     if (ids.length === 0) return;
     if (action === "delete" && !window.confirm(`Delete ${ids.length} lead(s)?`)) return;
     try {
-      await crm.bulk(ids, action, value);
+      const res = await crm.bulk(ids, action, value);
       setSelected(new Set());
       load();
+      toast.success(`${res.updated} lead${res.updated === 1 ? "" : "s"} updated.`);
     } catch (err) {
-      setError(err.data?.detail || "Bulk action failed.");
+      toast.error(err.data?.detail || "Bulk action failed.");
     }
   };
 
@@ -240,6 +243,9 @@ export default function LeadsList() {
 
       {error && <p className="text-maroon-400 mb-4">{error}</p>}
 
+      {!page ? (
+        <TableSkeleton rows={8} cols={6} />
+      ) : (
       <div className="border border-white/10 rounded-sm overflow-x-auto">
         <table className="w-full text-sm min-w-[820px]">
           <thead>
@@ -313,6 +319,7 @@ export default function LeadsList() {
           <p className="text-center text-bone-100/40 py-12 text-sm">No leads match those filters.</p>
         )}
       </div>
+      )}
 
       {page && page.count > PAGE_SIZE && (
         <div className="flex items-center justify-between mt-4 font-mono text-[10px] tracking-[0.18em] uppercase text-bone-100/50">
