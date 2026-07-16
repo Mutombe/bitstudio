@@ -21,10 +21,10 @@ function bucketOf(task, today) {
 }
 
 const GROUPS = [
-  { id: "overdue", label: "Overdue", accent: "#B54656" },
-  { id: "today", label: "Today", accent: "#D4FF3A" },
-  { id: "upcoming", label: "Upcoming", accent: "#22D3EE" },
-  { id: "someday", label: "No date", accent: "#9DA6B0" },
+  { id: "overdue", label: "Overdue", accent: "#C46A6A" },
+  { id: "today", label: "Today", accent: "#C9A24B" },
+  { id: "upcoming", label: "Upcoming", accent: "#5B82F0" },
+  { id: "someday", label: "No date", accent: "#6B7280" },
 ];
 
 export default function FollowUps() {

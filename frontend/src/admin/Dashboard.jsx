@@ -7,7 +7,7 @@ import { STAGES, formatMoney } from "./constants.js";
 
 const OFFER_NAME = Object.fromEntries(OFFERS.map((o) => [o.slug, o.name]));
 
-function Stat({ label, value, hint, accent = "#D4FF3A", testId }) {
+function Stat({ label, value, hint, accent = "#E6E8EC", testId }) {
   return (
     <div
       data-testid={testId}
@@ -74,21 +74,21 @@ export default function Dashboard() {
         <Stat
           label="Won"
           value={formatMoney(stats.won_value)}
-          accent="#25D366"
+          accent="#4B9E6B"
           hint="Closed revenue"
         />
-        <Stat label="Win rate" value={winRate} accent="#22D3EE" hint="Won of decided" />
+        <Stat label="Win rate" value={winRate} hint="Won of decided" />
         <Stat
           label="Unassigned"
           value={stats.unassigned}
-          accent={stats.unassigned > 0 ? "#B54656" : "#D4FF3A"}
+          accent={stats.unassigned > 0 ? "#C46A6A" : "#E6E8EC"}
           hint={stats.unassigned > 0 ? "Nobody is chasing these." : "All claimed."}
         />
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
         <Stat label="Total leads" value={stats.total} testId="stat-total" />
-        <Stat label="New this week" value={stats.new_this_week} accent="#9F6BFF" />
+        <Stat label="New this week" value={stats.new_this_week} />
         <Stat label="Assigned to me" value={stats.mine} />
         <Stat label="Open follow-ups" value={stats.open_tasks} />
       </div>
@@ -125,7 +125,7 @@ export default function Dashboard() {
                   <td className="px-4 py-3 text-bone-100/70 tabular-nums">
                     {formatMoney(row.pipeline_value)}
                   </td>
-                  <td className="px-4 py-3 tabular-nums" style={{ color: "#25D366" }}>
+                  <td className="px-4 py-3 tabular-nums" style={{ color: "#4B9E6B" }}>
                     {formatMoney(row.won_value)}
                   </td>
                 </tr>

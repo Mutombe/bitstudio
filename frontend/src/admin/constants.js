@@ -1,13 +1,14 @@
 // Mirrors leads.models.Lead.Status on the backend. Order is the pipeline,
 // left to right. Keep in sync — the board renders one column per entry.
 
+// Neutral, professional stage colours — muted, not the marketing palette.
 export const STAGES = [
-  { id: "new", label: "New", accent: "#D4FF3A" },
-  { id: "contacted", label: "Contacted", accent: "#A8C72E" },
-  { id: "qualified", label: "Qualified", accent: "#22D3EE" },
-  { id: "proposal", label: "Proposal sent", accent: "#9F6BFF" },
-  { id: "won", label: "Won", accent: "#25D366" },
-  { id: "lost", label: "Lost", accent: "#B54656" },
+  { id: "new", label: "New", accent: "#8A93A3" },
+  { id: "contacted", label: "Contacted", accent: "#7C93C9" },
+  { id: "qualified", label: "Qualified", accent: "#5B82F0" },
+  { id: "proposal", label: "Proposal sent", accent: "#C9A24B" },
+  { id: "won", label: "Won", accent: "#4B9E6B" },
+  { id: "lost", label: "Lost", accent: "#C46A6A" },
 ];
 
 export const STAGE_LABEL = Object.fromEntries(
@@ -44,12 +45,12 @@ export const ROLE_LABEL = {
   sales: "Sales",
 };
 
-// Lead score → colour. Warm high, cool low.
+// Lead score → colour. Muted green high, neutral grey low.
 export function scoreColor(score) {
-  if (score >= 70) return "#25D366";
-  if (score >= 40) return "#D4FF3A";
-  if (score >= 20) return "#F5C518";
-  return "#9DA6B0";
+  if (score >= 70) return "#4B9E6B";
+  if (score >= 40) return "#C9A24B";
+  if (score >= 20) return "#8A93A3";
+  return "#6B7280";
 }
 
 // Whole-dollar USD. Deal values are round numbers, so cents are noise.

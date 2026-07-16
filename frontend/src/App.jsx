@@ -95,21 +95,25 @@ export default function App() {
   // The CRM gets none of the marketing chrome: no nav, no footer, no
   // command palette, no ambient audio, no custom cursor. It is a tool.
   if (isAdmin) {
+    // `crm-theme` scopes the neutral internal-tool palette (see index.css),
+    // keeping the marketing maroon/chartreuse off the CRM.
     return (
       <HelmetProvider>
-        <ErrorBoundary>
-          <Suspense
-            fallback={
-              <div className="min-h-screen bg-[color:var(--color-ink)] flex items-center justify-center">
-                <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50">
-                  Loading…
-                </p>
-              </div>
-            }
-          >
-            <AdminRoutes />
-          </Suspense>
-        </ErrorBoundary>
+        <div className="crm-theme">
+          <ErrorBoundary>
+            <Suspense
+              fallback={
+                <div className="min-h-screen bg-[color:var(--color-ink)] flex items-center justify-center">
+                  <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50">
+                    Loading…
+                  </p>
+                </div>
+              }
+            >
+              <AdminRoutes />
+            </Suspense>
+          </ErrorBoundary>
+        </div>
       </HelmetProvider>
     );
   }

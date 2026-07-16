@@ -122,7 +122,7 @@ function WebToLead() {
           <li key={k.id} className="border border-white/10 rounded-sm p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-bone-100">{k.name}</span>
-              <button onClick={() => toggle(k)} className={`font-mono text-[10px] tracking-[0.15em] uppercase ${k.is_active ? "text-[#25D366]" : "text-maroon-400"}`}>
+              <button onClick={() => toggle(k)} className={`font-mono text-[10px] tracking-[0.15em] uppercase ${k.is_active ? "text-[#4B9E6B]" : "text-maroon-400"}`}>
                 {k.is_active ? "Active" : "Disabled"}
               </button>
             </div>
