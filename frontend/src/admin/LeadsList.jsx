@@ -1,12 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CaretDownIcon, CaretUpIcon, PlusIcon, UploadSimpleIcon, XIcon } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { crm } from "../lib/api.js";
+import { prefetchLead } from "../lib/prefetch.js";
 import { useAuth } from "./AuthContext.jsx";
 import { AdminHead } from "./AdminLayout.jsx";
 import { STAGES, STAGE_LABEL, formatDate, formatMoney, scoreColor } from "./constants.js";
 import { TableSkeleton } from "./Skeleton.jsx";
+import Modal from "./Modal.jsx";
+import LeadForm from "./LeadForm.jsx";
+import ImportLeads from "./ImportLeads.jsx";
+import PrefetchLink from "./PrefetchLink.jsx";
 
 const PAGE_SIZE = 50; // matches DRF's default page size
 
@@ -34,8 +39,11 @@ function TagChip({ tag }) {
 
 export default function LeadsList() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const canManage = user?.can_assign_leads;
 
+  const [newOpen, setNewOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [page, setPage] = useState(null);
   const [tags, setTags] = useState([]);
   const [filters, setFilters] = useState({ q: "", status: "", owner: "", tag: "" });
@@ -140,15 +148,15 @@ export default function LeadsList() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Link to="/admin/leads/import" className="btn btn-ghost">
+          <button data-testid="import-btn" onClick={() => setImportOpen(true)} className="btn btn-ghost">
             <UploadSimpleIcon size={14} /> Import
-          </Link>
+          </button>
           <a href={crm.exportUrl({ ...filters, ...sort })} className="btn btn-ghost">
             Export CSV
           </a>
-          <Link to="/admin/leads/new" data-testid="new-lead-btn" className="btn btn-primary">
+          <button onClick={() => setNewOpen(true)} data-testid="new-lead-btn" className="btn btn-primary">
             <PlusIcon size={14} weight="bold" /> New lead
-          </Link>
+          </button>
         </div>
       </div>
 
@@ -276,9 +284,13 @@ export default function LeadsList() {
                   <input type="checkbox" checked={selected.has(lead.id)} onChange={() => toggleRow(lead.id)} aria-label={`Select ${lead.name}`} />
                 </td>
                 <td className="px-4 py-3">
-                  <Link to={`/admin/leads/${lead.id}`} className="text-bone-100 hover:text-signal">
+                  <PrefetchLink
+                    to={`/admin/leads/${lead.id}`}
+                    prefetch={() => prefetchLead(lead.id)}
+                    className="text-bone-100 hover:text-signal text-left"
+                  >
                     {lead.name}
-                  </Link>
+                  </PrefetchLink>
                   <p className="text-xs text-bone-100/40">{lead.company || lead.email}</p>
                   {lead.tags?.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-1.5">
@@ -334,6 +346,17 @@ export default function LeadsList() {
           </div>
         </div>
       )}
+
+      <Modal open={newOpen} onClose={() => setNewOpen(false)} title="New lead" description="A phone call, a walk-in, a referral." size="2xl">
+        <LeadForm
+          onSaved={(lead) => { setNewOpen(false); navigate(`/admin/leads/${lead.id}`); }}
+          onCancel={() => setNewOpen(false)}
+        />
+      </Modal>
+
+      <Modal open={importOpen} onClose={() => setImportOpen(false)} title="Import leads" size="xl">
+        <ImportLeads onDone={() => { setImportOpen(false); load(); }} />
+      </Modal>
     </div>
   );
 }

@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { PlusIcon } from "@phosphor-icons/react";
+import { toast } from "sonner";
 import { crm } from "../lib/api.js";
+import { prefetchCompany } from "../lib/prefetch.js";
 import { AdminHead } from "./AdminLayout.jsx";
+import Modal from "./Modal.jsx";
+import PrefetchLink from "./PrefetchLink.jsx";
 
 const inputCls =
   "mt-2 w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm";
@@ -33,6 +36,7 @@ export default function Companies() {
       setForm({ name: "", website: "", industry: "", phone: "" });
       setShowForm(false);
       load();
+      toast.success("Company created.");
     } catch (err) {
       setError(err.data?.name?.[0] || "Could not create the company.");
     }
@@ -46,36 +50,37 @@ export default function Companies() {
           <h1 className="font-display text-3xl md:text-4xl mb-1">Companies</h1>
           <p className="text-sm text-bone-100/55">{companies.length} accounts</p>
         </div>
-        <button data-testid="new-company-btn" onClick={() => setShowForm((s) => !s)} className="btn btn-primary">
+        <button data-testid="new-company-btn" onClick={() => setShowForm(true)} className="btn btn-primary">
           <PlusIcon size={14} weight="bold" /> New company
         </button>
       </div>
 
       {error && <p className="text-maroon-400 mb-4">{error}</p>}
 
-      {showForm && (
-        <form onSubmit={create} className="border border-signal/40 rounded-sm p-5 bg-maroon-950/20 mb-6 grid sm:grid-cols-2 gap-4">
+      <Modal open={showForm} onClose={() => setShowForm(false)} title="New company" size="2xl">
+        <form onSubmit={create} className="grid sm:grid-cols-2 gap-4">
           <label className="block">
-            <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Name *</span>
+            <span className="font-medium text-[11px] uppercase tracking-wide text-bone-100/45">Name *</span>
             <input data-testid="company-name" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} className={inputCls} required />
           </label>
           <label className="block">
-            <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Industry</span>
+            <span className="font-medium text-[11px] uppercase tracking-wide text-bone-100/45">Industry</span>
             <input value={form.industry} onChange={(e) => setForm((f) => ({ ...f, industry: e.target.value }))} className={inputCls} />
           </label>
           <label className="block">
-            <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Website</span>
+            <span className="font-medium text-[11px] uppercase tracking-wide text-bone-100/45">Website</span>
             <input value={form.website} onChange={(e) => setForm((f) => ({ ...f, website: e.target.value }))} className={inputCls} />
           </label>
           <label className="block">
-            <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Phone</span>
+            <span className="font-medium text-[11px] uppercase tracking-wide text-bone-100/45">Phone</span>
             <input value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} className={inputCls} />
           </label>
-          <div className="sm:col-span-2">
-            <button type="submit" data-testid="create-company" className="btn btn-primary">Create</button>
+          <div className="sm:col-span-2 flex items-center gap-3">
+            <button type="submit" data-testid="create-company" className="btn btn-primary">Create company</button>
+            <button type="button" onClick={() => setShowForm(false)} className="btn btn-ghost">Cancel</button>
           </div>
         </form>
-      )}
+      </Modal>
 
       <input
         value={q}
@@ -97,7 +102,9 @@ export default function Companies() {
             {companies.map((c) => (
               <tr key={c.id} className="border-b border-white/5 hover:bg-white/[0.02]">
                 <td className="px-4 py-3">
-                  <Link to={`/admin/companies/${c.id}`} className="text-bone-100 hover:text-signal">{c.name}</Link>
+                  <PrefetchLink to={`/admin/companies/${c.id}`} prefetch={() => prefetchCompany(c.id)} className="text-bone-100 hover:text-signal text-left">
+                    {c.name}
+                  </PrefetchLink>
                   {c.website && <p className="text-xs text-bone-100/40">{c.website}</p>}
                 </td>
                 <td className="px-4 py-3 text-bone-100/70 text-xs">{c.industry || "—"}</td>

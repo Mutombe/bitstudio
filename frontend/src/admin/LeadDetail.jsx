@@ -13,10 +13,14 @@ import {
 } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { crm } from "../lib/api.js";
+import { getLeadCached, invalidateLead, prefetchCompany } from "../lib/prefetch.js";
 import { useAuth } from "./AuthContext.jsx";
 import { AdminHead } from "./AdminLayout.jsx";
 import { ACTIVITY_KINDS, SOURCE_LABEL, STAGES, formatDateTime, scoreColor } from "./constants.js";
 import { DetailSkeleton } from "./Skeleton.jsx";
+import Modal from "./Modal.jsx";
+import LeadForm from "./LeadForm.jsx";
+import PrefetchLink from "./PrefetchLink.jsx";
 
 const ACTIVITY_TONE = {
   created: "text-bone-100/50",
@@ -63,9 +67,6 @@ function Attribution({ lead }) {
   );
 }
 
-const inputCls =
-  "mt-2 w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm";
-
 export default function LeadDetail() {
   const { id } = useParams();
   const { user } = useAuth();
@@ -80,23 +81,27 @@ export default function LeadDetail() {
   const [emailOpen, setEmailOpen] = useState(false);
   const [emailDraft, setEmailDraft] = useState({ subject: "", body: "" });
   const [editing, setEditing] = useState(false);
-  const [editForm, setEditForm] = useState(null);
   const [log, setLog] = useState({ kind: "note", body: "" });
   const [task, setTask] = useState({ title: "", due_date: "", assignee_id: "" });
   const [valueDraft, setValueDraft] = useState("");
   const [error, setError] = useState("");
 
-  const load = useCallback(() => {
-    crm
-      .getLead(id)
-      .then((data) => {
-        setLead(data);
-        setValueDraft(String(Math.round(Number(data.value) || 0)));
-      })
-      .catch(() => setError("Could not load this lead."));
-  }, [id]);
+  const apply = useCallback((data) => {
+    setLead(data);
+    setValueDraft(String(Math.round(Number(data.value) || 0)));
+  }, []);
 
-  useEffect(load, [load]);
+  // Reloads after a mutation must fetch fresh — never the prefetch cache,
+  // which would re-show the pre-edit copy.
+  const load = useCallback(() => {
+    invalidateLead(id); // this record just changed; drop any stale prefetch
+    crm.getLead(id).then(apply).catch(() => setError("Could not load this lead."));
+  }, [id, apply]);
+
+  // Initial open prefers a hover-prefetched copy so the page appears instantly.
+  useEffect(() => {
+    getLeadCached(id).then(apply).catch(() => setError("Could not load this lead."));
+  }, [id, apply]);
 
   useEffect(() => {
     if (user?.can_assign_leads) crm.team().then(setTeam).catch(() => setTeam([]));
@@ -178,25 +183,6 @@ export default function LeadDetail() {
   const saveValue = () => {
     const next = Math.max(0, Math.round(Number(valueDraft) || 0));
     if (next !== Math.round(Number(lead.value) || 0)) patch({ value: next }, { value: next });
-  };
-
-  const startEdit = () => {
-    setEditForm({
-      name: lead.name,
-      email: lead.email,
-      phone: lead.phone,
-      company: lead.company,
-      message: lead.message,
-    });
-    setEditing(true);
-  };
-
-  const saveEdit = async (event) => {
-    event.preventDefault();
-    if (await patch(editForm, editForm)) {
-      setEditing(false);
-      toast.success("Lead updated.");
-    }
   };
 
   const submitLog = async (event) => {
@@ -281,7 +267,6 @@ export default function LeadDetail() {
   const whatsapp = lead.phone
     ? `https://wa.me/${lead.phone.replace(/[^0-9]/g, "")}`
     : null;
-  const setEdit = (k) => (e) => setEditForm((f) => ({ ...f, [k]: e.target.value }));
 
   return (
     <div>
@@ -323,7 +308,7 @@ export default function LeadDetail() {
               <EnvelopeSimpleIcon size={14} /> Email
             </button>
           )}
-          <button data-testid="edit-lead-btn" onClick={startEdit} className="btn btn-ghost">
+          <button data-testid="edit-lead-btn" onClick={() => setEditing(true)} className="btn btn-ghost">
             <PencilSimpleIcon size={14} /> Edit
           </button>
           {user?.can_see_all_leads && (
@@ -505,7 +490,18 @@ export default function LeadDetail() {
             {/* Company link */}
             <div className="mt-4 grid sm:grid-cols-2 gap-4">
               <label className="block">
-                <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Company (account)</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45 flex items-center gap-2">
+                  Company (account)
+                  {lead.company_ref && (
+                    <PrefetchLink
+                      to={`/admin/companies/${lead.company_ref.id}`}
+                      prefetch={() => prefetchCompany(lead.company_ref.id)}
+                      className="text-signal hover:underline normal-case tracking-normal font-sans text-[10px]"
+                    >
+                      view →
+                    </PrefetchLink>
+                  )}
+                </span>
                 <select
                   data-testid="company-select"
                   value={lead.company_ref?.id || ""}
@@ -547,61 +543,42 @@ export default function LeadDetail() {
             )}
           </section>
 
-          {/* Contact + message: read-only, or an edit form */}
-          {editing ? (
-            <form onSubmit={saveEdit} className="border border-signal/40 rounded-sm p-5 bg-maroon-950/20">
-              <h2 className="font-mono text-[9px] tracking-[0.22em] uppercase text-signal mb-4">Edit details</h2>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <label className="block">
-                  <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Name</span>
-                  <input data-testid="edit-name" value={editForm.name} onChange={setEdit("name")} className={inputCls} required />
-                </label>
-                <label className="block">
-                  <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Company</span>
-                  <input data-testid="edit-company" value={editForm.company} onChange={setEdit("company")} className={inputCls} />
-                </label>
-                <label className="block">
-                  <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Email</span>
-                  <input type="email" value={editForm.email} onChange={setEdit("email")} className={inputCls} />
-                </label>
-                <label className="block">
-                  <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Phone</span>
-                  <input value={editForm.phone} onChange={setEdit("phone")} className={inputCls} />
-                </label>
-              </div>
-              <label className="block mt-4">
-                <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">What they need</span>
-                <textarea value={editForm.message} onChange={setEdit("message")} rows={3} className={`${inputCls} resize-y`} />
-              </label>
-              <div className="flex items-center gap-3 mt-4">
-                <button type="submit" data-testid="save-edit" className="btn btn-primary">Save</button>
-                <button type="button" onClick={() => setEditing(false)} className="btn btn-ghost">Cancel</button>
-              </div>
-            </form>
-          ) : (
-            <section className="border border-white/10 rounded-sm p-5 bg-maroon-950/20">
-              <h2 className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/45 mb-4">Contact</h2>
-              <dl className="space-y-2.5 mb-4">
-                {[
-                  ["Email", lead.email],
-                  ["Phone", lead.phone],
-                  ["Company", lead.company],
-                  ["Prefers", lead.channel],
-                ].filter(([, v]) => v).map(([label, value]) => (
-                  <div key={label} className="flex gap-3 text-sm">
-                    <dt className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/40 w-24 shrink-0 pt-1">{label}</dt>
-                    <dd className="text-bone-100/85 break-all">{value}</dd>
-                  </div>
-                ))}
-              </dl>
-              {lead.message && (
-                <>
-                  <p className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/40 mb-2">What they need</p>
-                  <p className="text-bone-100/90 whitespace-pre-wrap leading-relaxed text-sm">{lead.message}</p>
-                </>
-              )}
-            </section>
-          )}
+          {/* Contact + message (edited via the modal). */}
+          <section className="border border-white/10 rounded-sm p-5 bg-maroon-950/20">
+            <h2 className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/45 mb-4">Contact</h2>
+            <dl className="space-y-2.5 mb-4">
+              {[
+                ["Email", lead.email],
+                ["Phone", lead.phone],
+                ["Company", lead.company],
+                ["Prefers", lead.channel],
+              ].filter(([, v]) => v).map(([label, value]) => (
+                <div key={label} className="flex gap-3 text-sm">
+                  <dt className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/40 w-24 shrink-0 pt-1">{label}</dt>
+                  <dd className="text-bone-100/85 break-all">{value}</dd>
+                </div>
+              ))}
+            </dl>
+            {lead.message && (
+              <>
+                <p className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/40 mb-2">What they need</p>
+                <p className="text-bone-100/90 whitespace-pre-wrap leading-relaxed text-sm">{lead.message}</p>
+              </>
+            )}
+          </section>
+
+          <Modal open={editing} onClose={() => setEditing(false)} title="Edit lead" size="2xl">
+            <LeadForm
+              lead={lead}
+              // Reload the full record — the write response is a thin shape
+              // (no activities/tasks/nested owner), so don't set it directly.
+              onSaved={() => {
+                setEditing(false);
+                load();
+              }}
+              onCancel={() => setEditing(false)}
+            />
+          </Modal>
 
           <Attribution lead={lead} />
 

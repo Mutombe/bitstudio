@@ -2,9 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeftIcon, PlusIcon } from "@phosphor-icons/react";
 import { crm } from "../lib/api.js";
+import { getCompanyCached, invalidateCompany, prefetchLead } from "../lib/prefetch.js";
 import { AdminHead } from "./AdminLayout.jsx";
 import { STAGE_LABEL, formatMoney } from "./constants.js";
 import { DetailSkeleton } from "./Skeleton.jsx";
+import PrefetchLink from "./PrefetchLink.jsx";
 
 const inputCls =
   "w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm";
@@ -17,15 +19,25 @@ export default function CompanyDetail() {
   const [contact, setContact] = useState({ name: "", email: "", title: "" });
   const [error, setError] = useState("");
 
-  const load = useCallback(() => {
-    crm.getCompany(id).then(setCompany).catch(() => setError("Could not load this company."));
+  const loadRelated = useCallback(() => {
     crm.listContacts({ company: id }).then((p) => setContacts(p.results || p)).catch(() => {});
     crm.listLeads({ q: "" }).then((p) =>
       setLeads((p.results || []).filter((l) => l.company_ref === Number(id) || l.company_ref?.id === Number(id)))
     ).catch(() => {});
   }, [id]);
 
-  useEffect(load, [load]);
+  // After a change, refetch the company fresh (not the prefetch cache).
+  const load = useCallback(() => {
+    invalidateCompany(id);
+    crm.getCompany(id).then(setCompany).catch(() => setError("Could not load this company."));
+    loadRelated();
+  }, [id, loadRelated]);
+
+  // Initial open uses a hover-prefetched copy for an instant render.
+  useEffect(() => {
+    getCompanyCached(id).then(setCompany).catch(() => setError("Could not load this company."));
+    loadRelated();
+  }, [id, loadRelated]);
 
   const addContact = async (e) => {
     e.preventDefault();
@@ -80,7 +92,7 @@ export default function CompanyDetail() {
           <ul className="space-y-2">
             {leads.map((l) => (
               <li key={l.id} className="flex items-center justify-between text-sm border-b border-white/5 pb-2">
-                <Link to={`/admin/leads/${l.id}`} className="text-bone-100 hover:text-signal">{l.name}</Link>
+                <PrefetchLink to={`/admin/leads/${l.id}`} prefetch={() => prefetchLead(l.id)} className="text-bone-100 hover:text-signal text-left">{l.name}</PrefetchLink>
                 <span className="flex items-center gap-3">
                   <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-bone-100/50">{STAGE_LABEL[l.status]}</span>
                   <span className="tabular-nums text-bone-100/70">{Number(l.value) > 0 ? formatMoney(l.value) : "—"}</span>

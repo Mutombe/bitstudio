@@ -184,6 +184,14 @@ const textOf = (page, selector) =>
 
 const countOf = (page, selector) => page.$$eval(selector, (els) => els.length);
 
+// Focus a field by clicking it, then type — robust against a field that's
+// still settling inside a freshly-opened modal.
+async function typeInto(page, selector, text) {
+  const el = await page.waitForSelector(selector, { visible: true, timeout: 10_000 });
+  await el.click();
+  await el.type(text);
+}
+
 async function run(page) {
   // ─── 1. The admin is never indexable ──────────────────────────────
   await page.goto(`${WEB}/admin/login`, { waitUntil: "networkidle0" });
@@ -356,27 +364,35 @@ async function run(page) {
   await page.screenshot({ path: path.join(SHOTS, "06-follow-ups.png") });
 
   // ─── 7b. Manual lead CRUD ─────────────────────────────────────────
-  await page.goto(`${WEB}/admin/leads/new`, { waitUntil: "networkidle0" });
-  await page.waitForSelector('[data-testid="new-name"]', { timeout: 15_000 });
-  await page.type('[data-testid="new-name"]', "Walk-in Winston");
-  await page.type('input[type="email"]', "winston@example.co.zw");
-  await page.click('[data-testid="create-lead"]');
+  await page.goto(`${WEB}/admin/leads`, { waitUntil: "networkidle0" });
+  await page.waitForSelector('[data-testid="new-lead-btn"]', { timeout: 15_000 });
+  await page.click('[data-testid="new-lead-btn"]');
+  await page.waitForSelector('[data-testid="lf-name"]', { visible: true, timeout: 15_000 });
+  await sleep(400); // let the modal settle + its chunk finish compiling on a cold start
+  await typeInto(page, '[data-testid="lf-name"]', "Walk-in Winston");
+  await typeInto(page, 'input[type="email"]', "winston@example.co.zw");
+  await page.click('[data-testid="lf-submit"]');
+  await page.waitForFunction(
+    () => /\/admin\/leads\/[0-9a-f-]{36}$/.test(location.pathname),
+    { timeout: 20_000 }
+  );
   await page.waitForSelector('[data-testid="edit-lead-btn"]', { timeout: 15_000 });
   check(
-    "created a lead by hand and landed on its detail",
+    "created a lead in a modal and landed on its detail",
     (await page.evaluate(() => document.querySelector("h1")?.textContent)) === "Walk-in Winston"
   );
 
-  // Edit: fill in the (empty) company field — unambiguous, no select-all.
+  // Edit via the modal — fill the (empty) company field.
   await page.click('[data-testid="edit-lead-btn"]');
-  await page.waitForSelector('[data-testid="edit-company"]', { timeout: 10_000 });
-  await page.type('[data-testid="edit-company"]', "Winston Holdings");
-  await page.click('[data-testid="save-edit"]');
+  await page.waitForSelector('[data-testid="lf-company"]', { visible: true, timeout: 10_000 });
+  await sleep(300);
+  await typeInto(page, '[data-testid="lf-company"]', "Winston Holdings");
+  await page.click('[data-testid="lf-submit"]');
   await page.waitForFunction(
     () => document.body.innerText.includes("Winston Holdings"),
     { timeout: 10_000 }
   );
-  check("edited the lead's contact details", true);
+  check("edited the lead in a modal", true);
 
   // Log a call.
   await page.click('[data-testid="log-kind-call"]');
@@ -435,9 +451,12 @@ async function run(page) {
   check("bulk stage change updated the rows", true);
   await page.screenshot({ path: path.join(SHOTS, "09-leads-bulk.png") });
 
-  // ─── 7d. CSV import ───────────────────────────────────────────────
-  await page.goto(`${WEB}/admin/leads/import`, { waitUntil: "networkidle0" });
-  const fileInput = await page.waitForSelector('[data-testid="import-file"]', { timeout: 15_000 });
+  // ─── 7d. CSV import (modal) ───────────────────────────────────────
+  await page.goto(`${WEB}/admin/leads`, { waitUntil: "networkidle0" });
+  await page.waitForSelector('[data-testid="import-btn"]', { timeout: 15_000 });
+  await page.click('[data-testid="import-btn"]');
+  const fileInput = await page.waitForSelector('[data-testid="import-file"]', { visible: true, timeout: 15_000 });
+  await sleep(350);
   const csvPath = path.join(SHOTS, "_import.csv");
   const { writeFileSync } = await import("node:fs");
   writeFileSync(csvPath, "name,email,company,value\nImported Ada,ada@import.co.zw,Ada Co,7000\nImported Ben,ben@import.co.zw,,\n");
@@ -445,17 +464,23 @@ async function run(page) {
   await page.click('[data-testid="import-submit"]');
   await page.waitForSelector('[data-testid="import-result"]', { timeout: 15_000 });
   check(
-    "CSV import reports leads created",
+    "CSV import (modal) reports leads created",
     (await textOf(page, '[data-testid="import-result"]'))?.includes("created")
   );
   await page.screenshot({ path: path.join(SHOTS, "10-import.png") });
 
-  // ─── 7e. Duplicate warning on the New Lead form ───────────────────
-  await page.goto(`${WEB}/admin/leads/new`, { waitUntil: "networkidle0" });
-  await page.waitForSelector('input[type="email"]', { timeout: 15_000 });
-  await page.type('input[type="email"]', "ada@import.co.zw"); // just imported
+  // ─── 7e. Duplicate warning in the New Lead modal ──────────────────
+  await page.goto(`${WEB}/admin/leads`, { waitUntil: "networkidle0" });
+  await page.waitForSelector('[data-testid="new-lead-btn"]', { timeout: 15_000 });
+  await page.click('[data-testid="new-lead-btn"]');
+  await page.waitForSelector('[data-testid="lf-name"]', { visible: true, timeout: 10_000 });
+  await sleep(400);
+  await typeInto(page, 'input[type="email"]', "ada@import.co.zw"); // just imported
   await page.waitForSelector('[data-testid="dup-warning"]', { timeout: 10_000 });
-  check("New Lead form warns on a duplicate email", true);
+  check("New Lead modal warns on a duplicate email", true);
+  // Close the modal so it doesn't overlay later steps.
+  await page.keyboard.press("Escape");
+  await sleep(300);
 
   // ─── 7f. Lead score + email + calendar on a lead ──────────────────
   await page.goto(`${WEB}/admin/leads`, { waitUntil: "networkidle0" });
@@ -466,9 +491,9 @@ async function run(page) {
   );
   check("leads list shows a numeric score column", scoreCells.some((s) => /^\d+$/.test(s)));
 
-  // Open a lead with an email (Tendai), send a templated email.
+  // Open a lead with an email (Tendai). The name is a prefetch link (button).
   await page.evaluate(() => {
-    const link = [...document.querySelectorAll("tbody tr a")].find((a) => a.textContent.includes("Tendai"));
+    const link = [...document.querySelectorAll("tbody tr button")].find((b) => b.textContent.includes("Tendai"));
     link?.click();
   });
   await page.waitForSelector('[data-testid="lead-score"]', { timeout: 15_000 });
@@ -498,8 +523,9 @@ async function run(page) {
   await page.goto(`${WEB}/admin/companies`, { waitUntil: "networkidle0" });
   await page.waitForSelector('[data-testid="new-company-btn"]', { timeout: 15_000 });
   await page.click('[data-testid="new-company-btn"]');
-  await page.waitForSelector('[data-testid="company-name"]', { timeout: 10_000 });
-  await page.type('[data-testid="company-name"]', "Acme Holdings");
+  await page.waitForSelector('[data-testid="company-name"]', { visible: true, timeout: 10_000 });
+  await sleep(350);
+  await typeInto(page, '[data-testid="company-name"]', "Acme Holdings");
   await page.click('[data-testid="create-company"]');
   await page.waitForFunction(
     () => document.querySelector('[data-testid="companies-table"]')?.textContent.includes("Acme Holdings"),
@@ -508,6 +534,7 @@ async function run(page) {
   check("created a company account", true);
 
   // ─── 7i. Notification bell ────────────────────────────────────────
+  await sleep(500); // let the company modal's backdrop finish animating out
   await page.click('[data-testid="notif-bell"]');
   await page.waitForSelector('[data-testid="notif-panel"]', { timeout: 10_000 });
   check("notification bell opens a panel", true);
@@ -599,17 +626,19 @@ async function run(page) {
   await logout(page);
   await login(page, "owner", "devpassword");
   await page.goto(`${WEB}/admin/users`, { waitUntil: "networkidle0" });
-  await page.waitForSelector('[data-testid="users-table"]', { timeout: 15_000 });
-
-  await page.type('[data-testid="new-username"]', "e2e_rep");
-  await page.type('[data-testid="new-password"]', "e2e-str0ng-pass!");
+  await page.waitForSelector('[data-testid="add-user-btn"]', { timeout: 15_000 });
+  await page.click('[data-testid="add-user-btn"]');
+  await page.waitForSelector('[data-testid="new-username"]', { visible: true, timeout: 10_000 });
+  await sleep(350);
+  await typeInto(page, '[data-testid="new-username"]', "e2e_rep");
+  await typeInto(page, '[data-testid="new-password"]', "e2e-str0ng-pass!");
   await page.click('[data-testid="create-user"]');
   await page.waitForFunction(
     () =>
       document.querySelector('[data-testid="users-table"]')?.textContent.includes("e2e_rep"),
     { timeout: 10_000 }
   );
-  check("admin created a new user", true);
+  check("admin created a new user (modal)", true);
   await page.screenshot({ path: path.join(SHOTS, "08-users.png") });
 
   // ─── 12. Settings (admin): custom field, web-to-lead key, audit ───
