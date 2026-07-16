@@ -4,6 +4,7 @@ import { ArrowLeftIcon, PlusIcon } from "@phosphor-icons/react";
 import { crm } from "../lib/api.js";
 import { AdminHead } from "./AdminLayout.jsx";
 import { STAGE_LABEL, formatMoney } from "./constants.js";
+import { DetailSkeleton } from "./Skeleton.jsx";
 
 const inputCls =
   "w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm";
@@ -35,7 +36,7 @@ export default function CompanyDetail() {
   };
 
   if (error && !company) return <p className="text-maroon-400">{error}</p>;
-  if (!company) return <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50">Loading…</p>;
+  if (!company) return <DetailSkeleton />;
 
   return (
     <div>

@@ -11,6 +11,7 @@ import {
   UsersThreeIcon,
   SignOutIcon,
 } from "@phosphor-icons/react";
+import { Toaster } from "sonner";
 import { useAuth } from "./AuthContext.jsx";
 import NotificationBell from "./NotificationBell.jsx";
 
@@ -120,6 +121,19 @@ export default function AdminLayout() {
       <main className="max-w-[1600px] mx-auto px-5 md:px-8 py-8">
         <Outlet />
       </main>
+
+      {/* Toasts confirm work landed (or didn't) without a full reload. */}
+      <Toaster
+        position="bottom-right"
+        theme="dark"
+        toastOptions={{
+          style: {
+            background: "#1C1F26",
+            border: "1px solid rgba(255,255,255,0.12)",
+            color: "#E6E8EC",
+          },
+        }}
+      />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { crm } from "../lib/api.js";
 import { OFFERS } from "../data/offers.js";
 import { AdminHead } from "./AdminLayout.jsx";
 import { STAGES, formatMoney } from "./constants.js";
+import { StatGridSkeleton, Skeleton } from "./Skeleton.jsx";
 
 const OFFER_NAME = Object.fromEntries(OFFERS.map((o) => [o.slug, o.name]));
 
@@ -38,9 +39,14 @@ export default function Dashboard() {
   if (error) return <p className="text-maroon-400">{error}</p>;
   if (!stats) {
     return (
-      <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50">
-        Loading…
-      </p>
+      <div>
+        <AdminHead title="Dashboard" />
+        <Skeleton className="h-8 w-48 mb-8" />
+        <div className="space-y-6">
+          <StatGridSkeleton count={4} />
+          <StatGridSkeleton count={4} />
+        </div>
+      </div>
     );
   }
 
