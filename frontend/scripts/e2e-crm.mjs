@@ -616,6 +616,56 @@ async function run(page) {
   check("the leads list shows deal value in dollars", /\$[\d,]+/.test(table || ""));
   await page.screenshot({ path: path.join(SHOTS, "05-leads-list.png") });
 
+  // ─── 10b. Linking an account searches the server ──────────────────
+  // A plain dropdown had to preload every company, so it capped out and
+  // silently hid the rest. This types a query and picks from live results.
+  await page.goto(`${WEB}/admin/leads/${body.id}`, { waitUntil: "networkidle0" });
+  await page.waitForSelector('[data-testid="company-select"]', { timeout: 15_000 });
+  await page.click('[data-testid="company-select"] button');
+  await typeInto(page, '[data-testid="company-select"] input', "Moyo");
+  await page.waitForFunction(
+    () =>
+      [...document.querySelectorAll('[data-testid="company-select"] li')].some((li) =>
+        li.textContent.includes("Moyo Properties")
+      ),
+    { timeout: 10_000 }
+  );
+  check("company picker searches accounts server-side as you type", true);
+
+  const options = await page.$$eval('[data-testid="company-select"] li', (lis) =>
+    lis.map((li) => li.textContent.trim())
+  );
+  await page.evaluate(() => {
+    [...document.querySelectorAll('[data-testid="company-select"] li button')]
+      .find((b) => b.textContent.includes("Moyo Properties"))
+      .click();
+  });
+  check(
+    "picker narrowed to the match instead of listing everything",
+    options.filter((o) => o !== "Not linked").length === 1,
+    options.join(" | ")
+  );
+
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-testid="company-select"]')
+        ?.textContent.includes("Moyo Properties"),
+    { timeout: 10_000 }
+  );
+  // Read it back through the page so the session cookie rides along.
+  const linked = await page.evaluate(
+    (api, id) =>
+      fetch(`${api}/api/leads/${id}/`, { credentials: "include" }).then((r) => r.json()),
+    API,
+    body.id
+  );
+  check(
+    "picking an account persists the link to the lead",
+    linked.company_ref?.name === "Moyo Properties",
+    JSON.stringify(linked.company_ref)
+  );
+
   // ─── 11. User administration (admin only) ─────────────────────────
   // Sales must not even have the Users nav.
   check(
