@@ -30,6 +30,12 @@ const SRC = path.join(ROOT, "src");
 const PORT = 4173;
 const ORIGIN = `http://localhost:${PORT}`;
 
+// 1x1 transparent PNG — stands in for every image while we snapshot the HTML.
+const STUB_PNG = Buffer.from(
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
+  "base64"
+);
+
 // All non-dynamic routes the SPA serves. Every entry here is rendered
 // to dist/<route>/index.html so a dumb crawler (Bing, LinkedIn, Slack,
 // AI scrapers, Twitter, Mastodon, social previewers) gets the real
@@ -116,6 +122,24 @@ async function renderRoute(browser, route) {
   page.on("console", () => {});
   page.on("pageerror", () => {});
 
+  // We are capturing HTML, not pixels: the <img src> attributes land in the
+  // snapshot whether or not the bytes ever arrive. Waiting on real images was
+  // what stopped the /work case studies from reaching networkidle0 inside the
+  // timeout — they hotlink images.unsplash.com, so every render paid for a
+  // round trip to a third party.
+  //
+  // Answer them with a stub rather than aborting. An aborted image fires the
+  // page's error path, which re-requests, which aborts again: one route span
+  // 3,600 retries at a single Unsplash URL and never went idle.
+  await page.setRequestInterception(true);
+  page.on("request", (req) => {
+    if (req.resourceType() === "image") {
+      req.respond({ status: 200, contentType: "image/png", body: STUB_PNG });
+    } else {
+      req.continue();
+    }
+  });
+
   const url = ORIGIN + route;
   await page.goto(url, { waitUntil: "networkidle0", timeout: 45_000 });
 
@@ -192,19 +216,38 @@ async function main() {
     let done = 0;
     const t0 = Date.now();
 
+    // Image-heavy pages can miss networkidle0 when four of them compete for
+    // the same preview server, and a route that loses that race ships with no
+    // static HTML at all. Retry before giving up on it.
+    const ATTEMPTS = 3;
+    const failed = [];
+
     async function worker() {
       while (i < routes.length) {
         const my = i++;
         const route = routes[my];
         const target = diskPathFor(route);
-        try {
-          const html = await renderRoute(browser, route);
-          await fs.mkdir(path.dirname(target), { recursive: true });
-          await fs.writeFile(target, html, "utf8");
-          done++;
-          console.log(`[prerender] ${String(done).padStart(3, " ")}/${routes.length} ${route}`);
-        } catch (e) {
-          console.warn(`[prerender] FAIL ${route}: ${e.message}`);
+        let lastError;
+        for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
+          try {
+            const html = await renderRoute(browser, route);
+            await fs.mkdir(path.dirname(target), { recursive: true });
+            await fs.writeFile(target, html, "utf8");
+            done++;
+            const note = attempt > 1 ? ` (attempt ${attempt})` : "";
+            console.log(
+              `[prerender] ${String(done).padStart(3, " ")}/${routes.length} ${route}${note}`
+            );
+            lastError = null;
+            break;
+          } catch (e) {
+            lastError = e;
+            if (attempt < ATTEMPTS) await new Promise((r) => setTimeout(r, 1000 * attempt));
+          }
+        }
+        if (lastError) {
+          failed.push(route);
+          console.warn(`[prerender] FAIL ${route}: ${lastError.message}`);
         }
       }
     }
@@ -213,6 +256,17 @@ async function main() {
 
     const dt = ((Date.now() - t0) / 1000).toFixed(1);
     console.log(`[prerender] done — ${done}/${routes.length} routes in ${dt}s`);
+
+    // A page with no static HTML is a page search engines may not index. That
+    // is the whole point of this script, so a miss has to fail the build
+    // rather than ship quietly.
+    if (failed.length) {
+      console.error(
+        `\n[prerender] ${failed.length} route(s) produced no static HTML after ` +
+          `${ATTEMPTS} attempts:\n  ${failed.join("\n  ")}\n`
+      );
+      process.exitCode = 1;
+    }
   } finally {
     // Browser cleanup — never throw, we are about to exit either way.
     if (browser) {
@@ -232,7 +286,8 @@ async function main() {
 }
 
 main()
-  .then(() => process.exit(0))
+  // Forcing exit(0) here would discard the exitCode set for failed routes.
+  .then(() => process.exit(process.exitCode ?? 0))
   .catch((e) => {
     console.error("[prerender] failed:", e);
     process.exit(1);
