@@ -54,22 +54,22 @@ export default function NotificationBell() {
       </button>
 
       {open && (
-        <div data-testid="notif-panel" className="absolute right-0 mt-2 w-80 max-h-[60vh] overflow-y-auto bg-maroon-950 border border-white/15 rounded-sm shadow-2xl z-50">
-          <div className="px-4 py-3 border-b border-white/10 font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/50">
+        <div data-testid="notif-panel" className="absolute right-0 mt-2 w-80 max-h-[60vh] overflow-y-auto bg-maroon-950 border border-line-strong rounded-lg shadow-2xl z-50">
+          <div className="px-4 py-3 border-b border-line font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/60">
             Notifications
           </div>
           {items.length === 0 ? (
-            <p className="px-4 py-8 text-center text-sm text-bone-100/40">Nothing yet.</p>
+            <p className="px-4 py-8 text-center text-sm text-bone-100/60">Nothing yet.</p>
           ) : (
             <ul>
               {items.map((n) => (
                 <li key={n.id}>
                   <button
                     onClick={() => { setOpen(false); if (n.link) navigate(n.link); }}
-                    className="w-full text-left px-4 py-3 border-b border-white/5 hover:bg-white/[0.03]"
+                    className="w-full text-left px-4 py-3 border-b border-line hover:bg-hover"
                   >
                     <p className="text-sm text-bone-100/90">{n.text}</p>
-                    <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-bone-100/35 mt-1">
+                    <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-bone-100/60 mt-1">
                       {formatDateTime(n.created_at)}
                     </p>
                   </button>

@@ -22,9 +22,9 @@ function bucketOf(task, today) {
 }
 
 const GROUPS = [
-  { id: "overdue", label: "Overdue", accent: "#C46A6A" },
-  { id: "today", label: "Today", accent: "#C9A24B" },
-  { id: "upcoming", label: "Upcoming", accent: "#5B82F0" },
+  { id: "overdue", label: "Overdue", accent: "#DC2626" },
+  { id: "today", label: "Today", accent: "#B45309" },
+  { id: "upcoming", label: "Upcoming", accent: "#2563EB" },
   { id: "someday", label: "No date", accent: "#6B7280" },
 ];
 
@@ -99,15 +99,15 @@ export default function FollowUps() {
     <div>
       <AdminHead title="Follow-ups" />
 
-      <h1 className="font-display text-3xl md:text-4xl mb-1">My follow-ups</h1>
-      <p className="text-sm text-bone-100/55 mb-8" data-testid="followups-count">
+      <h1 className="text-xl md:text-2xl mb-1">My follow-ups</h1>
+      <p className="text-sm text-bone-100/60 mb-8" data-testid="followups-count">
         {total} open{tasks.length < total ? ` · showing ${tasks.length}` : ""}
       </p>
 
       {error && <p className="text-maroon-400 mb-4">{error}</p>}
 
       {grouped.length === 0 ? (
-        <p className="text-bone-100/40 text-sm">Nothing owed. Enjoy the quiet.</p>
+        <p className="text-bone-100/60 text-sm">Nothing owed. Enjoy the quiet.</p>
       ) : (
         <div className="space-y-8 max-w-3xl">
           {grouped.map((group) => (
@@ -122,18 +122,18 @@ export default function FollowUps() {
                 {group.items.map((task) => (
                   <li
                     key={task.id}
-                    className="flex items-start gap-3 border border-white/10 rounded-sm p-3 bg-maroon-950/20"
+                    className="flex items-start gap-3 border border-line rounded-lg p-3 bg-maroon-950"
                   >
                     <button
                       onClick={() => complete(task)}
                       aria-label="Mark done"
                       className="mt-0.5 shrink-0"
                     >
-                      <CircleIcon size={18} className="text-bone-100/40 hover:text-signal" />
+                      <CircleIcon size={18} className="text-bone-100/60 hover:text-signal" />
                     </button>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm text-bone-100/90">{task.title}</p>
-                      <p className="text-[11px] text-bone-100/45 mt-1">
+                      <p className="text-[11px] text-bone-100/60 mt-1">
                         <Link
                           to={`/admin/leads/${task.lead_id}`}
                           className="hover:text-signal"
@@ -158,7 +158,7 @@ export default function FollowUps() {
             <button
               data-testid="followups-load-more"
               onClick={loadMore}
-              className="w-full py-2.5 text-xs text-bone-100/50 hover:text-signal border border-dashed border-white/15 hover:border-signal rounded-md"
+              className="w-full py-2.5 text-xs text-bone-100/60 hover:text-signal border border-dashed border-line-strong hover:border-signal rounded-md"
             >
               Load more ({total - tasks.length} left)
             </button>

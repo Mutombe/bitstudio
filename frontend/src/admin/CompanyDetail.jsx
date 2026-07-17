@@ -9,7 +9,7 @@ import { DetailSkeleton } from "./Skeleton.jsx";
 import PrefetchLink from "./PrefetchLink.jsx";
 
 const inputCls =
-  "w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm";
+  "w-full bg-transparent border border-line-strong focus:border-signal outline-none rounded-lg px-3 py-2 text-sm";
 
 export default function CompanyDetail() {
   const { id } = useParams();
@@ -57,19 +57,19 @@ export default function CompanyDetail() {
   return (
     <div>
       <AdminHead title={company.name} />
-      <Link to="/admin/companies" className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/50 hover:text-signal mb-6">
+      <Link to="/admin/companies" className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/60 hover:text-signal mb-6">
         <ArrowLeftIcon size={12} weight="bold" /> Companies
       </Link>
 
-      <h1 className="font-display text-3xl md:text-4xl mb-1">{company.name}</h1>
-      <p className="text-sm text-bone-100/55 mb-8">
+      <h1 className="text-xl md:text-2xl mb-1">{company.name}</h1>
+      <p className="text-sm text-bone-100/60 mb-8">
         {[company.industry, company.website, company.phone].filter(Boolean).join(" · ") || "No details yet"}
       </p>
 
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Contacts */}
-        <section className="border border-white/10 rounded-sm p-5 bg-maroon-950/20">
-          <h2 className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/45 mb-4">Contacts</h2>
+        <section className="border border-line rounded-lg p-5 bg-maroon-950">
+          <h2 className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/60 mb-4">Contacts</h2>
           <form onSubmit={addContact} className="grid grid-cols-3 gap-2 mb-4">
             <input data-testid="contact-name" value={contact.name} onChange={(e) => setContact((c) => ({ ...c, name: e.target.value }))} placeholder="Name" className={inputCls} />
             <input value={contact.email} onChange={(e) => setContact((c) => ({ ...c, email: e.target.value }))} placeholder="Email" className={inputCls} />
@@ -80,30 +80,30 @@ export default function CompanyDetail() {
           </form>
           <ul className="space-y-2">
             {contacts.map((c) => (
-              <li key={c.id} className="text-sm border-b border-white/5 pb-2">
+              <li key={c.id} className="text-sm border-b border-line pb-2">
                 <span className="text-bone-100">{c.name}</span>
-                {c.title && <span className="text-bone-100/45"> · {c.title}</span>}
-                {c.email && <p className="text-xs text-bone-100/40">{c.email}</p>}
+                {c.title && <span className="text-bone-100/60"> · {c.title}</span>}
+                {c.email && <p className="text-xs text-bone-100/60">{c.email}</p>}
               </li>
             ))}
-            {contacts.length === 0 && <li className="text-xs text-bone-100/35">No contacts yet.</li>}
+            {contacts.length === 0 && <li className="text-xs text-bone-100/60">No contacts yet.</li>}
           </ul>
         </section>
 
         {/* Leads at this company */}
-        <section className="border border-white/10 rounded-sm p-5 bg-maroon-950/20">
-          <h2 className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/45 mb-4">Linked leads</h2>
+        <section className="border border-line rounded-lg p-5 bg-maroon-950">
+          <h2 className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/60 mb-4">Linked leads</h2>
           <ul className="space-y-2">
             {leads.map((l) => (
-              <li key={l.id} className="flex items-center justify-between text-sm border-b border-white/5 pb-2">
+              <li key={l.id} className="flex items-center justify-between text-sm border-b border-line pb-2">
                 <PrefetchLink to={`/admin/leads/${l.id}`} prefetch={() => prefetchLead(l.id)} className="text-bone-100 hover:text-signal text-left">{l.name}</PrefetchLink>
                 <span className="flex items-center gap-3">
-                  <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-bone-100/50">{STAGE_LABEL[l.status]}</span>
+                  <span className="font-mono text-[9px] tracking-[0.15em] uppercase text-bone-100/60">{STAGE_LABEL[l.status]}</span>
                   <span className="tabular-nums text-bone-100/70">{Number(l.value) > 0 ? formatMoney(l.value) : "—"}</span>
                 </span>
               </li>
             ))}
-            {leads.length === 0 && <li className="text-xs text-bone-100/35">No leads linked yet. Link one from a lead's detail page.</li>}
+            {leads.length === 0 && <li className="text-xs text-bone-100/60">No leads linked yet. Link one from a lead's detail page.</li>}
           </ul>
         </section>
       </div>

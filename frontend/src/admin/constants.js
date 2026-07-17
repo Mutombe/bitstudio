@@ -3,12 +3,12 @@
 
 // Neutral, professional stage colours — muted, not the marketing palette.
 export const STAGES = [
-  { id: "new", label: "New", accent: "#8A93A3" },
-  { id: "contacted", label: "Contacted", accent: "#7C93C9" },
-  { id: "qualified", label: "Qualified", accent: "#5B82F0" },
-  { id: "proposal", label: "Proposal sent", accent: "#C9A24B" },
-  { id: "won", label: "Won", accent: "#4B9E6B" },
-  { id: "lost", label: "Lost", accent: "#C46A6A" },
+  { id: "new", label: "New", accent: "#64748B" },
+  { id: "contacted", label: "Contacted", accent: "#4F72C4" },
+  { id: "qualified", label: "Qualified", accent: "#2563EB" },
+  { id: "proposal", label: "Proposal sent", accent: "#B45309" },
+  { id: "won", label: "Won", accent: "#059669" },
+  { id: "lost", label: "Lost", accent: "#DC2626" },
 ];
 
 export const STAGE_LABEL = Object.fromEntries(
@@ -47,9 +47,9 @@ export const ROLE_LABEL = {
 
 // Lead score → colour. Muted green high, neutral grey low.
 export function scoreColor(score) {
-  if (score >= 70) return "#4B9E6B";
-  if (score >= 40) return "#C9A24B";
-  if (score >= 20) return "#8A93A3";
+  if (score >= 70) return "#059669";
+  if (score >= 40) return "#B45309";
+  if (score >= 20) return "#64748B";
   return "#6B7280";
 }
 

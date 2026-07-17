@@ -42,6 +42,13 @@
   --color-ink: #0A0708;
   --color-chrome: #C9C3BA;
 
+  /* Hairline/fill tokens for the admin tool. Declared here so Tailwind emits
+     `border-line`, `bg-hover`, etc.; `.crm-theme` gives them their real
+     values. The marketing site draws its own edges and does not use these. */
+  --color-line: #E2E8F0;
+  --color-line-strong: #CBD5E1;
+  --color-hover: #F1F5F9;
+
   /* ─── Typography ─── */
   --font-display: "Syne", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
@@ -546,54 +553,74 @@
  * overrides beat the layered `.btn-*` defaults.
  * ──────────────────────────────────────────────────────────────────── */
 .crm-theme {
-  color-scheme: dark;
+  color-scheme: light;
 
-  /* Work fonts, not the marketing display faces. A native UI sans reads as
-     "software," loads instantly, and is built for dense operational screens.
-     Numbers/labels/code use the platform monospace, not stylised JetBrains. */
-  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, "Cascadia Mono", "Segoe UI Mono", Consolas, "Liberation Mono", monospace;
+  /* Inter, self-hosted (see AdminRoutes.jsx). The marketing display faces are
+     for the public site; Inter is drawn for dense UI — it is what the
+     reference tool uses, and its tabular figures keep money columns aligned.
+     Loaded only in the admin chunk, so the public site does not pay for it. */
+  --font-body: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  --color-ink: #0E0F13;          /* page background */
-  --color-bone-50:  #F2F4F7;
-  --color-bone-100: #E6E8EC;     /* primary text */
-  --color-bone-200: #C7CCD4;
-  --color-bone-300: #9AA0AC;     /* muted text */
+  /* A light canvas with white cards: the working surface is paper, and the
+     data sits on top of it. Slate, not pure grey, so it stays a hair cool. */
+  --color-ink: #F1F5F9;          /* page canvas (slate-100) */
+  --color-bone-50:  #F8FAFC;
+  --color-bone-100: #0F172A;     /* primary text — dark on light now, so the
+                                    /55 and /45 opacity variants used across
+                                    the admin become proper muted greys. */
+  --color-bone-200: #334155;
+  --color-bone-300: #64748B;     /* muted text */
 
   /* One restrained accent: interactive, active nav, links, focus rings. */
-  --color-signal: #5B82F0;
-  --color-signal-muted: #4D6FD0;
+  --color-signal: #0284C7;
+  --color-signal-muted: #0369A1;
 
   /* Maroon is repurposed: the 900s become neutral surfaces; 400/500 stay a
-     muted red used only for danger and the notification badge. */
-  --color-maroon-950: #16181D;   /* card surface */
-  --color-maroon-900: #1C1F26;   /* hover / elevated */
-  --color-maroon-800: #22262F;
-  --color-maroon-700: #2A2E37;
-  --color-maroon-600: #C46A6A;
-  --color-maroon-500: #B5555A;   /* notification badge */
-  --color-maroon-400: #C46A6A;   /* danger text */
-  --color-maroon-300: #D4999E;
+     red used only for danger and the notification badge. */
+  --color-maroon-950: #FFFFFF;   /* card surface */
+  --color-maroon-900: #F1F5F9;   /* hover / elevated */
+  --color-maroon-800: #E2E8F0;
+  --color-maroon-700: #CBD5E1;
+  --color-maroon-600: #DC2626;
+  --color-maroon-500: #DC2626;   /* notification badge */
+  --color-maroon-400: #DC2626;   /* danger text */
+  --color-maroon-300: #B91C1C;
+
+  /* Hairlines and fills. A dark UI draws these with translucent white, which
+     is invisible on paper, so the admin uses named tokens instead. */
+  --color-line: #E2E8F0;         /* dividers, card edges */
+  --color-line-strong: #CBD5E1;  /* inputs and controls */
+  --color-hover: #F1F5F9;        /* row / menu hover fill */
 }
 
-/* Buttons in the tool are compact and don't hop on hover. */
+/* The marketing button is a pill: uppercase, mono, 0.2em tracking, and it
+   lifts on hover. That is signage. A button in a tool is a control you hit a
+   hundred times a day, so it reads as a plain word at a normal size and stays
+   still when you point at it. */
 .crm-theme .btn {
-  padding: 0.5rem 1rem;
-  font-size: 0.66rem;
-  border-radius: 0.375rem;
+  padding: 0.5rem 0.875rem;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  border-radius: 0.5rem;
+  gap: 0.4rem;
 }
 .crm-theme .btn:hover { transform: none; }
 .crm-theme .btn-primary { background: var(--color-signal); color: #fff; }
 .crm-theme .btn-primary:hover { background: var(--color-signal-muted); }
 .crm-theme .btn-ghost {
-  color: var(--color-bone-100);
-  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--color-bone-200);
+  background: #fff;
+  border-color: var(--color-line-strong);
 }
 .crm-theme .btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--color-hover);
   color: var(--color-bone-100);
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: #94A3B8;
 }
 
 /* The marketing base sets headings to a tight 0.92 line-height with heavy
@@ -601,22 +628,36 @@
    page titles read as clear labels, not display type. */
 .crm-theme {
   font-family: var(--font-body);
-  letter-spacing: normal;
+  letter-spacing: -0.01em;
+  /* The marketing base ships stylistic alternates; a work tool wants Inter's
+     defaults plus lining figures. */
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
 }
 .crm-theme h1,
 .crm-theme h2,
 .crm-theme h3,
 .crm-theme h4 {
-  letter-spacing: -0.011em;
+  letter-spacing: -0.025em;
   line-height: 1.2;
   font-weight: 600;
 }
 
-/* Skeleton shimmer for loading states. */
+/* Figures in tables, money and any monospace-tagged label line up in columns.
+   This is the single most "accounting software" detail in the reference app:
+   digits share one advance width, so numbers stack instead of shimmering. */
+.crm-theme table,
+.crm-theme .font-mono,
+.crm-theme .tabular-nums {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Skeleton shimmer for loading states. Placeholders are darker than the card
+   they sit on, and the sweep is white — the inverse of the dark build. */
 .crm-theme .skeleton {
   position: relative;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.05);
+  background: #E9EEF4;
   border-radius: 4px;
 }
 .crm-theme .skeleton::after {
@@ -627,7 +668,7 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.75),
     transparent
   );
   animation: crm-shimmer 1.3s infinite;

@@ -19,7 +19,7 @@ export default function Pagination({ page, pageNum, onChange, pageSize = PAGE_SI
   const to = Math.min(pageNum * pageSize, total);
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 mt-4 text-xs text-bone-100/50">
+    <div className="flex flex-wrap items-center justify-between gap-3 mt-4 text-xs text-bone-100/60">
       <span data-testid="page-summary">
         {from}–{to} of <span className="text-bone-100/80 tabular-nums">{total}</span> {label}
       </span>
@@ -29,7 +29,7 @@ export default function Pagination({ page, pageNum, onChange, pageSize = PAGE_SI
             onClick={() => onChange(Math.max(1, pageNum - 1))}
             disabled={!page.previous}
             aria-label="Previous page"
-            className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-white/15 rounded-md hover:border-signal disabled:opacity-30 disabled:hover:border-white/15"
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-line-strong rounded-md hover:border-signal disabled:opacity-30 disabled:hover:border-line-strong"
           >
             <CaretLeftIcon size={12} /> Prev
           </button>
@@ -41,7 +41,7 @@ export default function Pagination({ page, pageNum, onChange, pageSize = PAGE_SI
             onClick={() => onChange(pageNum + 1)}
             disabled={!page.next}
             aria-label="Next page"
-            className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-white/15 rounded-md hover:border-signal disabled:opacity-30 disabled:hover:border-white/15"
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 border border-line-strong rounded-md hover:border-signal disabled:opacity-30 disabled:hover:border-line-strong"
           >
             Next <CaretRightIcon size={12} />
           </button>

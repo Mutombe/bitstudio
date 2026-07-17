@@ -8,9 +8,9 @@ import Modal from "./Modal.jsx";
 import Pagination from "./Pagination.jsx";
 
 const inputCls =
-  "mt-2 w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm";
+  "mt-2 w-full bg-transparent border border-line-strong focus:border-signal outline-none rounded-lg px-3 py-2 text-sm";
 const selectCls =
-  "mt-2 w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm";
+  "mt-2 w-full bg-maroon-950 border border-line-strong rounded-lg pl-3 pr-9 py-2 text-sm";
 
 function NewUserForm({ onCreated, onCancel }) {
   const blank = { username: "", first_name: "", last_name: "", email: "", role: "sales", password: "" };
@@ -44,23 +44,23 @@ function NewUserForm({ onCreated, onCancel }) {
       {error && <p role="alert" className="mb-4 text-sm text-maroon-400">{error}</p>}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <label className="block">
-          <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Username *</span>
+          <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60">Username *</span>
           <input data-testid="new-username" value={form.username} onChange={set("username")} className={inputCls} required />
         </label>
         <label className="block">
-          <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">First name</span>
+          <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60">First name</span>
           <input value={form.first_name} onChange={set("first_name")} className={inputCls} />
         </label>
         <label className="block">
-          <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Last name</span>
+          <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60">Last name</span>
           <input value={form.last_name} onChange={set("last_name")} className={inputCls} />
         </label>
         <label className="block">
-          <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Email</span>
+          <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60">Email</span>
           <input type="email" value={form.email} onChange={set("email")} className={inputCls} />
         </label>
         <label className="block">
-          <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Role</span>
+          <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60">Role</span>
           <select value={form.role} onChange={set("role")} className={selectCls}>
             <option value="sales">Sales</option>
             <option value="manager">Manager</option>
@@ -68,7 +68,7 @@ function NewUserForm({ onCreated, onCancel }) {
           </select>
         </label>
         <label className="block">
-          <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Password *</span>
+          <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60">Password *</span>
           <input data-testid="new-password" type="password" value={form.password} onChange={set("password")} className={inputCls} required autoComplete="new-password" />
         </label>
       </div>
@@ -132,8 +132,8 @@ export default function Users() {
       <AdminHead title="Users" />
       <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
         <div>
-          <h1 className="font-display text-3xl md:text-4xl mb-1">Users</h1>
-          <p className="text-sm text-bone-100/55">
+          <h1 className="text-xl md:text-2xl mb-1">Users</h1>
+          <p className="text-sm text-bone-100/60">
             The team. Deactivate instead of deleting, so their leads keep an author.
           </p>
         </div>
@@ -148,12 +148,12 @@ export default function Users() {
         <NewUserForm onCreated={() => { setAddOpen(false); load(); }} onCancel={() => setAddOpen(false)} />
       </Modal>
 
-      <div className="border border-white/10 rounded-sm overflow-x-auto">
+      <div className="border border-line rounded-lg overflow-x-auto">
         <table className="w-full text-sm min-w-[720px]" data-testid="users-table">
           <thead>
-            <tr className="border-b border-white/10 text-left">
+            <tr className="border-b border-line text-left">
               {["User", "Role", "Status", "Joined", ""].map((h) => (
-                <th key={h} className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45 px-4 py-3">
+                <th key={h} className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60 px-4 py-3">
                   {h}
                 </th>
               ))}
@@ -161,10 +161,10 @@ export default function Users() {
           </thead>
           <tbody>
             {users.map((u) => (
-              <tr key={u.id} className="border-b border-white/5">
+              <tr key={u.id} className="border-b border-line">
                 <td className="px-4 py-3">
                   <p className="text-bone-100">{u.name}</p>
-                  <p className="text-xs text-bone-100/40">
+                  <p className="text-xs text-bone-100/60">
                     @{u.username}{u.email ? ` · ${u.email}` : ""}
                   </p>
                 </td>
@@ -172,7 +172,7 @@ export default function Users() {
                   <select
                     value={u.role}
                     onChange={(e) => changeRole(u, e.target.value)}
-                    className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-2 pr-7 py-1 text-xs"
+                    className="bg-maroon-950 border border-line-strong rounded-lg pl-2 pr-7 py-1 text-xs"
                   >
                     {Object.entries(ROLE_LABEL).map(([id, label]) => (
                       <option key={id} value={id}>{label}</option>
@@ -180,11 +180,11 @@ export default function Users() {
                   </select>
                 </td>
                 <td className="px-4 py-3">
-                  <span className={u.is_active ? "text-[#4B9E6B]" : "text-maroon-400"}>
+                  <span className={u.is_active ? "text-[#059669]" : "text-maroon-400"}>
                     {u.is_active ? "Active" : "Deactivated"}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-bone-100/50 text-xs whitespace-nowrap">
+                <td className="px-4 py-3 text-bone-100/60 text-xs whitespace-nowrap">
                   {formatDate(u.date_joined)}
                 </td>
                 <td className="px-4 py-3 text-right whitespace-nowrap">

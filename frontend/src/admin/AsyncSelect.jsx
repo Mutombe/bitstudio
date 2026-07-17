@@ -77,9 +77,9 @@ export default function AsyncSelect({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="w-full flex items-center justify-between gap-2 bg-[color:var(--color-ink)] border border-white/15 hover:border-white/30 rounded-md px-3 py-2 text-sm text-left"
+          className="w-full flex items-center justify-between gap-2 bg-maroon-950 border border-line-strong hover:border-line-strong rounded-md px-3 py-2 text-sm text-left"
         >
-          <span className={value ? "text-bone-100" : "text-bone-100/45"}>
+          <span className={value ? "text-bone-100" : "text-bone-100/60"}>
             {value ? value.name : emptyLabel}
           </span>
           <span className="flex items-center gap-1 shrink-0">
@@ -90,37 +90,37 @@ export default function AsyncSelect({
                 aria-label="Clear"
                 onClick={(e) => { e.stopPropagation(); onChange(null); }}
                 onKeyDown={(e) => { if (e.key === "Enter") { e.stopPropagation(); onChange(null); } }}
-                className="text-bone-100/40 hover:text-maroon-400"
+                className="text-bone-100/60 hover:text-maroon-400"
               >
                 <XIcon size={12} />
               </span>
             )}
-            <CaretDownIcon size={12} className="text-bone-100/40" />
+            <CaretDownIcon size={12} className="text-bone-100/60" />
           </span>
         </button>
       )}
 
       {open && (
-        <ul className="absolute z-30 mt-1 w-full max-h-56 overflow-y-auto bg-maroon-950 border border-white/15 rounded-md shadow-xl">
+        <ul className="absolute z-30 mt-1 w-full max-h-56 overflow-y-auto bg-maroon-950 border border-line-strong rounded-md shadow-xl">
           <li>
             <button
               type="button"
               onClick={() => pick(null)}
-              className="w-full text-left px-3 py-2 text-sm text-bone-100/50 hover:bg-white/5"
+              className="w-full text-left px-3 py-2 text-sm text-bone-100/60 hover:bg-hover"
             >
               {emptyLabel}
             </button>
           </li>
-          {loading && <li className="px-3 py-2 text-xs text-bone-100/40">Searching…</li>}
+          {loading && <li className="px-3 py-2 text-xs text-bone-100/60">Searching…</li>}
           {!loading && options.length === 0 && (
-            <li className="px-3 py-2 text-xs text-bone-100/40">No matches.</li>
+            <li className="px-3 py-2 text-xs text-bone-100/60">No matches.</li>
           )}
           {options.map((o) => (
             <li key={o.id}>
               <button
                 type="button"
                 onClick={() => pick(o)}
-                className="w-full text-left px-3 py-2 text-sm text-bone-100/90 hover:bg-white/5"
+                className="w-full text-left px-3 py-2 text-sm text-bone-100/90 hover:bg-hover"
               >
                 {o.name}
               </button>

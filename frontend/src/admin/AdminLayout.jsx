@@ -1,5 +1,8 @@
-import { Link, NavLink, Navigate, Outlet, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, NavLink, Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+// eslint-disable-next-line no-unused-vars
+import { AnimatePresence, motion } from "framer-motion";
 import {
   ChartBarIcon,
   KanbanIcon,
@@ -8,6 +11,8 @@ import {
   BuildingsIcon,
   ChartLineUpIcon,
   GearIcon,
+  ListIcon,
+  MagnifyingGlassIcon,
   UsersThreeIcon,
   SignOutIcon,
 } from "@phosphor-icons/react";
@@ -32,9 +37,7 @@ export function AdminHead({ title }) {
 export function AdminLoading() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[color:var(--color-ink)]">
-      <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/50">
-        Authenticating…
-      </p>
+      <p className="text-[13px] text-bone-100/60">Authenticating…</p>
     </div>
   );
 }
@@ -60,77 +63,162 @@ const NAV = [
   { to: "/admin/settings", label: "Settings", icon: GearIcon, adminOnly: true },
 ];
 
+/**
+ * The shell: a fixed rail of destinations on the left, a bar for identity and
+ * alerts on top, work in the middle. A tool you sit in all day should keep
+ * navigation in the same place at all times rather than centring it like a
+ * page — the layout is furniture, not a composition.
+ */
 export default function AdminLayout() {
   const { user, logout } = useAuth();
+  const [mobileNav, setMobileNav] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
   const nav = NAV.filter((item) => !item.adminOnly || user?.role === "admin");
 
-  return (
-    <div className="min-h-screen bg-[color:var(--color-ink)] text-bone-100">
-      <header className="border-b border-white/10 sticky top-0 z-40 bg-[color:var(--color-ink)]/90 backdrop-blur">
-        <div className="max-w-[1600px] mx-auto px-5 md:px-8 h-16 flex items-center justify-between gap-6">
-          <div className="flex items-center gap-8 min-w-0">
-            <Link to="/admin" className="flex items-center gap-2.5 shrink-0">
-              <img src="/logo.png" alt="" className="h-6 w-6" />
-              <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-bone-100/80">
-                Bit / CRM
-              </span>
-            </Link>
-            <nav className="flex items-center gap-1">
-              {nav.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    end={item.end}
-                    className={({ isActive }) =>
-                      `flex items-center gap-2 px-3 py-1.5 rounded-sm font-mono text-[10px] tracking-[0.2em] uppercase transition-colors ${
-                        isActive
-                          ? "text-signal bg-signal/10"
-                          : "text-bone-100/60 hover:text-bone-100"
-                      }`
-                    }
-                  >
-                    <Icon size={14} />
-                    <span className="hidden sm:inline">{item.label}</span>
-                  </NavLink>
-                );
-              })}
-            </nav>
-          </div>
+  // A route change closes the drawer; otherwise it hangs over the new page.
+  useEffect(() => setMobileNav(false), [location.pathname]);
 
-          <div className="flex items-center gap-3 shrink-0">
-            <NotificationBell />
-            <div className="text-right hidden sm:block">
-              <p className="text-sm text-bone-100 leading-tight">{user?.name}</p>
-              <p className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">
-                {user?.role}
-              </p>
-            </div>
-            <button
-              onClick={logout}
-              aria-label="Sign out"
-              className="p-2 text-bone-100/60 hover:text-maroon-400 transition-colors"
+  const rail = (
+    <div className="h-full w-[240px] bg-maroon-950 border-r border-line flex flex-col">
+      <div className="h-16 flex items-center gap-2.5 px-5 border-b border-line shrink-0">
+        <Link to="/admin" className="flex items-center gap-2.5 min-w-0">
+          <img src="/logo.png" alt="" className="h-7 w-7 rounded-md" />
+          <span className="text-[15px] font-semibold text-bone-100 truncate">
+            Bit Studio
+          </span>
+        </Link>
+      </div>
+
+      <nav className="flex-1 overflow-y-auto p-3 space-y-0.5">
+        {nav.map((item) => {
+          const Icon = item.icon;
+          return (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.end}
+              className={({ isActive }) =>
+                `relative flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors ${
+                  isActive
+                    ? "bg-signal/10 text-signal"
+                    : "text-bone-100/70 hover:bg-hover hover:text-bone-100"
+                }`
+              }
             >
-              <SignOutIcon size={18} />
-            </button>
-          </div>
-        </div>
-      </header>
+              {({ isActive }) => (
+                <>
+                  {isActive && (
+                    <span className="absolute -left-3 top-1.5 bottom-1.5 w-1 rounded-r-full bg-signal" />
+                  )}
+                  <Icon size={17} weight={isActive ? "fill" : "regular"} />
+                  {item.label}
+                </>
+              )}
+            </NavLink>
+          );
+        })}
+      </nav>
 
-      <main className="max-w-[1600px] mx-auto px-5 md:px-8 py-8">
-        <Outlet />
-      </main>
+      <div className="p-3 border-t border-line shrink-0">
+        <div className="flex items-center gap-3 px-2 py-1.5">
+          <div className="h-8 w-8 rounded-full bg-signal/10 text-signal grid place-items-center text-xs font-semibold shrink-0">
+            {(user?.name || "?").slice(0, 1).toUpperCase()}
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-medium text-bone-100 truncate leading-tight">
+              {user?.name}
+            </p>
+            <p className="text-[11px] text-bone-100/60 capitalize">{user?.role}</p>
+          </div>
+          <button
+            onClick={logout}
+            aria-label="Sign out"
+            className="p-1.5 rounded-md text-bone-100/60 hover:text-maroon-400 hover:bg-hover transition-colors"
+          >
+            <SignOutIcon size={16} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-[color:var(--color-ink)] text-bone-100 flex">
+      <div className="hidden lg:block fixed inset-y-0 left-0 z-40">{rail}</div>
+
+      <AnimatePresence>
+        {mobileNav && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileNav(false)}
+              className="fixed inset-0 bg-slate-900/40 z-40 lg:hidden"
+            />
+            <motion.div
+              initial={{ x: -240 }}
+              animate={{ x: 0 }}
+              exit={{ x: -240 }}
+              transition={{ type: "spring", damping: 26, stiffness: 320 }}
+              className="fixed inset-y-0 left-0 z-50 lg:hidden"
+            >
+              {rail}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      <div className="flex-1 min-w-0 lg:ml-[240px] flex flex-col">
+        <header className="h-16 bg-maroon-950 border-b border-line sticky top-0 z-30 flex items-center justify-between gap-4 px-4 md:px-6">
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            <button
+              onClick={() => setMobileNav(true)}
+              aria-label="Open navigation"
+              className="lg:hidden p-2 -ml-2 rounded-lg text-bone-100/60 hover:bg-hover"
+            >
+              <ListIcon size={20} />
+            </button>
+            {/* Finding a person is the most frequent thing anyone does here, so
+                it gets the permanent slot. Enter hands off to the leads list,
+                which reads ?q= — no second search implementation. */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const q = new FormData(e.currentTarget).get("q")?.toString().trim();
+                if (q) navigate(`/admin/leads?q=${encodeURIComponent(q)}`);
+              }}
+              className="flex-1 max-w-md"
+            >
+              <label className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-[color:var(--color-ink)] border border-line focus-within:border-signal focus-within:bg-maroon-950 transition-colors">
+                <MagnifyingGlassIcon size={15} className="text-bone-100/60 shrink-0" />
+                <input
+                  name="q"
+                  data-testid="global-search"
+                  placeholder="Search leads by name, email, company…"
+                  className="w-full bg-transparent outline-none text-[13px] text-bone-100 placeholder:text-bone-100/60"
+                />
+              </label>
+            </form>
+          </div>
+          <NotificationBell />
+        </header>
+
+        <main className="flex-1 min-w-0 p-4 md:p-6">
+          <Outlet />
+        </main>
+      </div>
 
       {/* Toasts confirm work landed (or didn't) without a full reload. */}
       <Toaster
         position="bottom-right"
-        theme="dark"
+        theme="light"
         toastOptions={{
           style: {
-            background: "#1C1F26",
-            border: "1px solid rgba(255,255,255,0.12)",
-            color: "#E6E8EC",
+            background: "#fff",
+            border: "1px solid #E2E8F0",
+            color: "#0F172A",
           },
         }}
       />
