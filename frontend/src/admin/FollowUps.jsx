@@ -28,21 +28,43 @@ const GROUPS = [
   { id: "someday", label: "No date", accent: "#6B7280" },
 ];
 
+const PER_PAGE = 50;
+
 export default function FollowUps() {
   const [tasks, setTasks] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [pageNum, setPageNum] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const today = todayISO();
 
+  // Grouped by due date, so a pager would fight the grouping — load more and
+  // append instead, but always show the true server count.
   const load = useCallback(() => {
     crm
-      .listTasks({ assignee: "me", open: "1", page_size: 200 })
-      .then((page) => setTasks(page.results))
+      .listTasks({ assignee: "me", open: "1", page_size: PER_PAGE, page: 1 })
+      .then((page) => {
+        setTasks(page.results || []);
+        setTotal(page.count || 0);
+        setPageNum(1);
+      })
       .catch(() => setError("Could not load your follow-ups."))
       .finally(() => setLoading(false));
   }, []);
 
   useEffect(load, [load]);
+
+  const loadMore = async () => {
+    const next = pageNum + 1;
+    try {
+      const page = await crm.listTasks({ assignee: "me", open: "1", page_size: PER_PAGE, page: next });
+      setTasks((prev) => [...prev, ...(page.results || [])]);
+      setTotal(page.count || 0);
+      setPageNum(next);
+    } catch {
+      setError("Could not load more.");
+    }
+  };
 
   const complete = async (task) => {
     // Optimistic: it vanishes from the open list immediately.
@@ -79,7 +101,7 @@ export default function FollowUps() {
 
       <h1 className="font-display text-3xl md:text-4xl mb-1">My follow-ups</h1>
       <p className="text-sm text-bone-100/55 mb-8" data-testid="followups-count">
-        {tasks.length} open
+        {total} open{tasks.length < total ? ` · showing ${tasks.length}` : ""}
       </p>
 
       {error && <p className="text-maroon-400 mb-4">{error}</p>}
@@ -131,6 +153,16 @@ export default function FollowUps() {
               </ul>
             </section>
           ))}
+
+          {tasks.length < total && (
+            <button
+              data-testid="followups-load-more"
+              onClick={loadMore}
+              className="w-full py-2.5 text-xs text-bone-100/50 hover:text-signal border border-dashed border-white/15 hover:border-signal rounded-md"
+            >
+              Load more ({total - tasks.length} left)
+            </button>
+          )}
         </div>
       )}
     </div>

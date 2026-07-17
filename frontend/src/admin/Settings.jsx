@@ -3,6 +3,7 @@ import { PlusIcon, TrashIcon } from "@phosphor-icons/react";
 import { admin, crm } from "../lib/api.js";
 import { AdminHead } from "./AdminLayout.jsx";
 import { formatDateTime } from "./constants.js";
+import Pagination from "./Pagination.jsx";
 
 const inputCls =
   "bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm";
@@ -146,10 +147,12 @@ function WebToLead() {
 // ─── Audit log ───────────────────────────────────────────────────────
 function AuditLog() {
   const [page, setPage] = useState(null);
-  useEffect(() => { admin.auditLog().then(setPage).catch(() => {}); }, []);
+  const [pageNum, setPageNum] = useState(1);
+  useEffect(() => { admin.auditLog({ page: pageNum }).then(setPage).catch(() => {}); }, [pageNum]);
   const rows = page?.results || [];
   return (
-    <div className="border border-white/10 rounded-sm overflow-x-auto max-w-3xl">
+    <div className="max-w-3xl">
+    <div className="border border-white/10 rounded-sm overflow-x-auto">
       <table className="w-full text-sm min-w-[560px]" data-testid="audit-table">
         <thead>
           <tr className="border-b border-white/10 text-left">
@@ -170,6 +173,8 @@ function AuditLog() {
         </tbody>
       </table>
       {rows.length === 0 && <p className="text-center text-bone-100/40 py-10 text-sm">Nothing logged yet.</p>}
+    </div>
+    <Pagination page={page} pageNum={pageNum} onChange={setPageNum} label="entries" />
     </div>
   );
 }

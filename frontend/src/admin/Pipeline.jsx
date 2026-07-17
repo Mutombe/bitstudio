@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import { crm } from "../lib/api.js";
+import { prefetchLead } from "../lib/prefetch.js";
 import { AdminHead } from "./AdminLayout.jsx";
 import { SOURCE_LABEL, STAGES, formatDate } from "./constants.js";
 import { BoardSkeleton } from "./Skeleton.jsx";
@@ -8,41 +10,106 @@ import { BoardSkeleton } from "./Skeleton.jsx";
 /**
  * Kanban board over Lead.status.
  *
- * Drag-and-drop uses the native HTML5 API rather than a library — the board
- * is one dimensional (a card moves between columns) and pulling in a DnD
- * dependency for that would be a poor trade on a bundle this size.
+ * Each column is fetched and paged independently. That matters: the board used
+ * to pull one 500-lead page and slice it client-side, so past 500 leads it
+ * silently dropped them — a board that looks complete but isn't is worse than
+ * one that says "showing 25 of 900". Column headers show the true server count
+ * and load more on demand.
  *
- * Moves are optimistic: the card lands in the new column immediately and
- * rolls back if the PATCH fails. A salesperson dragging a card should never
- * wait on a round trip.
+ * Drag-and-drop uses the native HTML5 API — the board is one dimensional (a
+ * card moves between columns), so a DnD dependency would be a poor trade.
+ * Moves are optimistic and roll back if the PATCH fails.
  */
+const PER_COLUMN = 25;
+
+const emptyColumns = () =>
+  Object.fromEntries(STAGES.map((s) => [s.id, { items: [], count: 0, page: 1 }]));
+
 export default function Pipeline() {
-  const [leads, setLeads] = useState([]);
+  const [columns, setColumns] = useState(emptyColumns);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [dragOver, setDragOver] = useState(null);
 
-  const load = useCallback(() => {
-    // page_size is capped server-side at 500, so this cannot haul the table.
-    crm
-      .listLeads({ page_size: 500 })
-      .then((page) => setLeads(page.results))
-      .catch(() => setError("Could not load the pipeline."))
-      .finally(() => setLoading(false));
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const pages = await Promise.all(
+        STAGES.map((s) =>
+          crm
+            .listLeads({ status: s.id, page_size: PER_COLUMN, page: 1 })
+            .catch(() => ({ count: 0, results: [] }))
+        )
+      );
+      setColumns(
+        Object.fromEntries(
+          STAGES.map((s, i) => [
+            s.id,
+            { items: pages[i].results || [], count: pages[i].count || 0, page: 1 },
+          ])
+        )
+      );
+    } catch {
+      setError("Could not load the pipeline.");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  useEffect(load, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
-  const move = async (leadId, status) => {
-    const previous = leads;
-    setLeads((current) =>
-      current.map((lead) => (lead.id === leadId ? { ...lead, status } : lead))
-    );
+  const loadMore = async (stageId) => {
+    const col = columns[stageId];
+    const next = col.page + 1;
     try {
-      await crm.updateLead(leadId, { status });
+      const p = await crm.listLeads({ status: stageId, page_size: PER_COLUMN, page: next });
+      setColumns((prev) => ({
+        ...prev,
+        [stageId]: {
+          items: [...prev[stageId].items, ...(p.results || [])],
+          count: p.count ?? prev[stageId].count,
+          page: next,
+        },
+      }));
     } catch {
-      setLeads(previous); // roll back; the server is the source of truth
-      setError("That move did not stick. Refresh and try again.");
+      toast.error("Could not load more.");
+    }
+  };
+
+  const move = async (leadId, toStatus) => {
+    let fromStatus = null;
+    let lead = null;
+    for (const stage of STAGES) {
+      const found = columns[stage.id].items.find((l) => l.id === leadId);
+      if (found) {
+        fromStatus = stage.id;
+        lead = found;
+        break;
+      }
+    }
+    if (!lead || fromStatus === toStatus) return;
+
+    const snapshot = columns;
+    setColumns((prev) => ({
+      ...prev,
+      [fromStatus]: {
+        ...prev[fromStatus],
+        items: prev[fromStatus].items.filter((l) => l.id !== leadId),
+        count: Math.max(0, prev[fromStatus].count - 1),
+      },
+      [toStatus]: {
+        ...prev[toStatus],
+        items: [{ ...lead, status: toStatus }, ...prev[toStatus].items],
+        count: prev[toStatus].count + 1,
+      },
+    }));
+    try {
+      await crm.updateLead(leadId, { status: toStatus });
+    } catch {
+      setColumns(snapshot); // the server is the source of truth
+      toast.error("That move did not stick.");
     }
   };
 
@@ -50,18 +117,19 @@ export default function Pipeline() {
     event.preventDefault();
     setDragOver(null);
     const leadId = event.dataTransfer.getData("text/plain");
-    const lead = leads.find((l) => l.id === leadId);
-    if (lead && lead.status !== status) move(leadId, status);
+    if (leadId) move(leadId, status);
   };
 
   if (loading) {
     return (
       <div>
         <h1 className="font-display text-3xl md:text-4xl mb-6">Pipeline</h1>
-        <BoardSkeleton columns={6} />
+        <BoardSkeleton columns={STAGES.length} />
       </div>
     );
   }
+
+  const total = STAGES.reduce((sum, s) => sum + columns[s.id].count, 0);
 
   return (
     <div>
@@ -71,7 +139,7 @@ export default function Pipeline() {
         <div>
           <h1 className="font-display text-3xl md:text-4xl">Pipeline</h1>
           <p className="text-sm text-bone-100/55 mt-1">
-            Drag a card to move the deal. {leads.length} leads on the board.
+            Drag a card to move the deal. <span className="tabular-nums">{total}</span> leads on the board.
           </p>
         </div>
       </div>
@@ -84,7 +152,8 @@ export default function Pipeline() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-4">
         {STAGES.map((stage) => {
-          const column = leads.filter((lead) => lead.status === stage.id);
+          const col = columns[stage.id];
+          const more = col.count - col.items.length;
           return (
             <section
               key={stage.id}
@@ -108,20 +177,22 @@ export default function Pipeline() {
                 >
                   {stage.label}
                 </span>
+                {/* True server count, not just what's rendered. */}
                 <span className="font-mono text-[10px] text-bone-100/40 tabular-nums">
-                  {column.length}
+                  {col.count}
                 </span>
               </header>
 
               <div className="space-y-3">
-                {column.map((lead) => (
+                {col.items.map((lead) => (
                   <article
                     key={lead.id}
                     data-testid="lead-card"
                     data-lead-id={lead.id}
                     draggable
                     onDragStart={(e) => e.dataTransfer.setData("text/plain", lead.id)}
-                    className="group rounded-sm border border-white/10 bg-[color:var(--color-ink)] p-3 cursor-grab active:cursor-grabbing hover:border-signal/50 transition-colors"
+                    onMouseEnter={() => prefetchLead(lead.id)}
+                    className="group relative rounded-sm border border-white/10 bg-[color:var(--color-ink)] p-3 cursor-grab active:cursor-grabbing hover:border-signal/50 transition-colors"
                   >
                     <Link to={`/admin/leads/${lead.id}`} className="block">
                       <p className="text-sm text-bone-100 leading-tight mb-1 group-hover:text-signal transition-colors">
@@ -150,10 +221,18 @@ export default function Pipeline() {
                   </article>
                 ))}
 
-                {column.length === 0 && (
-                  <p className="text-[11px] text-bone-100/25 py-6 text-center">
-                    Nothing here.
-                  </p>
+                {col.items.length === 0 && (
+                  <p className="text-[11px] text-bone-100/25 py-6 text-center">Nothing here.</p>
+                )}
+
+                {more > 0 && (
+                  <button
+                    data-testid={`load-more-${stage.id}`}
+                    onClick={() => loadMore(stage.id)}
+                    className="w-full py-2 text-[11px] text-bone-100/50 hover:text-signal border border-dashed border-white/15 hover:border-signal rounded-sm"
+                  >
+                    Load {Math.min(more, PER_COLUMN)} more ({more} left)
+                  </button>
                 )}
               </div>
             </section>

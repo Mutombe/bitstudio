@@ -6,27 +6,31 @@ import { prefetchCompany } from "../lib/prefetch.js";
 import { AdminHead } from "./AdminLayout.jsx";
 import Modal from "./Modal.jsx";
 import PrefetchLink from "./PrefetchLink.jsx";
+import Pagination from "./Pagination.jsx";
 
 const inputCls =
   "mt-2 w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm";
 
 export default function Companies() {
-  const [companies, setCompanies] = useState([]);
+  const [page, setPage] = useState(null);
+  const [pageNum, setPageNum] = useState(1);
   const [q, setQ] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: "", website: "", industry: "", phone: "" });
   const [error, setError] = useState("");
 
   const load = useCallback(() => {
-    crm.listCompanies({ q })
-      .then((p) => setCompanies(p.results || p))
+    crm.listCompanies({ q, page: pageNum })
+      .then(setPage)
       .catch(() => setError("Could not load companies."));
-  }, [q]);
+  }, [q, pageNum]);
 
   useEffect(() => {
     const t = setTimeout(load, 200);
     return () => clearTimeout(t);
   }, [load]);
+
+  const companies = page?.results || [];
 
   const create = async (e) => {
     e.preventDefault();
@@ -48,7 +52,8 @@ export default function Companies() {
       <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
         <div>
           <h1 className="font-display text-3xl md:text-4xl mb-1">Companies</h1>
-          <p className="text-sm text-bone-100/55">{companies.length} accounts</p>
+          {/* The server's real total — not the number of rows on this page. */}
+          <p className="text-sm text-bone-100/55">{page ? `${page.count} accounts` : "Loading…"}</p>
         </div>
         <button data-testid="new-company-btn" onClick={() => setShowForm(true)} className="btn btn-primary">
           <PlusIcon size={14} weight="bold" /> New company
@@ -84,7 +89,7 @@ export default function Companies() {
 
       <input
         value={q}
-        onChange={(e) => setQ(e.target.value)}
+        onChange={(e) => { setPageNum(1); setQ(e.target.value); }}
         placeholder="Search companies…"
         className="w-full max-w-md bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm mb-6"
       />
@@ -117,6 +122,8 @@ export default function Companies() {
         </table>
         {companies.length === 0 && <p className="text-center text-bone-100/40 py-12 text-sm">No companies yet.</p>}
       </div>
+
+      <Pagination page={page} pageNum={pageNum} onChange={setPageNum} label="accounts" />
     </div>
   );
 }

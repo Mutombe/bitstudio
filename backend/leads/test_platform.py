@@ -101,6 +101,43 @@ class CompanyContactTests(TestCase):
         lead.refresh_from_db()
         self.assertEqual(lead.company_ref, company)
 
+    def test_filter_leads_by_company_ref(self):
+        """
+        The company detail page must filter in the DB. It used to pull page 1
+        of all leads and filter client-side, so a company's leads disappeared
+        once they fell past the first page.
+        """
+        company = Company.objects.create(name="Acme")
+        # Enough noise that the target would be off page 1 of an unfiltered list.
+        for i in range(60):
+            Lead.objects.create(name=f"Noise {i}", email=f"n{i}@x.co", message="x")
+        target = Lead.objects.create(
+            name="Acme Lead", email="acme@x.co", message="x", company_ref=company
+        )
+
+        response = self.client.get(reverse("lead-list"), {"company_ref": company.id})
+        results = response.json()["results"]
+        self.assertEqual([r["name"] for r in results], ["Acme Lead"])
+        self.assertEqual(response.json()["count"], 1)
+        self.assertEqual(str(target.id), results[0]["id"])
+
+    def test_pipeline_column_is_paged_with_a_true_count(self):
+        """Each board column pages independently and reports the real total."""
+        for i in range(30):
+            Lead.objects.create(name=f"New {i}", email=f"p{i}@x.co", message="x", status="new")
+
+        page1 = self.client.get(
+            reverse("lead-list"), {"status": "new", "page_size": 25, "page": 1}
+        ).json()
+        self.assertEqual(page1["count"], 30)      # true total, not the page size
+        self.assertEqual(len(page1["results"]), 25)
+        self.assertIsNotNone(page1["next"])
+
+        page2 = self.client.get(
+            reverse("lead-list"), {"status": "new", "page_size": 25, "page": 2}
+        ).json()
+        self.assertEqual(len(page2["results"]), 5)
+
 
 class SavedViewTests(TestCase):
     def setUp(self):
