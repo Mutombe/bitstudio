@@ -21,6 +21,7 @@ import { DetailSkeleton } from "./Skeleton.jsx";
 import Modal from "./Modal.jsx";
 import LeadForm from "./LeadForm.jsx";
 import PrefetchLink from "./PrefetchLink.jsx";
+import AsyncSelect from "./AsyncSelect.jsx";
 
 const ACTIVITY_TONE = {
   created: "text-bone-100/50",
@@ -75,7 +76,6 @@ export default function LeadDetail() {
   const [lead, setLead] = useState(null);
   const [team, setTeam] = useState([]);
   const [allTags, setAllTags] = useState([]);
-  const [companies, setCompanies] = useState([]);
   const [customDefs, setCustomDefs] = useState([]);
   const [templates, setTemplates] = useState([]);
   const [emailOpen, setEmailOpen] = useState(false);
@@ -90,6 +90,13 @@ export default function LeadDetail() {
     setLead(data);
     setValueDraft(String(Math.round(Number(data.value) || 0)));
   }, []);
+
+  // The account list is searched server-side, so linking works whether there
+  // are six companies or six thousand.
+  const searchCompanies = useCallback(
+    (q) => crm.listCompanies({ q, page_size: 20 }).then((p) => p.results || p),
+    [],
+  );
 
   // Reloads after a mutation must fetch fresh — never the prefetch cache,
   // which would re-show the pre-edit copy.
@@ -109,9 +116,6 @@ export default function LeadDetail() {
 
   useEffect(() => {
     crm.listTags().then(setAllTags).catch(() => setAllTags([]));
-    // The picker needs the whole account list, not just page 1 — otherwise
-    // you can't link a lead to company #51. 500 is the server's ceiling.
-    crm.listCompanies({ page_size: 500 }).then((p) => setCompanies(p.results || p)).catch(() => setCompanies([]));
     crm.listCustomFields().then(setCustomDefs).catch(() => setCustomDefs([]));
     crm.listEmailTemplates().then(setTemplates).catch(() => setTemplates([]));
   }, []);
@@ -491,7 +495,9 @@ export default function LeadDetail() {
 
             {/* Company link */}
             <div className="mt-4 grid sm:grid-cols-2 gap-4">
-              <label className="block">
+              {/* Not a <label>: it forwards clicks to the control inside it,
+                  which for a button means click → label → button → forever. */}
+              <div className="block">
                 <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45 flex items-center gap-2">
                   Company (account)
                   {lead.company_ref && (
@@ -504,16 +510,19 @@ export default function LeadDetail() {
                     </PrefetchLink>
                   )}
                 </span>
-                <select
-                  data-testid="company-select"
-                  value={lead.company_ref?.id || ""}
-                  onChange={(e) => patch({ company_ref: e.target.value ? Number(e.target.value) : null })}
-                  className="mt-2 w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm"
-                >
-                  <option value="">Not linked</option>
-                  {companies.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-                </select>
-              </label>
+                <AsyncSelect
+                  testId="company-select"
+                  value={lead.company_ref || null}
+                  search={searchCompanies}
+                  placeholder="Type a company name…"
+                  onChange={(option) =>
+                    patch(
+                      { company_ref: option ? option.id : null },
+                      { company_ref: option },
+                    )
+                  }
+                />
+              </div>
             </div>
 
             {/* Custom fields */}
