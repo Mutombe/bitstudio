@@ -1,4 +1,8 @@
 import { Route, Routes } from "react-router-dom";
+// Inter, self-hosted and imported here rather than in main.jsx: the admin is a
+// lazy chunk, so only someone opening the CRM downloads it. The reference tool
+// pulls Inter from Google's CDN; we do not ship a third-party font request.
+import "@fontsource-variable/inter";
 import { AuthProvider } from "./AuthContext.jsx";
 import AdminLayout, { RequireAuth } from "./AdminLayout.jsx";
 import Login from "./Login.jsx";

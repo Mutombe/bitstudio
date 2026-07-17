@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { CaretDownIcon, CaretUpIcon, PlusIcon, UploadSimpleIcon, XIcon } from "@phosphor-icons/react";
 import { toast } from "sonner";
 import { crm } from "../lib/api.js";
@@ -29,7 +29,7 @@ const COLUMNS = [
 function TagChip({ tag }) {
   return (
     <span
-      className="inline-block font-mono text-[8px] tracking-[0.12em] uppercase px-1.5 py-0.5 rounded-sm border"
+      className="inline-block font-mono text-[8px] tracking-[0.12em] uppercase px-1.5 py-0.5 rounded-lg border"
       style={{ color: tag.color, borderColor: `${tag.color}55` }}
     >
       {tag.name}
@@ -40,13 +40,21 @@ function TagChip({ tag }) {
 export default function LeadsList() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const canManage = user?.can_assign_leads;
 
   const [newOpen, setNewOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [page, setPage] = useState(null);
   const [tags, setTags] = useState([]);
-  const [filters, setFilters] = useState({ q: "", status: "", owner: "", tag: "" });
+  // Seeded from the URL so the shell's search box can land here with a query,
+  // and so a filtered list stays shareable.
+  const [filters, setFilters] = useState({
+    q: searchParams.get("q") || "",
+    status: "",
+    owner: "",
+    tag: "",
+  });
   const [sort, setSort] = useState({ sort: "created_at", dir: "desc" });
   const [pageNum, setPageNum] = useState(1);
   const [selected, setSelected] = useState(new Set());
@@ -56,6 +64,16 @@ export default function LeadsList() {
   useEffect(() => {
     crm.listViews().then(setViews).catch(() => setViews([]));
   }, []);
+
+  // Searching again from the shell while already on this page changes the URL
+  // but not the mount, so pick the new query up here.
+  useEffect(() => {
+    const q = searchParams.get("q");
+    if (q !== null) {
+      setFilters((f) => (f.q === q ? f : { ...f, q }));
+      setPageNum(1);
+    }
+  }, [searchParams]);
 
   const applyView = (v) => {
     const p = v.params || {};
@@ -142,8 +160,8 @@ export default function LeadsList() {
 
       <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
         <div>
-          <h1 className="font-display text-3xl md:text-4xl mb-1">Leads</h1>
-          <p className="text-sm text-bone-100/55">
+          <h1 className="text-xl md:text-2xl mb-1">Leads</h1>
+          <p className="text-sm text-bone-100/60">
             {page ? `${page.count} matching` : "Loading…"}
           </p>
         </div>
@@ -166,18 +184,18 @@ export default function LeadsList() {
           value={filters.q}
           onChange={update("q")}
           placeholder="Search name, email, company, offer…"
-          className="flex-1 min-w-[240px] bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm"
+          className="flex-1 min-w-[240px] bg-transparent border border-line-strong focus:border-signal outline-none rounded-lg px-3 py-2 text-sm"
         />
-        <select value={filters.status} onChange={update("status")} className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm">
+        <select value={filters.status} onChange={update("status")} className="bg-maroon-950 border border-line-strong rounded-lg pl-3 pr-9 py-2 text-sm">
           <option value="">All stages</option>
           {STAGES.map((s) => <option key={s.id} value={s.id}>{s.label}</option>)}
         </select>
-        <select value={filters.owner} onChange={update("owner")} className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm">
+        <select value={filters.owner} onChange={update("owner")} className="bg-maroon-950 border border-line-strong rounded-lg pl-3 pr-9 py-2 text-sm">
           <option value="">Anyone</option>
           <option value="me">Assigned to me</option>
           <option value="unassigned">Unassigned</option>
         </select>
-        <select value={filters.tag} onChange={update("tag")} className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm">
+        <select value={filters.tag} onChange={update("tag")} className="bg-maroon-950 border border-line-strong rounded-lg pl-3 pr-9 py-2 text-sm">
           <option value="">All tags</option>
           {tags.map((t) => <option key={t.id} value={t.id}>{t.name} ({t.lead_count})</option>)}
         </select>
@@ -185,12 +203,12 @@ export default function LeadsList() {
 
       {/* Saved views */}
       <div className="flex flex-wrap items-center gap-2 mb-4">
-        <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/35">Views:</span>
+        <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60">Views:</span>
         {views.map((v) => (
           <span
             key={v.id}
             onClick={() => applyView(v)}
-            className="group inline-flex items-center gap-1.5 cursor-pointer font-mono text-[10px] tracking-[0.12em] uppercase px-2.5 py-1 rounded-sm border border-white/15 text-bone-100/70 hover:border-signal hover:text-signal"
+            className="group inline-flex items-center gap-1.5 cursor-pointer font-mono text-[10px] tracking-[0.12em] uppercase px-2.5 py-1 rounded-lg border border-line-strong text-bone-100/70 hover:border-signal hover:text-signal"
           >
             {v.name}
             <button onClick={(e) => deleteView(v.id, e)} className="opacity-0 group-hover:opacity-100 hover:text-maroon-400" aria-label={`Delete ${v.name}`}>
@@ -198,14 +216,14 @@ export default function LeadsList() {
             </button>
           </span>
         ))}
-        <button onClick={saveView} data-testid="save-view" className="font-mono text-[10px] tracking-[0.12em] uppercase px-2.5 py-1 rounded-sm border border-dashed border-white/20 text-bone-100/50 hover:text-signal hover:border-signal">
+        <button onClick={saveView} data-testid="save-view" className="font-mono text-[10px] tracking-[0.12em] uppercase px-2.5 py-1 rounded-lg border border-dashed border-line-strong text-bone-100/60 hover:text-signal hover:border-signal">
           + Save current
         </button>
       </div>
 
       {/* Bulk action bar */}
       {selected.size > 0 && (
-        <div data-testid="bulk-bar" className="flex flex-wrap items-center gap-3 mb-4 p-3 border border-signal/40 rounded-sm bg-signal/5">
+        <div data-testid="bulk-bar" className="flex flex-wrap items-center gap-3 mb-4 p-3 border border-signal/40 rounded-lg bg-signal/5">
           <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-signal">
             {selected.size} selected
           </span>
@@ -213,7 +231,7 @@ export default function LeadsList() {
             data-testid="bulk-stage"
             defaultValue=""
             onChange={(e) => { if (e.target.value) { runBulk("status", e.target.value); e.target.value = ""; } }}
-            className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-2 pr-7 py-1.5 text-xs"
+            className="bg-maroon-950 border border-line-strong rounded-lg pl-2 pr-7 py-1.5 text-xs"
           >
             <option value="">Set stage…</option>
             {STAGES.map((s) => <option key={s.id} value={s.id}>{s.label}</option>)}
@@ -222,7 +240,7 @@ export default function LeadsList() {
             <select
               defaultValue=""
               onChange={(e) => { if (e.target.value) { runBulk("add_tag", e.target.value); e.target.value = ""; } }}
-              className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-2 pr-7 py-1.5 text-xs"
+              className="bg-maroon-950 border border-line-strong rounded-lg pl-2 pr-7 py-1.5 text-xs"
             >
               <option value="">Add tag…</option>
               {tags.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
@@ -243,7 +261,7 @@ export default function LeadsList() {
               Delete
             </button>
           )}
-          <button onClick={() => setSelected(new Set())} className="ml-auto text-bone-100/40 hover:text-bone-100">
+          <button onClick={() => setSelected(new Set())} className="ml-auto text-bone-100/60 hover:text-bone-100">
             <XIcon size={14} />
           </button>
         </div>
@@ -254,10 +272,10 @@ export default function LeadsList() {
       {!page ? (
         <TableSkeleton rows={8} cols={6} />
       ) : (
-      <div className="border border-white/10 rounded-sm overflow-x-auto">
+      <div className="border border-line rounded-lg overflow-x-auto">
         <table className="w-full text-sm min-w-[820px]">
           <thead>
-            <tr className="border-b border-white/10 text-left">
+            <tr className="border-b border-line text-left">
               <th className="px-4 py-3 w-8">
                 <input type="checkbox" data-testid="select-all" checked={allSelected} onChange={toggleAll} aria-label="Select all" />
               </th>
@@ -265,7 +283,7 @@ export default function LeadsList() {
                 <th
                   key={col.label}
                   onClick={() => toggleSort(col.sort)}
-                  className={`font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45 px-4 py-3 ${col.sort ? "cursor-pointer hover:text-bone-100 select-none" : ""}`}
+                  className={`font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60 px-4 py-3 ${col.sort ? "cursor-pointer hover:text-bone-100 select-none" : ""}`}
                 >
                   <span className="inline-flex items-center gap-1">
                     {col.label}
@@ -279,7 +297,7 @@ export default function LeadsList() {
           </thead>
           <tbody>
             {rows.map((lead) => (
-              <tr key={lead.id} className={`border-b border-white/5 hover:bg-white/[0.02] ${selected.has(lead.id) ? "bg-signal/[0.04]" : ""}`}>
+              <tr key={lead.id} className={`border-b border-line hover:bg-hover ${selected.has(lead.id) ? "bg-signal/[0.04]" : ""}`}>
                 <td className="px-4 py-3">
                   <input type="checkbox" checked={selected.has(lead.id)} onChange={() => toggleRow(lead.id)} aria-label={`Select ${lead.name}`} />
                 </td>
@@ -291,7 +309,7 @@ export default function LeadsList() {
                   >
                     {lead.name}
                   </PrefetchLink>
-                  <p className="text-xs text-bone-100/40">{lead.company || lead.email}</p>
+                  <p className="text-xs text-bone-100/60">{lead.company || lead.email}</p>
                   {lead.tags?.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-1.5">
                       {lead.tags.map((t) => <TagChip key={t.id} tag={t} />)}
@@ -300,7 +318,7 @@ export default function LeadsList() {
                 </td>
                 <td className="px-4 py-3">
                   <span
-                    className="inline-flex items-center justify-center min-w-[28px] px-1.5 py-0.5 rounded-sm font-mono text-[11px] tabular-nums font-bold"
+                    className="inline-flex items-center justify-center min-w-[28px] px-1.5 py-0.5 rounded-lg font-mono text-[11px] tabular-nums font-bold"
                     style={{ color: scoreColor(lead.score), border: `1px solid ${scoreColor(lead.score)}44` }}
                     title="Lead score"
                   >
@@ -312,14 +330,14 @@ export default function LeadsList() {
                   {Number(lead.value) > 0 ? formatMoney(lead.value) : "—"}
                 </td>
                 <td className="px-4 py-3">
-                  <span className="font-mono text-[9px] tracking-[0.15em] uppercase px-2 py-1 rounded-full border border-white/15">
+                  <span className="font-mono text-[9px] tracking-[0.15em] uppercase px-2 py-1 rounded-full border border-line-strong">
                     {STAGE_LABEL[lead.status]}
                   </span>
                 </td>
                 <td className="px-4 py-3 text-bone-100/70 text-xs">
                   {lead.owner ? lead.owner.name : <span className="text-maroon-400">Unassigned</span>}
                 </td>
-                <td className="px-4 py-3 text-bone-100/50 text-xs whitespace-nowrap">
+                <td className="px-4 py-3 text-bone-100/60 text-xs whitespace-nowrap">
                   {formatDate(lead.created_at)}
                 </td>
               </tr>
@@ -328,19 +346,19 @@ export default function LeadsList() {
         </table>
 
         {rows.length === 0 && (
-          <p className="text-center text-bone-100/40 py-12 text-sm">No leads match those filters.</p>
+          <p className="text-center text-bone-100/60 py-12 text-sm">No leads match those filters.</p>
         )}
       </div>
       )}
 
       {page && page.count > PAGE_SIZE && (
-        <div className="flex items-center justify-between mt-4 font-mono text-[10px] tracking-[0.18em] uppercase text-bone-100/50">
+        <div className="flex items-center justify-between mt-4 font-mono text-[10px] tracking-[0.18em] uppercase text-bone-100/60">
           <span>Page {pageNum} of {Math.ceil(page.count / PAGE_SIZE)}</span>
           <div className="flex items-center gap-2">
-            <button onClick={() => { setPageNum((n) => Math.max(1, n - 1)); setSelected(new Set()); }} disabled={!page.previous} className="px-3 py-1.5 border border-white/15 rounded-sm hover:border-signal disabled:opacity-30 disabled:hover:border-white/15">
+            <button onClick={() => { setPageNum((n) => Math.max(1, n - 1)); setSelected(new Set()); }} disabled={!page.previous} className="px-3 py-1.5 border border-line-strong rounded-lg hover:border-signal disabled:opacity-30 disabled:hover:border-line-strong">
               Prev
             </button>
-            <button data-testid="next-page" onClick={() => { setPageNum((n) => n + 1); setSelected(new Set()); }} disabled={!page.next} className="px-3 py-1.5 border border-white/15 rounded-sm hover:border-signal disabled:opacity-30 disabled:hover:border-white/15">
+            <button data-testid="next-page" onClick={() => { setPageNum((n) => n + 1); setSelected(new Set()); }} disabled={!page.next} className="px-3 py-1.5 border border-line-strong rounded-lg hover:border-signal disabled:opacity-30 disabled:hover:border-line-strong">
               Next
             </button>
           </div>

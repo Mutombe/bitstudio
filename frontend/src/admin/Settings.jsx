@@ -6,7 +6,7 @@ import { formatDateTime } from "./constants.js";
 import Pagination from "./Pagination.jsx";
 
 const inputCls =
-  "bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm";
+  "bg-transparent border border-line-strong focus:border-signal outline-none rounded-lg px-3 py-2 text-sm";
 
 const TABS = ["Custom fields", "Email templates", "Web-to-lead", "Audit log"];
 
@@ -42,12 +42,12 @@ function CustomFields() {
       </form>
       <ul className="space-y-2 max-w-lg">
         {fields.map((f) => (
-          <li key={f.id} className="flex items-center justify-between border border-white/10 rounded-sm px-4 py-2.5">
-            <span className="text-sm text-bone-100">{f.label} <span className="text-bone-100/40 font-mono text-xs">· {f.field_type} · {f.key}</span></span>
-            <button onClick={() => remove(f.id)} className="text-bone-100/40 hover:text-maroon-400"><TrashIcon size={14} /></button>
+          <li key={f.id} className="flex items-center justify-between border border-line rounded-lg px-4 py-2.5">
+            <span className="text-sm text-bone-100">{f.label} <span className="text-bone-100/60 font-mono text-xs">· {f.field_type} · {f.key}</span></span>
+            <button onClick={() => remove(f.id)} className="text-bone-100/60 hover:text-maroon-400"><TrashIcon size={14} /></button>
           </li>
         ))}
-        {fields.length === 0 && <li className="text-sm text-bone-100/40">No custom fields yet. Add one to capture extra data on every lead.</li>}
+        {fields.length === 0 && <li className="text-sm text-bone-100/60">No custom fields yet. Add one to capture extra data on every lead.</li>}
       </ul>
     </div>
   );
@@ -78,12 +78,12 @@ function EmailTemplates() {
       </form>
       <ul className="space-y-2 max-w-xl">
         {items.map((t) => (
-          <li key={t.id} className="flex items-center justify-between border border-white/10 rounded-sm px-4 py-2.5">
-            <span className="text-sm text-bone-100">{t.name} <span className="text-bone-100/40 text-xs">· {t.subject}</span></span>
-            <button onClick={() => remove(t.id)} className="text-bone-100/40 hover:text-maroon-400"><TrashIcon size={14} /></button>
+          <li key={t.id} className="flex items-center justify-between border border-line rounded-lg px-4 py-2.5">
+            <span className="text-sm text-bone-100">{t.name} <span className="text-bone-100/60 text-xs">· {t.subject}</span></span>
+            <button onClick={() => remove(t.id)} className="text-bone-100/60 hover:text-maroon-400"><TrashIcon size={14} /></button>
           </li>
         ))}
-        {items.length === 0 && <li className="text-sm text-bone-100/40">No templates yet.</li>}
+        {items.length === 0 && <li className="text-sm text-bone-100/60">No templates yet.</li>}
       </ul>
     </div>
   );
@@ -109,7 +109,7 @@ function WebToLead() {
 
   return (
     <div>
-      <p className="text-sm text-bone-100/55 mb-4 max-w-2xl">
+      <p className="text-sm text-bone-100/60 mb-4 max-w-2xl">
         Give an external website a key so it can POST leads straight into the CRM.
         Any form can submit to <code className="text-bone-100/80">{origin}/api/intake/</code> with an
         <code className="text-bone-100/80"> X-Api-Key</code> header.
@@ -120,17 +120,17 @@ function WebToLead() {
       </form>
       <ul className="space-y-3 max-w-2xl">
         {keys.map((k) => (
-          <li key={k.id} className="border border-white/10 rounded-sm p-4">
+          <li key={k.id} className="border border-line rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-bone-100">{k.name}</span>
-              <button onClick={() => toggle(k)} className={`font-mono text-[10px] tracking-[0.15em] uppercase ${k.is_active ? "text-[#4B9E6B]" : "text-maroon-400"}`}>
+              <button onClick={() => toggle(k)} className={`font-mono text-[10px] tracking-[0.15em] uppercase ${k.is_active ? "text-[#059669]" : "text-maroon-400"}`}>
                 {k.is_active ? "Active" : "Disabled"}
               </button>
             </div>
-            <code className="block text-xs text-bone-100/60 break-all bg-black/30 rounded-sm px-3 py-2">{k.key}</code>
+            <code className="block text-xs text-bone-100/60 break-all bg-black/30 rounded-lg px-3 py-2">{k.key}</code>
             <details className="mt-2">
-              <summary className="text-[11px] text-bone-100/40 cursor-pointer">Embed snippet</summary>
-              <pre className="mt-2 text-[10px] text-bone-100/60 bg-black/30 rounded-sm p-3 overflow-x-auto">{`fetch("${origin}/api/intake/", {
+              <summary className="text-[11px] text-bone-100/60 cursor-pointer">Embed snippet</summary>
+              <pre className="mt-2 text-[10px] text-bone-100/60 bg-black/30 rounded-lg p-3 overflow-x-auto">{`fetch("${origin}/api/intake/", {
   method: "POST",
   headers: { "Content-Type": "application/json", "X-Api-Key": "${k.key}" },
   body: JSON.stringify({ name, email, message })
@@ -138,7 +138,7 @@ function WebToLead() {
             </details>
           </li>
         ))}
-        {keys.length === 0 && <li className="text-sm text-bone-100/40">No keys yet.</li>}
+        {keys.length === 0 && <li className="text-sm text-bone-100/60">No keys yet.</li>}
       </ul>
     </div>
   );
@@ -152,19 +152,19 @@ function AuditLog() {
   const rows = page?.results || [];
   return (
     <div className="max-w-3xl">
-    <div className="border border-white/10 rounded-sm overflow-x-auto">
+    <div className="border border-line rounded-lg overflow-x-auto">
       <table className="w-full text-sm min-w-[560px]" data-testid="audit-table">
         <thead>
-          <tr className="border-b border-white/10 text-left">
+          <tr className="border-b border-line text-left">
             {["When", "Who", "Did", "What"].map((h) => (
-              <th key={h} className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45 px-4 py-3">{h}</th>
+              <th key={h} className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60 px-4 py-3">{h}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.id} className="border-b border-white/5">
-              <td className="px-4 py-2.5 text-bone-100/50 text-xs whitespace-nowrap">{formatDateTime(r.created_at)}</td>
+            <tr key={r.id} className="border-b border-line">
+              <td className="px-4 py-2.5 text-bone-100/60 text-xs whitespace-nowrap">{formatDateTime(r.created_at)}</td>
               <td className="px-4 py-2.5 text-bone-100/80 text-xs">{r.actor?.name || "System"}</td>
               <td className="px-4 py-2.5 text-xs"><span className="font-mono tracking-[0.12em] uppercase text-signal">{r.verb}</span></td>
               <td className="px-4 py-2.5 text-bone-100/70 text-xs">{r.target}{r.summary ? ` — ${r.summary}` : ""}</td>
@@ -172,7 +172,7 @@ function AuditLog() {
           ))}
         </tbody>
       </table>
-      {rows.length === 0 && <p className="text-center text-bone-100/40 py-10 text-sm">Nothing logged yet.</p>}
+      {rows.length === 0 && <p className="text-center text-bone-100/60 py-10 text-sm">Nothing logged yet.</p>}
     </div>
     <Pagination page={page} pageNum={pageNum} onChange={setPageNum} label="entries" />
     </div>
@@ -184,16 +184,16 @@ export default function Settings() {
   return (
     <div>
       <AdminHead title="Settings" />
-      <h1 className="font-display text-3xl md:text-4xl mb-6">Settings</h1>
+      <h1 className="text-xl md:text-2xl mb-6">Settings</h1>
 
-      <div className="flex flex-wrap gap-1 mb-8 border-b border-white/10">
+      <div className="flex flex-wrap gap-1 mb-8 border-b border-line">
         {TABS.map((t) => (
           <button
             key={t}
             data-testid={`tab-${t.split(" ")[0].toLowerCase()}`}
             onClick={() => setTab(t)}
             className={`px-4 py-2.5 font-mono text-[10px] tracking-[0.2em] uppercase transition-colors border-b-2 -mb-px ${
-              tab === t ? "border-signal text-signal" : "border-transparent text-bone-100/50 hover:text-bone-100"
+              tab === t ? "border-signal text-signal" : "border-transparent text-bone-100/60 hover:text-bone-100"
             }`}
           >
             {t}

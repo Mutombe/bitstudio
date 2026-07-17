@@ -8,11 +8,11 @@ import { useAuth } from "./AuthContext.jsx";
 import { MANUAL_SOURCES, SOURCE_LABEL, STAGES } from "./constants.js";
 
 const inputCls =
-  "mt-1.5 w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-md px-3 py-2 text-sm";
+  "mt-1.5 w-full bg-transparent border border-line-strong focus:border-signal outline-none rounded-md px-3 py-2 text-sm";
 const selectCls =
-  "mt-1.5 w-full bg-[color:var(--color-ink)] border border-white/15 rounded-md pl-3 pr-9 py-2 text-sm";
+  "mt-1.5 w-full bg-maroon-950 border border-line-strong rounded-md pl-3 pr-9 py-2 text-sm";
 const Label = ({ children }) => (
-  <span className="font-medium text-[11px] uppercase tracking-wide text-bone-100/45">{children}</span>
+  <span className="font-medium text-[11px] uppercase tracking-wide text-bone-100/60">{children}</span>
 );
 
 // Create OR edit a lead, inside a modal. `lead` present = edit.
@@ -95,15 +95,15 @@ export default function LeadForm({ lead, onSaved, onCancel }) {
       {error && <p role="alert" className="text-sm text-maroon-400 break-words">{error}</p>}
 
       {dupes.length > 0 && (
-        <div data-testid="dup-warning" className="p-3 border border-[#C9A24B]/40 rounded-md bg-[#C9A24B]/5">
-          <p className="flex items-center gap-2 text-sm text-[#C9A24B] mb-1">
+        <div data-testid="dup-warning" className="p-3 border border-[#B45309]/40 rounded-md bg-[#B45309]/5">
+          <p className="flex items-center gap-2 text-sm text-[#B45309] mb-1">
             <WarningIcon size={15} weight="fill" /> Possible duplicate — {dupes.length} already on file
           </p>
           <ul className="text-sm space-y-0.5">
             {dupes.map((d) => (
               <li key={d.id}>
                 <Link to={`/admin/leads/${d.id}`} className="text-bone-100 hover:text-signal underline">{d.name}</Link>
-                <span className="text-bone-100/45"> · {d.email}</span>
+                <span className="text-bone-100/60"> · {d.email}</span>
               </li>
             ))}
           </ul>

@@ -34,16 +34,16 @@ export default function Login() {
 
       <form
         onSubmit={submit}
-        className="w-full max-w-sm border border-white/10 rounded-sm p-8 bg-maroon-950/30"
+        className="w-full max-w-sm border border-line rounded-lg p-8 bg-maroon-950"
       >
         <img src="/logo.png" alt="" className="h-8 w-8 mb-6" />
-        <h1 className="font-display text-3xl leading-tight mb-2">Bit Studio CRM</h1>
-        <p className="text-sm text-bone-100/55 mb-8">
+        <h1 className="text-2xl mb-2">Bit Studio CRM</h1>
+        <p className="text-sm text-bone-100/60 mb-8">
           Sales floor. Staff only.
         </p>
 
         <label className="block mb-4">
-          <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/50">
+          <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/60">
             Username
           </span>
           <input
@@ -52,12 +52,12 @@ export default function Login() {
             autoComplete="username"
             autoFocus
             required
-            className="mt-2 w-full bg-transparent border-b border-white/20 focus:border-signal outline-none py-2 text-bone-100"
+            className="mt-2 w-full bg-transparent border-b border-line-strong focus:border-signal outline-none py-2 text-bone-100"
           />
         </label>
 
         <label className="block mb-8">
-          <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/50">
+          <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/60">
             Password
           </span>
           <input
@@ -66,7 +66,7 @@ export default function Login() {
             onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
             autoComplete="current-password"
             required
-            className="mt-2 w-full bg-transparent border-b border-white/20 focus:border-signal outline-none py-2 text-bone-100"
+            className="mt-2 w-full bg-transparent border-b border-line-strong focus:border-signal outline-none py-2 text-bone-100"
           />
         </label>
 

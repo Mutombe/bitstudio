@@ -9,7 +9,7 @@ import PrefetchLink from "./PrefetchLink.jsx";
 import Pagination from "./Pagination.jsx";
 
 const inputCls =
-  "mt-2 w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm";
+  "mt-2 w-full bg-transparent border border-line-strong focus:border-signal outline-none rounded-lg px-3 py-2 text-sm";
 
 export default function Companies() {
   const [page, setPage] = useState(null);
@@ -51,9 +51,9 @@ export default function Companies() {
       <AdminHead title="Companies" />
       <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
         <div>
-          <h1 className="font-display text-3xl md:text-4xl mb-1">Companies</h1>
+          <h1 className="text-xl md:text-2xl mb-1">Companies</h1>
           {/* The server's real total — not the number of rows on this page. */}
-          <p className="text-sm text-bone-100/55">{page ? `${page.count} accounts` : "Loading…"}</p>
+          <p className="text-sm text-bone-100/60">{page ? `${page.count} accounts` : "Loading…"}</p>
         </div>
         <button data-testid="new-company-btn" onClick={() => setShowForm(true)} className="btn btn-primary">
           <PlusIcon size={14} weight="bold" /> New company
@@ -65,19 +65,19 @@ export default function Companies() {
       <Modal open={showForm} onClose={() => setShowForm(false)} title="New company" size="2xl">
         <form onSubmit={create} className="grid sm:grid-cols-2 gap-4">
           <label className="block">
-            <span className="font-medium text-[11px] uppercase tracking-wide text-bone-100/45">Name *</span>
+            <span className="font-medium text-[11px] uppercase tracking-wide text-bone-100/60">Name *</span>
             <input data-testid="company-name" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} className={inputCls} required />
           </label>
           <label className="block">
-            <span className="font-medium text-[11px] uppercase tracking-wide text-bone-100/45">Industry</span>
+            <span className="font-medium text-[11px] uppercase tracking-wide text-bone-100/60">Industry</span>
             <input value={form.industry} onChange={(e) => setForm((f) => ({ ...f, industry: e.target.value }))} className={inputCls} />
           </label>
           <label className="block">
-            <span className="font-medium text-[11px] uppercase tracking-wide text-bone-100/45">Website</span>
+            <span className="font-medium text-[11px] uppercase tracking-wide text-bone-100/60">Website</span>
             <input value={form.website} onChange={(e) => setForm((f) => ({ ...f, website: e.target.value }))} className={inputCls} />
           </label>
           <label className="block">
-            <span className="font-medium text-[11px] uppercase tracking-wide text-bone-100/45">Phone</span>
+            <span className="font-medium text-[11px] uppercase tracking-wide text-bone-100/60">Phone</span>
             <input value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} className={inputCls} />
           </label>
           <div className="sm:col-span-2 flex items-center gap-3">
@@ -91,26 +91,26 @@ export default function Companies() {
         value={q}
         onChange={(e) => { setPageNum(1); setQ(e.target.value); }}
         placeholder="Search companies…"
-        className="w-full max-w-md bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm mb-6"
+        className="w-full max-w-md bg-transparent border border-line-strong focus:border-signal outline-none rounded-lg px-3 py-2 text-sm mb-6"
       />
 
-      <div className="border border-white/10 rounded-sm overflow-x-auto">
+      <div className="border border-line rounded-lg overflow-x-auto">
         <table className="w-full text-sm min-w-[640px]" data-testid="companies-table">
           <thead>
-            <tr className="border-b border-white/10 text-left">
+            <tr className="border-b border-line text-left">
               {["Company", "Industry", "Leads", "Contacts", "Owner"].map((h) => (
-                <th key={h} className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45 px-4 py-3">{h}</th>
+                <th key={h} className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60 px-4 py-3">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {companies.map((c) => (
-              <tr key={c.id} className="border-b border-white/5 hover:bg-white/[0.02]">
+              <tr key={c.id} className="border-b border-line hover:bg-hover">
                 <td className="px-4 py-3">
                   <PrefetchLink to={`/admin/companies/${c.id}`} prefetch={() => prefetchCompany(c.id)} className="text-bone-100 hover:text-signal text-left">
                     {c.name}
                   </PrefetchLink>
-                  {c.website && <p className="text-xs text-bone-100/40">{c.website}</p>}
+                  {c.website && <p className="text-xs text-bone-100/60">{c.website}</p>}
                 </td>
                 <td className="px-4 py-3 text-bone-100/70 text-xs">{c.industry || "—"}</td>
                 <td className="px-4 py-3 text-bone-100/70 tabular-nums">{c.lead_count}</td>
@@ -120,7 +120,7 @@ export default function Companies() {
             ))}
           </tbody>
         </table>
-        {companies.length === 0 && <p className="text-center text-bone-100/40 py-12 text-sm">No companies yet.</p>}
+        {companies.length === 0 && <p className="text-center text-bone-100/60 py-12 text-sm">No companies yet.</p>}
       </div>
 
       <Pagination page={page} pageNum={pageNum} onChange={setPageNum} label="accounts" />

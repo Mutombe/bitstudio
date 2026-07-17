@@ -24,15 +24,15 @@ import PrefetchLink from "./PrefetchLink.jsx";
 import AsyncSelect from "./AsyncSelect.jsx";
 
 const ACTIVITY_TONE = {
-  created: "text-bone-100/50",
+  created: "text-bone-100/60",
   note: "text-bone-100",
-  call: "text-[#8A93A3]",
-  email: "text-[#8A93A3]",
-  meeting: "text-[#8A93A3]",
-  whatsapp: "text-[#4B9E6B]",
+  call: "text-[#64748B]",
+  email: "text-[#64748B]",
+  meeting: "text-[#64748B]",
+  whatsapp: "text-[#059669]",
   status_change: "text-signal",
-  assignment: "text-[#8A93A3]",
-  edited: "text-bone-100/50",
+  assignment: "text-[#64748B]",
+  edited: "text-bone-100/60",
 };
 
 const KIND_LABEL = Object.fromEntries(ACTIVITY_KINDS.map((k) => [k.id, k.label]));
@@ -50,14 +50,14 @@ function Attribution({ lead }) {
 
   if (rows.length === 0) return null;
   return (
-    <section className="border border-white/10 rounded-sm p-5 bg-maroon-950/20">
-      <h2 className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/45 mb-4">
+    <section className="border border-line rounded-lg p-5 bg-maroon-950">
+      <h2 className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/60 mb-4">
         Attribution
       </h2>
       <dl className="space-y-2.5">
         {rows.map(([label, value]) => (
           <div key={label} className="flex gap-3 text-sm">
-            <dt className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/40 w-24 shrink-0 pt-1">
+            <dt className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60 w-24 shrink-0 pt-1">
               {label}
             </dt>
             <dd className="text-bone-100/85 break-all">{value}</dd>
@@ -280,7 +280,7 @@ export default function LeadDetail() {
 
       <Link
         to="/admin/leads"
-        className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/50 hover:text-signal mb-6"
+        className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/60 hover:text-signal mb-6"
       >
         <ArrowLeftIcon size={12} weight="bold" /> Leads
       </Link>
@@ -289,7 +289,7 @@ export default function LeadDetail() {
         <div className="flex items-start gap-4">
           <span
             data-testid="lead-score"
-            className="shrink-0 mt-1 inline-flex flex-col items-center justify-center w-14 h-14 rounded-sm border font-mono"
+            className="shrink-0 mt-1 inline-flex flex-col items-center justify-center w-14 h-14 rounded-lg border font-mono"
             style={{ color: scoreColor(lead.score), borderColor: `${scoreColor(lead.score)}55` }}
             title={Object.entries(lead.score_breakdown || {}).map(([k, v]) => `${k}: +${v}`).join("\n")}
           >
@@ -297,8 +297,8 @@ export default function LeadDetail() {
             <span className="text-[7px] tracking-[0.15em] uppercase mt-0.5">score</span>
           </span>
           <div>
-            <h1 className="font-display text-3xl md:text-4xl">{lead.name}</h1>
-            <p className="text-sm text-bone-100/50 mt-1">
+            <h1 className="text-xl md:text-2xl">{lead.name}</h1>
+            <p className="text-sm text-bone-100/60 mt-1">
               {lead.company ? `${lead.company} · ` : ""}Added {formatDateTime(lead.created_at)}
             </p>
           </div>
@@ -340,14 +340,14 @@ export default function LeadDetail() {
           <form
             onSubmit={sendEmail}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-lg bg-maroon-950 border border-white/15 rounded-sm p-6"
+            className="w-full max-w-lg bg-maroon-950 border border-line-strong rounded-lg p-6"
           >
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-display text-xl">Email {lead.name}</h2>
-              <button type="button" onClick={() => setEmailOpen(false)} className="text-bone-100/40 hover:text-bone-100"><XIcon size={16} /></button>
+              <button type="button" onClick={() => setEmailOpen(false)} className="text-bone-100/60 hover:text-bone-100"><XIcon size={16} /></button>
             </div>
             {templates.length > 0 && (
-              <select onChange={(e) => applyTemplate(e.target.value)} className="w-full mb-3 bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm">
+              <select onChange={(e) => applyTemplate(e.target.value)} className="w-full mb-3 bg-maroon-950 border border-line-strong rounded-lg pl-3 pr-9 py-2 text-sm">
                 <option value="">Start from a template…</option>
                 {templates.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
               </select>
@@ -357,7 +357,7 @@ export default function LeadDetail() {
               value={emailDraft.subject}
               onChange={(e) => setEmailDraft((d) => ({ ...d, subject: e.target.value }))}
               placeholder="Subject"
-              className="w-full mb-3 bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm"
+              className="w-full mb-3 bg-transparent border border-line-strong focus:border-signal outline-none rounded-lg px-3 py-2 text-sm"
               required
             />
             <textarea
@@ -366,7 +366,7 @@ export default function LeadDetail() {
               onChange={(e) => setEmailDraft((d) => ({ ...d, body: e.target.value }))}
               rows={6}
               placeholder="Message — {{name}}, {{company}} are filled in."
-              className="w-full mb-4 bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm resize-y"
+              className="w-full mb-4 bg-transparent border border-line-strong focus:border-signal outline-none rounded-lg px-3 py-2 text-sm resize-y"
               required
             />
             <button type="submit" data-testid="email-send" className="btn btn-primary">Send email</button>
@@ -377,15 +377,15 @@ export default function LeadDetail() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           {/* Pipeline controls */}
-          <section className="border border-white/10 rounded-sm p-5 bg-maroon-950/20">
+          <section className="border border-line rounded-lg p-5 bg-maroon-950">
             <div className="grid sm:grid-cols-2 gap-4">
               <label className="block">
-                <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Stage</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60">Stage</span>
                 <select
                   data-testid="stage-select"
                   value={lead.status}
                   onChange={(e) => patch({ status: e.target.value }, { status: e.target.value })}
-                  className="mt-2 w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm"
+                  className="mt-2 w-full bg-maroon-950 border border-line-strong rounded-lg pl-3 pr-9 py-2 text-sm"
                 >
                   {STAGES.map((s) => (
                     <option key={s.id} value={s.id}>{s.label}</option>
@@ -394,13 +394,13 @@ export default function LeadDetail() {
               </label>
 
               <label className="block">
-                <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Owner</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60">Owner</span>
                 {user?.can_assign_leads ? (
                   <select
                     data-testid="owner-select"
                     value={lead.owner?.id || ""}
                     onChange={(e) => patch({ owner: e.target.value ? Number(e.target.value) : null })}
-                    className="mt-2 w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm"
+                    className="mt-2 w-full bg-maroon-950 border border-line-strong rounded-lg pl-3 pr-9 py-2 text-sm"
                   >
                     <option value="">Unassigned</option>
                     {team.map((member) => (
@@ -428,9 +428,9 @@ export default function LeadDetail() {
 
             <div className="grid sm:grid-cols-2 gap-4 mt-4">
               <label className="block">
-                <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Deal value (USD)</span>
-                <div className="mt-2 flex items-center border border-white/15 rounded-sm focus-within:border-signal">
-                  <span className="pl-3 text-bone-100/50">$</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60">Deal value (USD)</span>
+                <div className="mt-2 flex items-center border border-line-strong rounded-lg focus-within:border-signal">
+                  <span className="pl-3 text-bone-100/60">$</span>
                   <input
                     data-testid="value-input"
                     type="number"
@@ -454,7 +454,7 @@ export default function LeadDetail() {
                       if (e.target.value !== lead.lost_reason) patch({ lost_reason: e.target.value });
                     }}
                     placeholder="Price, timing, went with a competitor…"
-                    className="mt-2 w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm"
+                    className="mt-2 w-full bg-transparent border border-line-strong focus:border-signal outline-none rounded-lg px-3 py-2 text-sm"
                   />
                 </label>
               )}
@@ -462,12 +462,12 @@ export default function LeadDetail() {
 
             {/* Tags */}
             <div className="mt-4">
-              <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">Tags</span>
+              <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60">Tags</span>
               <div className="mt-2 flex flex-wrap items-center gap-2" data-testid="lead-tags">
                 {lead.tags.map((t) => (
                   <span
                     key={t.id}
-                    className="inline-flex items-center gap-1.5 font-mono text-[9px] tracking-[0.12em] uppercase px-2 py-1 rounded-sm border"
+                    className="inline-flex items-center gap-1.5 font-mono text-[9px] tracking-[0.12em] uppercase px-2 py-1 rounded-lg border"
                     style={{ color: t.color, borderColor: `${t.color}55` }}
                   >
                     {t.name}
@@ -480,14 +480,14 @@ export default function LeadDetail() {
                   data-testid="add-tag-select"
                   value=""
                   onChange={(e) => { addTag(Number(e.target.value)); e.target.value = ""; }}
-                  className="bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-2 pr-7 py-1 text-xs"
+                  className="bg-maroon-950 border border-line-strong rounded-lg pl-2 pr-7 py-1 text-xs"
                 >
                   <option value="">+ Add tag</option>
                   {allTags
                     .filter((t) => !lead.tags.some((lt) => lt.id === t.id))
                     .map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
                 </select>
-                <button onClick={createAndAddTag} className="font-mono text-[9px] tracking-[0.15em] uppercase text-bone-100/50 hover:text-signal">
+                <button onClick={createAndAddTag} className="font-mono text-[9px] tracking-[0.15em] uppercase text-bone-100/60 hover:text-signal">
                   New tag
                 </button>
               </div>
@@ -498,7 +498,7 @@ export default function LeadDetail() {
               {/* Not a <label>: it forwards clicks to the control inside it,
                   which for a button means click → label → button → forever. */}
               <div className="block">
-                <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45 flex items-center gap-2">
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60 flex items-center gap-2">
                   Company (account)
                   {lead.company_ref && (
                     <PrefetchLink
@@ -530,12 +530,12 @@ export default function LeadDetail() {
               <div className="mt-4 grid sm:grid-cols-2 gap-4">
                 {customDefs.map((f) => (
                   <label key={f.id} className="block">
-                    <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45">{f.label}</span>
+                    <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60">{f.label}</span>
                     {f.field_type === "select" ? (
                       <select
                         defaultValue={lead.custom?.[f.key] || ""}
                         onChange={(e) => setCustom(f.key, e.target.value)}
-                        className="mt-2 w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm"
+                        className="mt-2 w-full bg-maroon-950 border border-line-strong rounded-lg pl-3 pr-9 py-2 text-sm"
                       >
                         <option value="">—</option>
                         {(f.options || []).map((o) => <option key={o} value={o}>{o}</option>)}
@@ -545,7 +545,7 @@ export default function LeadDetail() {
                         type={f.field_type === "number" ? "number" : f.field_type === "date" ? "date" : "text"}
                         defaultValue={lead.custom?.[f.key] || ""}
                         onBlur={(e) => { if (e.target.value !== (lead.custom?.[f.key] || "")) setCustom(f.key, e.target.value); }}
-                        className="mt-2 w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm"
+                        className="mt-2 w-full bg-transparent border border-line-strong focus:border-signal outline-none rounded-lg px-3 py-2 text-sm"
                       />
                     )}
                   </label>
@@ -555,8 +555,8 @@ export default function LeadDetail() {
           </section>
 
           {/* Contact + message (edited via the modal). */}
-          <section className="border border-white/10 rounded-sm p-5 bg-maroon-950/20">
-            <h2 className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/45 mb-4">Contact</h2>
+          <section className="border border-line rounded-lg p-5 bg-maroon-950">
+            <h2 className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/60 mb-4">Contact</h2>
             <dl className="space-y-2.5 mb-4">
               {[
                 ["Email", lead.email],
@@ -565,14 +565,14 @@ export default function LeadDetail() {
                 ["Prefers", lead.channel],
               ].filter(([, v]) => v).map(([label, value]) => (
                 <div key={label} className="flex gap-3 text-sm">
-                  <dt className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/40 w-24 shrink-0 pt-1">{label}</dt>
+                  <dt className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60 w-24 shrink-0 pt-1">{label}</dt>
                   <dd className="text-bone-100/85 break-all">{value}</dd>
                 </div>
               ))}
             </dl>
             {lead.message && (
               <>
-                <p className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/40 mb-2">What they need</p>
+                <p className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60 mb-2">What they need</p>
                 <p className="text-bone-100/90 whitespace-pre-wrap leading-relaxed text-sm">{lead.message}</p>
               </>
             )}
@@ -594,8 +594,8 @@ export default function LeadDetail() {
           <Attribution lead={lead} />
 
           {/* Activity timeline */}
-          <section className="border border-white/10 rounded-sm p-5 bg-maroon-950/20">
-            <h2 className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/45 mb-4">Activity</h2>
+          <section className="border border-line rounded-lg p-5 bg-maroon-950">
+            <h2 className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/60 mb-4">Activity</h2>
 
             <form onSubmit={submitLog} className="mb-6">
               <div className="flex flex-wrap gap-1.5 mb-2">
@@ -605,10 +605,10 @@ export default function LeadDetail() {
                     type="button"
                     data-testid={`log-kind-${k.id}`}
                     onClick={() => setLog((l) => ({ ...l, kind: k.id }))}
-                    className={`font-mono text-[10px] tracking-[0.15em] uppercase px-2.5 py-1 rounded-sm border transition-colors ${
+                    className={`font-mono text-[10px] tracking-[0.15em] uppercase px-2.5 py-1 rounded-lg border transition-colors ${
                       log.kind === k.id
                         ? "border-signal text-signal"
-                        : "border-white/15 text-bone-100/50 hover:text-bone-100"
+                        : "border-line-strong text-bone-100/60 hover:text-bone-100"
                     }`}
                   >
                     {k.label}
@@ -621,7 +621,7 @@ export default function LeadDetail() {
                 onChange={(e) => setLog((l) => ({ ...l, body: e.target.value }))}
                 rows={2}
                 placeholder={`Log a ${KIND_LABEL[log.kind]?.toLowerCase() || "note"}…`}
-                className="w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm resize-y"
+                className="w-full bg-transparent border border-line-strong focus:border-signal outline-none rounded-lg px-3 py-2 text-sm resize-y"
               />
               <button type="submit" data-testid="log-submit" disabled={!log.body.trim()} className="btn btn-ghost mt-2">
                 Log {KIND_LABEL[log.kind] || "note"}
@@ -634,14 +634,14 @@ export default function LeadDetail() {
                   <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-signal shrink-0" />
                   <div className="min-w-0">
                     {["call", "email", "meeting", "whatsapp"].includes(item.kind) && (
-                      <span className="font-mono text-[9px] tracking-[0.18em] uppercase text-bone-100/45 mr-2">
+                      <span className="font-mono text-[9px] tracking-[0.18em] uppercase text-bone-100/60 mr-2">
                         {KIND_LABEL[item.kind]}
                       </span>
                     )}
                     <span className={`text-sm ${ACTIVITY_TONE[item.kind] || "text-bone-100"}`}>
                       {item.body}
                     </span>
-                    <p className="font-mono text-[9px] tracking-[0.18em] uppercase text-bone-100/35 mt-1">
+                    <p className="font-mono text-[9px] tracking-[0.18em] uppercase text-bone-100/60 mt-1">
                       {item.actor ? item.actor.name : "System"} · {formatDateTime(item.created_at)}
                     </p>
                   </div>
@@ -653,8 +653,8 @@ export default function LeadDetail() {
 
         {/* Right. Follow-ups */}
         <div className="space-y-6">
-          <section className="border border-white/10 rounded-sm p-5 bg-maroon-950/20">
-            <h2 className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/45 mb-4">Follow-ups</h2>
+          <section className="border border-line rounded-lg p-5 bg-maroon-950">
+            <h2 className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/60 mb-4">Follow-ups</h2>
 
             <form onSubmit={submitTask} className="space-y-2 mb-5">
               <input
@@ -662,19 +662,19 @@ export default function LeadDetail() {
                 value={task.title}
                 onChange={(e) => setTask((t) => ({ ...t, title: e.target.value }))}
                 placeholder="Send the proposal"
-                className="w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm"
+                className="w-full bg-transparent border border-line-strong focus:border-signal outline-none rounded-lg px-3 py-2 text-sm"
               />
               <input
                 type="date"
                 value={task.due_date}
                 onChange={(e) => setTask((t) => ({ ...t, due_date: e.target.value }))}
-                className="w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm px-3 py-2 text-sm"
+                className="w-full bg-maroon-950 border border-line-strong rounded-lg px-3 py-2 text-sm"
               />
               {user?.can_assign_leads && team.length > 0 && (
                 <select
                   value={task.assignee_id}
                   onChange={(e) => setTask((t) => ({ ...t, assignee_id: e.target.value }))}
-                  className="w-full bg-[color:var(--color-ink)] border border-white/15 rounded-sm pl-3 pr-9 py-2 text-sm"
+                  className="w-full bg-maroon-950 border border-line-strong rounded-lg pl-3 pr-9 py-2 text-sm"
                 >
                   <option value="">Assign to me</option>
                   {team.map((member) => (
@@ -698,16 +698,16 @@ export default function LeadDetail() {
                     {item.is_done ? (
                       <CheckCircleIcon size={18} weight="fill" className="text-signal" />
                     ) : (
-                      <CircleIcon size={18} className="text-bone-100/40" />
+                      <CircleIcon size={18} className="text-bone-100/60" />
                     )}
                   </button>
                   <div className="min-w-0 flex-1">
-                    <p className={`text-sm ${item.is_done ? "line-through text-bone-100/35" : "text-bone-100/90"}`}>
+                    <p className={`text-sm ${item.is_done ? "line-through text-bone-100/60" : "text-bone-100/90"}`}>
                       {item.title}
                     </p>
-                    {item.due_date && <p className="text-[10px] text-bone-100/40">Due {item.due_date}</p>}
+                    {item.due_date && <p className="text-[10px] text-bone-100/60">Due {item.due_date}</p>}
                     {item.assignee && (
-                      <p className="text-[10px] text-bone-100/35">{item.assignee.name}</p>
+                      <p className="text-[10px] text-bone-100/60">{item.assignee.name}</p>
                     )}
                   </div>
                   <a
@@ -728,7 +728,7 @@ export default function LeadDetail() {
                 </li>
               ))}
               {lead.tasks.length === 0 && (
-                <li className="text-xs text-bone-100/35">Nothing scheduled.</li>
+                <li className="text-xs text-bone-100/60">Nothing scheduled.</li>
               )}
             </ul>
           </section>

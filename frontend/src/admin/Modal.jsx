@@ -54,17 +54,17 @@ export default function Modal({ open, onClose, title, description, size = "lg", 
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.97, y: 12 }}
               transition={{ duration: 0.18 }}
-              className={`relative w-full ${SIZES[size]} bg-maroon-950 border border-white/12 rounded-lg shadow-2xl`}
+              className={`relative w-full ${SIZES[size]} bg-maroon-950 border border-line rounded-lg shadow-2xl`}
             >
-              <div className="flex items-start justify-between gap-4 px-6 py-4 border-b border-white/10">
+              <div className="flex items-start justify-between gap-4 px-6 py-4 border-b border-line">
                 <div>
                   <h2 className="text-lg font-semibold text-bone-100">{title}</h2>
-                  {description && <p className="mt-0.5 text-sm text-bone-100/50">{description}</p>}
+                  {description && <p className="mt-0.5 text-sm text-bone-100/60">{description}</p>}
                 </div>
                 <button
                   onClick={onClose}
                   aria-label="Close"
-                  className="p-1.5 -m-1.5 rounded-md text-bone-100/40 hover:text-bone-100 hover:bg-white/5"
+                  className="p-1.5 -m-1.5 rounded-md text-bone-100/60 hover:text-bone-100 hover:bg-hover"
                 >
                   <XIcon size={18} />
                 </button>

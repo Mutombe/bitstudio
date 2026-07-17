@@ -8,22 +8,22 @@ import { StatGridSkeleton, Skeleton } from "./Skeleton.jsx";
 
 const OFFER_NAME = Object.fromEntries(OFFERS.map((o) => [o.slug, o.name]));
 
-function Stat({ label, value, hint, accent = "#E6E8EC", testId }) {
+function Stat({ label, value, hint, accent = "#0F172A", testId }) {
   return (
     <div
       data-testid={testId}
-      className="border border-white/10 rounded-sm p-5 bg-maroon-950/20"
+      className="border border-line rounded-lg p-5 bg-maroon-950"
     >
-      <p className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/45 mb-3">
+      <p className="font-mono text-[9px] tracking-[0.22em] uppercase text-bone-100/60 mb-3">
         {label}
       </p>
       <p
-        className="font-display text-3xl md:text-4xl tabular-nums leading-none"
+        className="text-3xl font-semibold tabular-nums leading-none"
         style={{ color: accent }}
       >
         {value}
       </p>
-      {hint && <p className="mt-2 text-xs text-bone-100/45">{hint}</p>}
+      {hint && <p className="mt-2 text-xs text-bone-100/60">{hint}</p>}
     </div>
   );
 }
@@ -59,8 +59,8 @@ export default function Dashboard() {
 
       <div className="flex items-end justify-between gap-4 mb-8">
         <div>
-          <h1 className="font-display text-3xl md:text-4xl">Dashboard</h1>
-          <p className="text-sm text-bone-100/55 mt-1">
+          <h1 className="text-xl md:text-2xl">Dashboard</h1>
+          <p className="text-sm text-bone-100/60 mt-1">
             What the pipeline is worth right now.
           </p>
         </div>
@@ -80,14 +80,14 @@ export default function Dashboard() {
         <Stat
           label="Won"
           value={formatMoney(stats.won_value)}
-          accent="#4B9E6B"
+          accent="#059669"
           hint="Closed revenue"
         />
         <Stat label="Win rate" value={winRate} hint="Won of decided" />
         <Stat
           label="Unassigned"
           value={stats.unassigned}
-          accent={stats.unassigned > 0 ? "#C46A6A" : "#E6E8EC"}
+          accent={stats.unassigned > 0 ? "#DC2626" : "#0F172A"}
           hint={stats.unassigned > 0 ? "Nobody is chasing these." : "All claimed."}
         />
       </div>
@@ -100,20 +100,20 @@ export default function Dashboard() {
       </div>
 
       {/* Which offer page actually earns. The point of the whole SEO push. */}
-      <h2 className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/45 mb-4">
+      <h2 className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/60 mb-4">
         Conversion by offer
       </h2>
       {stats.by_offer.length === 0 ? (
-        <p className="text-sm text-bone-100/40 mb-10">No offer leads yet.</p>
+        <p className="text-sm text-bone-100/60 mb-10">No offer leads yet.</p>
       ) : (
-        <div className="border border-white/10 rounded-sm overflow-x-auto mb-10">
+        <div className="border border-line rounded-lg overflow-x-auto mb-10">
           <table className="w-full text-sm min-w-[640px]" data-testid="by-offer-table">
             <thead>
-              <tr className="border-b border-white/10 text-left">
+              <tr className="border-b border-line text-left">
                 {["Offer", "Leads", "Won", "Pipeline", "Won value"].map((h) => (
                   <th
                     key={h}
-                    className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/45 px-4 py-3"
+                    className="font-mono text-[9px] tracking-[0.2em] uppercase text-bone-100/60 px-4 py-3"
                   >
                     {h}
                   </th>
@@ -122,7 +122,7 @@ export default function Dashboard() {
             </thead>
             <tbody>
               {stats.by_offer.map((row) => (
-                <tr key={row.offer_slug} className="border-b border-white/5">
+                <tr key={row.offer_slug} className="border-b border-line">
                   <td className="px-4 py-3 text-bone-100">
                     {OFFER_NAME[row.offer_slug] || row.offer_slug}
                   </td>
@@ -131,7 +131,7 @@ export default function Dashboard() {
                   <td className="px-4 py-3 text-bone-100/70 tabular-nums">
                     {formatMoney(row.pipeline_value)}
                   </td>
-                  <td className="px-4 py-3 tabular-nums" style={{ color: "#4B9E6B" }}>
+                  <td className="px-4 py-3 tabular-nums" style={{ color: "#059669" }}>
                     {formatMoney(row.won_value)}
                   </td>
                 </tr>
@@ -141,7 +141,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      <h2 className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/45 mb-4">
+      <h2 className="font-mono text-[10px] tracking-[0.22em] uppercase text-bone-100/60 mb-4">
         By stage
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">

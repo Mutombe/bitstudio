@@ -123,7 +123,7 @@ export default function Pipeline() {
   if (loading) {
     return (
       <div>
-        <h1 className="font-display text-3xl md:text-4xl mb-6">Pipeline</h1>
+        <h1 className="text-xl md:text-2xl mb-6">Pipeline</h1>
         <BoardSkeleton columns={STAGES.length} />
       </div>
     );
@@ -137,8 +137,8 @@ export default function Pipeline() {
 
       <div className="flex items-end justify-between gap-4 mb-6">
         <div>
-          <h1 className="font-display text-3xl md:text-4xl">Pipeline</h1>
-          <p className="text-sm text-bone-100/55 mt-1">
+          <h1 className="text-xl md:text-2xl">Pipeline</h1>
+          <p className="text-sm text-bone-100/60 mt-1">
             Drag a card to move the deal. <span className="tabular-nums">{total}</span> leads on the board.
           </p>
         </div>
@@ -164,13 +164,16 @@ export default function Pipeline() {
               }}
               onDragLeave={() => setDragOver((s) => (s === stage.id ? null : s))}
               onDrop={(e) => onDrop(e, stage.id)}
-              className={`rounded-sm border p-3 min-h-[60vh] transition-colors ${
+              // Three steps of elevation: the page is slate, the column sits a
+              // shade lighter, and the cards are white on top of it. Without
+              // that the cards would be white on white and vanish.
+              className={`rounded-lg border p-3 min-h-[60vh] transition-colors ${
                 dragOver === stage.id
                   ? "border-signal bg-signal/5"
-                  : "border-white/10 bg-maroon-950/20"
+                  : "border-line bg-bone-50"
               }`}
             >
-              <header className="flex items-center justify-between mb-4 pb-2 border-b border-white/10">
+              <header className="flex items-center justify-between mb-4 pb-2 border-b border-line">
                 <span
                   className="font-mono text-[10px] tracking-[0.2em] uppercase"
                   style={{ color: stage.accent }}
@@ -178,7 +181,7 @@ export default function Pipeline() {
                   {stage.label}
                 </span>
                 {/* True server count, not just what's rendered. */}
-                <span className="font-mono text-[10px] text-bone-100/40 tabular-nums">
+                <span className="font-mono text-[10px] text-bone-100/60 tabular-nums">
                   {col.count}
                 </span>
               </header>
@@ -192,29 +195,29 @@ export default function Pipeline() {
                     draggable
                     onDragStart={(e) => e.dataTransfer.setData("text/plain", lead.id)}
                     onMouseEnter={() => prefetchLead(lead.id)}
-                    className="group relative rounded-sm border border-white/10 bg-[color:var(--color-ink)] p-3 cursor-grab active:cursor-grabbing hover:border-signal/50 transition-colors"
+                    className="group relative rounded-lg border border-line bg-maroon-950 p-3 shadow-xs cursor-grab active:cursor-grabbing hover:border-signal/50 hover:shadow-sm transition-all"
                   >
                     <Link to={`/admin/leads/${lead.id}`} className="block">
                       <p className="text-sm text-bone-100 leading-tight mb-1 group-hover:text-signal transition-colors">
                         {lead.name}
                       </p>
                       {lead.company && (
-                        <p className="text-xs text-bone-100/50 mb-2">{lead.company}</p>
+                        <p className="text-xs text-bone-100/60 mb-2">{lead.company}</p>
                       )}
                       {lead.offer_slug && (
                         <p className="font-mono text-[9px] tracking-[0.15em] uppercase text-bone-100/60 mb-2 truncate">
                           {lead.offer_slug}
                         </p>
                       )}
-                      <div className="flex items-center justify-between gap-2 mt-3 pt-2 border-t border-white/5">
-                        <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-bone-100/40">
+                      <div className="flex items-center justify-between gap-2 mt-3 pt-2 border-t border-line">
+                        <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-bone-100/60">
                           {SOURCE_LABEL[lead.source] || lead.source}
                         </span>
-                        <span className="text-[10px] text-bone-100/40">
+                        <span className="text-[10px] text-bone-100/60">
                           {formatDate(lead.created_at)}
                         </span>
                       </div>
-                      <p className="mt-2 text-[10px] text-bone-100/50">
+                      <p className="mt-2 text-[10px] text-bone-100/60">
                         {lead.owner ? lead.owner.name : "Unassigned"}
                       </p>
                     </Link>
@@ -229,7 +232,7 @@ export default function Pipeline() {
                   <button
                     data-testid={`load-more-${stage.id}`}
                     onClick={() => loadMore(stage.id)}
-                    className="w-full py-2 text-[11px] text-bone-100/50 hover:text-signal border border-dashed border-white/15 hover:border-signal rounded-sm"
+                    className="w-full py-2 text-[11px] text-bone-100/60 hover:text-signal border border-dashed border-line-strong hover:border-signal rounded-lg"
                   >
                     Load {Math.min(more, PER_COLUMN)} more ({more} left)
                   </button>
