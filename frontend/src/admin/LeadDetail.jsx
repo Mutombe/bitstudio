@@ -109,7 +109,9 @@ export default function LeadDetail() {
 
   useEffect(() => {
     crm.listTags().then(setAllTags).catch(() => setAllTags([]));
-    crm.listCompanies({}).then((p) => setCompanies(p.results || p)).catch(() => setCompanies([]));
+    // The picker needs the whole account list, not just page 1 — otherwise
+    // you can't link a lead to company #51. 500 is the server's ceiling.
+    crm.listCompanies({ page_size: 500 }).then((p) => setCompanies(p.results || p)).catch(() => setCompanies([]));
     crm.listCustomFields().then(setCustomDefs).catch(() => setCustomDefs([]));
     crm.listEmailTemplates().then(setTemplates).catch(() => setTemplates([]));
   }, []);

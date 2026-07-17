@@ -5,6 +5,7 @@ import { admin } from "../lib/api.js";
 import { AdminHead } from "./AdminLayout.jsx";
 import { ROLE_LABEL, formatDate } from "./constants.js";
 import Modal from "./Modal.jsx";
+import Pagination from "./Pagination.jsx";
 
 const inputCls =
   "mt-2 w-full bg-transparent border border-white/15 focus:border-signal outline-none rounded-sm px-3 py-2 text-sm";
@@ -82,18 +83,20 @@ function NewUserForm({ onCreated, onCancel }) {
 }
 
 export default function Users() {
-  const [users, setUsers] = useState([]);
+  const [page, setPage] = useState(null);
+  const [pageNum, setPageNum] = useState(1);
   const [addOpen, setAddOpen] = useState(false);
   const [error, setError] = useState("");
 
   const load = useCallback(() => {
-    // The users endpoint is paginated (DRF default), so unwrap results.
     admin
-      .listUsers()
-      .then((page) => setUsers(Array.isArray(page) ? page : page.results))
+      .listUsers({ page: pageNum })
+      .then(setPage)
       .catch(() => setError("Could not load users."));
-  }, []);
+  }, [pageNum]);
   useEffect(load, [load]);
+
+  const users = page?.results || [];
 
   const changeRole = async (u, role) => {
     try {
@@ -197,6 +200,8 @@ export default function Users() {
           </tbody>
         </table>
       </div>
+
+      <Pagination page={page} pageNum={pageNum} onChange={setPageNum} label="users" />
     </div>
   );
 }

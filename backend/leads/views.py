@@ -161,6 +161,12 @@ class LeadViewSet(
         if tag := params.get("tag"):
             if tag.isdigit():
                 queryset = queryset.filter(tags__id=int(tag))
+        # A company's leads must be filtered in the database — the company
+        # detail page used to pull page 1 of *all* leads and filter client-side,
+        # which silently hid any lead past the first page.
+        if company_ref := params.get("company_ref"):
+            if company_ref.isdigit():
+                queryset = queryset.filter(company_ref_id=int(company_ref))
 
         # Sorting. `?sort=value&dir=desc`, allow-listed.
         sort = params.get("sort")

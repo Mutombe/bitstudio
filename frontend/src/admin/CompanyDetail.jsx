@@ -20,10 +20,14 @@ export default function CompanyDetail() {
   const [error, setError] = useState("");
 
   const loadRelated = useCallback(() => {
-    crm.listContacts({ company: id }).then((p) => setContacts(p.results || p)).catch(() => {});
-    crm.listLeads({ q: "" }).then((p) =>
-      setLeads((p.results || []).filter((l) => l.company_ref === Number(id) || l.company_ref?.id === Number(id)))
-    ).catch(() => {});
+    crm.listContacts({ company: id, page_size: 200 })
+      .then((p) => setContacts(p.results || p))
+      .catch(() => {});
+    // Filter in the database. This used to fetch page 1 of *all* leads and
+    // filter client-side, so a company's leads vanished past the first page.
+    crm.listLeads({ company_ref: id, page_size: 200 })
+      .then((p) => setLeads(p.results || []))
+      .catch(() => {});
   }, [id]);
 
   // After a change, refetch the company fresh (not the prefetch cache).

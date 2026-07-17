@@ -236,7 +236,7 @@ export const notifications = {
 };
 
 export const admin = {
-  listUsers: () => request("/api/users/"),
+  listUsers: (params) => request(`/api/users/${queryString(params)}`),
   createUser: (user) => request("/api/users/", { method: "POST", body: user }),
   updateUser: (id, patch) => request(`/api/users/${id}/`, { method: "PATCH", body: patch }),
   resetPassword: (id, password) =>
