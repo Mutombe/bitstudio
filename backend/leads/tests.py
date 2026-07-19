@@ -677,3 +677,64 @@ class LoginCsrfTests(TestCase):
     @override_settings(CSRF_TRUSTED_ORIGINS=["https://bitstudio.co.zw"])
     def test_login_from_an_untrusted_origin_is_rejected(self):
         self.assertEqual(self._login_from("https://evil.example").status_code, 403)
+
+
+class TokenAuthTests(TestCase):
+    """
+    The SPA lives on a different registrable domain from the API, so a session
+    cookie is cross-site and dropped. /auth/token/ hands back a token instead,
+    which the browser sends in the Authorization header. It must work without a
+    CSRF cookie (that's the whole point) yet still reject bad credentials.
+    """
+
+    def setUp(self):
+        cache.clear()
+        # enforce_csrf_checks proves the token endpoint needs no CSRF cookie —
+        # the cross-domain SPA can never obtain one.
+        self.client = Client(enforce_csrf_checks=True)
+        User.objects.create_user("tendai", password="correct-horse", email="t@x.co")
+        self.url = reverse("auth-token")
+
+    def test_token_login_needs_no_csrf_and_returns_a_token(self):
+        response = self.client.post(
+            self.url,
+            {"username": "tendai", "password": "correct-horse"},
+            content_type="application/json",
+            HTTP_ORIGIN="https://bitstudio.co.zw",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json().get("token"))
+
+    def test_bad_credentials_are_rejected_without_leaking_which_field(self):
+        response = self.client.post(
+            self.url,
+            {"username": "tendai", "password": "wrong"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 401)
+        self.assertNotIn("token", response.json())
+
+    def test_token_authenticates_a_protected_request(self):
+        token = self.client.post(
+            self.url,
+            {"username": "tendai", "password": "correct-horse"},
+            content_type="application/json",
+        ).json()["token"]
+
+        # A fresh client with no session — auth rides entirely on the header.
+        bare = Client(enforce_csrf_checks=True)
+        me = bare.get(reverse("auth-me"), HTTP_AUTHORIZATION=f"Token {token}")
+        self.assertEqual(me.status_code, 200)
+        self.assertEqual(me.json()["username"], "tendai")
+
+    def test_logout_revokes_the_token(self):
+        token = self.client.post(
+            self.url,
+            {"username": "tendai", "password": "correct-horse"},
+            content_type="application/json",
+        ).json()["token"]
+
+        auth = {"HTTP_AUTHORIZATION": f"Token {token}"}
+        self.assertEqual(self.client.post(reverse("auth-logout"), **auth).status_code, 204)
+        # The same token no longer authenticates.
+        self.assertEqual(self.client.get(reverse("auth-me"), **auth).status_code, 401)

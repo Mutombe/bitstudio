@@ -169,9 +169,16 @@ export default function LeadsList() {
           <button data-testid="import-btn" onClick={() => setImportOpen(true)} className="btn btn-ghost">
             <UploadSimpleIcon size={14} /> Import
           </button>
-          <a href={crm.exportUrl({ ...filters, ...sort })} className="btn btn-ghost">
+          <button
+            onClick={() =>
+              crm
+                .exportCsv({ ...filters, ...sort })
+                .catch(() => toast.error("Export failed."))
+            }
+            className="btn btn-ghost"
+          >
             Export CSV
-          </a>
+          </button>
           <button onClick={() => setNewOpen(true)} data-testid="new-lead-btn" className="btn btn-primary">
             <PlusIcon size={14} weight="bold" /> New lead
           </button>

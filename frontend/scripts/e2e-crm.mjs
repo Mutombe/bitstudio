@@ -219,7 +219,7 @@ async function run(page) {
   await page.type('input[autocomplete="username"]', "manager");
   await page.type('input[autocomplete="current-password"]', "wrong-password");
   const rejected = page.waitForResponse(
-    (res) => res.url().endsWith("/api/auth/login/") && res.request().method() === "POST",
+    (res) => res.url().endsWith("/api/auth/token/") && res.request().method() === "POST",
     { timeout: 10_000 }
   );
   await page.click('button[type="submit"]');
@@ -653,10 +653,15 @@ async function run(page) {
         ?.textContent.includes("Moyo Properties"),
     { timeout: 10_000 }
   );
-  // Read it back through the page so the session cookie rides along.
+  // Read it back through the page, carrying the auth token the SPA stored.
   const linked = await page.evaluate(
-    (api, id) =>
-      fetch(`${api}/api/leads/${id}/`, { credentials: "include" }).then((r) => r.json()),
+    (api, id) => {
+      const t = localStorage.getItem("crm_token");
+      return fetch(`${api}/api/leads/${id}/`, {
+        headers: t ? { Authorization: `Token ${t}` } : {},
+        credentials: "include",
+      }).then((r) => r.json());
+    },
     API,
     body.id
   );

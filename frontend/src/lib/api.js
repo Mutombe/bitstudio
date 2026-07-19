@@ -22,31 +22,46 @@ export class ApiError extends Error {
   }
 }
 
-function readCookie(name) {
-  const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
-  return match ? decodeURIComponent(match[2]) : null;
+// Auth token. The API is on a different registrable domain from the site, so
+// a session cookie would be cross-site and dropped. We authenticate once, keep
+// the token, and send it in the Authorization header on every call. localStorage
+// (not a cookie) is the tradeoff that lets this work cross-domain.
+const TOKEN_KEY = "crm_token";
+
+export function getToken() {
+  try {
+    return localStorage.getItem(TOKEN_KEY);
+  } catch {
+    return null;
+  }
 }
 
-const UNSAFE = new Set(["POST", "PUT", "PATCH", "DELETE"]);
+function setToken(value) {
+  try {
+    if (value) localStorage.setItem(TOKEN_KEY, value);
+    else localStorage.removeItem(TOKEN_KEY);
+  } catch {
+    /* private mode / storage disabled — auth just won't persist */
+  }
+}
+
+function authHeaders() {
+  const token = getToken();
+  return token ? { Authorization: `Token ${token}` } : {};
+}
 
 /**
  * Authenticated request against the CRM.
  *
- * Sends the session cookie (`credentials: include`) and echoes Django's
- * csrftoken back as X-CSRFToken, which is what its CSRF check expects.
+ * Carries the token in the Authorization header. `credentials: include` stays
+ * so same-origin (local dev, tests) can still fall back to the session cookie.
  */
 async function request(path, { method = "GET", body } = {}) {
   if (!API_URL) throw new ApiError("API is not configured.", 0, null);
 
-  const headers = { "Content-Type": "application/json" };
-  if (UNSAFE.has(method)) {
-    const token = readCookie("csrftoken");
-    if (token) headers["X-CSRFToken"] = token;
-  }
-
   const response = await fetch(`${API_URL}${path}`, {
     method,
-    headers,
+    headers: { "Content-Type": "application/json", ...authHeaders() },
     credentials: "include",
     body: body === undefined ? undefined : JSON.stringify(body),
   });
@@ -62,6 +77,29 @@ async function request(path, { method = "GET", body } = {}) {
     );
   }
   return data;
+}
+
+/**
+ * Download a file from an authenticated endpoint. A plain <a href> can't carry
+ * the Authorization header, so we fetch the bytes with the token and save the
+ * blob ourselves.
+ */
+async function download(path, filename) {
+  if (!API_URL) throw new ApiError("API is not configured.", 0, null);
+  const response = await fetch(`${API_URL}${path}`, {
+    headers: authHeaders(),
+    credentials: "include",
+  });
+  if (!response.ok) throw new ApiError("Download failed", response.status, null);
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }
 
 // ─── Public lead capture ─────────────────────────────────────────────
@@ -126,13 +164,10 @@ export function attributionFrom(search) {
 export async function importLeadsCsv(file) {
   const form = new FormData();
   form.append("file", file);
-  const headers = {};
-  const token = readCookie("csrftoken");
-  if (token) headers["X-CSRFToken"] = token;
 
   const response = await fetch(`${API_URL}/api/leads/import_csv/`, {
     method: "POST",
-    headers,
+    headers: authHeaders(),
     credentials: "include",
     body: form,
   });
@@ -146,11 +181,23 @@ export async function importLeadsCsv(file) {
 // ─── Auth ────────────────────────────────────────────────────────────
 
 export const auth = {
-  // Plants the csrftoken cookie. Call once before the first unsafe request.
-  primeCsrf: () => request("/api/auth/csrf/"),
-  login: (username, password) =>
-    request("/api/auth/login/", { method: "POST", body: { username, password } }),
-  logout: () => request("/api/auth/logout/", { method: "POST" }),
+  // Cross-domain login: authenticate and keep the returned token. No CSRF
+  // priming — the token flow doesn't use the session cookie.
+  login: async (username, password) => {
+    const data = await request("/api/auth/token/", {
+      method: "POST",
+      body: { username, password },
+    });
+    if (data?.token) setToken(data.token);
+    return data;
+  },
+  logout: async () => {
+    try {
+      await request("/api/auth/logout/", { method: "POST" });
+    } finally {
+      setToken(null); // clear locally even if the server call fails
+    }
+  },
   me: () => request("/api/auth/me/"),
 };
 
@@ -179,9 +226,10 @@ export const crm = {
   updateLead: (id, patch) =>
     request(`/api/leads/${id}/`, { method: "PATCH", body: patch }),
   deleteLead: (id) => request(`/api/leads/${id}/`, { method: "DELETE" }),
-  // The CSV export isn't JSON — hand back the URL for a plain browser download,
-  // which carries the session cookie automatically.
-  exportUrl: (params) => `${API_URL}/api/leads/export/${queryString(params)}`,
+  // Downloads must carry the token, so they fetch bytes and save a blob rather
+  // than navigating to a URL (a link can't set the Authorization header).
+  exportCsv: (params) =>
+    download(`/api/leads/export/${queryString(params)}`, "leads.csv"),
   checkDuplicate: (params) =>
     request(`/api/leads/check-duplicate/${queryString(params)}`),
   bulk: (ids, action, value) =>
@@ -201,7 +249,8 @@ export const crm = {
   updateTask: (taskId, patch) =>
     request(`/api/tasks/${taskId}/`, { method: "PATCH", body: patch }),
   deleteTask: (taskId) => request(`/api/tasks/${taskId}/`, { method: "DELETE" }),
-  taskIcsUrl: (taskId) => `${API_URL}/api/tasks/${taskId}/ics/`,
+  downloadTaskIcs: (taskId, name = "task") =>
+    download(`/api/tasks/${taskId}/ics/`, `${name}.ics`),
 
   // Email
   sendEmail: (id, subject, body) =>

@@ -75,10 +75,51 @@ class LoginView(APIView):
         return Response(UserSerializer(user).data)
 
 
+# Cross-domain login. The SPA on bitstudio.co.zw can't use the cookie flow
+# above — the csrftoken and session cookies are cross-site and never reach a
+# *.onrender.com API — so it authenticates here and gets a token to send in
+# the Authorization header. No Django session is created, so there is no
+# session cookie to hijack and thus no login-CSRF vector; authentication_classes
+# is empty so DRF never runs its CSRF check on this anonymous POST.
+class TokenLoginView(APIView):
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
+    throttle_scope = "login"
+
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = authenticate(
+            request,
+            username=serializer.validated_data["username"],
+            password=serializer.validated_data["password"],
+        )
+        if user is None:
+            return Response(
+                {"detail": "Invalid credentials."},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        from rest_framework.authtoken.models import Token
+
+        token, _ = Token.objects.get_or_create(user=user)
+        from leads.services import audit  # local import avoids an import cycle
+
+        audit(user, "logged in", f"User: {user.username}")
+        data = UserSerializer(user).data
+        data["token"] = token.key
+        return Response(data)
+
+
 class LogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
+        # Drop the token so it can't be reused, and clear any session too.
+        from rest_framework.authtoken.models import Token
+
+        Token.objects.filter(user=request.user).delete()
         logout(request)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
