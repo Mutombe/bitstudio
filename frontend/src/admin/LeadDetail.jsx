@@ -710,14 +710,18 @@ export default function LeadDetail() {
                       <p className="text-[10px] text-bone-100/60">{item.assignee.name}</p>
                     )}
                   </div>
-                  <a
-                    href={crm.taskIcsUrl(item.id)}
+                  <button
+                    onClick={() =>
+                      crm
+                        .downloadTaskIcs(item.id, item.title || "task")
+                        .catch(() => toast.error("Could not download the calendar file."))
+                    }
                     aria-label="Add to calendar"
                     title="Add to calendar (.ics)"
                     className="mt-0.5 shrink-0 text-bone-100/25 hover:text-signal"
                   >
                     <CalendarPlusIcon size={14} />
-                  </a>
+                  </button>
                   <button
                     onClick={() => deleteTask(item)}
                     aria-label="Delete follow-up"

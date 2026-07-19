@@ -14,6 +14,10 @@ dist-ssr
 .env
 .env.*
 !.env.example
+# Committed on purpose: holds only VITE_API_URL, a public build-time value.
+# Vite client vars are baked into the browser bundle, so this can never hold
+# a secret anyway — and the production build needs it to reach the backend.
+!.env.production
 e2e-artifacts/
 
 # Editor directories and files

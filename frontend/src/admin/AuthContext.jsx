@@ -14,7 +14,6 @@ export function AuthProvider({ children }) {
 
     (async () => {
       try {
-        await auth.primeCsrf();
         const me = await auth.me();
         if (!cancelled) setUser(me);
       } catch {
@@ -30,7 +29,6 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = useCallback(async (username, password) => {
-    await auth.primeCsrf();
     const me = await auth.login(username, password);
     setUser(me);
     return me;

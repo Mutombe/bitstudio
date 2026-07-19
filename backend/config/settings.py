@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "corsheaders",
     "rest_framework",
+    "rest_framework.authtoken",
     "accounts",
     "leads",
 ]
@@ -148,7 +149,13 @@ else:
 # The public lead endpoint is the only anonymous write on the service, so
 # it is throttled hard. Everything else will require auth (phase 2).
 REST_FRAMEWORK = {
+    # Token first: the SPA lives on a different registrable domain from the
+    # API (bitstudio.co.zw vs *.onrender.com), so a session cookie is
+    # cross-site and gets dropped. The browser authenticates with a token in
+    # the Authorization header instead. Session auth stays for same-origin
+    # callers (the Django admin, the test client, the browsable API).
     "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
