@@ -1,0 +1,39 @@
+# Render blueprint for the Bit Studio CRM backend.
+#
+# The service was first created via the Render API, but this file is the
+# source of truth for its shape: anyone can reproduce or review the deploy
+# from here. It sits in Virginia (us-east) to be next to the Neon database
+# in us-east-1 — every request makes several DB round-trips, so app-to-DB
+# latency matters more than app-to-user.
+#
+# Secrets (SECRET_KEY, DATABASE_URL) are NOT in this file. They are set in
+# the Render dashboard / API so they never land in git.
+services:
+  - type: web
+    name: bitstudio-crm-api
+    runtime: python
+    region: virginia
+    plan: starter
+    rootDir: backend
+    branch: main
+    healthCheckPath: /healthz
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate --noinput
+    startCommand: gunicorn config.wsgi:application
+    envVars:
+      - key: SECRET_KEY
+        sync: false          # set in dashboard; never committed
+      - key: DATABASE_URL
+        sync: false          # rotated Neon URL; never committed
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: .onrender.com
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://bitstudio.co.zw,https://www.bitstudio.co.zw
+      # onrender.com is cross-site from the marketing domain, so the session
+      # cookie needs SameSite=None to have any chance. The real fix is to put
+      # the API on api.bitstudio.co.zw and set SESSION_COOKIE_DOMAIN there.
+      - key: COOKIE_SAMESITE
+        value: None
+      - key: PYTHON_VERSION
+        value: 3.12.7
