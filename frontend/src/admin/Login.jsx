@@ -31,7 +31,7 @@ export default function Login() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center px-5 bg-cover bg-center relative"
+      className="login-screen min-h-screen flex items-center justify-center px-5 bg-cover bg-center relative"
       style={{ backgroundImage: "url(/login-bg.jpg)" }}
     >
       <AdminHead title="Sign in" />
