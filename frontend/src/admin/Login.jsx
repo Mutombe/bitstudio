@@ -57,7 +57,7 @@ export default function Login() {
             autoComplete="username"
             autoFocus
             required
-            className="mt-2 w-full rounded-lg bg-white/10 border border-white/20 focus:border-white/60 focus:bg-white/15 outline-none px-3 py-2.5 text-white placeholder-white/40 transition-colors"
+            className="mt-2 w-full rounded-lg bg-white/15 border border-white/30 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] focus:border-white/70 focus:bg-white/20 outline-none px-3.5 py-2.5 text-white placeholder-white/50 transition"
           />
         </label>
 
@@ -72,15 +72,16 @@ export default function Login() {
               onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
               autoComplete="current-password"
               required
-              className="w-full rounded-lg bg-white/10 border border-white/20 focus:border-white/60 focus:bg-white/15 outline-none pl-3 pr-11 py-2.5 text-white placeholder-white/40 transition-colors"
+              className="w-full rounded-lg bg-white/15 border border-white/30 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] focus:border-white/70 focus:bg-white/20 outline-none pl-3.5 pr-12 py-2.5 text-white placeholder-white/50 transition"
             />
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
               aria-label={showPassword ? "Hide password" : "Show password"}
-              className="absolute inset-y-0 right-0 flex items-center px-3 text-white/50 hover:text-white transition-colors"
+              title={showPassword ? "Hide password" : "Show password"}
+              className="absolute inset-y-0 right-0 my-1 mr-1 flex items-center gap-1.5 rounded-md px-2.5 text-white/90 hover:text-white hover:bg-white/15 transition-colors"
             >
-              {showPassword ? <EyeSlashIcon size={18} /> : <EyeIcon size={18} />}
+              {showPassword ? <EyeSlashIcon size={20} weight="bold" /> : <EyeIcon size={20} weight="bold" />}
             </button>
           </div>
         </label>
