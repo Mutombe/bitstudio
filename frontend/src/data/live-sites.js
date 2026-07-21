@@ -22,6 +22,17 @@ const _LIVE = [
       "Bard Global Finance Institute. Daily editorial coverage of African capital markets, plus long-form research from Finance Africa Quarterly.",
   },
   {
+    slug: "taqon",
+    name: "Taqon",
+    domain: "taqon.co.zw",
+    url: "https://taqon.co.zw",
+    tag: "Energy",
+    palette: ["#0F2A4B", "#F26522", "#FAFAF6"],
+    featured: true,
+    brief:
+      "Solar shop, package builder, and advisor platform. The sun's interface.",
+  },
+  {
     slug: "ecolusgroup",
     name: "Ecolus Group",
     domain: "ecolusgroup.co.zw",
@@ -124,6 +135,36 @@ const _LIVE = [
     palette: ["#103D2A", "#F5C518", "#F4F7EE"],
     brief:
       "Zimbabwean renewable energy certificates. The registry for green attribute trading.",
+  },
+  {
+    slug: "care-express-pharmacy",
+    name: "Care Express Pharmacy",
+    domain: "careexpresspharmacy.co.zw",
+    url: "https://careexpresspharmacy.co.zw",
+    tag: "Healthcare",
+    palette: ["#0E4C6B", "#2FB3A6", "#F2F8F7"],
+    brief:
+      "A Zimbabwean chemist gone digital. Prescriptions, wellness ranges, and delivery on a clean storefront.",
+  },
+  {
+    slug: "arch-aluminium",
+    name: "Arch Aluminium",
+    domain: "archaluminium.co.zw",
+    url: "https://archaluminium.co.zw",
+    tag: "Construction",
+    palette: ["#20272E", "#8C949C", "#EEF1F4"],
+    brief:
+      "Aluminium and glass fabrication — windows, doors, shopfronts. An industrial catalogue with the shine of the material itself.",
+  },
+  {
+    slug: "bard-santner-golf",
+    name: "Bard Santner Golf",
+    domain: "bardsantnergolf.com",
+    url: "https://bardsantnergolf.com",
+    tag: "Sport",
+    palette: ["#0C3B2E", "#C9A24B", "#F4F1E8"],
+    brief:
+      "A golf day under the Bard Santner banner — fixtures, sponsors, and the leaderboard. Fairway green, trophy gold.",
   },
 ];
 
