@@ -57,7 +57,7 @@ export default function Login() {
             autoComplete="username"
             autoFocus
             required
-            className="mt-2 w-full rounded-lg bg-white/15 border border-white/30 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] focus:border-white/70 focus:bg-white/20 outline-none px-3.5 py-2.5 text-white placeholder-white/50 transition"
+            className="mt-2 w-full rounded-lg bg-slate-950/40 border border-white/15 backdrop-blur-md focus:border-white/40 focus:bg-slate-950/55 outline-none px-3.5 py-2.5 text-white placeholder-white/50 transition"
           />
         </label>
 
@@ -72,7 +72,7 @@ export default function Login() {
               onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
               autoComplete="current-password"
               required
-              className="w-full rounded-lg bg-white/15 border border-white/30 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] focus:border-white/70 focus:bg-white/20 outline-none pl-3.5 pr-12 py-2.5 text-white placeholder-white/50 transition"
+              className="w-full rounded-lg bg-slate-950/40 border border-white/15 backdrop-blur-md focus:border-white/40 focus:bg-slate-950/55 outline-none pl-3.5 pr-12 py-2.5 text-white placeholder-white/50 transition"
             />
             <button
               type="button"
