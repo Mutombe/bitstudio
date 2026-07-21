@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { ArrowRightIcon } from "@phosphor-icons/react";
+import { ArrowRightIcon, EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { useAuth } from "./AuthContext.jsx";
 import { AdminHead, AdminLoading } from "./AdminLayout.jsx";
 
@@ -9,6 +9,7 @@ export default function Login() {
   const location = useLocation();
 
   const [form, setForm] = useState({ username: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -29,21 +30,25 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[color:var(--color-ink)] text-bone-100 flex items-center justify-center px-5">
+    <div
+      className="min-h-screen flex items-center justify-center px-5 bg-cover bg-center relative"
+      style={{ backgroundImage: "url(/login-bg.jpg)" }}
+    >
       <AdminHead title="Sign in" />
+      {/* Darkening wash so the frosted card and its light text stay legible
+          over the bright, burning parts of the photo. */}
+      <div className="absolute inset-0 bg-slate-950/55" />
 
       <form
         onSubmit={submit}
-        className="w-full max-w-sm border border-line rounded-lg p-8 bg-maroon-950"
+        className="relative w-full max-w-sm rounded-2xl border border-white/20 bg-white/10 backdrop-blur-2xl shadow-2xl shadow-black/40 p-8 text-white"
       >
         <img src="/logo.png" alt="" className="h-8 w-8 mb-6" />
-        <h1 className="text-2xl mb-2">Bit Studio CRM</h1>
-        <p className="text-sm text-bone-100/60 mb-8">
-          Sales floor. Staff only.
-        </p>
+        <h1 className="text-2xl font-semibold mb-2">Bit Studio CRM</h1>
+        <p className="text-sm text-white/70 mb-8">Sales floor. Staff only.</p>
 
         <label className="block mb-4">
-          <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/60">
+          <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/60">
             Username
           </span>
           <input
@@ -52,31 +57,45 @@ export default function Login() {
             autoComplete="username"
             autoFocus
             required
-            className="mt-2 w-full bg-transparent border-b border-line-strong focus:border-signal outline-none py-2 text-bone-100"
+            className="mt-2 w-full rounded-lg bg-white/10 border border-white/20 focus:border-white/60 focus:bg-white/15 outline-none px-3 py-2.5 text-white placeholder-white/40 transition-colors"
           />
         </label>
 
         <label className="block mb-8">
-          <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-bone-100/60">
+          <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/60">
             Password
           </span>
-          <input
-            type="password"
-            value={form.password}
-            onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
-            autoComplete="current-password"
-            required
-            className="mt-2 w-full bg-transparent border-b border-line-strong focus:border-signal outline-none py-2 text-bone-100"
-          />
+          <div className="relative mt-2">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={form.password}
+              onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+              autoComplete="current-password"
+              required
+              className="w-full rounded-lg bg-white/10 border border-white/20 focus:border-white/60 focus:bg-white/15 outline-none pl-3 pr-11 py-2.5 text-white placeholder-white/40 transition-colors"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              className="absolute inset-y-0 right-0 flex items-center px-3 text-white/50 hover:text-white transition-colors"
+            >
+              {showPassword ? <EyeSlashIcon size={18} /> : <EyeIcon size={18} />}
+            </button>
+          </div>
         </label>
 
         {error && (
-          <p role="alert" className="mb-5 text-sm text-maroon-400">
+          <p role="alert" className="mb-5 text-sm text-rose-300">
             {error}
           </p>
         )}
 
-        <button type="submit" disabled={busy} className="btn btn-primary w-full justify-center">
+        <button
+          type="submit"
+          disabled={busy}
+          className="btn btn-primary w-full justify-center"
+        >
           {busy ? "Signing in…" : "Sign in"}
           {!busy && <ArrowRightIcon size={14} weight="bold" />}
         </button>
