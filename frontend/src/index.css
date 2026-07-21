@@ -679,3 +679,22 @@
 @media (prefers-reduced-motion: reduce) {
   .crm-theme .skeleton::after { animation: none; }
 }
+
+/* Login screen: kill the browser's autofill background. When a saved
+   credential fills a field, Chrome/Edge/Safari paint it with their own near-
+   white background that ignores `background-color`. The inset box-shadow is
+   the only reliable way to cover it; we tint it to the field's dark glass and
+   force the text white so an autofilled login still reads correctly. The long
+   transition delays the native background from ever showing. Scoped to
+   .login-screen so the marketing site's light forms are untouched. */
+.login-screen input:-webkit-autofill,
+.login-screen input:-webkit-autofill:hover,
+.login-screen input:-webkit-autofill:focus,
+.login-screen input:-webkit-autofill:active {
+  -webkit-text-fill-color: #ffffff;
+  caret-color: #ffffff;
+  -webkit-box-shadow: 0 0 0 1000px rgba(15, 23, 42, 0.88) inset;
+  box-shadow: 0 0 0 1000px rgba(15, 23, 42, 0.88) inset;
+  border-radius: 0.5rem;
+  transition: background-color 9999s ease-in-out 0s;
+}
