@@ -4,7 +4,6 @@ import {
   ArrowUpRightIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
-  FrameCornersIcon,
   CopyIcon,
   CheckIcon,
 } from "@phosphor-icons/react";
@@ -144,10 +143,24 @@ export default function ProjectDetail() {
                     <span className="w-2 h-2 rounded-full bg-signal-muted" />
                     <span className="w-2 h-2 rounded-full bg-signal" />
                   </div>
-                  <span className="truncate max-w-[70%] normal-case tracking-normal text-bone-100/60 font-sans">
+                  <span className="truncate normal-case tracking-normal text-bone-100/60 font-sans">
                     {p.url.replace(/^https?:\/\//, "")}
                   </span>
-                  <FrameCornersIcon size={12} />
+                  <button
+                    type="button"
+                    onClick={copyLink}
+                    {...hover}
+                    aria-label="Copy demo link"
+                    title={copied ? "Link copied" : "Copy link"}
+                    className="shrink-0 flex items-center gap-1 normal-case tracking-normal font-sans text-bone-100/50 hover:text-signal transition-colors"
+                  >
+                    {copied ? (
+                      <CheckIcon size={13} weight="bold" />
+                    ) : (
+                      <CopyIcon size={13} weight="bold" />
+                    )}
+                    <span className="hidden sm:inline">{copied ? "Copied" : "Copy"}</span>
+                  </button>
                 </div>
                 <div className="flex-1 relative">
                   <iframe
