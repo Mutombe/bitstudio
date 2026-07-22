@@ -1,10 +1,12 @@
+import { useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import {
   ArrowUpRightIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
   FrameCornersIcon,
+  CopyIcon,
+  CheckIcon,
 } from "@phosphor-icons/react";
 import { findProject, adjacentProjects } from "../data/projects.js";
 import PageTransition from "../components/PageTransition.jsx";
@@ -17,6 +19,7 @@ export default function ProjectDetail() {
   const project = findProject(slug);
   const hover = useCursorHover("hover", "");
   const openHover = useCursorHover("view", "Open live");
+  const [copied, setCopied] = useState(false);
 
   if (!project) return <Navigate to="/work" replace />;
 
@@ -24,6 +27,29 @@ export default function ProjectDetail() {
 
   const p = project;
   const [a, b, c] = p.palette;
+
+  // Copy the demo's URL so it can be shared without opening it first.
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(p.url);
+    } catch {
+      // Non-secure context or old browser: fall back to a hidden textarea.
+      const ta = document.createElement("textarea");
+      ta.value = p.url;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+      } catch {
+        /* nothing more we can do */
+      }
+      ta.remove();
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  };
 
   return (
     <PageTransition>
@@ -145,6 +171,20 @@ export default function ProjectDetail() {
                   Visit live
                   <ArrowUpRightIcon size={14} weight="bold" />
                 </a>
+                <button
+                  type="button"
+                  onClick={copyLink}
+                  {...hover}
+                  aria-label="Copy demo link"
+                  className="btn btn-ghost"
+                >
+                  {copied ? (
+                    <CheckIcon size={14} weight="bold" />
+                  ) : (
+                    <CopyIcon size={14} weight="bold" />
+                  )}
+                  {copied ? "Copied" : "Copy link"}
+                </button>
                 {next && (
                   <Link to={`/work/${next.slug}`} {...hover} className="btn btn-ghost">
                     Next: {next.name}
