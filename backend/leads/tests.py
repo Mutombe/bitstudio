@@ -727,6 +727,20 @@ class TokenAuthTests(TestCase):
         self.assertEqual(me.status_code, 200)
         self.assertEqual(me.json()["username"], "tendai")
 
+    def test_token_also_works_as_a_bearer_header(self):
+        # External API clients (ChatGPT actions, most HTTP tooling) default to
+        # the Bearer keyword; the same token must authenticate either way.
+        token = self.client.post(
+            self.url,
+            {"username": "tendai", "password": "correct-horse"},
+            content_type="application/json",
+        ).json()["token"]
+
+        bare = Client(enforce_csrf_checks=True)
+        me = bare.get(reverse("auth-me"), HTTP_AUTHORIZATION=f"Bearer {token}")
+        self.assertEqual(me.status_code, 200)
+        self.assertEqual(me.json()["username"], "tendai")
+
     def test_logout_revokes_the_token(self):
         token = self.client.post(
             self.url,
