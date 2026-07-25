@@ -156,6 +156,10 @@ REST_FRAMEWORK = {
     # callers (the Django admin, the test client, the browsable API).
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
+        # Same token, `Authorization: Bearer <key>`. Lets external API clients
+        # (ChatGPT actions, HTTP tooling) use their default keyword. Both
+        # classes return None on a keyword mismatch, so order is harmless.
+        "accounts.authentication.BearerTokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
